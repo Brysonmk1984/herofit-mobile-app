@@ -1,9 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, Text, StyleSheet, Button, FlatList } from 'react-native';
+import debugErrors from './common/debugErrors';
 import { store } from './store';
 import LoadingWidget from './LoadingWidget';
 import { clearLs } from './common/helperFunction';
+import { getHeroList } from './api/authentication';
 //import AuthContext from "./context";
 
 const styles = StyleSheet.create({
@@ -24,13 +26,6 @@ const ScreenContainer = ({ children }) => (
   <View style={styles.container}>{children}</View>
 );
 
-
-const Details = () =>{
-  <ScreenContainer>
-    <Text>Details Screen</Text>
-  </ScreenContainer>
-}
-
 const Search = ({ navigation }) =>(
   <ScreenContainer>
     <Text>Search Screen</Text>
@@ -38,17 +33,6 @@ const Search = ({ navigation }) =>(
     <Button title="React native school" onPress={() => alert(2)} />
   </ScreenContainer>
 )
-
-const Profile = ({ navigation }) =>{
-  const { dispatch, state } = useContext(store);
-  return (
-    <ScreenContainer>
-      <Text>Profile {state.color} Screen</Text>
-      <Button title="Drawer" onPress={() => alert('TODO')} />
-      <Button title="Sign Out" onPress={() => alert('signout')} />
-    </ScreenContainer>
-  )
-}
 
 const Loading = () =>{
   return (
@@ -81,6 +65,8 @@ const SignIn = ({ navigation }) => {
   )
 }
 
+// Finalize Hero Selection Screen 
+// Name the Hero and get finish initializing hero
 const FinalizeHeroSelection = ({ route, navigation }) => {
 
   return (
@@ -92,33 +78,85 @@ const FinalizeHeroSelection = ({ route, navigation }) => {
 }
 
 
-
+// Hero Details Screen
 const HeroDetails = ({ route, navigation }) => {
   const { hero } = route.params;
+  
+  useEffect(() =>{
+    navigation.setOptions({ title: hero.alias });
+  }, []);
+
   return (
     <View>
-      <Text>Hero Details Screen</Text>
-      <Text>This is some text about { hero }</Text>
+      <Text>This is some text about { hero.alias }</Text>
+      <Text>{ hero.history }</Text>
       <Button title="Select" onPress={() => navigation.navigate('FinalizeHeroSelection')} />
-      <Button title="Go Back" onPress={() => navigation.goBack()} />
     </View>
   )
 }
 
-
-const SelectHero = ({ navigation }) =>{
+// Select Hero Screen
+const SelectHero = ({ route, navigation }) =>{
   const { dispatch, state } = useContext(store);
+  const { heroList } = route.params;
+  console.log('HL - ', heroList.length);
+
+  const Item = ({ hero }) => (
+    <View >
+      <Button title={hero.alias} onPress={() => navigation.push("HeroDetails", { hero })} />
+    </View>
+  );
+
+  const renderItem = ({ item }) => (
+    <Item hero={item} />
+  );
+
+
+  /// map out each hero in list on screen
   return (
     <ScreenContainer>
       <Text>Select Hero Screen</Text>
       <Text>Choose from many heroes</Text>
-      <Button title="Compost Creature" onPress={() => navigation.push("HeroDetails", { hero : 'Compost Creature' })} />
-      <Button title="Wildspeaker" onPress={() => navigation.push("HeroDetails", { hero : 'Wildspeaker' })} />
-      <Button title="The Empath" onPress={() => navigation.push("HeroDetails", { hero : 'The Empath' })} />
+      <FlatList
+        data={heroList}
+        renderItem={renderItem}
+        keyExtractor={(item, i) => i.toString()}
+      />
+      
+    </ScreenContainer>
+  )
+}
+
+// How To Select Screen
+const SelectHeroHowTo = ({ navigation }) =>{
+  const { dispatch, state } = useContext(store);
+  // Make API call to get hero data for the next screen
+  const [heroList, setHeroList] = useState([]);
+
+  useEffect(() =>{
+
+    getHeroList()
+    .then((data) =>{
+      if(data.error){
+        const error = data.error;
+        return debugErrors(error);
+      }
+
+      setHeroList(data);
+    });
+  }, []);
+
+  return (
+    <ScreenContainer>
+      <Text>How To Select Screen</Text>
+      <Text>Gives a little more information about how and why users should select their hero in the following screen</Text>
+      <Button title="OK" onPress={() => navigation.push("SelectHero", { heroList })} />
+
     </ScreenContainer>
   )
 }
 
 
 
-export { Home, Details, Search, Profile, Loading, SignIn, SelectHero, HeroDetails, FinalizeHeroSelection };
+
+export { Home, Search, Loading, SignIn, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection };

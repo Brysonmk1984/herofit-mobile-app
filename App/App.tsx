@@ -5,7 +5,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { store, IStore } from './store';
-import { SignIn, Home, SelectHero, HeroDetails, FinalizeHeroSelection, Loading } from './Screens';
+import { SignIn, Home, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection, Loading } from './Screens';
 import { getLsWithExpiry, setLsWithExpiry } from './common/helperFunction';
 
 // First level Navigator, used to determine if the user should go through auth sequence of straight to the app
@@ -43,14 +43,17 @@ const AuthStackScreen = () =>{
   </AuthStack.Navigator>
 };
 
+
 // Third level Navigator, used for Select Hero sequence for new users
 const SelectHeroStack = createStackNavigator();
 const SelectHeroStackScreen = () =>{
   const { dispatch, state } = useContext<IStore>(store);
+  
   return  <SelectHeroStack.Navigator >
+    <SelectHeroStack.Screen name="SelectHeroHowTo" component={SelectHeroHowTo}  options={{ title : 'Select Hero' }} />
     <SelectHeroStack.Screen name="SelectHero" component={SelectHero}  options={{ title : 'Select Hero' }} />
-    <SelectHeroStack.Screen name="HeroDetails" component={HeroDetails}  options={{ title : 'Hero Details' }} />
-    <SelectHeroStack.Screen name="FinalizeHeroSelection" component={FinalizeHeroSelection} options={{ title : 'Finalize Hero Selection' }} />
+    <SelectHeroStack.Screen name="HeroDetails" component={HeroDetails} options={HeroDetails.navigationOptions}  options={{ title : 'Hero Details' }} />
+    <SelectHeroStack.Screen name="FinalizeHeroSelection" component={FinalizeHeroSelection}  options={{ title : 'Finalize Hero Selection' }} />
   </SelectHeroStack.Navigator>
 };
 
