@@ -5,7 +5,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { store, IStore } from './store';
-import { SignIn, Home, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection, Loading } from './Screens';
+import { SignIn, Home, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection, SpendQP, Loading } from './Screens';
 import { getLsWithExpiry, setLsWithExpiry } from './common/helperFunction';
 
 // First level Navigator, used to determine if the user should go through auth sequence of straight to the app
@@ -22,6 +22,7 @@ const RootStackScreen = ({  }) =>{
 const Drawer = createDrawerNavigator();
 const DrawerScreen = () =>{
   const { dispatch, state } = useContext<IStore>(store);
+  console.log('THE STATE', state);
   return <Drawer.Navigator>
     {
       state.isLoading ? <Drawer.Screen name="Loading" component={Loading} />
@@ -30,6 +31,18 @@ const DrawerScreen = () =>{
   
   </Drawer.Navigator>
 }
+
+// STILL NEED TO WORK THIS OUT IN MY HEAD.... HOW WILL THE DRAWER NAV & the various modal stacks (Walkthrough) work together??
+// Third level Navigator, used for Everything under HOME
+const HomeWrapperStack = createStackNavigator();
+const HomeWrapperScreen = () => {
+  return  <HomeWrapperStack.Navigator >
+
+  </HomeWrapperStack.Navigator>
+};
+
+
+
 
 // Second level Navigator, used for App Auth
 const AuthStack = createStackNavigator();
