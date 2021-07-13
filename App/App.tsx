@@ -2,13 +2,11 @@ import React, { useContext, useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { View, Text, StyleSheet, Button } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import { store, IStore } from './store';
-import { SignIn, Home, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection, SpendQP, Loading } from './Screens';
-import { getLsWithExpiry, setLsWithExpiry } from './common/helperFunction';
+import { SignIn, Register, Home, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection, SpendQP, Loading } from './Screens/Screens';
+import { getJwtInLocalStorage, setJwtInLocalStorage } from './common/jwtModule';
 
-// First level Navigator, used to determine if the user should go through auth sequence of straight to the app
+// ROOT First level Navigator, used to determine if the user should go through auth sequence of straight to the app
 const RootStack = createStackNavigator();
 const RootStackScreen = ({  }) =>{
   return <RootStack.Navigator headerMode="none">
@@ -18,46 +16,67 @@ const RootStackScreen = ({  }) =>{
   </RootStack.Navigator>
 }
 
-// Second level Navigator, used for directing users who are already authorized
+// IN APP Second level Navigator, used for directing users who are already authorized
 const Drawer = createDrawerNavigator();
 const DrawerScreen = () =>{
   const { dispatch, state } = useContext<IStore>(store);
-  console.log('THE STATE', state);
+
   return <Drawer.Navigator>
     {
       state.isLoading ? <Drawer.Screen name="Loading" component={Loading} />
-      :  <Drawer.Screen name="Home" component={Home}  options={{ title : 'Home' }} /> 
+      :  <Drawer.Screen name="HomeWrapperScreen" component={HomeWrapperScreen} />
     }
   
   </Drawer.Navigator>
 }
 
 // STILL NEED TO WORK THIS OUT IN MY HEAD.... HOW WILL THE DRAWER NAV & the various modal stacks (Walkthrough) work together??
-// Third level Navigator, used for Everything under HOME
+// IN APP Third level Navigator, used for Everything under HOME
 const HomeWrapperStack = createStackNavigator();
 const HomeWrapperScreen = () => {
+  const { dispatch, state } = useContext<IStore>(store);
   return  <HomeWrapperStack.Navigator >
-
+    {
+      state.newUser ? <Drawer.Screen name="WalkthroughStackScreen" component={WalkthroughStackScreen}  options= {{ headerShown: false }} /> 
+      : <Drawer.Screen name="Home" component={Home} options={{ title : 'Home' }} /> 
+    }
   </HomeWrapperStack.Navigator>
+};
+
+// IN APP Fourth level Navigator, used for Select Hero sequence for new users
+const WalkthroughStack = createStackNavigator();
+const WalkthroughStackScreen = () =>{
+  const { dispatch, state } = useContext<IStore>(store);
+  
+  return  <WalkthroughStack.Navigator >
+    <WalkthroughStack.Screen name="SpendQP" component={SpendQP}  options={{ title : 'Quantum Points' }} />
+    {/* <WalkthroughStack.Screen name="SelectCampaign" component={SelectCampaign}  options={{ title : 'Select Campaign' }} />
+    <WalkthroughStack.Screen name="RecordActivities" component={RecordActivities}  options={{ title : 'Record Activities' }} />
+    <WalkthroughStack.Screen name="GoToBattle" component={GoToBattle}  options={{ title : 'Go To Battle' }} />
+    <WalkthroughStack.Screen name="UseInventory" component={UseInventory}  options={{ title : 'Use Inventory' }} /> */}
+  </WalkthroughStack.Navigator>
 };
 
 
 
 
-// Second level Navigator, used for App Auth
+
+// AUTH Second level Navigator, used for App Auth
 const AuthStack = createStackNavigator();
 const AuthStackScreen = () =>{
   const { dispatch, state } = useContext<IStore>(store);
+  console.log('STTATE', state);
   return <AuthStack.Navigator headerMode="none">
     {
       state.newUser ? <SelectHeroStack.Screen name="SelectHero" component={SelectHeroStackScreen} />
       : <AuthStack.Screen name="SignIn" component={SignIn}  options={{ title : 'Sign In' }} />
     }
+    <AuthStack.Screen name="Register" component={Register}  options={{ title : 'Register' }} />
   </AuthStack.Navigator>
 };
 
 
-// Third level Navigator, used for Select Hero sequence for new users
+// AUTH Third level Navigator, used for Select Hero sequence for new users
 const SelectHeroStack = createStackNavigator();
 const SelectHeroStackScreen = () =>{
   const { dispatch, state } = useContext<IStore>(store);
@@ -67,6 +86,7 @@ const SelectHeroStackScreen = () =>{
     <SelectHeroStack.Screen name="SelectHero" component={SelectHero}  options={{ title : 'Select Hero' }} />
     <SelectHeroStack.Screen name="HeroDetails" component={HeroDetails} options={HeroDetails.navigationOptions}  options={{ title : 'Hero Details' }} />
     <SelectHeroStack.Screen name="FinalizeHeroSelection" component={FinalizeHeroSelection}  options={{ title : 'Finalize Hero Selection' }} />
+    {/* NEED TO ADD REGISTER HERE */}
   </SelectHeroStack.Navigator>
 };
 
@@ -80,13 +100,13 @@ const App: React.FC<AppProps> = ({}) => {
   useEffect(() =>{
     // Simulate Loading
     setTimeout(() =>{
-      dispatch({type : 'APP LOADING', payload : { isLoading : false } });
+      dispatch({type : 'TOGGLE LOADING', payload : { isLoading : false } });
     },1500);
   }, []);
 
   useEffect(() =>{
     console.log('JWT - ', state.jwt);   
-    const token : Promise<any> = getLsWithExpiry('herofit-jwt');
+    const token : Promise<any> = getJwtInLocalStorage();
     token.then((jwt) =>{
       console.log('here jwt', jwt);
       // token exists locally, check if valid on server
@@ -95,7 +115,7 @@ const App: React.FC<AppProps> = ({}) => {
         setTimeout(() =>{
           if(serverValidated){
             console.log('server says valid, renew locally');
-            dispatch({type: 'SET LOCAL JWT', payload: { jwt: '123-xyz'}});
+            //dispatch({type: 'SET LOCAL JWT', payload: { jwt: '123-xyz'}});
           }
         }, 1000);
       // Token doesn't exist locally, get new one
@@ -107,7 +127,7 @@ const App: React.FC<AppProps> = ({}) => {
             dispatch({type: 'SET LOCAL JWT', payload: { jwt: '123-xyz'}});
           }, 1000);
         }else{
-          dispatch({type: 'NEW USER'});
+          dispatch({ type: 'SET NEW USER', payload: { newUser : true } });
         }
       }
     });

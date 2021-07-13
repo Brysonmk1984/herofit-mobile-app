@@ -251,7 +251,7 @@ function isPublicRoute(publicRoutes, path){
   function determineFoeClass(type){
     const foeClasses = {
         spirits : ['wraith', 'specter', 'apparition','banshee','poltergeist','phantasm','shade','phantom', 'shadow-self'],
-        elementals : ['gusty rascal', 'rock skipper', 'flame fiend', 'splash artist', 'wheezing jinn', 'granite golem', 'flaming jinn', 'cyclonic siren', 'storming oni', 'hulking crag', 'scorching archfiend', 'tidal-borne dame'],
+        elementals : ['gusty rascal', 'rock skipper', 'flame fiend', 'splash artist', 'wheezing jinn', 'granite golem', 'burning jinn', 'cyclonic siren', 'storming oni', 'hulking aggro crag', 'scorching archfiend', 'high priestess of the tides'],
         titans : ['plaguebringer']
       }
       let parentClass = null;

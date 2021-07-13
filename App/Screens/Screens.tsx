@@ -1,14 +1,16 @@
 import React, { useContext, useEffect, useState, createRef } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { View, Text, TextInput, StyleSheet, Button, FlatList, SectionList } from 'react-native';
-import debugErrors from './common/debugErrors';
-import { store } from './store';
-import LoadingWidget from './LoadingWidget';
-import { clearLs } from './common/helperFunction';
-import { getHeroList } from './api/authentication';
-import { checkAvatarName } from './api/avatar';
+import debugErrors from '../common/debugErrors';
+import { store } from '../store';
+import LoadingWidget from '../LoadingWidget';
+import { clearLs } from '../common/helperFunctions';
+import { getHeroList } from '../api/authentication';
+import { checkAvatarName } from '../api/avatar';
 import DelayInput from "react-native-debounce-input";
+import Checkbox from 'expo-checkbox';
 //import AuthContext from "./context";
+import RegisterComponent from './Auth/Register';
 
 const styles = StyleSheet.create({
   container: {
@@ -21,20 +23,18 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginVertical: 10,
     borderRadius: 5
-  }
+  },
+  input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+  },
 });
 
 const ScreenContainer = ({ children }) => (
   <View style={styles.container}>{children}</View>
 );
 
-const Search = ({ navigation }) =>(
-  <ScreenContainer>
-    <Text>Search Screen</Text>
-    <Button title="Search 2" onPress={() => alert('TODO')} />
-    <Button title="React native school" onPress={() => alert(2)} />
-  </ScreenContainer>
-)
 
 const Loading = () =>{
   return (
@@ -44,10 +44,10 @@ const Loading = () =>{
   )
 };
 
-const Home = ({ route, navigation }) => {
-  const { hero, newUser } = route.params;
-  console.log('NH - ', hero, navigation, newUser);
-
+const Home = ({ navigation }) => {
+  const { dispatch, state } = useContext<IStore>(store);
+  const hero = state.hero;
+  console.log('!HERO', hero);
 
   function renderHeroDetails(){
 
@@ -57,11 +57,7 @@ const Home = ({ route, navigation }) => {
     </View>
   }
 
-  useEffect(() =>{
-    if(newUser){
-      navigation.navigate('SpendQP', { hero, newUser });
-    }
-  }, [newUser])
+
 
   return (
     <ScreenContainer>
@@ -74,27 +70,91 @@ const Home = ({ route, navigation }) => {
 
 
 
-// Third level Navigator, used for Select Hero sequence for new users
-const WalkthroughStack = createStackNavigator();
-const WalkthroughStackScreen = () =>{
-  const { dispatch, state } = useContext<IStore>(store);
-  
-  return  <WalkthroughStack.Navigator >
-    <WalkthroughStack.Screen name="SpendQP" component={SpendQP}  options={{ title : 'Quantum Points' }} />
-  </WalkthroughStack.Navigator>
-};
-
-
-
 
 
 const SpendQP = ({ route, navigation }) => {
-  const { hero, newUser } = route.params;
+  const { dispatch, state } = useContext<IStore>(store);
+  const newUser: boolean = state.newUser;
+  const { hero } = route.params;
+  const [power, setPower] = useState( newUser ? 100 : 0);
+  const [health, setHealth] = useState( newUser ? 100 : 0);
+  const [armor, setArmor] = useState( newUser ? 0 : 0);
+  const [recovery, setRecovery] = useState( newUser ? 5 : 5);
+  const [fire, setFire] = useState( newUser ? 0 : 0);
+  const [earth, setEarth] = useState( newUser ? 0 : 0);
+  const [water, setWater] = useState( newUser ? 0 : 0);
+  const [air, setAir] = useState( newUser ? 0 : 0);
+  const [qp, setQP] = useState( newUser ? 5 : 0);
 
   console.log(hero, newUser);
+
+  // As long as hero has QP, let them increment stats
+  const incrementAttribute = function(attribute: string): void{
+    if(qp > 0){
+      type attributeTuple = [string, number, React.Dispatch<React.SetStateAction<number>>];
+      const attributeTuples: attributeTuple[] = [ ['power', power, setPower], ['health', health, setHealth], ['armor', armor, setArmor], ['recovery', recovery, setRecovery], ['fire', fire, setFire], ['earth', earth, setEarth], ['water', water, setWater],['air', air, setAir] ];
+  
+      const matchingTuple : attributeTuple  = attributeTuples.find((tuple) : boolean => tuple[0] === attribute)!;
+      const matchingValue : number = matchingTuple[1];
+      const matchingUpdateFunc : React.Dispatch<React.SetStateAction<number>> = matchingTuple[2];
+      matchingUpdateFunc(matchingValue + 1);
+      setQP(qp - 1);
+    }
+  }
+
+  // If there if no QP left and the hero has been set,
+  useEffect(() =>{
+    if(newUser && qp === 0){
+      const heroReadyToSave = Object.assign({}, hero, { power, health, armor, recovery, fire, earth, water, air, qp, status : 'New Recruit' });
+      dispatch({ type: 'SET NEW USER', payload: { newUser : false }});
+      dispatch({ type: 'SET HERO', payload: { hero : heroReadyToSave } });
+
+      return navigation.navigate('Auth', { 
+        screen : 'Register'
+      });
+
+      
+    }
+  }, [newUser, state.hero, qp]);
+
+
   return (
     <ScreenContainer>
-      <Text>Spend QP Here</Text>
+      <View>
+        <Text>Stat points effect your battles and recovery</Text>
+      </View>
+      <View>
+        <Text>Power: </Text><Text>{power}</Text>
+        <Button title={'+'} onPress={() => incrementAttribute('power')} />
+      </View>
+      <View>
+        <Text>Health: </Text><Text>{health}</Text>
+        <Button title={'+'} onPress={() => incrementAttribute('health')} />
+      </View>
+      <View>
+        <Text>Armor: </Text><Text>{armor}</Text>
+        <Button title={'+'} onPress={() => incrementAttribute('armor')} />
+      </View>
+      <View>
+        <Text>Recovery: </Text><Text>{recovery}</Text>
+        <Button title={'+'} onPress={() => incrementAttribute('recovery')} />
+      </View>
+      <View>
+        <Text>Fire: </Text><Text>{fire}</Text>
+        <Button title={'+'} onPress={() => incrementAttribute('fire')} />
+      </View>
+      <View>
+        <Text>Earth: </Text><Text>{earth}</Text>
+        <Button title={'+'} onPress={() => incrementAttribute('earth')} />
+      </View>
+      <View>
+        <Text>Water: </Text><Text>{water}</Text>
+        <Button title={'+'} onPress={() => incrementAttribute('water')} />
+      </View>
+      <View>
+        <Text>Air: </Text><Text>{air}</Text>
+        <Button title={'+'} onPress={() => incrementAttribute('air')} />
+      </View>
     </ScreenContainer>
   )
 
@@ -114,6 +174,17 @@ const SignIn = ({ navigation }) => {
     </ScreenContainer>
   )
 }
+
+const Register = ({ navigation }) =>{
+  const { dispatch, state } = useContext(store);
+  
+  return (
+    <ScreenContainer>
+      <RegisterComponent />
+    </ScreenContainer>
+  )
+}
+
 
 // Finalize Hero Selection Screen 
 // Name the Hero and get finish initializing hero
@@ -163,8 +234,14 @@ const FinalizeHeroSelection = ({ route, navigation }) => {
       name : heroName,
       ...hero
     }
-    console.log('NAMED = ', namedHero);
-    return navigation.navigate('App', { screen : 'Home', params : { hero : namedHero, newUser : true } });
+    // Navigate out of the Auth stack, into App -> HomeWrapperScreen -> WalkthroughStackScreen -> SpendQP
+    return navigation.navigate('App', {
+      screen: 'HomeWrapperScreen', params: {
+          screen : 'WalkthroughStackScreen', params : {
+            screen: 'SpendQP', params : { hero : namedHero }
+          }
+      }
+    });
   }
 
 
@@ -209,7 +286,7 @@ const HeroDetails = ({ route, navigation }) => {
 
   return (
     <View>
-      <Text>FIRE: {hero.elms.fire} EARTH: {hero.elms.earth} WATER:{hero.elms.water} AIR:{hero.elms.air}</Text>
+      <Text>FIRE: {hero.fire} EARTH: {hero.earth} WATER:{hero.water} AIR:{hero.air}</Text>
       <Text>{ hero.history }</Text>
       <Button title="Select" onPress={() => navigation.navigate('FinalizeHeroSelection', { hero })} />
     </View>
@@ -281,12 +358,12 @@ const SelectHeroHowTo = ({ navigation }) =>{
   useEffect(() =>{
 
     getHeroList()
-    .then((data) =>{
+    .then((data) =>{console.log('LOOK', data);
       if(data.error){
         const error = data.error;
         return debugErrors(error);
       }
-
+      
       setHeroList(data);
     });
   }, []);
@@ -300,30 +377,31 @@ const SelectHeroHowTo = ({ navigation }) =>{
       <FlatList 
         data={[
           {
-            key : 0,
+  
             trait : "Power",
             description : "Physical Damage",
             value : "100"
           },
           {
-            key : 1,
+     
             trait : "Health",
             description : "A Hero's life total",
             value : "100"
           },
           {
-            key : 2,
+     
             trait : "Armor",
             description : "Reduces Physical Damage",
             value : "0"
           },
           {
-            key : 3,
+ 
             trait : "Recovery",
             description : "Effects health Recovered per hour & chance to revive early",
             value : "5"
           }
         ]}
+        keyExtractor={(item, i) => i.toString()}
         renderItem={({item}) => <View>
           <Text>{item.trait}</Text>
           <Text>{item.description}</Text>
@@ -333,7 +411,7 @@ const SelectHeroHowTo = ({ navigation }) =>{
       <Text>Elemental Power:</Text>
       <SectionList
       sections={DATA}
-      keyExtractor={(item, index) => item + index}
+      keyExtractor={(item, index) => (item + index).toString()}
       renderItem={({ item }) => <Item title={item} />}
       renderSectionHeader={({ section: { title } }) => (
         <Text>{title}</Text>
@@ -350,4 +428,4 @@ const SelectHeroHowTo = ({ navigation }) =>{
 
 
 
-export { Home, Search, Loading, SignIn, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection, SpendQP };
+export { Home, Loading, SignIn, Register, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection, SpendQP };

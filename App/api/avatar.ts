@@ -13,7 +13,7 @@ const insertAvatar = function(body, jwt){
   .then(({ data }) => {
     return data.data;
   }).catch(({ request, response }) => {
-    return handleHttpError(request, response);
+    throw handleHttpError(request, response);
   });
 };
 
@@ -22,7 +22,7 @@ const updateAvatar = function(body, jwt){
   .then(({ data }) => {
     return data.data || { data : null };
   }).catch(({ request, response }) => {
-    return handleHttpError(request, response);
+    throw handleHttpError(request, response);
   });
 };
 
@@ -31,7 +31,7 @@ const buffAndUpdateAvatar = function(body, jwt){
   .then(({ data }) => {
     return data.data;
   }).catch(({ request, response }) => {
-    return handleHttpError(request, response);
+    throw handleHttpError(request, response);
   });
 };
 
@@ -41,7 +41,7 @@ const getAvatar = function(body, jwt){
     const avatar = data.data;
     return { avatar };      
   }).catch(({ request, response }) => {
-    return handleHttpError(request, response);
+    throw handleHttpError(request, response);
   });
 };
 
@@ -50,7 +50,7 @@ const checkAvatarName = function(body){
   .then(({ data }) => {
     return data.data;      
   }).catch(({ request, response }) => {
-    return handleHttpError(request, response);
+    throw handleHttpError(request, response);
   });
 };
 
@@ -61,7 +61,7 @@ const fetchAvatarsByPage = function(body){
   }).catch(({ request, response }) => {
     // Need to return here. If async is needed, need to wrap it in a new Promise
     // Client received an error response (5xx, 4xx, or something from bad code before request)
-    return handleHttpError(request, response);
+    throw handleHttpError(request, response);
   });
 };
 
@@ -70,7 +70,7 @@ const fetchAvatarsByPageAndRankingType = function(body){
   .then(({ data }) => {
     return data.data;
   }).catch(({ request, response }) => {
-    return handleHttpError(request, response);
+    throw handleHttpError(request, response);
   });
 };
 
@@ -79,7 +79,7 @@ const fetchAvatarsByPageAndRankingTypeBattle = function(body){
   .then(({ data }) => {
     return data.data;
   }).catch(({ request, response }) => {
-    return handleHttpError(request, response);
+    throw handleHttpError(request, response);
   });
 };
 
