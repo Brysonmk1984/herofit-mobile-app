@@ -65,7 +65,6 @@ const WalkthroughStackScreen = () =>{
 const AuthStack = createStackNavigator();
 const AuthStackScreen = () =>{
   const { dispatch, state } = useContext<IStore>(store);
-  console.log('STTATE', state);
   return <AuthStack.Navigator headerMode="none">
     {
       state.newUser ? <SelectHeroStack.Screen name="SelectHero" component={SelectHeroStackScreen} />
@@ -103,35 +102,6 @@ const App: React.FC<AppProps> = ({}) => {
       dispatch({type : 'TOGGLE LOADING', payload : { isLoading : false } });
     },1500);
   }, []);
-
-  useEffect(() =>{
-    console.log('JWT - ', state.jwt);   
-    const token : Promise<any> = getJwtInLocalStorage();
-    token.then((jwt) =>{
-      console.log('here jwt', jwt);
-      // token exists locally, check if valid on server
-      if(jwt){
-        const serverValidated : boolean = true;
-        setTimeout(() =>{
-          if(serverValidated){
-            console.log('server says valid, renew locally');
-            //dispatch({type: 'SET LOCAL JWT', payload: { jwt: '123-xyz'}});
-          }
-        }, 1000);
-      // Token doesn't exist locally, get new one
-      }else{
-        const serverGaveNewToken : boolean = false;
-        if(serverGaveNewToken){
-          setTimeout(() =>{
-            console.log('server gave new token, save locally');
-            dispatch({type: 'SET LOCAL JWT', payload: { jwt: '123-xyz'}});
-          }, 1000);
-        }else{
-          dispatch({ type: 'SET NEW USER', payload: { newUser : true } });
-        }
-      }
-    });
-  }, [state.jwt]);
 
   return (
     <NavigationContainer>

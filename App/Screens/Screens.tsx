@@ -169,8 +169,13 @@ const SignIn = ({ navigation }) => {
     <ScreenContainer>
       <Text>Sign In Screen</Text>
       <Text>Has Token : { state.jwt } </Text>
+      <Button title="Select Hero" onPress={() => {
+        dispatch({ type: 'SET NEW USER', payload: { newUser : true }});
+        return navigation.navigate('Auth', { 
+          screen : 'SelectHero'
+        });
+      }} />
       <Button title="Sign In"  onPress={() => navigation.push("Home")} />
-      <Button title="Create Account" onPress={() => navigation.push("SignUp")} />
     </ScreenContainer>
   )
 }

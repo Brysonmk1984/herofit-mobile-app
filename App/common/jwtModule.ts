@@ -6,7 +6,7 @@ function setJwtInLocalStorage({ token, expiresIn }){
   const daysInt = parseInt(expiresIn);
   const duration = moment.duration(daysInt, 'days');
   const milliseconds = duration.asMilliseconds();
-  setLsWithExpiry('herofit-jwt', token, milliseconds);
+  return setLsWithExpiry('herofit-jwt', token, milliseconds);
 };
 
 function getJwtInLocalStorage(){

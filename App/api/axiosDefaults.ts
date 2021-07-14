@@ -1,9 +1,10 @@
-import _axios from 'axios';
+import { getJwtInLocalStorage } from '../common/jwtModule';
 
 interface restrictedHeader {
   headers : {
     Authorization: string
   },
+  data : object | null | undefined,
   withCredentials: boolean
 }
 
@@ -13,12 +14,21 @@ interface openHeader {
 
 type eitherHeader = restrictedHeader | openHeader
 
-const axiosOptions = function(jwt?: string) : eitherHeader{
-  if(jwt){
-      return { headers : { Authorization : `Bearer ${ jwt }` }, withCredentials:true };
-  }else {
-      return { withCredentials:true };
+
+ async function axiosOptions() : eitherHeader{
+  const jwtHeader = await getJwtInLocalStorage();
+  console.log('JWT HEADER', jwtHeader);
+  // If a non-expired JWT is saved locally, attach it to the request
+  if(jwtHeader){
+      return { headers : { Authorization : jwtHeader }, withCredentials : true };
+  }else{
+      return { withCredentials : true };
   }
 }
 
-export { axiosOptions };
+async function axiosDeleteConfig(body){
+  const jwtHeader = await getJwtInLocalStorage();
+  return { headers : { Authorization : jwtHeader }, data : body  , withCredentials : true }
+}
+
+export { axiosOptions, axiosDeleteConfig };

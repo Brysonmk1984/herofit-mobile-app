@@ -10,32 +10,36 @@ let axios = _axios.create();
 axiosRetry(axios, {retries: 3});
 
 
-const login = function(body){
-    return axios.post(`${endpoint}auth/login`, body, axiosOptions())
+const login = async function(body){
+    return axios.post(`${endpoint}auth/login`, body, await axiosOptions())
     .then(({ data }) => {
         if(data.error){
             return data.error;
         }
         const { user, tokenObject } = data.data;
         setJwtInLocalStorage(tokenObject);
-        return data.data;
+        return { user, tokenObject };
     }).catch(({ request, response }) => {
         throw handleHttpError(request, response);
     });
 };
 
-const register = function(body){
-    return axios.post(`${endpoint}auth/register`, body, axiosOptions())
-    .then(({ data }) => {
-        setJwtInLocalStorage(data.data.tokenObject);
-        return data.data;
+const register = async function(body){
+    return axios.post(`${endpoint}auth/register`, body, await axiosOptions())
+    .then(async ({ data }) => {
+        const { user, tokenObject } = data.data;
+        console.log('USER', user);
+        console.log('TOKEN OBJ', tokenObject);
+        await setJwtInLocalStorage(tokenObject);
+        console.log('SET JWT');
+        return { user };
     }).catch(({ request, response }) => {
         throw handleHttpError(request, response);
     });
 };
 
-const resetPassword = function(body){
-    return axios.post(`${endpoint}auth/reset-password`, body, axiosOptions())
+const resetPassword = async function(body){
+    return axios.post(`${endpoint}auth/reset-password`, body, await  axiosOptions())
     .then(({ data }) => {
         return data;
     }).catch(({ request, response }) => {
@@ -44,8 +48,8 @@ const resetPassword = function(body){
 };
 
 // Only Meant for password reset
-const sendPasswordResetEmailVerification = function(body){
-    return axios.post(`${endpoint}auth/reset-password-confirm-email`, body, axiosOptions())
+const sendPasswordResetEmailVerification = async function(body){
+    return axios.post(`${endpoint}auth/reset-password-confirm-email`, body, await  axiosOptions())
     .then(({ data }) => {
         return data;
     }).catch(({ request, response }) => {
@@ -53,8 +57,8 @@ const sendPasswordResetEmailVerification = function(body){
     });
 };
 
-const getStravaClientCredentials = function(){
-    return axios.get(`${endpoint}auth/strava-client-credentials`, axiosOptions())
+const getStravaClientCredentials = async function(){
+    return axios.get(`${endpoint}auth/strava-client-credentials`, await  axiosOptions())
     .then(({ data }) =>{
         return data.data;
     }).catch(({ request, response }) => {
@@ -62,8 +66,8 @@ const getStravaClientCredentials = function(){
     });
 };
 
-const insertStravaCredentials = function(body){
-    return axios.post(`${endpoint}auth/strava-credentials`, body, axiosOptions('cake'))
+const insertStravaCredentials = async function(body){
+    return axios.post(`${endpoint}auth/strava-credentials`, body, await  axiosOptions())
     .then(({ data }) => {
         return data.data;
     }).catch(({ request, response }) => {
@@ -72,9 +76,9 @@ const insertStravaCredentials = function(body){
 };
 
 
-const fetchLatestPatchDetails = function(){
+const fetchLatestPatchDetails = async function(){
 
-    return axios.get(`${endpoint}auth/fetch-latest-patch-details`, axiosOptions())
+    return axios.get(`${endpoint}auth/fetch-latest-patch-details`, await  axiosOptions())
     .then(({ data }) =>{
       return data.data;
     }).catch(({ request, response }) => {
@@ -82,8 +86,8 @@ const fetchLatestPatchDetails = function(){
     });
 }
 
-const updateSeenLatestPatch = function(body){
-    return axios.post(`${endpoint}auth/update-seen-latest-patch`, body, axiosOptions())
+const updateSeenLatestPatch = async function(body){
+    return axios.post(`${endpoint}auth/update-seen-latest-patch`, body, await  axiosOptions())
     .then(({ data }) =>{
       return data.data;
     }).catch(({ request, response }) => {
@@ -91,8 +95,8 @@ const updateSeenLatestPatch = function(body){
     });
 };
 
-const sendVerificationCode = function(body){
-    return axios.post(`${endpoint}auth/validated-email`, body, axiosOptions())
+const sendVerificationCode = async function(body){
+    return axios.post(`${endpoint}auth/validated-email`, body, await  axiosOptions())
     .then(({ data }) =>{
       return data.data;
     }).catch(({ request, response }) => {
@@ -101,8 +105,8 @@ const sendVerificationCode = function(body){
 }
 
 // Only meant for initial registration email confirm
-const resendEmailConfirmation = function(body){
-    return axios.post(`${endpoint}auth/resend-email-confirmation`, body, axiosOptions())
+const resendEmailConfirmation = async function(body){
+    return axios.post(`${endpoint}auth/resend-email-confirmation`, body, await  axiosOptions())
     .then(({ data }) =>{
       return data.data;
     }).catch(({ request, response }) => {
@@ -110,8 +114,8 @@ const resendEmailConfirmation = function(body){
     });
 }
 
-const getHeroList = function(){
-  return axios.get(`${endpoint}auth/hero-list`, axiosOptions())
+const getHeroList = async function(){
+  return axios.get(`${endpoint}auth/hero-list`, await  axiosOptions())
   .then(({ data }) =>{
     return data.data;
   }).catch(({ request, response }) => {

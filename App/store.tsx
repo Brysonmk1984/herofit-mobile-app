@@ -32,12 +32,6 @@ const StateProvider : React.FC = ( { children } ) => {
         }
         return Object.assign({}, state, { isLoading });
 
-      case 'SET LOCAL JWT':
-        const jwt = action.payload.jwt;
-        // expire after 7 days
-        setLsWithExpiry('herofit-jwt', jwt, 6.048e+8);
-        return { ...state, jwt };
-
       case 'SET NEW USER':
         const { newUser } = action.payload;
         return { ...state, newUser };

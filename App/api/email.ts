@@ -8,41 +8,41 @@ let axios = _axios.create();
 axiosRetry(axios, {retries: 3});
 
 
-const emailFeedbackData = function(body : object, jwt : string){
-    return axios.post(`${endpoint}email/feedback-data`, { ...body }, axiosOptions(jwt))
+const emailFeedbackData = async function(body){
+    return axios.post(`${endpoint}email/feedback-data`, body, await  axiosOptions())
     .then(({ data }) =>{
         return data.data;
     }).catch(({ request, response }) => {
-        throw handleHttpError(request, response);
+        return handleHttpError(request, response);
     });
 };
 
-const emailSurveyData = function(body : object, jwt : string){
-    return axios.post(`${endpoint}email/survey-data`, { ...body }, axiosOptions(jwt))
+const emailSurveyData = async function(body){
+    return axios.post(`${endpoint}email/survey-data`, body, await  axiosOptions())
     .then(({ data }) =>{
         return data.data;
     }).catch(({ request, response }) => {
-        throw handleHttpError(request, response);
+        return handleHttpError(request, response);
     });
 };
 
-const emailContactForm = function(body : object){
-    return axios.post(`${endpoint}email/contact-form`, { ...body }, axiosOptions())
+const emailContactForm = async function(body){
+    return axios.post(`${endpoint}email/contact-form`, body, await  axiosOptions())
     .then(({ data }) =>{
         return data;
     }).catch(({ request, response }) => {
-        throw handleHttpError(request, response);
+        return handleHttpError(request, response);
     });
 };
 
-const emailAppError = function(body : { status : number }){
-    const errorLocation = body.status === 400 || body.status === 500 ? 'Backend' : 'Frontend';
-    return axios.post(`${endpoint}email/app-error`, { ...body, errorLocation }, axiosOptions())
+const emailAppError = async function(body){
+    body.errorLocation = body.status === 400 || body.status === 500 ? 'Backend' : 'Frontend';
+    return axios.post(`${endpoint}email/app-error`, body, await  axiosOptions())
     .then(({ data }) =>{
         console.log('APP ERROR Email Delivered', data);
     }).catch(({ request, response }) => {
         console.log('Error sending email - response', response);
-        throw handleHttpError(request, response);
+        return handleHttpError(request, response);
     });
 };
 

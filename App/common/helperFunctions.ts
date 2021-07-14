@@ -4,7 +4,6 @@ import avatars from './heroList.json';
 // import { debugErrors } from './errorHandler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
 const lowercaseUnderscore = function(ally){
     if(ally !== null && typeof ally !== 'undefined'){
         return ally.replace(/\s+/g, '_').toLowerCase();
@@ -83,12 +82,13 @@ function setLsWithExpiry(key, value, ttl) {
       value: value,
       expiry: now.getTime() + ttl
   }
-  AsyncStorage.setItem(key, JSON.stringify(item))
+  return AsyncStorage.setItem(key, JSON.stringify(item))
 }
 
 async function getLsWithExpiry(key) {
     try{
       const itemStr = await AsyncStorage.getItem(key);
+      console.log('ITEM STR', itemStr);
       if(!itemStr){
         throw new Error('No Token');
       }
@@ -109,7 +109,7 @@ async function getLsWithExpiry(key) {
 
 }
 
-function clearLs(key){
+async function clearLs(key){
   AsyncStorage.removeItem(key);
   setTimeout(() =>{
     getLsWithExpiry(key)

@@ -2,7 +2,8 @@ import React, { useContext, useEffect, useState, createRef } from 'react';
 import { View, ScrollView, Text, TextInput, StyleSheet, Button } from 'react-native';
 import DelayInput from "react-native-debounce-input";
 import Checkbox from 'expo-checkbox';
-import { register, insertAvatarIntoDb } from '../../api/authentication';
+import { register } from '../../api/authentication';
+import { insertAvatar } from '../../api/avatar';
 import { store } from '../../store';
 import debugErrors from '../../common/debugErrors';
 import { setJwtInLocalStorage } from '../../common/jwtModule';
@@ -26,7 +27,7 @@ const Register = ({ navigation }) => {
     console.log('HERE in post register', user);
     dispatch({ type: 'SET USER', payload: { user, loggedIn : true } });
     new Promise(() =>{
-      return insertAvatarIntoDb(state.hero);
+      return insertAvatar({ avatar : state.hero, email : user.email, userId : user.id });
     }).then((data) =>{
       console.log('data from inserting av into db', data);
     }).catch((error) =>{
@@ -45,7 +46,6 @@ const Register = ({ navigation }) => {
       setSuccess(true);
       const { user, tokenObject } : { user : object, tokenObject : string } = data;
       console.log( user, tokenObject );
-      setJwtInLocalStorage(tokenObject);
       dispatch({ type: 'SET ALERTS', payload: { alerts : [{ type : 'success', message : "Please check your email to verify account. Check your spam folder if the message is not in your inbox.", persist : true }] } });
       
       handlePostRegister(user);
@@ -96,8 +96,6 @@ const Register = ({ navigation }) => {
     return setFormIsValid(false);
   }, [email, displayName, password, passwordConfirm]);
 
-
-  console.log('HERO IN STATE', state.hero);
   return (
     <ScrollView>
       <Text>Register Screen</Text>

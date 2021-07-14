@@ -8,80 +8,80 @@ const endpoint : string = Constants.manifest.extra.HF_ENDPOINT;
 let axios = _axios.create();
 axiosRetry(axios, {retries: 3});
 
-const insertAvatar = function(body, jwt){
-  return axios.post(`${endpoint}avatar/insert-avatar`, { ...body }, axiosOptions(jwt))
-  .then(({ data }) => {
-    return data.data;
-  }).catch(({ request, response }) => {
-    throw handleHttpError(request, response);
-  });
+const insertAvatar = async function(body){
+    return axios.post(`${endpoint}avatar/insert-avatar`, body, await axiosOptions())
+    .then(({ data }) => {
+      return data.data;
+    }).catch(({ request, response }) => {
+      return handleHttpError(request, response);
+    });
 };
 
-const updateAvatar = function(body, jwt){
-  return axios.post(`${endpoint}avatar/update-avatar`, { ...body }, axiosOptions(jwt))
+const updateAvatarStats = async function(body){
+  return axios.post(`${endpoint}avatar/update-avatar-stats`, body, await axiosOptions())
   .then(({ data }) => {
     return data.data || { data : null };
   }).catch(({ request, response }) => {
-    throw handleHttpError(request, response);
+    return handleHttpError(request, response);
   });
 };
 
-const buffAndUpdateAvatar = function(body, jwt){
-  return axios.post(`${endpoint}avatar/buff-and-update-avatar`, { ...body }, axiosOptions(jwt))
+const upgradeSequence = async function(body){
+  return axios.post(`${endpoint}avatar/upgrade-sequence`, body, await axiosOptions())
   .then(({ data }) => {
     return data.data;
   }).catch(({ request, response }) => {
-    throw handleHttpError(request, response);
+    return handleHttpError(request, response);
   });
 };
 
-const getAvatar = function(body, jwt){  
-  return axios.post(`${endpoint}avatar/get-avatar`, { ...body }, axiosOptions(jwt))
+const getAvatar = async function(body){  
+  return axios.post(`${endpoint}avatar/get-avatar`, body, await axiosOptions())
   .then(({ data }) => {
     const avatar = data.data;
     return { avatar };      
   }).catch(({ request, response }) => {
-    throw handleHttpError(request, response);
+    return handleHttpError(request, response);
   });
 };
 
-const checkAvatarName = function(body){
-  return axios.post(`${endpoint}avatar/check-avatar-name`, { ...body }, axiosOptions())
+const checkAvatarName = async function(body){
+  return axios.post(`${endpoint}avatar/check-avatar-name`, body, await axiosOptions())
   .then(({ data }) => {
     return data.data;      
   }).catch(({ request, response }) => {
-    throw handleHttpError(request, response);
+    return handleHttpError(request, response);
   });
 };
 
-const fetchAvatarsByPage = function(body){
-  return axios.post(`${endpoint}avatar/fetch-avatars-by-page`, { ...body }, axiosOptions())
+const fetchAvatarsByPage = async function(body){
+  return axios.post(`${endpoint}avatar/fetch-avatars-by-page`, body, await axiosOptions())
   .then(({ data }) => {
     return data.data;
   }).catch(({ request, response }) => {
     // Need to return here. If async is needed, need to wrap it in a new Promise
     // Client received an error response (5xx, 4xx, or something from bad code before request)
-    throw handleHttpError(request, response);
+    return handleHttpError(request, response);
   });
 };
 
-const fetchAvatarsByPageAndRankingType = function(body){
-  return axios.post(`${endpoint}avatar/fetch-avatars-by-page-and-ranking-type`,{ ...body }, axiosOptions())
+const fetchAvatarsByPageAndRankingType = async function(body){
+  return axios.post(`${endpoint}avatar/fetch-avatars-by-page-and-ranking-type`, body, await axiosOptions())
   .then(({ data }) => {
     return data.data;
   }).catch(({ request, response }) => {
-    throw handleHttpError(request, response);
+    return handleHttpError(request, response);
   });
 };
 
-const fetchAvatarsByPageAndRankingTypeBattle = function(body){
-  return axios.post(`${endpoint}avatar/fetch-avatars-by-page-and-ranking-type-battle`,{ ...body }, axiosOptions())
+const fetchAvatarsByPageAndRankingTypeBattle = async function(body){
+  return axios.post(`${endpoint}avatar/fetch-avatars-by-page-and-ranking-type-battle`, body, await axiosOptions())
   .then(({ data }) => {
     return data.data;
   }).catch(({ request, response }) => {
-    throw handleHttpError(request, response);
+    return handleHttpError(request, response);
   });
 };
 
 
-export { insertAvatar, updateAvatar, buffAndUpdateAvatar, getAvatar, checkAvatarName, fetchAvatarsByPage, fetchAvatarsByPageAndRankingType, fetchAvatarsByPageAndRankingTypeBattle }
+export { insertAvatar, updateAvatarStats, upgradeSequence, getAvatar, checkAvatarName, fetchAvatarsByPage, fetchAvatarsByPageAndRankingType, fetchAvatarsByPageAndRankingTypeBattle };
