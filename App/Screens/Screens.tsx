@@ -6,11 +6,12 @@ import { store } from '../store';
 import LoadingWidget from '../LoadingWidget';
 import { clearLs } from '../common/helperFunctions';
 import { getHeroList } from '../api/authentication';
+import { deleteAccount } from '../api/account';
 import { checkAvatarName } from '../api/avatar';
 import DelayInput from "react-native-debounce-input";
-import Checkbox from 'expo-checkbox';
 //import AuthContext from "./context";
 import RegisterComponent from './Auth/Register';
+import SignInComponent from './Auth/SignIn';
 
 const styles = StyleSheet.create({
   container: {
@@ -57,12 +58,35 @@ const Home = ({ navigation }) => {
     </View>
   }
 
+  function handleDeleteAccount(){
+    const pResult = prompt('Delete Account: enter your email to confirm.');
+    const user = state.user;
+    if(pResult === user.email){
+      deleteAccount({ username: user.username, avatarID : user.id, email : user.email })
+      .then(async (data) =>{
+        if(data.error){
+          debugErrors(data.error, user);
+        }else{
+          
+          dispatch({ type: 'SET ALERTS', payload: { alerts : [{ type : 'success', message : "Account has beeb deleted. We hope to see you again sometime." }] } });
 
+          setTimeout(() =>{
+            return navigation.navigate('Auth', { screen : 'SignIn'});
+          }, 3000);
+        }
+      }).catch((error) =>{
+        debugErrors(error, user);
+      });
+    }else if(pResult !== null){
+      alert("Your email must match the email associated with this account!");
+    }
+  }
 
   return (
     <ScreenContainer>
       { renderHeroDetails() }
       <Button title="Delete JWT" onPress={() => clearLs('herofit-jwt')} />
+      <Button title="Delete ACCOUNT" onPress={() => handleDeleteAccount()} />
       <Button title="Drawer" onPress={() => navigation.toggleDrawer()} />
     </ScreenContainer>
   )
@@ -175,7 +199,7 @@ const SignIn = ({ navigation }) => {
           screen : 'SelectHero'
         });
       }} />
-      <Button title="Sign In"  onPress={() => navigation.push("Home")} />
+      <SignInComponent navigation={navigation} />
     </ScreenContainer>
   )
 }
@@ -185,7 +209,7 @@ const Register = ({ navigation }) =>{
   
   return (
     <ScreenContainer>
-      <RegisterComponent />
+      <RegisterComponent navigation={navigation} />
     </ScreenContainer>
   )
 }
@@ -363,7 +387,7 @@ const SelectHeroHowTo = ({ navigation }) =>{
   useEffect(() =>{
 
     getHeroList()
-    .then((data) =>{console.log('LOOK', data);
+    .then((data) =>{
       if(data.error){
         const error = data.error;
         return debugErrors(error);

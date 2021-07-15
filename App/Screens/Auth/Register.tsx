@@ -6,7 +6,6 @@ import { register } from '../../api/authentication';
 import { insertAvatar } from '../../api/avatar';
 import { store } from '../../store';
 import debugErrors from '../../common/debugErrors';
-import { setJwtInLocalStorage } from '../../common/jwtModule';
 
 const Register = ({ navigation }) => {
   const { dispatch, state } = useContext(store);
@@ -16,6 +15,7 @@ const Register = ({ navigation }) => {
   const [displayName, setDisplayName] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [emailMarketingOptIn, setEmailMarketingOptIn] = useState(true);
   const [helperText, setHelperText] = useState(null);
   const [formIsValid, setFormIsValid] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -30,6 +30,10 @@ const Register = ({ navigation }) => {
       return insertAvatar({ avatar : state.hero, email : user.email, userId : user.id });
     }).then((data) =>{
       console.log('data from inserting av into db', data);
+      dispatch({ type: 'SET ALERTS', payload: { alerts : [{type : 'success', message :`Account creation successful!`}] } });
+      setTimeout(() =>{
+        navigation.navigate('App', { screen: 'HomeWrapperScreen', params: { screen : 'Home'} });
+      },1500);
     }).catch((error) =>{
       // Error getting Avatar, should only happen if DB connection issues
       debugErrors(error, user);
@@ -41,8 +45,10 @@ const Register = ({ navigation }) => {
   function handleRegister(){
     setLoading(true);
     setHelperText('');
-    register({ email, firstName, lastName, username : displayName, password })
+
+    register({ email, firstName, lastName, username : displayName, password, emailMarketingOptIn })
     .then((data) =>{
+      
       setSuccess(true);
       const { user, tokenObject } : { user : object, tokenObject : string } = data;
       console.log( user, tokenObject );
@@ -127,6 +133,7 @@ const Register = ({ navigation }) => {
         style={styles.input}
         onChangeText={text => handlePasswordInput(text)}
         value={password}
+        secureTextEntry={true}
         autoCompleteType="password"
         textContentType="password"
         placeholder="Password"
@@ -135,6 +142,7 @@ const Register = ({ navigation }) => {
         style={styles.input}
         onChangeText={text => handlePasswordConfirmInput(text)}
         value={passwordConfirm}
+        secureTextEntry={true}
         textContentType="password"
         placeholder="Confirm Password"
       />
@@ -143,15 +151,15 @@ const Register = ({ navigation }) => {
       </View>
       <Checkbox
         style={styles.checkbox}
-        value={marketingIsChecked}
-        onValueChange={setMarketingIsChecked}
+        value={emailMarketingOptIn}
+        onValueChange={(e) => setEmailMarketingOptIn(e)}
         color={marketingIsChecked ? '#4630EB' : undefined}
       />
       <View>
         <Text>Receive content-related Emails once every few months or so (we'll never sell your data).</Text>
       </View>
       <View>
-        <Button title="Submit" onPress={handleRegister} />
+        <Button title="Submit" disabled={formIsValid ? false : true} onPress={handleRegister} />
       </View>
     </ScrollView>
   )
