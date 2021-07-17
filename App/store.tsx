@@ -7,9 +7,10 @@ interface IStore {
   jwt : string | null;
   newUser : boolean;
   hero : object | null;
+  alerts : array;
 }
 
-const initialState : IStore = { isLoading : true, jwt : null, newUser : false, hero : null };
+const initialState : IStore = { isLoading : true, jwt : null, newUser : false, hero : null, alerts : [] };
 
 
 const store = createContext<IStore>(initialState);

@@ -24,6 +24,14 @@ const SignIn = ({ navigation }) => {
       setSuccess(true);
       const { user, tokenObject } : { user : object, tokenObject : string } = data;
       console.log( user, tokenObject );
+      
+      // User hasn't confirmed email yet
+      if(!user.active){
+        dispatch({ type: 'SET ALERTS', payload: { alerts : [{ type : 'error', message : error.message }] } });
+        dispatch({ type: 'SET USER', payload: { user, loggedIn : false } });
+        dispatch({ type: 'TOGGLE LOADING', payload: { isLoading : false } });
+        return setLoading(false);
+      }
 
       getAvatar({ email : user.email })
       .then((data) =>{
@@ -69,6 +77,12 @@ const SignIn = ({ navigation }) => {
     }
     return setFormIsValid(false);
   }, [email, password]);
+
+  useEffect(() =>{
+    dispatch({ type: 'SET ALERTS', payload : { alerts : 
+      [{ type : 'Success', message : 'Default Test Alert' }]
+    }});
+  }, []);
 
 
   return (

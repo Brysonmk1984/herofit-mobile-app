@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { store, IStore } from './store';
 import { SignIn, Register, Home, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection, SpendQP, Loading } from './Screens/Screens';
 import { getJwtInLocalStorage, setJwtInLocalStorage } from './common/jwtModule';
+import Alerts from './Alerts';
 
 // ROOT First level Navigator, used to determine if the user should go through auth sequence of straight to the app
 const RootStack = createStackNavigator();
@@ -104,9 +106,13 @@ const App: React.FC<AppProps> = ({}) => {
   }, []);
 
   return (
-    <NavigationContainer>
-      <RootStackScreen />
-    </NavigationContainer>  
+   
+      <NavigationContainer>
+        <RootStackScreen />
+        { state.alerts.length ? <Alerts alerts={state.alerts} dispatch={dispatch} />  : null }
+      </NavigationContainer>
+      
+    
   )
 
 }

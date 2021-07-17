@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState, createRef } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { View, Text, TextInput, StyleSheet, Button, FlatList, SectionList } from 'react-native';
 import debugErrors from '../common/debugErrors';
-import { store } from '../store';
+import { store, IStore } from '../store';
 import LoadingWidget from '../LoadingWidget';
 import { clearLs } from '../common/helperFunctions';
 import { getHeroList } from '../api/authentication';
