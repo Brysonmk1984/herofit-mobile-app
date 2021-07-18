@@ -3,6 +3,7 @@ import randomToken from 'random-token';
 import avatars from './heroList.json';
 // import { debugErrors } from './errorHandler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { IStore } from '../store';
 
 const lowercaseUnderscore = function(ally){
     if(ally !== null && typeof ally !== 'undefined'){
@@ -197,11 +198,11 @@ function alertAdder(current, newAlerts){
     return {newAlertArray : [...current, ...arrayWithIndexes], fadeOutAlerts };
   }
 
-  function alertRemover(indiciesForRemoval, dispatch){
+  function alertRemover(indiciesForRemoval : string[], dispatch : any) : void{
     dispatch({type: 'REMOVE ALERTS', payload : { indiciesForRemoval }});
   }
 
-  function updateAlerts(newAlerts, state, dispatch){
+  function updateAlerts(newAlerts : object[], state : IStore, dispatch : any) : void{
     // Alerts are NEW and need to be added with new indicies, then added to state with any other state
     const { newAlertArray, fadeOutAlerts }  = alertAdder(state.alerts, newAlerts);
 
