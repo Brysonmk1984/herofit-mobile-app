@@ -4,6 +4,7 @@ import { login } from '../../api/authentication';
 import { getAvatar } from '../../api/avatar';
 import { store } from '../../store';
 import debugErrors from '../../common/debugErrors';
+import { updateAlerts } from '../../common/helperFunctions';
 
 const SignIn = ({ navigation }) => {
   const { dispatch, state } = useContext(store);
@@ -27,7 +28,7 @@ const SignIn = ({ navigation }) => {
       
       // User hasn't confirmed email yet
       if(!user.active){
-        dispatch({ type: 'SET ALERTS', payload: { alerts : [{ type : 'error', message : error.message }] } });
+        updateAlerts([{ type : 'error', message : "Please Confirm your Email by Clicking the link in the message sent after registration." }], state, dispatch);
         dispatch({ type: 'SET USER', payload: { user, loggedIn : false } });
         dispatch({ type: 'TOGGLE LOADING', payload: { isLoading : false } });
         return setLoading(false);
@@ -45,7 +46,7 @@ const SignIn = ({ navigation }) => {
         throw error;
       })
     }).catch((error) =>{
-      dispatch({ type: 'SET ALERTS', payload: { alerts : [{ type : 'error', message : error.message }] } });
+      updateAlerts([{ type : 'error', message : error.message }], state, dispatch);
       debugErrors(error);
     });
     
@@ -79,10 +80,13 @@ const SignIn = ({ navigation }) => {
   }, [email, password]);
 
   useEffect(() =>{
-    dispatch({ type: 'SET ALERTS', payload : { alerts : 
-      [{ type : 'Success', message : 'Default Test Alert' }]
-    }});
+    updateAlerts([{ type : 'Success', message : 'Default Test Alert' }], state, dispatch);
   }, []);
+
+  function addAlert(){
+    const message = Math.random();
+    updateAlerts([{ type : 'Success', message }], state, dispatch);
+  }
 
 
   return (
@@ -109,6 +113,7 @@ const SignIn = ({ navigation }) => {
       <View>
         <Button title="Submit" disabled={formIsValid ? false : true} onPress={handleSignIn} />
       </View>
+      <Button title="Add Alert" onPress={addAlert}></Button>
     </ScrollView>
   )
 }

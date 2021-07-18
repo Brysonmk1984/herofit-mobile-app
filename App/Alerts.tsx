@@ -3,11 +3,13 @@ import { StyleSheet, Text, View, Button, Linking, Pressable } from 'react-native
 import { Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Fonts, Colors, Spacing } from './styles';
+import { alertRemover } from './common/helperFunctions';
 
 interface LoadingWrapperProps {
 
 }
 const Alerts: React.FC<Alerts> = ({ alerts, dispatch }) => {
+  
 
   function handleConfirmButton(a){
     if(a.cb){
@@ -37,7 +39,7 @@ const Alerts: React.FC<Alerts> = ({ alerts, dispatch }) => {
     });
 
     if(alerts.length){
-      return <View key="alert-wrapper" >
+      return <View key={alertRemover.index} >
         {[...alertEls]}
       </View>
     }
@@ -46,8 +48,8 @@ const Alerts: React.FC<Alerts> = ({ alerts, dispatch }) => {
 
 
   function clearAlert(index){
-    const filtered = alerts.filter((alert) => alert.index !== index);
-    dispatch({ type: 'SET ALERTS', payload : { alerts : filtered }});
+    const filtered = alerts.filter((alert) => alert.index === index).map(alert => alert.index);
+    alertRemover(filtered, dispatch);
   }
 
   return(

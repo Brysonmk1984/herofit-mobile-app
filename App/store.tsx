@@ -1,5 +1,5 @@
 import React, {createContext, useReducer} from 'react';
-import { getLsWithExpiry, setLsWithExpiry } from './common/helperFunctions';
+import { alertAdder, alertRemover} from './common/helperFunctions';
 
 
 interface IStore {
@@ -7,7 +7,7 @@ interface IStore {
   jwt : string | null;
   newUser : boolean;
   hero : object | null;
-  alerts : array;
+  alerts : object[];
 }
 
 const initialState : IStore = { isLoading : true, jwt : null, newUser : false, hero : null, alerts : [] };
@@ -47,8 +47,14 @@ const StateProvider : React.FC = ( { children } ) => {
 
       case 'SET ALERTS':
         const { alerts } : { alerts : array } = action.payload;
-        return { ...state, alerts };
-
+        return { ...state, alerts : [...alerts] };
+      case 'REMOVE ALERTS':
+        const { indiciesForRemoval } : { alerts : array } = action.payload;
+        return { ...state, alerts : 
+          state.alerts.filter((alert) => {
+            return !indiciesForRemoval.includes(alert.index);
+          })
+        };
       default:
         throw new Error();
     };

@@ -103,6 +103,7 @@ const App: React.FC<AppProps> = ({}) => {
     setTimeout(() =>{
       dispatch({type : 'TOGGLE LOADING', payload : { isLoading : false } });
     },1500);
+    console.log('ALS', state.alerts);
   }, []);
 
   return (

@@ -1,4 +1,4 @@
-//import { generate } from 'rand-token';
+import randomToken from 'random-token';
 //import { validateAdmin } from '../services/mockService';
 import avatars from './heroList.json';
 // import { debugErrors } from './errorHandler';
@@ -174,74 +174,39 @@ function _uniqueUrlCheck(path){
     return path;
 }
 
-function isPrivateRoute(privateRoutes, path){
-    path = _uniqueUrlCheck(path);
-    return privateRoutes.find(route => route === path) !== undefined;
-}
-
-function isPublicRoute(publicRoutes, path){
-    path = _uniqueUrlCheck(path);
-    return publicRoutes.find(route => route === path) !== undefined;
-}
-
-// function alertAdder(current, newAlerts){
-//     newAlerts = Array.isArray(newAlerts) ? newAlerts : [newAlerts];
-//     const fadeOutAlerts = [];
+function alertAdder(current, newAlerts){
+    newAlerts = Array.isArray(newAlerts) ? newAlerts : [newAlerts];
+    const fadeOutAlerts = [];
     
-//     const arrayWithIndexes = newAlerts.map((alert, i) => {
-//         const token = generate(16);
-//         let mappedAlert = { type : alert.type, message : alert.message, index : token }
-//         if(alert.link){
-//           mappedAlert.link = alert.link;
-//         }
-//         if(alert.persist){
-//             mappedAlert.persist = true;
-//         }else{
-//             mappedAlert.persist = false;
-//             fadeOutAlerts.push(token);
-//         }
-
-//       return mappedAlert;
-//     });
-
-//     return {newAlertArray : [...current, ...arrayWithIndexes], fadeOutAlerts };
-//   }
-
-  // function alertRemover(current, indiciesForRemoval){
-  //   return current.filter((alert) => {
-  //     return !indiciesForRemoval.includes(alert.index);
-  //   });
-  // }
-
-  function adminPanelBinding(updateState, jwt){
-    let keysPressed = {};
-    document.addEventListener('keydown', (event) => {
-        keysPressed[event.key] = true;
-        if (event.ctrlKey && event.key === '2') {
-            if(process.env.REACT_APP_HOST_ENV === 'development'){
-              return updateState({ adminPanelOpen : true });
-            }else{
-              keysPressed = {};
-              let password = prompt('Enter Admin Password');
-              
-              validateAdmin({ password }, jwt)
-              .then((data) =>{
-                if(data.error){
-                  if(data.error.status === 403){
-                    return debugErrors(data.error);
-                  }
-                  return updateState({ alerts : [{ type : 'warning', message : 'Incorrect Password' }] });
-                }
-                return updateState({ adminPanelOpen : true });
-              });
-
-            }
+    const arrayWithIndexes = newAlerts.map((alert, i) => {
+        const token = randomToken(16);
+        let mappedAlert = { type : alert.type, message : alert.message, index : token }
+        if(alert.link){
+          mappedAlert.link = alert.link;
         }
-     });
-     
-     document.addEventListener('keyup', (event) => {
-        delete keysPressed[event.key];
-     });
+        if(alert.persist){
+            mappedAlert.persist = true;
+        }else{
+            mappedAlert.persist = false;
+            fadeOutAlerts.push(token);
+        }
+
+      return mappedAlert;
+    });
+
+    return {newAlertArray : [...current, ...arrayWithIndexes], fadeOutAlerts };
+  }
+
+  function alertRemover(indiciesForRemoval, dispatch){
+    dispatch({type: 'REMOVE ALERTS', payload : { indiciesForRemoval }});
+  }
+
+  function updateAlerts(newAlerts, state, dispatch){
+    // Alerts are NEW and need to be added with new indicies, then added to state with any other state
+    const { newAlertArray, fadeOutAlerts }  = alertAdder(state.alerts, newAlerts);
+
+    dispatch({type: 'SET ALERTS', payload : { alerts : newAlertArray }});
+    setTimeout(() => { alertRemover(fadeOutAlerts, dispatch); }, 6800);
   }
 
   function getAvatarAlias(character){
@@ -413,4 +378,4 @@ function isPublicRoute(publicRoutes, path){
   }
 
 
-export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getUrlParams, getUrlParamsAfterHash, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, isPrivateRoute, isPublicRoute,adminPanelBinding, getAvatarAlias, determineFoeClass, getImagePackage, getHeroImagePackage, getVillainImagePackage, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems,convertAorAn };
+export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getUrlParams, getUrlParamsAfterHash, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, alertAdder, alertRemover, updateAlerts, getAvatarAlias, determineFoeClass, getImagePackage, getHeroImagePackage, getVillainImagePackage, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems,convertAorAn };

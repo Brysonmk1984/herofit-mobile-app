@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState, createRef } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { View, Text, TextInput, StyleSheet, Button, FlatList, SectionList } from 'react-native';
 import debugErrors from '../common/debugErrors';
+import { updateAlerts } from '../common/helperFunctions';
 import { store, IStore } from '../store';
 import LoadingWidget from '../LoadingWidget';
 import { clearLs } from '../common/helperFunctions';
@@ -68,8 +69,7 @@ const Home = ({ navigation }) => {
           debugErrors(data.error, user);
         }else{
           
-          dispatch({ type: 'SET ALERTS', payload: { alerts : [{ type : 'success', message : "Account has beeb deleted. We hope to see you again sometime." }] } });
-
+          updateAlerts([{ type : 'success', message : "Account has beeb deleted. We hope to see you again sometime." }], state, dispatch);
           setTimeout(() =>{
             return navigation.navigate('Auth', { screen : 'SignIn'});
           }, 3000);

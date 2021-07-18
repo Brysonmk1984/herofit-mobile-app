@@ -6,6 +6,7 @@ import { register } from '../../api/authentication';
 import { insertAvatar } from '../../api/avatar';
 import { store } from '../../store';
 import debugErrors from '../../common/debugErrors';
+import { updateAlerts } from '../../common/helperFunctions';
 
 const Register = ({ navigation }) => {
   const { dispatch, state } = useContext(store);
@@ -37,7 +38,7 @@ const Register = ({ navigation }) => {
     }).catch((error) =>{
       // Error getting Avatar, should only happen if DB connection issues
       debugErrors(error, user);
-      dispatch({ type: 'SET ALERTS', payload: { alerts : [{type : 'error', message :`${error.status}: ${error.message}`}] } });
+      updateAlerts([{type : 'error', message :`${error.status}: ${error.message}`}], state, dispatch);
       dispatch({ type: 'TOGGLE LOADING', payload: { isLoading : false } });
     });
   }
@@ -52,11 +53,11 @@ const Register = ({ navigation }) => {
       setSuccess(true);
       const { user, tokenObject } : { user : object, tokenObject : string } = data;
       console.log( user, tokenObject );
-      dispatch({ type: 'SET ALERTS', payload: { alerts : [{ type : 'success', message : "Please check your email to verify account. Check your spam folder if the message is not in your inbox.", persist : true }] } });
+      updateAlerts([{ type : 'success', message : "Please check your email to verify account. Check your spam folder if the message is not in your inbox.", persist : true }], state, dispatch);
       
       handlePostRegister(user);
     }).catch((error) =>{
-      dispatch({ type: 'SET ALERTS', payload: { alerts : [{ type : 'error', message : error.message }] } });
+      updateAlerts([{ type : 'error', message : error.message }], state, dispatch);
       debugErrors(error);
     });
     
