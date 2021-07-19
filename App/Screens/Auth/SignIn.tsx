@@ -80,41 +80,48 @@ const SignIn = ({ navigation }) => {
   }, [email, password]);
 
   useEffect(() =>{
-    updateAlerts([{ type : 'Success', message : 'Default Test Alert' }], state, dispatch);
+    updateAlerts([{ type : 'success', message : 'Default Test Alert' }], state, dispatch);
   }, []);
+
+
+  function theFunc(){
+    console.log('WORKS');
+  }
 
   function addAlert(){
     const message = Math.random();
-    updateAlerts([{ type : 'Success', message }], state, dispatch);
+    updateAlerts([{ type : 'error', message, confirm:"cake?", cb : theFunc }], state, dispatch);
   }
 
 
   return (
-    <ScrollView>
-      <Text>Sign IN Screen</Text>
-      <TextInput
-        style={styles.input}
-        onChangeText={email => handleEmailInput(email)}
-        value={email}
-        placeholder="Email"
-      />
-      <TextInput
-        style={styles.input}
-        onChangeText={text => handlePasswordInput(text)}
-        value={password}
-        secureTextEntry={true}
-        autoCompleteType="password"
-        textContentType="password"
-        placeholder="Password"
-      />
-      <View>
-        <Text>{ helperText }</Text>
-      </View>
-      <View>
-        <Button title="Submit" disabled={formIsValid ? false : true} onPress={handleSignIn} />
-      </View>
-      <Button title="Add Alert" onPress={addAlert}></Button>
-    </ScrollView>
+    <View style={ styles.container }>
+      <ScrollView>
+        <Text>Sign IN Screen</Text>
+        <TextInput
+          style={styles.input}
+          onChangeText={email => handleEmailInput(email)}
+          value={email}
+          placeholder="Email"
+        />
+        <TextInput
+          style={styles.input}
+          onChangeText={text => handlePasswordInput(text)}
+          value={password}
+          secureTextEntry={true}
+          autoCompleteType="password"
+          textContentType="password"
+          placeholder="Password"
+        />
+        <View>
+          <Text>{ helperText }</Text>
+        </View>
+        <View>
+          <Button title="Submit" disabled={formIsValid ? false : true} onPress={handleSignIn} />
+        </View>
+        <Button title="Add Alert" onPress={addAlert}></Button>
+      </ScrollView>
+    </View>
   )
 }
 
@@ -125,7 +132,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    //backgroundColor: 'red',
+    width: '100%'
   },
   button: {
     paddingHorizontal: 20,

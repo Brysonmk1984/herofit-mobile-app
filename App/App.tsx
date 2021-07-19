@@ -7,6 +7,8 @@ import { store, IStore } from './store';
 import { SignIn, Register, Home, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection, SpendQP, Loading } from './Screens/Screens';
 import { getJwtInLocalStorage, setJwtInLocalStorage } from './common/jwtModule';
 import Alerts from './Alerts';
+import {LogBox } from 'react-native';
+LogBox.ignoreLogs(['Reanimated 2']);
 
 // ROOT First level Navigator, used to determine if the user should go through auth sequence of straight to the app
 const RootStack = createStackNavigator();

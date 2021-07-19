@@ -1,14 +1,20 @@
 import React, { useContext } from 'react';
 import { StyleSheet, Text, View, Button, Linking, Pressable } from 'react-native';
 import { Dimensions } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { Fonts, Colors, Spacing } from './styles';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { Fonts, Colors, Spacing, AlertThemes, Buttons } from './styles';
 import { alertRemover } from './common/helperFunctions';
 
-interface LoadingWrapperProps {
 
+interface Alert{
+  type : string
+  message : string,
+  link : string | undefined,
+  confirm : string | undefined,
+  cb : { () : void } | undefined,
 }
-const Alerts: React.FC<Alerts> = ({ alerts, dispatch }) => {
+
+const Alerts: React.FC<Alerts> = ({ alerts, dispatch } : { alerts : Alert[], dispatch : React.Dispatch<any> }) => {
   
 
   function handleConfirmButton(a){
@@ -17,22 +23,43 @@ const Alerts: React.FC<Alerts> = ({ alerts, dispatch }) => {
     }
   }
 
+  function renderIcon(aType, aStyle){
+    console.log(aType);
+    switch(aType){
+      case 'success':
+        return <Ionicons name="md-checkmark-circle" size={24} color={aStyle.color}  />
+      case 'warning':
+        return <Ionicons name="md-warning-sharp" size={24} color={aStyle.color}  />
+      case 'error':
+        return <MaterialIcons name="error" size={24} color={aStyle.color}  />
+      case 'info':
+        return <MaterialIcons name="info" size={24} color={aStyle.color}  />
+      default:
+        return null;
+    }
+  }
+
   function renderAlerts(){
    
     const alertEls = alerts.map((a)=>{
-     
+        const aType = a.type;
+        const aStyle =  AlertThemes[aType];
+        console.log(a);
         return(
-          <View style={styles.alertContainer} key={`alert-${a.index}`}>
-            <Ionicons name="md-checkmark-circle" size={32} color="green" />
-            
-            <View style={styles.textColumn}>
-              <Text style={styles.header}>{a.type === 'info' ? 'FYI' : a.type}</Text>
-              { a.link ? <Text style={{color: 'blue'}} onPress={() => Linking.openURL(a.link)}> {a.message} </Text> : <Text>{a.message}</Text> }
-              { a.confirm ? <Button onPress={() => handleConfirmButton(a)}>{a.confirm}</Button> : null }
+          <View style={ [styles.alertContainer, aStyle] } key={`alert-${a.index}`}>
+            <View style={styles.iconColumn}>
+              { renderIcon(aType, aStyle) }
             </View>
-            
+            <View style={styles.textColumn}>
+              <Text style={[styles.header, { color : aStyle.color }]}>{a.type === 'info' ? 'FYI' : a.type.toUpperCase()}</Text>
+              { a.link ? <Text style={{color: Colors.linkText, textDecorationLine: 'underline'}} onPress={() => Linking.openURL(a.link)}> {a.message} </Text> 
+                : a.confirm ?  <View style={ { flexDirection: 'row', flex: 1, alignItems: 'center' } }><Text style={ { color : aStyle.color } }>{a.message} </Text><Pressable onPress={() => handleConfirmButton(a)}><Text style={ Buttons.primaryButton }>{a.confirm}</Text></Pressable></View> 
+                : <Text style={ { color: aStyle.color } }>{a.message} </Text>
+              }
+              
+            </View>
             <Pressable style={styles.closeButton} onPress={() =>{ clearAlert(a.index) }}>
-              <Ionicons name="md-close" size={32} color="green" />
+              <Ionicons name="md-close" size={24}  color={`${aStyle.color}`} />
             </Pressable>
           </View>
         )
@@ -67,12 +94,14 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     width: '100%',
-    height: Dimensions.get('window').height * .2,
     justifyContent: "center",
     alignSelf: "flex-end",
     zIndex:0,
-    backgroundColor: 'red',
     fontFamily : Fonts.bodyText,
+    opacity: .9
+  },
+  iconColumn:{
+    flex: .15
   },
   textColumn:{
     flex: 1
@@ -82,11 +111,12 @@ const styles = StyleSheet.create({
   },
   header: {
     fontFamily : Fonts.headlineText,
-    fontSize: 50
+    fontSize: 20,
+    lineHeight: 24
   },
   closeButton: {
+  },
 
-  }
 });
 
 export default Alerts;

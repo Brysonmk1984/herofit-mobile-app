@@ -185,6 +185,12 @@ function alertAdder(current, newAlerts){
         if(alert.link){
           mappedAlert.link = alert.link;
         }
+        if(alert.confirm){
+          mappedAlert.confirm = alert.confirm;
+        }
+        if(alert.cb){
+          mappedAlert.cb = alert.cb;
+        }
         if(alert.persist){
             mappedAlert.persist = true;
         }else{
@@ -211,8 +217,8 @@ function alertAdder(current, newAlerts){
   }
 
   function getAvatarAlias(character){
-        const alias = avatars.find((av) => av.character === character).alias;
-        return alias;
+    const alias = avatars.find((av) => av.character === character).alias;
+    return alias;
   }
   function determineFoeClass(type){
     const foeClasses = {
