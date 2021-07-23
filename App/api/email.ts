@@ -13,7 +13,7 @@ const emailFeedbackData = async function(body){
     .then(({ data }) =>{
         return data.data;
     }).catch(({ request, response }) => {
-        return handleHttpError(request, response);
+        throw handleHttpError(request, response);
     });
 };
 
@@ -22,7 +22,7 @@ const emailSurveyData = async function(body){
     .then(({ data }) =>{
         return data.data;
     }).catch(({ request, response }) => {
-        return handleHttpError(request, response);
+        throw handleHttpError(request, response);
     });
 };
 
@@ -31,7 +31,7 @@ const emailContactForm = async function(body){
     .then(({ data }) =>{
         return data;
     }).catch(({ request, response }) => {
-        return handleHttpError(request, response);
+        throw handleHttpError(request, response);
     });
 };
 
@@ -42,7 +42,7 @@ const emailAppError = async function(body){
         console.log('APP ERROR Email Delivered', data);
     }).catch(({ request, response }) => {
         console.log('Error sending email - response', response);
-        return handleHttpError(request, response);
+        throw handleHttpError(request, response);
     });
 };
 

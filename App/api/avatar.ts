@@ -13,7 +13,7 @@ const insertAvatar = async function(body){
     .then(({ data }) => {
       return data.data;
     }).catch(({ request, response }) => {
-      return handleHttpError(request, response);
+      throw handleHttpError(request, response);
     });
 };
 
@@ -22,7 +22,7 @@ const updateAvatarStats = async function(body){
   .then(({ data }) => {
     return data.data || { data : null };
   }).catch(({ request, response }) => {
-    return handleHttpError(request, response);
+    throw handleHttpError(request, response);
   });
 };
 
@@ -31,17 +31,17 @@ const upgradeSequence = async function(body){
   .then(({ data }) => {
     return data.data;
   }).catch(({ request, response }) => {
-    return handleHttpError(request, response);
+    throw handleHttpError(request, response);
   });
 };
 
 const getAvatar = async function(body){  
   return axios.post(`${endpoint}avatar/get-avatar`, body, await axiosOptions())
   .then(({ data }) => {
-    const avatar = data.data;
-    return { avatar };      
+    const hero = data.data;
+    return { hero };      
   }).catch(({ request, response }) => {
-    return handleHttpError(request, response);
+    throw handleHttpError(request, response);
   });
 };
 
@@ -50,7 +50,7 @@ const checkAvatarName = async function(body){
   .then(({ data }) => {
     return data.data;      
   }).catch(({ request, response }) => {
-    return handleHttpError(request, response);
+    throw handleHttpError(request, response);
   });
 };
 
@@ -61,7 +61,7 @@ const fetchAvatarsByPage = async function(body){
   }).catch(({ request, response }) => {
     // Need to return here. If async is needed, need to wrap it in a new Promise
     // Client received an error response (5xx, 4xx, or something from bad code before request)
-    return handleHttpError(request, response);
+    throw handleHttpError(request, response);
   });
 };
 
@@ -70,7 +70,7 @@ const fetchAvatarsByPageAndRankingType = async function(body){
   .then(({ data }) => {
     return data.data;
   }).catch(({ request, response }) => {
-    return handleHttpError(request, response);
+    throw handleHttpError(request, response);
   });
 };
 
@@ -79,7 +79,7 @@ const fetchAvatarsByPageAndRankingTypeBattle = async function(body){
   .then(({ data }) => {
     return data.data;
   }).catch(({ request, response }) => {
-    return handleHttpError(request, response);
+    throw handleHttpError(request, response);
   });
 };
 

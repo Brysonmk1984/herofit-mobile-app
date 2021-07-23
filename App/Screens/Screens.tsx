@@ -2,10 +2,11 @@ import React, { useContext, useEffect, useState, createRef } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { View, Text, TextInput, StyleSheet, Button, FlatList, SectionList } from 'react-native';
 import debugErrors from '../common/debugErrors';
-import { updateAlerts } from '../common/helperFunctions';
-import { store, IStore } from '../store';
+import { updateAlerts } from '../common/alerts';
+import { store } from '../store';
+import { IStore } from '../common/interfaces';
 import LoadingWidget from '../LoadingWidget';
-import { clearLs } from '../common/helperFunctions';
+import { clearJwtInLocalStorage } from '../common/jwtModule';
 import { getHeroList } from '../api/authentication';
 import { deleteAccount } from '../api/account';
 import { checkAvatarName } from '../api/avatar';
@@ -69,7 +70,7 @@ const Home = ({ navigation }) => {
           debugErrors(data.error, user);
         }else{
           
-          updateAlerts([{ type : 'success', message : "Account has beeb deleted. We hope to see you again sometime." }], state, dispatch);
+          updateAlerts([{ type : 'success', message : "Account has been deleted. We hope to see you again sometime." }], state, dispatch);
           setTimeout(() =>{
             return navigation.navigate('Auth', { screen : 'SignIn'});
           }, 3000);
@@ -85,7 +86,12 @@ const Home = ({ navigation }) => {
   return (
     <ScreenContainer>
       { renderHeroDetails() }
-      <Button title="Delete JWT" onPress={() => clearLs('herofit-jwt')} />
+      <Button title="Delete JWT" onPress={() => {
+
+        clearJwtInLocalStorage();
+        navigation.navigate('Auth', { screen: 'HomeWrapperScreen', params: { screen : 'Home'} });
+
+      }} />
       <Button title="Delete ACCOUNT" onPress={() => handleDeleteAccount()} />
       <Button title="Drawer" onPress={() => navigation.toggleDrawer()} />
     </ScreenContainer>
@@ -195,9 +201,7 @@ const SignIn = ({ navigation }) => {
       <Text>Has Token : { state.jwt } </Text>
       <Button title="Select Hero" onPress={() => {
         dispatch({ type: 'SET NEW USER', payload: { newUser : true }});
-        return navigation.navigate('Auth', { 
-          screen : 'SelectHero'
-        });
+        return navigation.navigate('Auth',  { screen : 'SignIn'});
       }} />
       <SignInComponent navigation={navigation} />
     </ScreenContainer>

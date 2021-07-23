@@ -3,20 +3,23 @@ import { View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { store, IStore } from './store';
+import { store } from './store';
+import { IStore } from './common/interfaces';
 import { SignIn, Register, Home, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection, SpendQP, Loading } from './Screens/Screens';
 import { getJwtInLocalStorage, setJwtInLocalStorage } from './common/jwtModule';
 import Alerts from './Alerts';
-import {LogBox } from 'react-native';
+import { LogBox } from 'react-native';
+import initDetails from './common/initDetails';
+
 LogBox.ignoreLogs(['Reanimated 2']);
 
 // ROOT First level Navigator, used to determine if the user should go through auth sequence of straight to the app
 const RootStack = createStackNavigator();
-const RootStackScreen = ({  }) =>{
+const RootStackScreen = ({ isSignedIn }) =>{
   return <RootStack.Navigator headerMode="none">
-    <RootStack.Screen name="Auth" component={AuthStackScreen} />
-    <RootStack.Screen name="App" component={DrawerScreen} />
-
+    { isSignedIn ? <RootStack.Screen name="App" component={DrawerScreen} />
+      : <RootStack.Screen name="Auth" component={AuthStackScreen} />
+    }
   </RootStack.Navigator>
 }
 
@@ -26,11 +29,7 @@ const DrawerScreen = () =>{
   const { dispatch, state } = useContext<IStore>(store);
 
   return <Drawer.Navigator>
-    {
-      state.isLoading ? <Drawer.Screen name="Loading" component={Loading} />
-      :  <Drawer.Screen name="HomeWrapperScreen" component={HomeWrapperScreen} />
-    }
-  
+    <Drawer.Screen name="HomeWrapperScreen" component={HomeWrapperScreen} />
   </Drawer.Navigator>
 }
 
@@ -89,7 +88,6 @@ const SelectHeroStackScreen = () =>{
     <SelectHeroStack.Screen name="SelectHero" component={SelectHero}  options={{ title : 'Select Hero' }} />
     <SelectHeroStack.Screen name="HeroDetails" component={HeroDetails} options={HeroDetails.navigationOptions}  options={{ title : 'Hero Details' }} />
     <SelectHeroStack.Screen name="FinalizeHeroSelection" component={FinalizeHeroSelection}  options={{ title : 'Finalize Hero Selection' }} />
-    {/* NEED TO ADD REGISTER HERE */}
   </SelectHeroStack.Navigator>
 };
 
@@ -99,23 +97,24 @@ const SelectHeroStackScreen = () =>{
 const App: React.FC<AppProps> = ({}) => {
   const { dispatch, state } = useContext<IStore>(store);
 
-
-  useEffect(() =>{
-    // Simulate Loading
-    setTimeout(() =>{
-      dispatch({type : 'TOGGLE LOADING', payload : { isLoading : false } });
-    },1500);
-    console.log('ALS', state.alerts);
+  useEffect(async () => {
+    const token = await getJwtInLocalStorage();
+    if(token){
+      console.log('THE TOKK', token, state);
+      await initDetails(dispatch);
+    }
+    dispatch({type : 'TOGGLE LOADING', payload : { isLoading : false } });
   }, []);
 
   return (
-   
-      <NavigationContainer>
-        <RootStackScreen />
-        { state.alerts.length ? <Alerts alerts={state.alerts} dispatch={dispatch} />  : null }
-      </NavigationContainer>
+    <NavigationContainer>
+      {
+        state.isLoading ? <Drawer.Screen name="Loading" component={Loading} />
+        : <RootStackScreen isSignedIn={state.isSignedIn} />
+      }
       
-    
+      { state.alerts.length ? <Alerts alerts={state.alerts} dispatch={dispatch} />  : null }
+    </NavigationContainer>
   )
 
 }

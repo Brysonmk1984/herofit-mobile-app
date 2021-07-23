@@ -1,8 +1,12 @@
-import { primaryButton as cPrimaryButton, secondaryButton as cSecondaryButton } from "./colors";
+import { primaryButton as cPrimaryButton, secondaryButton as cSecondaryButton, pressedButton as cPressedButton, linkText, lightLinkText } from "./colors";
 
 const base = {
   paddingHorizontal: 10,
   paddingVertical: 12,
+};
+const baseSmall = {
+  paddingHorizontal: 8,
+  paddingVertical: 8,
 };
 const primary = {
   backgroundColor : cPrimaryButton.backgroundColor,
@@ -12,21 +16,35 @@ const secondary = {
   backgroundColor : cSecondaryButton.backgroundColor,
   color : cSecondaryButton.color
 };
-
-const small = {
-  paddingHorizontal: 10,
-  paddingVertical: 12,
-  width: 75
+const pressed = {
+  backgroundColor : cPressedButton.backgroundColor,
+  color : cPressedButton.color
 };
+
+const textLink = {
+  color: linkText.color,
+  textDecorationLine: 'underline'
+}
+
+const lightTextLink = {
+  color: lightLinkText.color,
+  textDecorationLine: 'underline'
+}
 
 const rounded = {
-  borderRadius: 50
+  borderRadius: 12
 };
 
-const smallRounded = {
-  ...base,
-  ...small,
-  ...rounded
+const alertButton = {
+  ...baseSmall,
+  ...rounded,
+  ...secondary
+};
+
+const alertButtonPressed = {
+  ...baseSmall,
+  ...rounded,
+  ...pressed
 };
 
 const primaryButton = {
@@ -37,5 +55,9 @@ const secondaryButton = {
   ...base,
   ...secondary
 };
+const pressedButton = {
+  ...base,
+  ...pressed
+};
 
-export { base, small, smallRounded, primaryButton, secondaryButton }
+export { base, primaryButton, secondaryButton, pressedButton, alertButton, alertButtonPressed, textLink, lightTextLink }

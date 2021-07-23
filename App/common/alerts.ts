@@ -1,35 +1,36 @@
-import { generate } from 'rand-token';
+import randomToken from 'random-token';
+import { IAlert, IStore } from './interfaces';
 
-function adder(current, newAlerts){
+function alertAdder(current, newAlerts){
   newAlerts = Array.isArray(newAlerts) ? newAlerts : [newAlerts];
   const fadeOutAlerts = [];
   
-  const arrayWithIndexes = newAlerts.map((alert, i) => {
-      const token = generate(16);
-      let mappedAlert = { type : alert.type, message : alert.message, confirm : alert.confirm, identifier : alert.identifier, index : token }
-      if(alert.link){
-        mappedAlert.link = alert.link;
-      }
+  const arrayWithIndexes = newAlerts.map((alert : IAlert, i : string) => {
+      alert.index = randomToken(16);
       if(alert.persist){
-          mappedAlert.persist = true;
+        alert.persist = true;
       }else{
-          mappedAlert.persist = false;
-          fadeOutAlerts.push(token);
-      }
-      if(alert.cb){
-        mappedAlert.cb = alert.cb;
+        alert.persist = false;
+        fadeOutAlerts.push(alert.index);
       }
 
-    return mappedAlert;
+    return alert;
   });
 
   return {newAlertArray : [...current, ...arrayWithIndexes], fadeOutAlerts };
 }
 
-function remover(current, indiciesForRemoval){
-  return current.filter((alert) => {
-    return !indiciesForRemoval.includes(alert.index);
-  });
+function alertRemover(indiciesForRemoval : string[], dispatch : any){
+  dispatch({type: 'REMOVE ALERTS', payload : { indiciesForRemoval }});
 }
 
-export { adder, remover };
+function updateAlerts(newAlerts : object[], state : IStore, dispatch : any){
+  // Alerts are NEW and need to be added with new indicies, then added to state with any other state
+  const { newAlertArray, fadeOutAlerts }  = alertAdder(state.alerts, newAlerts);
+
+  dispatch({type: 'SET ALERTS', payload : { alerts : newAlertArray }});
+  setTimeout(() => { alertRemover(fadeOutAlerts, dispatch); }, 6800);
+}
+
+
+export { updateAlerts, alertAdder, alertRemover };

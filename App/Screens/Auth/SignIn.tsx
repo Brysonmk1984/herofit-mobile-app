@@ -4,7 +4,7 @@ import { login } from '../../api/authentication';
 import { getAvatar } from '../../api/avatar';
 import { store } from '../../store';
 import debugErrors from '../../common/debugErrors';
-import { updateAlerts } from '../../common/helperFunctions';
+import { updateAlerts } from '../../common/alerts';
 
 const SignIn = ({ navigation }) => {
   const { dispatch, state } = useContext(store);
@@ -38,6 +38,7 @@ const SignIn = ({ navigation }) => {
       .then((data) =>{
         const { avatar } = data;
         dispatch({ type: 'SET HERO', payload: { hero : avatar } });
+        updateAlerts([{ type : 'Success', message : "You've been logged in!"  }], state, dispatch);
         console.log('AVATAR');
         setTimeout(() =>{
           navigation.navigate('App', { screen: 'HomeWrapperScreen', params: { screen : 'Home'} });
@@ -79,18 +80,14 @@ const SignIn = ({ navigation }) => {
     return setFormIsValid(false);
   }, [email, password]);
 
-  useEffect(() =>{
-    updateAlerts([{ type : 'success', message : 'Default Test Alert' }], state, dispatch);
-  }, []);
-
-
-  function theFunc(){
-    console.log('WORKS');
+  
+  function myCB(){
+    console.log('works');
   }
 
   function addAlert(){
     const message = Math.random();
-    updateAlerts([{ type : 'error', message, confirm:"cake?", cb : theFunc }], state, dispatch);
+    updateAlerts([{ type : 'success', message, confirm: { text : 'cake', cb : myCB } }], state, dispatch);
   }
 
 

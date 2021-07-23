@@ -1,55 +1,44 @@
 import React, {createContext, useReducer} from 'react';
-import { alertAdder, alertRemover} from './common/helperFunctions';
+import { IStore, Action } from './common/interfaces';
 
-
-interface IStore {
-  isLoading : boolean;
-  jwt : string | null;
-  newUser : boolean;
-  hero : object | null;
-  alerts : object[];
-}
-
-const initialState : IStore = { isLoading : true, jwt : null, newUser : false, hero : null, alerts : [] };
-
-
+const initialState : IStore = { isLoading : true, isSignedIn : null, newUser : false, hero : null, alerts : [] };
 const store = createContext<IStore>(initialState);
 const { Provider } = store;
 
-interface Action {
-  type : string;
-  payload : object;
-}
-
-
-
 const StateProvider : React.FC = ( { children } ) => {
   const [state, dispatch] = useReducer((state : IStore, action : Action) => {
+    let isLoading, user, hero, gameItems, latestBattle, isSignedIn, alerts, indiciesForRemoval;
+
     switch(action.type) {
       case 'TOGGLE LOADING':
-        const { isLoading } : { isLoading : boolean | undefined } = action.payload;
+        ({ isLoading } = action.payload);
         if(typeof isLoading === 'undefined'){
           return Object.assign({}, state, { isLoading : !state.isLoading });
         }
         return Object.assign({}, state, { isLoading });
-
+      case 'SET EXISTING USER INIT DATA':
+        ({ user, hero, gameItems, latestBattle, isSignedIn } = action.payload);
+        return { ...state, ...{ user, hero, gameItems, latestBattle, isSignedIn } };
+      case 'SET ISSIGNEDIN':
+        ({ isSignedIn } = action.payload);
+        return { ...state, isSignedIn };
       case 'SET NEW USER':
-        const { newUser } = action.payload;
+        ({ newUser } = action.payload);
         return { ...state, newUser };
 
       case 'SET HERO':
-        const { hero } : { hero : object } = action.payload;
+        ({ hero } = action.payload);
         return { ...state, hero };
 
       case 'SET USER':
-        const { user } : { alerts : object } = action.payload;
+        ({ user } = action.payload);
         return { ...state, user };
 
       case 'SET ALERTS':
-        const { alerts } : { alerts : array } = action.payload;
+        ({ alerts }  = action.payload);
         return { ...state, alerts : [...alerts] };
       case 'REMOVE ALERTS':
-        const { indiciesForRemoval } : { alerts : array } = action.payload;
+        ({ indiciesForRemoval } = action.payload);
         return { ...state, alerts : 
           state.alerts.filter((alert) => {
             return !indiciesForRemoval.includes(alert.index);
@@ -67,4 +56,4 @@ const StateProvider : React.FC = ( { children } ) => {
   );
 };
 
-export { store, StateProvider, IStore }
+export { store, StateProvider }

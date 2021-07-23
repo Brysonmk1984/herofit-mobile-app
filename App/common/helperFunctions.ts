@@ -1,9 +1,8 @@
-import randomToken from 'random-token';
+
 //import { validateAdmin } from '../services/mockService';
 import avatars from './heroList.json';
 // import { debugErrors } from './errorHandler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { IStore } from '../store';
 
 const lowercaseUnderscore = function(ally){
     if(ally !== null && typeof ally !== 'undefined'){
@@ -89,7 +88,6 @@ function setLsWithExpiry(key, value, ttl) {
 async function getLsWithExpiry(key) {
     try{
       const itemStr = await AsyncStorage.getItem(key);
-      console.log('ITEM STR', itemStr);
       if(!itemStr){
         throw new Error('No Token');
       }
@@ -166,54 +164,13 @@ function cloneObj(obj, deep=false){
     return result
 }
 
-// If the route is longer than just one directory, check only the first string for the public/private route check
-// eg - /users/myusername -> only check /users
-function _uniqueUrlCheck(path){
-    if(path.split('/').length > 2){
-        return '/' + path.split('/')[1];
-    }
-    return path;
-}
-
-function alertAdder(current, newAlerts){
-    newAlerts = Array.isArray(newAlerts) ? newAlerts : [newAlerts];
-    const fadeOutAlerts = [];
-    
-    const arrayWithIndexes = newAlerts.map((alert, i) => {
-        const token = randomToken(16);
-        let mappedAlert = { type : alert.type, message : alert.message, index : token }
-        if(alert.link){
-          mappedAlert.link = alert.link;
-        }
-        if(alert.confirm){
-          mappedAlert.confirm = alert.confirm;
-        }
-        if(alert.cb){
-          mappedAlert.cb = alert.cb;
-        }
-        if(alert.persist){
-            mappedAlert.persist = true;
-        }else{
-            mappedAlert.persist = false;
-            fadeOutAlerts.push(token);
-        }
-
-      return mappedAlert;
-    });
-
-    return {newAlertArray : [...current, ...arrayWithIndexes], fadeOutAlerts };
-  }
-
-  function alertRemover(indiciesForRemoval : string[], dispatch : any) : void{
-    dispatch({type: 'REMOVE ALERTS', payload : { indiciesForRemoval }});
-  }
-
-  function updateAlerts(newAlerts : object[], state : IStore, dispatch : any) : void{
-    // Alerts are NEW and need to be added with new indicies, then added to state with any other state
-    const { newAlertArray, fadeOutAlerts }  = alertAdder(state.alerts, newAlerts);
-
-    dispatch({type: 'SET ALERTS', payload : { alerts : newAlertArray }});
-    setTimeout(() => { alertRemover(fadeOutAlerts, dispatch); }, 6800);
+  // If the route is longer than just one directory, check only the first string for the public/private route check
+  // eg - /users/myusername -> only check /users
+  function _uniqueUrlCheck(path){
+      if(path.split('/').length > 2){
+          return '/' + path.split('/')[1];
+      }
+      return path;
   }
 
   function getAvatarAlias(character){
@@ -368,7 +325,7 @@ function alertAdder(current, newAlerts){
   }
 
 
-  function convertItemIdsToFullItems(itemIds, defaultItems){
+  function convertItemIdsToFullItems(itemIds : number[], defaultItems : object[]){
 
     const allAvatarItems = itemIds.map((itemInstance) => {
       const matchingItem = defaultItems.find(item => item.id === itemInstance.itemID);
@@ -385,4 +342,4 @@ function alertAdder(current, newAlerts){
   }
 
 
-export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getUrlParams, getUrlParamsAfterHash, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, alertAdder, alertRemover, updateAlerts, getAvatarAlias, determineFoeClass, getImagePackage, getHeroImagePackage, getVillainImagePackage, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems,convertAorAn };
+export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getUrlParams, getUrlParamsAfterHash, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, getAvatarAlias, determineFoeClass, getImagePackage, getHeroImagePackage, getVillainImagePackage, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems,convertAorAn };

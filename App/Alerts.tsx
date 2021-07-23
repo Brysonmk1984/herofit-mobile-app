@@ -1,30 +1,15 @@
 import React, { useContext } from 'react';
 import { StyleSheet, Text, View, Button, Linking, Pressable } from 'react-native';
-import { Dimensions } from 'react-native';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { Fonts, Colors, Spacing, AlertThemes, Buttons } from './styles';
-import { alertRemover } from './common/helperFunctions';
+import { alertRemover } from './common/alerts';
+import { IAlert } from './common/interfaces';
 
 
-interface Alert{
-  type : string
-  message : string,
-  link : string | undefined,
-  confirm : string | undefined,
-  cb : { () : void } | undefined,
-}
 
-const Alerts: React.FC<Alerts> = ({ alerts, dispatch } : { alerts : Alert[], dispatch : React.Dispatch<any> }) => {
-  
-
-  function handleConfirmButton(a){
-    if(a.cb){
-      a.cb();
-    }
-  }
+const Alerts: React.FC<Alerts> = ({ alerts, dispatch } : { alerts : IAlert[], dispatch : React.Dispatch<any> }) => {
 
   function renderIcon(aType, aStyle){
-    console.log(aType);
     switch(aType){
       case 'success':
         return <Ionicons name="md-checkmark-circle" size={24} color={aStyle.color}  />
@@ -40,41 +25,50 @@ const Alerts: React.FC<Alerts> = ({ alerts, dispatch } : { alerts : Alert[], dis
   }
 
   function renderAlerts(){
-   
-    const alertEls = alerts.map((a)=>{
-        const aType = a.type;
+    // All Alerts
+    const alertEls = alerts.map((a) =>{
+        const aType = a.type.toLowerCase();
         const aStyle =  AlertThemes[aType];
-        console.log(a);
-        return(
+
+        return (
+          // Single Alert
           <View style={ [styles.alertContainer, aStyle] } key={`alert-${a.index}`}>
+            {/* Alert Icon */}
             <View style={styles.iconColumn}>
               { renderIcon(aType, aStyle) }
             </View>
+            {/* Alert Text Column */}
             <View style={styles.textColumn}>
-              <Text style={[styles.header, { color : aStyle.color }]}>{a.type === 'info' ? 'FYI' : a.type.toUpperCase()}</Text>
-              { a.link ? <Text style={{color: Colors.linkText, textDecorationLine: 'underline'}} onPress={() => Linking.openURL(a.link)}> {a.message} </Text> 
-                : a.confirm ?  <View style={ { flexDirection: 'row', flex: 1, alignItems: 'center' } }><Text style={ { color : aStyle.color } }>{a.message} </Text><Pressable onPress={() => handleConfirmButton(a)}><Text style={ Buttons.primaryButton }>{a.confirm}</Text></Pressable></View> 
+              {/* Alert Header */}
+              <Text style={[styles.alertHeader, { color : aStyle.color }]}>{a.type === 'info' ? 'FYI' : a.type.toUpperCase()}</Text>
+              {/* Alert Body Text / Link / Button */}
+              { a.link ? <Text style={Buttons.lightTextLink} onPress={() => Linking.openURL(a.link)}> {a.message} </Text> 
+                : a.confirm ?  
+                  <View style={ styles.alertConfirmContent  }>
+                    <Text style={ { color : aStyle.color } }>{a.message} </Text>
+                    <Pressable style={({pressed}) => (pressed ? Buttons.alertButtonPressed : Buttons.alertButton)}  onPress={() => a.confirm.cb()} 
+                    children={({ pressed }) => ( 
+                      <Text style={{ color: pressed ? Buttons.pressedButton.color : Buttons.alertButton.color }}>{a.confirm.text}</Text>
+                    )} />
+                  </View> 
                 : <Text style={ { color: aStyle.color } }>{a.message} </Text>
-              }
-              
+              } 
             </View>
+            {/* Alert Close Icon */}
             <Pressable style={styles.closeButton} onPress={() =>{ clearAlert(a.index) }}>
               <Ionicons name="md-close" size={24}  color={`${aStyle.color}`} />
             </Pressable>
           </View>
         )
     });
-
-    if(alerts.length){
-      return <View key={alertRemover.index} >
-        {[...alertEls]}
-      </View>
-    }
-    return null;
+    
+    return <View>
+      {[...alertEls]}
+    </View>
   }
 
 
-  function clearAlert(index){
+  function clearAlert(index : string){
     const filtered = alerts.filter((alert) => alert.index === index).map(alert => alert.index);
     alertRemover(filtered, dispatch);
   }
@@ -109,10 +103,15 @@ const styles = StyleSheet.create({
   alertContainer: {
     flexDirection: 'row'
   },
-  header: {
+  alertHeader: {
     fontFamily : Fonts.headlineText,
     fontSize: 20,
     lineHeight: 24
+  },
+  alertConfirmContent: {
+    flexDirection: 'row',
+    flex: 1,
+    alignItems: 'center'
   },
   closeButton: {
   },

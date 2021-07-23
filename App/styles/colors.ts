@@ -4,6 +4,7 @@ const primaryBackground = { backgroundColor : '#e8eddf' };
 const secondaryBackground = { backgroundColor : '#ebebeb' };
 const mediumBackground = { backgroundColor : '#333533'};
 const darkBackground = { backgroundColor : '#242423' };
+const highlightBackground = { backgroundColor : '#f1c85b' };
 
 // Text - color property
 const darkText = { color : '#242423' };
@@ -29,11 +30,12 @@ const healthText = { color : '#A30216' };
 
 // Buttons - has color & backgroundColor properties
 const primaryButton = { backgroundColor : '#494e49', color : '#fff' };
-const secondaryButton = { backgroundColor : '#e8eddf', color : '#fff' };
+const secondaryButton = { backgroundColor : '#e8eddf', color : lightLinkText.color };
+const pressedButton = { backgroundColor : highlightBackground.backgroundColor, color : '#fff' };
 
 export { 
   primaryBackground, secondaryBackground, mediumBackground, darkBackground,
   darkText,mediumText,lightText,reversedText,reversedAltText,linkText,lightLinkText,warningText,cautionText,disabledText,
   highlightText,brandHighlightText,stravaText,fireText,earthText,waterText,successText,airText,aetherText,healthText,
-  primaryButton,secondaryButton
+  primaryButton,secondaryButton, pressedButton
 }

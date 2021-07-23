@@ -1,0 +1,85 @@
+import _axios from 'axios';
+import axiosRetry from 'axios-retry';
+import { axiosOptions, axiosDeleteConfig } from './axiosDefaults';
+import handleHttpError from './handleHttpError';
+import Constants from 'expo-constants';
+const endpoint : string = Constants.manifest.extra.HF_ENDPOINT;
+
+let axios = _axios.create();
+axiosRetry(axios, {retries: 3});
+
+const goToBattle = async function(body){
+  return axios.post(`${endpoint}battle/insert-battle`, body, await axiosOptions())
+  .then(({ data }) => {
+    return data;
+  }).catch(({ request, response }) => {
+    throw handleHttpError(request, response);
+  })
+};
+
+const fetchBattleReport = async function(body){
+  return axios.post(`${endpoint}battle/fetch-battle-report`, body, await axiosOptions())
+  .then(({ data }) => {
+    const { result } = data.data;
+    return { latestBattle : result ? result : null };
+  }).catch(({ request, response }) => {console.log('ERR', request, response);
+    throw handleHttpError(request, response);
+  });
+};
+
+const fetchBattleReportById = async function(body){
+  return axios.post(`${endpoint}battle/fetch-battle-report-by-id`, body, await axiosOptions())
+  .then(({ data }) => {
+    return data.data;
+  }).catch(({ request, response }) => {
+    throw handleHttpError(request, response);
+  });
+};
+
+const updateBattleReportSeen = async function(body){
+  return axios.post(`${endpoint}battle/update-battle-report-seen`, body, await axiosOptions())
+  .then(({ data }) => {
+    return data;
+  }).catch(({ request, response }) => {
+    throw handleHttpError(request, response);
+  });
+};
+
+const getVillainList = async function(){
+  return axios.get(`${endpoint}battle/villain-list`, await axiosOptions())
+  .then(({ data }) => {
+    return data.data;
+  }).catch(({ request, response }) => {
+    throw handleHttpError(request, response);
+  });
+};
+
+const fetchBattlesWonOrDkoByAvatarID = async function(body){
+  return axios.post(`${endpoint}battle//fetch-battles-won-or-dko`, body, await axiosOptions())
+  .then(({ data }) => {
+    return data.data;
+  }).catch(({ request, response }) => {
+    throw handleHttpError(request, response);
+  });
+};
+
+const fetchUpcomingFoeAndRewards = async function(body){
+  return axios.post(`${endpoint}battle/fetch-upcoming-foe-and-rewards`, body , await axiosOptions())
+  .then(({ data }) => {
+    return data.data;
+  }).catch(({ request, response }) => {
+    throw handleHttpError(request, response);
+  });
+};
+
+const runSpecificBattle = async function(body){
+  return axios.post(`${endpoint}battle/run-specific-battle`, body, await axiosOptions())
+  .then(({ data }) => {
+    return data.data;
+  }).catch(({ request, response }) => {
+    throw handleHttpError(request, response);
+  });
+}
+
+
+export { goToBattle, fetchBattleReport, updateBattleReportSeen, getVillainList, fetchBattlesWonOrDkoByAvatarID, fetchUpcomingFoeAndRewards, fetchBattleReportById, runSpecificBattle };

@@ -6,7 +6,7 @@ import { register } from '../../api/authentication';
 import { insertAvatar } from '../../api/avatar';
 import { store } from '../../store';
 import debugErrors from '../../common/debugErrors';
-import { updateAlerts } from '../../common/helperFunctions';
+import { updateAlerts } from '../../common/alerts';
 
 const Register = ({ navigation }) => {
   const { dispatch, state } = useContext(store);

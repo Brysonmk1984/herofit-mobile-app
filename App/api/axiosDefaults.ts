@@ -17,7 +17,7 @@ type eitherHeader = restrictedHeader | openHeader
 
  async function axiosOptions() : eitherHeader{
   const jwtHeader = await getJwtInLocalStorage();
-  console.log('JWT HEADER', jwtHeader);
+  //console.log('JWT HEADER', jwtHeader);
   // If a non-expired JWT is saved locally, attach it to the request
   if(jwtHeader){
       return { headers : { Authorization : jwtHeader }, withCredentials : true };

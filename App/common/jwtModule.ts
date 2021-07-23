@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { getLsWithExpiry, setLsWithExpiry } from './helperFunctions';
+import { getLsWithExpiry, setLsWithExpiry, clearLs } from './helperFunctions';
 
 
 function setJwtInLocalStorage({ token, expiresIn }){
@@ -13,4 +13,8 @@ function getJwtInLocalStorage(){
   return getLsWithExpiry('herofit-jwt');
 }
 
-export { setJwtInLocalStorage, getJwtInLocalStorage };
+function clearJwtInLocalStorage(){
+  return clearLs('herofit-jwt');
+}
+
+export { setJwtInLocalStorage, getJwtInLocalStorage, clearJwtInLocalStorage };
