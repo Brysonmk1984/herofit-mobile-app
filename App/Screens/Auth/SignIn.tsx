@@ -5,9 +5,10 @@ import { getAvatar } from '../../api/avatar';
 import { store } from '../../store';
 import debugErrors from '../../common/debugErrors';
 import { updateAlerts } from '../../common/alerts';
+import fetchInitialData from '../../common/fetchInitialData';
 
 const SignIn = ({ navigation }) => {
-  const { dispatch, state } = useContext(store);
+  const { state, dispatch } = useContext(store);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [helperText, setHelperText] = useState(null);
@@ -15,15 +16,14 @@ const SignIn = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
-
-  function handleSignIn(){
+  async function handleSignIn (){
     setLoading(true);
     setHelperText('');
     
-    login({ email, password })
-    .then((data) =>{
+    try{
+      console.log('TRYING LOGIN');
+      const { user, tokenObject }  = await login({ email, password });
       setSuccess(true);
-      const { user, tokenObject } : { user : object, tokenObject : string } = data;
       console.log( user, tokenObject );
       
       // User hasn't confirmed email yet
@@ -33,24 +33,12 @@ const SignIn = ({ navigation }) => {
         dispatch({ type: 'TOGGLE LOADING', payload: { isLoading : false } });
         return setLoading(false);
       }
-
-      getAvatar({ email : user.email })
-      .then((data) =>{
-        const { avatar } = data;
-        dispatch({ type: 'SET HERO', payload: { hero : avatar } });
-        updateAlerts([{ type : 'Success', message : "You've been logged in!"  }], state, dispatch);
-        console.log('AVATAR');
-        setTimeout(() =>{
-          navigation.navigate('App', { screen: 'HomeWrapperScreen', params: { screen : 'Home'} });
-        },1500);
-      }).catch(error =>{
-        throw error;
-      })
-    }).catch((error) =>{
-      updateAlerts([{ type : 'error', message : error.message }], state, dispatch);
-      debugErrors(error);
-    });
-    
+      
+      return fetchInitialData(null, dispatch, state, user.email);
+    } catch(error){
+      const message = debugErrors(error);
+      updateAlerts([{ type : 'error', message }], state, dispatch);
+    }
   }
 
   function handleEmailInput(val){
@@ -80,7 +68,14 @@ const SignIn = ({ navigation }) => {
     return setFormIsValid(false);
   }, [email, password]);
 
-  
+  useEffect(() =>{
+    if(state.isSignedIn){
+      navigation.navigate('App', { screen: 'HomeWrapperScreen', params: { screen : 'Home'} });
+    }
+   
+  }, [state.isSignedIn]);
+
+
   function myCB(){
     console.log('works');
   }

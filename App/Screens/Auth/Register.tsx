@@ -9,7 +9,7 @@ import debugErrors from '../../common/debugErrors';
 import { updateAlerts } from '../../common/alerts';
 
 const Register = ({ navigation }) => {
-  const { dispatch, state } = useContext(store);
+  const { state, dispatch } = useContext(store);
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');

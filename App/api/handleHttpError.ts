@@ -53,32 +53,27 @@ function handleHttpError(request: AxiosRequestConfig, response: AxiosResponse | 
     }
 
     return {
-      error : {
-        status,
-        message : error && error.message ? error.message : `There was a server error, please try again later`,
-        debug : errorArray,
-        meta
-      }
+      status,
+      message : error && error.message ? error.message : `There was a server error, please try again later`,
+      debug : errorArray,
+      meta
     }
+
   // client never received a response, or request never left
   }else if(request) {
-
     return {
-      error : {
-        status : null,
-        message : "Network Error, please try again later.",
-        debug : "Request failed to go through."
-      }
+      status : null,
+      message : "Network Error, please try again later.",
+      debug : "Request failed to go through."
     }
   // No request was even made, error in code above
   }else{
     return {
-      error : {
-        status : null,
-        message : "There was an error, please try again later.",
-        debug : "Error in client code before the request was made!"
-      }
+      status : null,
+      message : "There was an error, please try again later.",
+      debug : "Error in client code before the request was made!"
     }
+  
   }
 }
 

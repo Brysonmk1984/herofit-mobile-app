@@ -48,7 +48,7 @@ const Loading = () =>{
 };
 
 const Home = ({ navigation }) => {
-  const { dispatch, state } = useContext<IStore>(store);
+  const { state, dispatch } = useContext<IStore>(store);
   const hero = state.hero;
   console.log('!HERO', hero);
 
@@ -83,14 +83,19 @@ const Home = ({ navigation }) => {
     }
   }
 
+  useEffect(() =>{
+    if(!state.isSignedIn){
+      return navigation.navigate('Auth', { screen: 'HomeWrapperScreen', params: { screen : 'Home'} });
+    }
+  }, [state.isSignedIn]);
+
   return (
     <ScreenContainer>
       { renderHeroDetails() }
       <Button title="Delete JWT" onPress={() => {
 
         clearJwtInLocalStorage();
-        navigation.navigate('Auth', { screen: 'HomeWrapperScreen', params: { screen : 'Home'} });
-
+        dispatch({type : 'SET ISSIGNEDIN', payload :  { isSignedIn : false }});
       }} />
       <Button title="Delete ACCOUNT" onPress={() => handleDeleteAccount()} />
       <Button title="Drawer" onPress={() => navigation.toggleDrawer()} />
@@ -103,7 +108,7 @@ const Home = ({ navigation }) => {
 
 
 const SpendQP = ({ route, navigation }) => {
-  const { dispatch, state } = useContext<IStore>(store);
+  const { state, dispatch } = useContext<IStore>(store);
   const newUser: boolean = state.newUser;
   const { hero } = route.params;
   const [power, setPower] = useState( newUser ? 100 : 0);
@@ -193,7 +198,7 @@ const SpendQP = ({ route, navigation }) => {
 
 
 const SignIn = ({ navigation }) => {
-  const { dispatch, state } = useContext(store);
+  const { state, dispatch } = useContext(store);
   
   return (
     <ScreenContainer>
@@ -209,7 +214,7 @@ const SignIn = ({ navigation }) => {
 }
 
 const Register = ({ navigation }) =>{
-  const { dispatch, state } = useContext(store);
+  const { state, dispatch } = useContext(store);
   
   return (
     <ScreenContainer>
@@ -328,7 +333,7 @@ const HeroDetails = ({ route, navigation }) => {
 
 // Select Hero Screen
 const SelectHero = ({ route, navigation }) =>{
-  const { dispatch, state } = useContext(store);
+  const { state, dispatch } = useContext(store);
   const { heroList } = route.params;
   console.log('HL - ', heroList.length);
 
@@ -360,7 +365,7 @@ const SelectHero = ({ route, navigation }) =>{
 
 // How To Select Screen
 const SelectHeroHowTo = ({ navigation }) =>{
-  const { dispatch, state } = useContext(store);
+  const { state, dispatch } = useContext(store);
   // Make API call to get hero data for the next screen
   const [heroList, setHeroList] = useState([]);
   const DATA = [

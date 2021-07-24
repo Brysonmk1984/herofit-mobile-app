@@ -11,7 +11,9 @@ axiosRetry(axios, {retries: 3});
 const getUser = async function(body){
   return axios.post(`${endpoint}user/user-details`, body, await axiosOptions())    
   .then(({ data }) => {
-      return data.data;
+    const user = data.data;
+
+      return { user };
   }).catch(({ request, response }) => {
     throw handleHttpError(request, response);
   });

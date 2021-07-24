@@ -15,11 +15,14 @@ interface IAlert{
   config? : linkOrConfirm;
 }
 
-interface Action {
+interface IAction {
   type : string;
-  payload : object;
+  payload : {
+    user : object, hero : object, gameItems : [], latestBattle : object, isSignedIn : boolean, isLoading : boolean,
+    newUser : boolean, alerts : IAlert[], indiciesForRemoval : string[]
+  };
 }
 
 
 
-export { IStore, IAlert, Action };
+export { IStore, IAlert, IAction };

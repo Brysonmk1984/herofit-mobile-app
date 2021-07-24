@@ -9,7 +9,7 @@ import { SignIn, Register, Home, SelectHeroHowTo, SelectHero, HeroDetails, Final
 import { getJwtInLocalStorage, setJwtInLocalStorage } from './common/jwtModule';
 import Alerts from './Alerts';
 import { LogBox } from 'react-native';
-import initDetails from './common/initDetails';
+import fetchInitialData from './common/fetchInitialData';
 
 LogBox.ignoreLogs(['Reanimated 2']);
 
@@ -26,7 +26,7 @@ const RootStackScreen = ({ isSignedIn }) =>{
 // IN APP Second level Navigator, used for directing users who are already authorized
 const Drawer = createDrawerNavigator();
 const DrawerScreen = () =>{
-  const { dispatch, state } = useContext<IStore>(store);
+  const { state, dispatch } = useContext<IStore>(store);
 
   return <Drawer.Navigator>
     <Drawer.Screen name="HomeWrapperScreen" component={HomeWrapperScreen} />
@@ -37,7 +37,7 @@ const DrawerScreen = () =>{
 // IN APP Third level Navigator, used for Everything under HOME
 const HomeWrapperStack = createStackNavigator();
 const HomeWrapperScreen = () => {
-  const { dispatch, state } = useContext<IStore>(store);
+  const { state, dispatch } = useContext<IStore>(store);
   return  <HomeWrapperStack.Navigator >
     {
       state.newUser ? <Drawer.Screen name="WalkthroughStackScreen" component={WalkthroughStackScreen}  options= {{ headerShown: false }} /> 
@@ -49,7 +49,7 @@ const HomeWrapperScreen = () => {
 // IN APP Fourth level Navigator, used for Select Hero sequence for new users
 const WalkthroughStack = createStackNavigator();
 const WalkthroughStackScreen = () =>{
-  const { dispatch, state } = useContext<IStore>(store);
+  const { state, dispatch } = useContext<IStore>(store);
   
   return  <WalkthroughStack.Navigator >
     <WalkthroughStack.Screen name="SpendQP" component={SpendQP}  options={{ title : 'Quantum Points' }} />
@@ -67,7 +67,7 @@ const WalkthroughStackScreen = () =>{
 // AUTH Second level Navigator, used for App Auth
 const AuthStack = createStackNavigator();
 const AuthStackScreen = () =>{
-  const { dispatch, state } = useContext<IStore>(store);
+  const { state, dispatch } = useContext<IStore>(store);
   return <AuthStack.Navigator headerMode="none">
     {
       state.newUser ? <SelectHeroStack.Screen name="SelectHero" component={SelectHeroStackScreen} />
@@ -81,7 +81,7 @@ const AuthStackScreen = () =>{
 // AUTH Third level Navigator, used for Select Hero sequence for new users
 const SelectHeroStack = createStackNavigator();
 const SelectHeroStackScreen = () =>{
-  const { dispatch, state } = useContext<IStore>(store);
+  const { state, dispatch } = useContext<IStore>(store);
   
   return  <SelectHeroStack.Navigator >
     <SelectHeroStack.Screen name="SelectHeroHowTo" component={SelectHeroHowTo}  options={{ title : 'Select Hero' }} />
@@ -95,15 +95,21 @@ const SelectHeroStackScreen = () =>{
 
 
 const App: React.FC<AppProps> = ({}) => {
-  const { dispatch, state } = useContext<IStore>(store);
+  const { state, dispatch } = useContext<IStore>(store);
+  
 
-  useEffect(async () => {
-    const token = await getJwtInLocalStorage();
-    if(token){
-      console.log('THE TOKK', token, state);
-      await initDetails(dispatch);
-    }
-    dispatch({type : 'TOGGLE LOADING', payload : { isLoading : false } });
+
+  useEffect(() => {
+    console.log('IN THIS EFFECT');
+    (async () =>{
+      const token = await getJwtInLocalStorage();
+      if(token){
+        console.log('THE TOKK', token, state);
+        await fetchInitialData(token, dispatch, state);
+      }
+      dispatch({type : 'TOGGLE LOADING', payload : { isLoading : false } });
+    })()
+
   }, []);
 
   return (

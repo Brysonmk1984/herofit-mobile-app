@@ -29,7 +29,7 @@ const Alerts: React.FC<Alerts> = ({ alerts, dispatch } : { alerts : IAlert[], di
     const alertEls = alerts.map((a) =>{
         const aType = a.type.toLowerCase();
         const aStyle =  AlertThemes[aType];
-
+        console.log('rendering alerts - type, style', aType,aStyle);
         return (
           // Single Alert
           <View style={ [styles.alertContainer, aStyle] } key={`alert-${a.index}`}>
