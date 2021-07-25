@@ -23,6 +23,28 @@ interface IAction {
   };
 }
 
+interface IUser {
+    id : number,
+    createdAt : string,
+    username : string,
+    email : string,
+    firstName : string,
+    lastName : string,
+    isFake : boolean,
+    latestActivityUpdate : string,
+    stravaAccessToken : string,
+    stravaAccessTokenExpiration : number,
+    stravaRefreshToken : string,
+    featurePreferenceSubmitted : boolean,
+    seenLatestPatch : boolean,
+    hash : string,
+    salt : string,
+    active : boolean,
+    emailCode : string,
+    dataSrcId : string,
+    emailMarketingOptIn : boolean,
+    updatedAt : string
+}
 
 
-export { IStore, IAlert, IAction };
+export { IStore, IAlert, IAction, IUser };

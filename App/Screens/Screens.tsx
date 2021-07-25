@@ -67,7 +67,7 @@ const Home = ({ navigation }) => {
       deleteAccount({ username: user.username, avatarID : user.id, email : user.email })
       .then(async (data) =>{
         if(data.error){
-          debugErrors(data.error, user);
+          debugErrors(data.error, user, dispatch);
         }else{
           
           updateAlerts([{ type : 'success', message : "Account has been deleted. We hope to see you again sometime." }], state, dispatch);
@@ -76,7 +76,7 @@ const Home = ({ navigation }) => {
           }, 3000);
         }
       }).catch((error) =>{
-        debugErrors(error, user);
+        debugErrors(error, user, dispatch);
       });
     }else if(pResult !== null){
       alert("Your email must match the email associated with this account!");

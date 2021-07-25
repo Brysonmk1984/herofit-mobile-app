@@ -1,7 +1,6 @@
 
 //import { validateAdmin } from '../services/mockService';
 import avatars from './heroList.json';
-// import { debugErrors } from './errorHandler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const lowercaseUnderscore = function(ally){

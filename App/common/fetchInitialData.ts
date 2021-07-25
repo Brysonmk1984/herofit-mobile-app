@@ -16,13 +16,13 @@ async function fetchInitialData(token, dispatch, state, email = null){
       ({ email } = jwt_decode(token));
     }
     
-    console.log('THE EMAIL', email);
     // Fetch the user, avatar, and all game items
     const [p1, p2, p3, p4] = await Promise.all([getUser({ initMessage : true }), getAvatar({ email }), fetchAllGameItems(), fetchBattleReport({ owner : email })]);
     const user = p1.user;
     const hero = p2.hero;
     const items  = p3.items;
     const latestBattle = p4.latestBattle;
+    console.log(user);
     //console.log('MADE IT!', user, hero, items, latestBattle);
     // Takes item instance IDs and assigns full items to the hero under 'equipped' property
     convertItemIdsToFullItems(hero.equipped, items);

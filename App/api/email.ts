@@ -2,7 +2,8 @@ import _axios from 'axios';
 import axiosRetry from 'axios-retry';
 import { axiosOptions } from './axiosDefaults';
 import handleHttpError from './handleHttpError';
-const endpoint = process.env.REACT_APP_HF_ENDPOINT;
+import Constants from 'expo-constants';
+const endpoint : string = Constants.manifest.extra.HF_ENDPOINT;
 
 let axios = _axios.create();
 axiosRetry(axios, {retries: 3});

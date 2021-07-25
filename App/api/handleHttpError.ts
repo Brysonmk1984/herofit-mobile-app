@@ -17,7 +17,7 @@ function determineErrorMessage(error : errorType, status : number){
   // and has a message property, then show the user that rather than a frontend message
   if(error?.message){
     // Sometimes the backend will send an error message that the user should see
-    return error.message
+    return error.message;
   }else if(status >= 400 && status < 500){
     // Client app error, such as sending the wrong body types to express server
     return `There was a client application error, please try again later`
