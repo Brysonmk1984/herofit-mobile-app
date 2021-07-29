@@ -2,7 +2,7 @@ import React, {createContext, useReducer} from 'react';
 import { IStore, IAction } from './common/interfaces';
 
 const initialState : IStore = { isLoading : true, isSignedIn : false, newUser : false, hero : null, alerts : [] };
-const store = createContext<IStore>(initialState);
+const store = createContext(initialState);
 const { Provider } = store;
 
 const StateProvider : React.FC = ( { children } ) => {
@@ -10,6 +10,8 @@ const StateProvider : React.FC = ( { children } ) => {
 
     switch(action.type) {
       case 'TOGGLE LOADING': {
+
+        console.log('TOGLOAD', action.payload);
         const { isLoading } = action.payload;
         if(typeof isLoading === 'undefined'){
           return Object.assign({}, state, { isLoading : !state.isLoading });
@@ -39,6 +41,9 @@ const StateProvider : React.FC = ( { children } ) => {
       case 'SET ALERTS': {
         const { alerts }  = action.payload;
         return { ...state, alerts : [...alerts] };
+      }
+      case 'RESET DEFAULTS': {
+        return { ...state, isLoading : false, isSignedIn : false, hero : null, user : null  };
       }
       case 'REMOVE ALERTS': {
         const { indiciesForRemoval } = action.payload;

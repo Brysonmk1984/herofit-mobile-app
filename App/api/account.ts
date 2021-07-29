@@ -27,11 +27,9 @@ const updateOwnerUsername = async function(body){
   });
 };
 
-const deleteAccount = async function(body){
+const deleteAccount = async function(body) : Promise<{ message : string }>{
   return axios.delete(`${endpoint}account/${body.username}`, await axiosDeleteConfig(body))
-  .then(({ data }) => {
-    return data;
-  }).catch(({ request, response }) => {
+  .then(({ data }) : { message : string } => data ).catch(({ request, response }) => {
     throw handleHttpError(request, response);
   });
 }

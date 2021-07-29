@@ -21,10 +21,9 @@ const SignIn = ({ navigation }) => {
     setHelperText('');
     
     try{
-      console.log('TRYING LOGIN');
+      dispatch({type : 'TOGGLE LOADING', payload : { isLoading : true } });
       const { user, tokenObject }  = await login({ email, password });
       setSuccess(true);
-      console.log( user, tokenObject );
       
       // User hasn't confirmed email yet
       if(!user.active){
@@ -34,10 +33,15 @@ const SignIn = ({ navigation }) => {
         return setLoading(false);
       }
       
-      return fetchInitialData(null, dispatch, state, user.email);
+      await fetchInitialData(null, dispatch, state, user.email);
+      return dispatch({type : 'TOGGLE LOADING', payload : { isLoading : false } });
     } catch(error){
-      const message = debugErrors(error);
+      let message = debugErrors(error);
+      if(Array.isArray(error.debug) && error.debug[0].msg === "Couldn't find a user with that email."){
+        message = error.debug[0].msg;
+      }
       updateAlerts([{ type : 'error', message }], state, dispatch);
+      return dispatch({type : 'TOGGLE LOADING', payload : { isLoading : false } });
     }
   }
 

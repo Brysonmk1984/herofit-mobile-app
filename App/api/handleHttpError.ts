@@ -62,16 +62,20 @@ function handleHttpError(request: AxiosRequestConfig, response: AxiosResponse | 
           // Any other custom error I write on the server
           }else{ return { error : err }; }
         }); 
+        meta = errorArray[0].msg;
       }else{
         errorArray = [error]
+        meta = errorArray[0].meta;
       }
     }else if(typeof error === 'string'){
       errorArray = [{
         msg : error,
         location : 'Backend'
       }];
+      meta = errorArray[0].msg;
     }else{
       errorArray = [error];
+      meta = errorArray[0].meta;
     }
 
     return {

@@ -5,6 +5,7 @@ import { fetchAllGameItems } from '../api/inventory';
 import { convertItemIdsToFullItems } from './helperFunctions';
 import { fetchBattleReport } from '../api/battle';
 import { updateAlerts } from './alerts';
+import debugErrors from "./debugErrors";
 
 // FETCH ALL THE NEEDED DATA FOR INITIALIZING THE HOME SCREEN
 // Either accepts the jwt token and gets email from it in the case of already-valid jwt, or accepts email as a parameter in the case of signing in
@@ -22,13 +23,28 @@ async function fetchInitialData(token, dispatch, state, email = null){
     const hero = p2.hero;
     const items  = p3.items;
     const latestBattle = p4.latestBattle;
-    //console.log('MADE IT!', user, hero, items, latestBattle);
     // Takes item instance IDs and assigns full items to the hero under 'equipped' property
     convertItemIdsToFullItems(hero.equipped, items);
     dispatch({type : 'SET EXISTING USER INIT DATA', payload : { user, hero, items, latestBattle, isSignedIn : true } });
   } catch(error){
-    const message = error.error.message;
-    updateAlerts([{ type : 'error', message }], state, dispatch);
+    console.log('EE', error);
+    let message, alertType;
+
+    
+    if(error.status === 401){
+      // JWT has expired, just warn user so they can log in again
+      message = error.meta;
+      alertType = 'warning';
+    }else{
+      // Error unrelated to JWT, display error message
+      message = error.message;
+      alertType = 'error';
+    }
+
+    console.log('MM', message);
+    debugErrors(error);
+    updateAlerts([{ type : alertType, message }], state, dispatch);
+    dispatch({ type : 'RESET DEFAULTS' });
   }
 
 }

@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState, createRef } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { View, Text, TextInput, StyleSheet, Button, FlatList, SectionList } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Button, FlatList, SectionList, Alert } from 'react-native';
 import debugErrors from '../common/debugErrors';
 import { updateAlerts } from '../common/alerts';
 import { store } from '../store';
-import { IStore } from '../common/interfaces';
-import LoadingWidget from '../LoadingWidget';
+import { IStore, IUser } from '../common/interfaces';
+import LoadingWidget from './Loading/LoadingWidget';
 import { clearJwtInLocalStorage } from '../common/jwtModule';
 import { getHeroList } from '../api/authentication';
 import { deleteAccount } from '../api/account';
@@ -14,6 +14,7 @@ import DelayInput from "react-native-debounce-input";
 //import AuthContext from "./context";
 import RegisterComponent from './Auth/Register';
 import SignInComponent from './Auth/SignIn';
+import SpendQP from './SpendQP';
 
 const styles = StyleSheet.create({
   container: {
@@ -49,7 +50,7 @@ const Loading = () =>{
 
 const Home = ({ navigation }) => {
   const { state, dispatch } = useContext<IStore>(store);
-  const hero = state.hero;
+  const hero = state.hero || {};
   console.log('!HERO', hero);
 
   function renderHeroDetails(){
@@ -60,27 +61,36 @@ const Home = ({ navigation }) => {
     </View>
   }
 
+  const createDeleteAlert = () => {
+    return Alert.alert(
+      "Delete Account",
+      "WARNING: This is non-reversible!",
+      [{
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel"
+        },
+        { text: "OK", onPress: () => handleDeleteAccount() }],
+      { cancelable: true }
+    );
+  }
+  
   function handleDeleteAccount(){
-    const pResult = prompt('Delete Account: enter your email to confirm.');
-    const user = state.user;
-    if(pResult === user.email){
-      deleteAccount({ username: user.username, avatarID : user.id, email : user.email })
-      .then(async (data) =>{
-        if(data.error){
-          debugErrors(data.error, user, dispatch);
-        }else{
-          
-          updateAlerts([{ type : 'success', message : "Account has been deleted. We hope to see you again sometime." }], state, dispatch);
-          setTimeout(() =>{
-            return navigation.navigate('Auth', { screen : 'SignIn'});
-          }, 3000);
-        }
-      }).catch((error) =>{
-        debugErrors(error, user, dispatch);
-      });
-    }else if(pResult !== null){
-      alert("Your email must match the email associated with this account!");
-    }
+    // TODO: Delete immediately after account creation doesnt work, hero doesn't have ID
+    const user : IUser = state.user;
+    console.log('HHH', hero);
+    deleteAccount({ username: user.username, avatarID : hero.id, email : user.email })
+    .then(async (data) =>{
+      updateAlerts([{ type : 'success', message : "Account has been deleted. We hope to see you again sometime." }], state, dispatch);
+      dispatch({ type : 'RESET DEFAULTS' });
+      
+      setTimeout(() =>{
+        return navigation.navigate('Auth', { screen : 'SignIn'});
+      }, 3000);
+    }).catch((error) =>{
+      debugErrors(error, user, dispatch);
+      updateAlerts([{ type : 'error', message : `Unable to delete account- ${error.message}` }], state, dispatch);
+    });
   }
 
   useEffect(() =>{
@@ -97,102 +107,10 @@ const Home = ({ navigation }) => {
         clearJwtInLocalStorage();
         dispatch({type : 'SET ISSIGNEDIN', payload :  { isSignedIn : false }});
       }} />
-      <Button title="Delete ACCOUNT" onPress={() => handleDeleteAccount()} />
+      <Button title="Delete ACCOUNT" onPress={() => createDeleteAlert()} />
       <Button title="Drawer" onPress={() => navigation.toggleDrawer()} />
     </ScreenContainer>
   )
-}
-
-
-
-
-
-const SpendQP = ({ route, navigation }) => {
-  const { state, dispatch } = useContext<IStore>(store);
-  const newUser: boolean = state.newUser;
-  const { hero } = route.params;
-  const [power, setPower] = useState( newUser ? 100 : 0);
-  const [health, setHealth] = useState( newUser ? 100 : 0);
-  const [armor, setArmor] = useState( newUser ? 0 : 0);
-  const [recovery, setRecovery] = useState( newUser ? 5 : 5);
-  const [fire, setFire] = useState( newUser ? 0 : 0);
-  const [earth, setEarth] = useState( newUser ? 0 : 0);
-  const [water, setWater] = useState( newUser ? 0 : 0);
-  const [air, setAir] = useState( newUser ? 0 : 0);
-  const [qp, setQP] = useState( newUser ? 5 : 0);
-
-  console.log(hero, newUser);
-
-  // As long as hero has QP, let them increment stats
-  const incrementAttribute = function(attribute: string): void{
-    if(qp > 0){
-      type attributeTuple = [string, number, React.Dispatch<React.SetStateAction<number>>];
-      const attributeTuples: attributeTuple[] = [ ['power', power, setPower], ['health', health, setHealth], ['armor', armor, setArmor], ['recovery', recovery, setRecovery], ['fire', fire, setFire], ['earth', earth, setEarth], ['water', water, setWater],['air', air, setAir] ];
-  
-      const matchingTuple : attributeTuple  = attributeTuples.find((tuple) : boolean => tuple[0] === attribute)!;
-      const matchingValue : number = matchingTuple[1];
-      const matchingUpdateFunc : React.Dispatch<React.SetStateAction<number>> = matchingTuple[2];
-      matchingUpdateFunc(matchingValue + 1);
-      setQP(qp - 1);
-    }
-  }
-
-  // If there if no QP left and the hero has been set,
-  useEffect(() =>{
-    if(newUser && qp === 0){
-      const heroReadyToSave = Object.assign({}, hero, { power, health, armor, recovery, fire, earth, water, air, qp, status : 'New Recruit' });
-      dispatch({ type: 'SET NEW USER', payload: { newUser : false }});
-      dispatch({ type: 'SET HERO', payload: { hero : heroReadyToSave } });
-
-      return navigation.navigate('Auth', { 
-        screen : 'Register'
-      });
-
-      
-    }
-  }, [newUser, state.hero, qp]);
-
-
-  return (
-    <ScreenContainer>
-      <View>
-        <Text>Stat points effect your battles and recovery</Text>
-      </View>
-      <View>
-        <Text>Power: </Text><Text>{power}</Text>
-        <Button title={'+'} onPress={() => incrementAttribute('power')} />
-      </View>
-      <View>
-        <Text>Health: </Text><Text>{health}</Text>
-        <Button title={'+'} onPress={() => incrementAttribute('health')} />
-      </View>
-      <View>
-        <Text>Armor: </Text><Text>{armor}</Text>
-        <Button title={'+'} onPress={() => incrementAttribute('armor')} />
-      </View>
-      <View>
-        <Text>Recovery: </Text><Text>{recovery}</Text>
-        <Button title={'+'} onPress={() => incrementAttribute('recovery')} />
-      </View>
-      <View>
-        <Text>Fire: </Text><Text>{fire}</Text>
-        <Button title={'+'} onPress={() => incrementAttribute('fire')} />
-      </View>
-      <View>
-        <Text>Earth: </Text><Text>{earth}</Text>
-        <Button title={'+'} onPress={() => incrementAttribute('earth')} />
-      </View>
-      <View>
-        <Text>Water: </Text><Text>{water}</Text>
-        <Button title={'+'} onPress={() => incrementAttribute('water')} />
-      </View>
-      <View>
-        <Text>Air: </Text><Text>{air}</Text>
-        <Button title={'+'} onPress={() => incrementAttribute('air')} />
-      </View>
-    </ScreenContainer>
-  )
-
 }
 
 
@@ -232,7 +150,7 @@ const FinalizeHeroSelection = ({ route, navigation }) => {
   const [checkingMessage, setCheckingMessage] = useState(false);
   const [helperText, setHelperText] = useState(null);
   const inputRef = createRef();
-
+  const { state, dispatch } = useContext(store);
   const { hero } = route.params;
 
   function handleNameInput(name : string): void{
@@ -268,18 +186,15 @@ const FinalizeHeroSelection = ({ route, navigation }) => {
   }
 
   function handleFinishSelection(){
+    
+
     const namedHero = {
       name : heroName,
+      //qp : 10,
       ...hero
     }
-    // Navigate out of the Auth stack, into App -> HomeWrapperScreen -> WalkthroughStackScreen -> SpendQP
-    return navigation.navigate('App', {
-      screen: 'HomeWrapperScreen', params: {
-          screen : 'WalkthroughStackScreen', params : {
-            screen: 'SpendQP', params : { hero : namedHero }
-          }
-      }
-    });
+
+    return navigation.navigate('SpendQP', { hero : namedHero });
   }
 
 
@@ -313,6 +228,11 @@ const FinalizeHeroSelection = ({ route, navigation }) => {
   )
 }
 
+const SpendQPScreen = ({ route, navigation }) => {
+  return <ScreenContainer>
+    <SpendQP route={route} navigation={navigation} />
+  </ScreenContainer>
+}
 
 // Hero Details Screen
 const HeroDetails = ({ route, navigation }) => {
@@ -335,7 +255,6 @@ const HeroDetails = ({ route, navigation }) => {
 const SelectHero = ({ route, navigation }) =>{
   const { state, dispatch } = useContext(store);
   const { heroList } = route.params;
-  console.log('HL - ', heroList.length);
 
   const Item = ({ hero }) => (
     <View >
@@ -466,4 +385,4 @@ const SelectHeroHowTo = ({ navigation }) =>{
 
 
 
-export { Home, Loading, SignIn, Register, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection, SpendQP };
+export { Home, Loading, SignIn, Register, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection, SpendQPScreen };

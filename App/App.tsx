@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { store } from './store';
 import { IStore } from './common/interfaces';
-import { SignIn, Register, Home, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection, SpendQP, Loading } from './Screens/Screens';
+import { SignIn, Register, Home, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection, Loading, SpendQPScreen } from './Screens/Screens';
 import { getJwtInLocalStorage, setJwtInLocalStorage } from './common/jwtModule';
 import Alerts from './Alerts';
 import { LogBox } from 'react-native';
@@ -39,10 +39,7 @@ const HomeWrapperStack = createStackNavigator();
 const HomeWrapperScreen = () => {
   const { state, dispatch } = useContext<IStore>(store);
   return  <HomeWrapperStack.Navigator >
-    {
-      state.newUser ? <Drawer.Screen name="WalkthroughStackScreen" component={WalkthroughStackScreen}  options= {{ headerShown: false }} /> 
-      : <Drawer.Screen name="Home" component={Home} options={{ title : 'Home' }} /> 
-    }
+    <Drawer.Screen name="Home" component={Home} options={{ title : 'Home' }} /> 
   </HomeWrapperStack.Navigator>
 };
 
@@ -52,7 +49,6 @@ const WalkthroughStackScreen = () =>{
   const { state, dispatch } = useContext<IStore>(store);
   
   return  <WalkthroughStack.Navigator >
-    <WalkthroughStack.Screen name="SpendQP" component={SpendQP}  options={{ title : 'Quantum Points' }} />
     {/* <WalkthroughStack.Screen name="SelectCampaign" component={SelectCampaign}  options={{ title : 'Select Campaign' }} />
     <WalkthroughStack.Screen name="RecordActivities" component={RecordActivities}  options={{ title : 'Record Activities' }} />
     <WalkthroughStack.Screen name="GoToBattle" component={GoToBattle}  options={{ title : 'Go To Battle' }} />
@@ -88,6 +84,7 @@ const SelectHeroStackScreen = () =>{
     <SelectHeroStack.Screen name="SelectHero" component={SelectHero}  options={{ title : 'Select Hero' }} />
     <SelectHeroStack.Screen name="HeroDetails" component={HeroDetails} options={HeroDetails.navigationOptions}  options={{ title : 'Hero Details' }} />
     <SelectHeroStack.Screen name="FinalizeHeroSelection" component={FinalizeHeroSelection}  options={{ title : 'Finalize Hero Selection' }} />
+    <SelectHeroStack.Screen name="SpendQP" component={SpendQPScreen}  options={{ title : 'Quantum Points' }} />
   </SelectHeroStack.Navigator>
 };
 
@@ -100,7 +97,6 @@ const App: React.FC<AppProps> = ({}) => {
 
 
   useEffect(() => {
-    console.log('IN THIS EFFECT');
     (async () =>{
       const token = await getJwtInLocalStorage();
       if(token){
@@ -115,10 +111,9 @@ const App: React.FC<AppProps> = ({}) => {
   return (
     <NavigationContainer>
       {
-        state.isLoading ? <Drawer.Screen name="Loading" component={Loading} />
+        state.isLoading ? <Loading />
         : <RootStackScreen isSignedIn={state.isSignedIn} />
       }
-      
       { state.alerts.length ? <Alerts alerts={state.alerts} dispatch={dispatch} />  : null }
     </NavigationContainer>
   )

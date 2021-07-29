@@ -340,5 +340,9 @@ function cloneObj(obj, deep=false){
     return firstLetterIsVowel === true ? 'an' : 'a';
   }
 
+function capitalize(string : string){
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
-export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getUrlParams, getUrlParamsAfterHash, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, getAvatarAlias, determineFoeClass, getImagePackage, getHeroImagePackage, getVillainImagePackage, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems,convertAorAn };
+
+export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getUrlParams, getUrlParamsAfterHash, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, getAvatarAlias, determineFoeClass, getImagePackage, getHeroImagePackage, getVillainImagePackage, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems,convertAorAn, capitalize };

@@ -24,43 +24,42 @@ const Register = ({ navigation }) => {
   const [marketingIsChecked, setMarketingIsChecked] = useState(true);
 
   // first time signup, need to insert avinsertAvatarIntoDb
-  function handlePostRegister(user) : void{
-    console.log('HERE in post register', user);
+  async function handlePostRegister(user) : void{
     dispatch({ type: 'SET USER', payload: { user, loggedIn : true } });
-    new Promise(() =>{
-      return insertAvatar({ avatar : state.hero, email : user.email, userId : user.id });
-    }).then((data) =>{
+    
+    try {
+      const data = await insertAvatar({ avatar : state.hero, email : user.email, userId : user.id });
       console.log('data from inserting av into db', data);
+      dispatch({ type: 'SET ISSIGNEDIN', payload: { isSignedIn : true }});
       dispatch({ type: 'SET ALERTS', payload: { alerts : [{type : 'success', message :`Account creation successful!`}] } });
       setTimeout(() =>{
         navigation.navigate('App', { screen: 'HomeWrapperScreen', params: { screen : 'Home'} });
       },1500);
-    }).catch((error) =>{
+    }catch(error){
       // Error getting Avatar, should only happen if DB connection issues
       debugErrors(error, user);
       updateAlerts([{type : 'error', message :`${error.status}: ${error.message}`}], state, dispatch);
       dispatch({ type: 'TOGGLE LOADING', payload: { isLoading : false } });
-    });
+    }
+
   }
 
-  function handleRegister(){
+  async function handleRegister(){
     setLoading(true);
     setHelperText('');
-
-    register({ email, firstName, lastName, username : displayName, password, emailMarketingOptIn })
-    .then((data) =>{
-      
+    
+    try{
+      const data = await register({ email, firstName, lastName, username : displayName, password, emailMarketingOptIn });
       setSuccess(true);
       const { user, tokenObject } : { user : object, tokenObject : string } = data;
       console.log( user, tokenObject );
       updateAlerts([{ type : 'success', message : "Please check your email to verify account. Check your spam folder if the message is not in your inbox.", persist : true }], state, dispatch);
-      
       handlePostRegister(user);
-    }).catch((error) =>{
+    }catch(error){
       updateAlerts([{ type : 'error', message : error.message }], state, dispatch);
       debugErrors(error);
-    });
-    
+    }
+
   }
 
   function handleEmailInput(val){

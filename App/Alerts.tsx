@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: "center",
     alignSelf: "flex-end",
-    zIndex:0,
+    zIndex:1000,
     fontFamily : Fonts.bodyText,
     opacity: .9
   },

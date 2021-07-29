@@ -11,7 +11,7 @@ axiosRetry(axios, {retries: 3});
 const getUser = async function(body){
   return axios.post(`${endpoint}user/user-details`, body, await axiosOptions())    
   .then(({ data }) => {
-    const user = data.data;
+    const user = data.data.user;
 
       return { user };
   }).catch(({ request, response }) => {

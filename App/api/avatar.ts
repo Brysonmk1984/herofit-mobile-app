@@ -9,12 +9,12 @@ let axios = _axios.create();
 axiosRetry(axios, {retries: 3});
 
 const insertAvatar = async function(body){
-    return axios.post(`${endpoint}avatar/insert-avatar`, body, await axiosOptions())
-    .then(({ data }) => {
-      return data.data;
-    }).catch(({ request, response }) => {
-      throw handleHttpError(request, response);
-    });
+  return axios.post(`${endpoint}avatar/insert-avatar`, body, await axiosOptions())
+  .then(({ data }) => {
+    return data.data;
+  }).catch(({ request, response }) => {
+    throw handleHttpError(request, response);
+  });
 };
 
 const updateAvatarStats = async function(body){

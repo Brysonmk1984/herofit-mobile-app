@@ -17,7 +17,7 @@ const login = async function(body){
             return data.error;
         }
         const { user, tokenObject } = data.data;
-        console.log('ASD', user);
+
         setJwtInLocalStorage(tokenObject);
         return { user, tokenObject };
     }).catch(({ request, response }) => {

@@ -46,5 +46,11 @@ interface IUser {
     updatedAt : string
 }
 
+interface IStats {
+  //qp : number,
+  //power: number,health: number,armor: number,recovery: number,fire: number,earth: number,water: number,air: number,aether: number,
+  //qpPower: number,qpHealth: number,qpArmor: number,qpRecovery: number,qpFire: number,qpEarth: number,qpAir: number,qpWater: number,qpAether: number
+  [stat:string] : number
+}
 
-export { IStore, IAlert, IAction, IUser };
+export { IStore, IAlert, IAction, IUser, IStats };
