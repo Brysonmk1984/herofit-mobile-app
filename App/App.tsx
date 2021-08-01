@@ -6,6 +6,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { store } from './store';
 import { IStore } from './common/interfaces';
 import { SignIn, Register, Home, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection, Loading, SpendQPScreen } from './Screens/Screens';
+import Settings from './Screens/Settings';
 import { getJwtInLocalStorage, setJwtInLocalStorage } from './common/jwtModule';
 import Alerts from './Alerts';
 import { LogBox } from 'react-native';
@@ -30,6 +31,7 @@ const DrawerScreen = () =>{
 
   return <Drawer.Navigator>
     <Drawer.Screen name="HomeWrapperScreen" component={HomeWrapperScreen} />
+    <Drawer.Screen name="Settings" component={Settings} />
   </Drawer.Navigator>
 }
 

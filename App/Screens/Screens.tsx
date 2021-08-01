@@ -1,14 +1,11 @@
 import React, { useContext, useEffect, useState, createRef } from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import { View, Text, TextInput, StyleSheet, Button, FlatList, SectionList, Alert } from 'react-native';
+import { View, Text, StyleSheet, Button, FlatList, SectionList } from 'react-native';
 import debugErrors from '../common/debugErrors';
-import { updateAlerts } from '../common/alerts';
 import { store } from '../store';
-import { IStore, IUser } from '../common/interfaces';
+import { IStore } from '../common/interfaces';
 import LoadingWidget from './Loading/LoadingWidget';
-import { clearJwtInLocalStorage } from '../common/jwtModule';
 import { getHeroList } from '../api/authentication';
-import { deleteAccount } from '../api/account';
+
 import { checkAvatarName } from '../api/avatar';
 import DelayInput from "react-native-debounce-input";
 //import AuthContext from "./context";
@@ -57,41 +54,10 @@ const Home = ({ navigation }) => {
 
     return <View>
       <Text>Hero Name: {hero.name}</Text>
-      <Text>Character: {hero.alias}</Text>
     </View>
   }
 
-  const createDeleteAlert = () => {
-    return Alert.alert(
-      "Delete Account",
-      "WARNING: This is non-reversible!",
-      [{
-        text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
-        style: "cancel"
-        },
-        { text: "OK", onPress: () => handleDeleteAccount() }],
-      { cancelable: true }
-    );
-  }
-  
-  function handleDeleteAccount(){
-    // TODO: Delete immediately after account creation doesnt work, hero doesn't have ID
-    const user : IUser = state.user;
-    console.log('HHH', hero);
-    deleteAccount({ username: user.username, avatarID : hero.id, email : user.email })
-    .then(async (data) =>{
-      updateAlerts([{ type : 'success', message : "Account has been deleted. We hope to see you again sometime." }], state, dispatch);
-      dispatch({ type : 'RESET DEFAULTS' });
-      
-      setTimeout(() =>{
-        return navigation.navigate('Auth', { screen : 'SignIn'});
-      }, 3000);
-    }).catch((error) =>{
-      debugErrors(error, user, dispatch);
-      updateAlerts([{ type : 'error', message : `Unable to delete account- ${error.message}` }], state, dispatch);
-    });
-  }
+
 
   useEffect(() =>{
     if(!state.isSignedIn){
@@ -102,12 +68,6 @@ const Home = ({ navigation }) => {
   return (
     <ScreenContainer>
       { renderHeroDetails() }
-      <Button title="Delete JWT" onPress={() => {
-
-        clearJwtInLocalStorage();
-        dispatch({type : 'SET ISSIGNEDIN', payload :  { isSignedIn : false }});
-      }} />
-      <Button title="Delete ACCOUNT" onPress={() => createDeleteAlert()} />
       <Button title="Drawer" onPress={() => navigation.toggleDrawer()} />
     </ScreenContainer>
   )
