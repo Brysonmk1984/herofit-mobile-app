@@ -6,11 +6,12 @@ import { convertItemIdsToFullItems } from './helperFunctions';
 import { fetchBattleReport } from '../api/battle';
 import { updateAlerts } from './alerts';
 import debugErrors from "./debugErrors";
+import { IUser, IHero, IItem, IStore } from '../common/interfaces'
 
 // FETCH ALL THE NEEDED DATA FOR INITIALIZING THE HOME SCREEN
 // Either accepts the jwt token and gets email from it in the case of already-valid jwt, or accepts email as a parameter in the case of signing in
 // user, hero, items, latestBattle
-async function fetchInitialData(token, dispatch, state, email = null){
+async function fetchInitialData(token : string, dispatch : React.Dispatch<any>, state : IStore, email : string | null = null){
   try{
     // Decode the JWT to get email, needed for fetching avatar
     if(token){
@@ -19,12 +20,15 @@ async function fetchInitialData(token, dispatch, state, email = null){
     
     // Fetch the user, avatar, and all game items
     const [p1, p2, p3, p4] = await Promise.all([getUser({ initMessage : true }), getAvatar({ email }), fetchAllGameItems(), fetchBattleReport({ owner : email })]);
-    const user = p1.user;
-    const hero = p2.hero;
-    const items  = p3.items;
+    const user : IUser = p1.user;
+    const hero : IHero = p2.hero;
+    const items : IItem[]  = p3.items;
     const latestBattle = p4.latestBattle;
+
     // Takes item instance IDs and assigns full items to the hero under 'equipped' property
-    convertItemIdsToFullItems(hero.equipped, items);
+    const equipped = convertItemIdsToFullItems(hero.equipped, items);
+    console.log(equipped);
+    hero.equipped = equipped;
     dispatch({type : 'SET EXISTING USER INIT DATA', payload : { user, hero, items, latestBattle, isSignedIn : true } });
   } catch(error){
     console.log('EE', error);

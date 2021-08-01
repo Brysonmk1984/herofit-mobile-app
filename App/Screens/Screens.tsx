@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState, createRef } from 'react';
 import { View, Text, StyleSheet, Button, FlatList, SectionList } from 'react-native';
 import debugErrors from '../common/debugErrors';
 import { store } from '../store';
-import { IStore } from '../common/interfaces';
 import LoadingWidget from './Loading/LoadingWidget';
 import { getHeroList } from '../api/authentication';
 
@@ -44,34 +43,6 @@ const Loading = () =>{
     </ScreenContainer>
   )
 };
-
-const Home = ({ navigation }) => {
-  const { state, dispatch } = useContext<IStore>(store);
-  const hero = state.hero || {};
-  console.log('!HERO', hero);
-
-  function renderHeroDetails(){
-
-    return <View>
-      <Text>Hero Name: {hero.name}</Text>
-    </View>
-  }
-
-
-
-  useEffect(() =>{
-    if(!state.isSignedIn){
-      return navigation.navigate('Auth', { screen: 'HomeWrapperScreen', params: { screen : 'Home'} });
-    }
-  }, [state.isSignedIn]);
-
-  return (
-    <ScreenContainer>
-      { renderHeroDetails() }
-      <Button title="Drawer" onPress={() => navigation.toggleDrawer()} />
-    </ScreenContainer>
-  )
-}
 
 
 
@@ -345,4 +316,4 @@ const SelectHeroHowTo = ({ navigation }) =>{
 
 
 
-export { Home, Loading, SignIn, Register, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection, SpendQPScreen };
+export { Loading, SignIn, Register, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection, SpendQPScreen };

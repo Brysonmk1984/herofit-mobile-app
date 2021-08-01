@@ -2,6 +2,7 @@
 //import { validateAdmin } from '../services/mockService';
 import avatars from './heroList.json';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { IHero, IItemInstance, IItem } from './interfaces';
 
 const lowercaseUnderscore = function(ally){
     if(ally !== null && typeof ally !== 'undefined'){
@@ -323,26 +324,25 @@ function cloneObj(obj, deep=false){
     return defaultItems;
   }
 
-
-  function convertItemIdsToFullItems(itemIds : number[], defaultItems : object[]){
-
-    const allAvatarItems = itemIds.map((itemInstance) => {
-      const matchingItem = defaultItems.find(item => item.id === itemInstance.itemID);
-      return Object.assign({}, itemInstance, matchingItem);
-    });
-
-    return allAvatarItems;
-  }
-
-  function convertAorAn(nextWord){
-    const vowels = ['a','e','i','o','u'];
-    const firstLetterIsVowel = vowels.includes(nextWord[0].toLowerCase());
-    return firstLetterIsVowel === true ? 'an' : 'a';
-  }
+function convertAorAn(nextWord){
+  const vowels = ['a','e','i','o','u'];
+  const firstLetterIsVowel = vowels.includes(nextWord[0].toLowerCase());
+  return firstLetterIsVowel === true ? 'an' : 'a';
+}
+  
 
 function capitalize(string : string){
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+// Combines item instances with default item templates
+function convertItemIdsToFullItems(itemInstances : IItemInstance[], defaultItems : IItem[]){
+  const combinedItems = itemInstances.map((itemInstance : IItemInstance) : IItem => {
+    const matchingItem = defaultItems.find((item : IItem) => item.id === itemInstance.itemID);
+    return Object.assign({}, itemInstance, matchingItem);
+  });
+
+  return combinedItems;
+}
 
 export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getUrlParams, getUrlParamsAfterHash, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, getAvatarAlias, determineFoeClass, getImagePackage, getHeroImagePackage, getVillainImagePackage, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems,convertAorAn, capitalize };
