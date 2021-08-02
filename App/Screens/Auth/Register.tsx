@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState, createRef } from 'react';
 import { View, ScrollView, Text, TextInput, StyleSheet, Button } from 'react-native';
-import DelayInput from "react-native-debounce-input";
 import Checkbox from 'expo-checkbox';
 import { register } from '../../api/authentication';
 import { insertAvatar } from '../../api/avatar';
 import { store } from '../../store';
 import debugErrors from '../../common/debugErrors';
 import { updateAlerts } from '../../common/alerts';
+import ScreenContainer from '../../Components/ScreenContainer';
 
 const Register = ({ navigation }) => {
   const { state, dispatch } = useContext(store);
@@ -103,65 +103,67 @@ const Register = ({ navigation }) => {
   }, [email, displayName, password, passwordConfirm]);
 
   return (
-    <ScrollView>
-      <Text>Register Screen</Text>
-      <TextInput
-        style={styles.input}
-        onChangeText={email => handleEmailInput(email)}
-        value={email}
-        placeholder="Email"
-      />
-      <TextInput
-        style={styles.input}
-        onChangeText={text => setFirstName(text)}
-        value={firstName}
-        placeholder="First Name"
-      />
-      <TextInput
-        style={styles.input}
-        onChangeText={text => setLastName(text)}
-        value={lastName}
-        placeholder="Last Name"
-      />
-      <TextInput
-        style={styles.input}
-        onChangeText={text => setDisplayName(text)}
-        value={displayName}
-        placeholder="Display Name"
-      />
-      <TextInput
-        style={styles.input}
-        onChangeText={text => handlePasswordInput(text)}
-        value={password}
-        secureTextEntry={true}
-        autoCompleteType="password"
-        textContentType="password"
-        placeholder="Password"
-      />
-      <TextInput
-        style={styles.input}
-        onChangeText={text => handlePasswordConfirmInput(text)}
-        value={passwordConfirm}
-        secureTextEntry={true}
-        textContentType="password"
-        placeholder="Confirm Password"
-      />
-      <View>
-        <Text>{ helperText }</Text>
-      </View>
-      <Checkbox
-        style={styles.checkbox}
-        value={emailMarketingOptIn}
-        onValueChange={(e) => setEmailMarketingOptIn(e)}
-        color={marketingIsChecked ? '#4630EB' : undefined}
-      />
-      <View>
-        <Text>Receive content-related Emails once every few months or so (we'll never sell your data).</Text>
-      </View>
-      <View>
-        <Button title="Submit" disabled={formIsValid ? false : true} onPress={handleRegister} />
-      </View>
-    </ScrollView>
+    <ScreenContainer>
+      <ScrollView>
+        <Text>Register Screen</Text>
+        <TextInput
+          style={styles.input}
+          onChangeText={email => handleEmailInput(email)}
+          value={email}
+          placeholder="Email"
+        />
+        <TextInput
+          style={styles.input}
+          onChangeText={text => setFirstName(text)}
+          value={firstName}
+          placeholder="First Name"
+        />
+        <TextInput
+          style={styles.input}
+          onChangeText={text => setLastName(text)}
+          value={lastName}
+          placeholder="Last Name"
+        />
+        <TextInput
+          style={styles.input}
+          onChangeText={text => setDisplayName(text)}
+          value={displayName}
+          placeholder="Display Name"
+        />
+        <TextInput
+          style={styles.input}
+          onChangeText={text => handlePasswordInput(text)}
+          value={password}
+          secureTextEntry={true}
+          autoCompleteType="password"
+          textContentType="password"
+          placeholder="Password"
+        />
+        <TextInput
+          style={styles.input}
+          onChangeText={text => handlePasswordConfirmInput(text)}
+          value={passwordConfirm}
+          secureTextEntry={true}
+          textContentType="password"
+          placeholder="Confirm Password"
+        />
+        <View>
+          <Text>{ helperText }</Text>
+        </View>
+        <Checkbox
+          style={styles.checkbox}
+          value={emailMarketingOptIn}
+          onValueChange={(e) => setEmailMarketingOptIn(e)}
+          color={marketingIsChecked ? '#4630EB' : undefined}
+        />
+        <View>
+          <Text>Receive content-related Emails once every few months or so (we'll never sell your data).</Text>
+        </View>
+        <View>
+          <Button title="Submit" disabled={formIsValid ? false : true} onPress={handleRegister} />
+        </View>
+      </ScrollView>
+    </ScreenContainer>
   )
 }
 

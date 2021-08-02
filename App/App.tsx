@@ -1,14 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { View } from 'react-native';
+import React, { useContext, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { store } from './store';
 import { IStore } from './common/interfaces';
-import { SignIn, Register, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection, Loading, SpendQPScreen } from './Screens/Screens';
-import Home from './Screens/Home';
-import Settings from './Screens/Settings';
-import { getJwtInLocalStorage, setJwtInLocalStorage } from './common/jwtModule';
+import * as Screens from './Screens';
+import { getJwtInLocalStorage } from './common/jwtModule';
 import Alerts from './Alerts';
 import { LogBox } from 'react-native';
 import fetchInitialData from './common/fetchInitialData';
@@ -32,7 +29,13 @@ const DrawerScreen = () =>{
 
   return <Drawer.Navigator>
     <Drawer.Screen name="HomeWrapperScreen" component={HomeWrapperScreen} />
-    <Drawer.Screen name="Settings" component={Settings} />
+    <Drawer.Screen name="Profile" component={Screens.Profile} />
+    <Drawer.Screen name="Ranking" component={Screens.Ranking} />
+    <Drawer.Screen name="Campaign" component={Screens.Campaign} />
+    <Drawer.Screen name="Inventory" component={Screens.Inventory} />
+    <Drawer.Screen name="Items" component={Screens.Items} />
+    <Drawer.Screen name="Feedback" component={Screens.Feedback} />
+    <Drawer.Screen name="Settings" component={Screens.Settings} />
   </Drawer.Navigator>
 }
 
@@ -42,7 +45,7 @@ const HomeWrapperStack = createStackNavigator();
 const HomeWrapperScreen = () => {
   const { state, dispatch } = useContext<IStore>(store);
   return  <HomeWrapperStack.Navigator >
-    <Drawer.Screen name="Home" component={Home} options={{ title : 'Home' }} /> 
+    <Drawer.Screen name="Home" component={Screens.Home} options={{ title : 'Home' }} /> 
   </HomeWrapperStack.Navigator>
 };
 
@@ -70,9 +73,9 @@ const AuthStackScreen = () =>{
   return <AuthStack.Navigator headerMode="none">
     {
       state.newUser ? <SelectHeroStack.Screen name="SelectHero" component={SelectHeroStackScreen} />
-      : <AuthStack.Screen name="SignIn" component={SignIn}  options={{ title : 'Sign In' }} />
+      : <AuthStack.Screen name="SignIn" component={Screens.SignIn}  options={{ title : 'Sign In' }} />
     }
-    <AuthStack.Screen name="Register" component={Register}  options={{ title : 'Register' }} />
+    <AuthStack.Screen name="Register" component={Screens.Register}  options={{ title : 'Register' }} />
   </AuthStack.Navigator>
 };
 
@@ -83,11 +86,11 @@ const SelectHeroStackScreen = () =>{
   const { state, dispatch } = useContext<IStore>(store);
   
   return  <SelectHeroStack.Navigator >
-    <SelectHeroStack.Screen name="SelectHeroHowTo" component={SelectHeroHowTo}  options={{ title : 'Select Hero' }} />
-    <SelectHeroStack.Screen name="SelectHero" component={SelectHero}  options={{ title : 'Select Hero' }} />
-    <SelectHeroStack.Screen name="HeroDetails" component={HeroDetails} options={HeroDetails.navigationOptions}  options={{ title : 'Hero Details' }} />
-    <SelectHeroStack.Screen name="FinalizeHeroSelection" component={FinalizeHeroSelection}  options={{ title : 'Finalize Hero Selection' }} />
-    <SelectHeroStack.Screen name="SpendQP" component={SpendQPScreen}  options={{ title : 'Quantum Points' }} />
+    <SelectHeroStack.Screen name="SelectHeroHowTo" component={Screens.SelectHeroHowTo}  options={{ title : 'Select Hero' }} />
+    <SelectHeroStack.Screen name="SelectHero" component={Screens.SelectHero}  options={{ title : 'Select Hero' }} />
+    <SelectHeroStack.Screen name="HeroDetails" component={Screens.HeroDetails} options={Screens.HeroDetails.navigationOptions}  options={{ title : 'Hero Details' }} />
+    <SelectHeroStack.Screen name="FinalizeHeroSelection" component={Screens.FinalizeHeroSelection}  options={{ title : 'Finalize Hero Selection' }} />
+    <SelectHeroStack.Screen name="SpendQP" component={Screens.SpendQP}  options={{ title : 'Quantum Points' }} />
   </SelectHeroStack.Navigator>
 };
 
@@ -114,7 +117,7 @@ const App: React.FC<AppProps> = ({}) => {
   return (
     <NavigationContainer>
       {
-        state.isLoading ? <Loading />
+        state.isLoading ? <Screens.Loading />
         : <RootStackScreen isSignedIn={state.isSignedIn} />
       }
       { state.alerts.length ? <Alerts alerts={state.alerts} dispatch={dispatch} />  : null }

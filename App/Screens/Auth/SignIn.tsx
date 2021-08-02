@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState, createRef } from 'react';
 import { View, ScrollView, Text, TextInput, StyleSheet, Button } from 'react-native';
 import { login } from '../../api/authentication';
-import { getAvatar } from '../../api/avatar';
 import { store } from '../../store';
 import debugErrors from '../../common/debugErrors';
 import { updateAlerts } from '../../common/alerts';
 import fetchInitialData from '../../common/fetchInitialData';
+import ScreenContainer from '../../Components/ScreenContainer';
 
 const SignIn = ({ navigation }) => {
   const { state, dispatch } = useContext(store);
@@ -91,33 +91,40 @@ const SignIn = ({ navigation }) => {
 
 
   return (
-    <View style={ styles.container }>
-      <ScrollView>
-        <Text>Sign IN Screen</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={email => handleEmailInput(email)}
-          value={email}
-          placeholder="Email"
-        />
-        <TextInput
-          style={styles.input}
-          onChangeText={text => handlePasswordInput(text)}
-          value={password}
-          secureTextEntry={true}
-          autoCompleteType="password"
-          textContentType="password"
-          placeholder="Password"
-        />
-        <View>
-          <Text>{ helperText }</Text>
-        </View>
-        <View>
-          <Button title="Submit" disabled={formIsValid ? false : true} onPress={handleSignIn} />
-        </View>
-        <Button title="Add Alert" onPress={addAlert}></Button>
-      </ScrollView>
-    </View>
+    <ScreenContainer>
+      <View style={ styles.container }>
+        <ScrollView>
+          <Text>Sign IN Screen</Text>
+          <Text>Has Token : { Boolean(state.jwt) } </Text>
+          <Button title="Select Hero" onPress={() => {
+            dispatch({ type: 'SET NEW USER', payload: { newUser : true }});
+            return navigation.navigate('Auth',  { screen : 'SignIn'});
+          }} />
+          <TextInput
+            style={styles.input}
+            onChangeText={email => handleEmailInput(email)}
+            value={email}
+            placeholder="Email"
+          />
+          <TextInput
+            style={styles.input}
+            onChangeText={text => handlePasswordInput(text)}
+            value={password}
+            secureTextEntry={true}
+            autoCompleteType="password"
+            textContentType="password"
+            placeholder="Password"
+          />
+          <View>
+            <Text>{ helperText }</Text>
+          </View>
+          <View>
+            <Button title="Submit" disabled={formIsValid ? false : true} onPress={handleSignIn} />
+          </View>
+          <Button title="Add Alert" onPress={addAlert}></Button>
+        </ScrollView>
+      </View>
+    </ScreenContainer>
   )
 }
 

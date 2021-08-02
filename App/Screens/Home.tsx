@@ -4,7 +4,6 @@ import ScreenContainer from '../Components/ScreenContainer';
 import debugErrors from '../common/debugErrors';
 import { store } from '../store';
 import { IStore, IItem } from '../common/interfaces';
-
 interface HomeProps {
 
 }

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import AnimatedLoader from "react-native-animated-loader";
+import ScreenContainer from '../../Components/ScreenContainer';
 
 interface LoadingWrapperProps {
 
 }
 
-const LoadingWidget: React.FC<LoadingWrapperProps> = () => {
+const Loading: React.FC<LoadingWrapperProps> = () => {
   const messages = ['powering up...', 'one last squat...', 'power walking to the server...','making sure we are using proper...', '"only five more miles"...', 'communing with the elements...', 'Doing pull-ups on our database...'];
   const [ message, setMessage ] = useState('powering up...');
 
@@ -25,22 +26,20 @@ const LoadingWidget: React.FC<LoadingWrapperProps> = () => {
     
 
   return (
-    <View style={[styles.container, styles.horizontal]}>
-      <View style={[styles.activityIndicator]}>
-        <AnimatedLoader
-          visible={true}
-          overlayColor="rgba(255,255,255,0.75)"
-          source={require("./loader.json")}
-          speed={1}
-        >
-          <Text>{ message }</Text>
-        </AnimatedLoader>
-     
-       
+    <ScreenContainer>
+      <View style={[styles.container, styles.horizontal]}>
+        <View style={[styles.activityIndicator]}>
+          <AnimatedLoader
+            visible={true}
+            overlayColor="rgba(255,255,255,0.75)"
+            source={require("./loader.json")}
+            speed={1}
+          >
+            <Text>{ message }</Text>
+          </AnimatedLoader>
+        </View>
       </View>
-
-
-    </View>
+    </ScreenContainer>
   );
 
 }
@@ -65,4 +64,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default LoadingWidget;
+export default Loading;

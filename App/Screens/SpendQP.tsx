@@ -6,6 +6,7 @@ import { updateAlerts } from '../common/alerts';
 import { fetchAstrologySeason } from '../api/calculate';
 import debugErrors from '../common/debugErrors';
 import { IStats } from '../common/interfaces';
+import ScreenContainer from '../Components/ScreenContainer';
 
 const SpendQP = ({ route, navigation }) => {
   // Global State
@@ -57,7 +58,7 @@ const SpendQP = ({ route, navigation }) => {
 
 
   return (
-    <>
+    <ScreenContainer>
       <View>
         <Text>Stat points effect your battles and recovery</Text>
       </View>
@@ -97,7 +98,7 @@ const SpendQP = ({ route, navigation }) => {
         <Text>Aether: </Text><Text>{qpState.aether}</Text>
         <Button title={'+'} onPress={() => incrementAttribute('aether')} />
       </View>
-    </>
+    </ScreenContainer>
   )
 }
 
