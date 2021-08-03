@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { View, Text } from 'react-native';
 import ScreenContainer from '../Components/ScreenContainer';
-import { IStore, IUser } from '../common/interfaces';
+import { Store, User } from '../common/types';
 import { updateAlerts } from '../common/alerts';
 import debugErrors from '../common/debugErrors';
 import { store } from '../store';
@@ -13,7 +13,7 @@ interface FeedbackProps {
 }
 
 const Feedback: React.FC<FeedbackProps> = ({ navigation }) => {
-  const { state, dispatch } = useContext<IStore>(store);
+  const { state, dispatch } = useContext<Store>(store);
   const { user, hero, isSignedIn } = state;
 
   const [email, setEmail] = useState(isSignedIn ? hero.email : '');

@@ -1,10 +1,10 @@
 import { capitalize } from '../common/helperFunctions';
-import { IStats } from '../common/interfaces';
+import { Stats } from './types';
 
-interface IPayload { newUserDefaults?: IStats, stat : string }
-interface IAction { type : string, payload : IPayload }
+interface IPayload { newUserDefaults?: Stats, stat : string }
+interface Action { type : string, payload : IPayload }
 
-function spendQPReducer(state : IStats, action : IAction) : IStats{
+function spendQPReducer(state : Stats, action : Action) : Stats{
   const { type, payload } = action;
   switch(type){
     case "SET NEW USER DEFAULTS":{

@@ -1,13 +1,38 @@
-interface IStore {
-  isLoading : boolean;
-  isSignedIn : boolean;
-  newUser : boolean;
-  hero : object | null;
-  alerts : object[];
+type ActionType = 'TOGGLE LOADING' | 'SET USER' | 'SET NEW USER';
+
+interface Action<Payload = {}> {
+    type: ActionType
+    payload: Payload
 }
 
+interface Store {
+  state: {
+    jwt: string,
+    isSignedIn: boolean
+    isLoading : boolean;
+    newUser : boolean;
+    hero : object | null;
+    alerts : object[];
+  }
+  dispatch: <Payload = {}>(action: Action<Payload>) => void
+}
+
+// interface Store {
+  // jwt: string,
+  // isSignedIn: boolean
+  // isLoading : boolean;
+// }
+
+// interface Action {
+//   type : string;
+//   payload : {
+//     user : object, hero : object, gameItems : [], latestBattle : object, isSignedIn : boolean, isLoading : boolean,
+//     newUser : boolean, alerts : SnackBarAlert[], indiciesForRemoval : string[]
+//   };
+// }
+
 type linkOrConfirm = string | { text : string; cb : { () : void };}
-interface IAlert{
+interface SnackBarAlert{
   index: string;
   type : string;
   message : string;
@@ -15,15 +40,15 @@ interface IAlert{
   config? : linkOrConfirm;
 }
 
-interface IAction {
+interface Action {
   type : string;
   payload : {
     user : object, hero : object, gameItems : [], latestBattle : object, isSignedIn : boolean, isLoading : boolean,
-    newUser : boolean, alerts : IAlert[], indiciesForRemoval : string[]
+    newUser : boolean, alerts : SnackBarAlert[], indiciesForRemoval : string[]
   };
 }
 
-interface IUser {
+interface User {
     id : number,
     createdAt : string,
     username : string,
@@ -46,16 +71,16 @@ interface IUser {
     updatedAt : string
 }
 
-interface IStats {
+interface Stats {
   //qp : number,
   //power: number,health: number,armor: number,recovery: number,fire: number,earth: number,water: number,air: number,aether: number,
   //qpPower: number,qpHealth: number,qpArmor: number,qpRecovery: number,qpFire: number,qpEarth: number,qpAir: number,qpWater: number,qpAether: number
   [stat:string] : number
 }
 
-interface IHero {
+interface Hero {
   name : string, status: string, statusFade : number,
-  equipped : IItemInstance[], goToBattle : boolean, restedEnough : boolean, healthRegenRate : number, photonTokens : string, 
+  equipped : ItemInstance[], goToBattle : boolean, restedEnough : boolean, healthRegenRate : number, photonTokens : string, 
   activityXP : number, battleXP : number, thisLevelStartXp : number, nextLevelStartXp : number,
   battleDkos: number, battleDraws: number, battleLosses: number, battleWins: number,
   power: number,health: number, maxHealth : string, armor: number,recovery: number,fire: number,earth: number,water: number,air: number,aether: number,
@@ -63,19 +88,19 @@ interface IHero {
   hasBeenUpgraded : boolean, owner : string, id : number, character : string, createdAt : string, updatedAt : string, userId : string
 }
 
-interface IItemInstance {
+interface ItemInstance {
   equipped : boolean,
   itemID : number
 }
 
-interface IItem extends IItemInstance {
+interface Item extends ItemInstance {
   action: string,
   activityRestriction: string | null,
   class: string | null,
   createdAt: string,
   description: string,
   dropRate: number | null,
-  effects: IEffect[],
+  effects: Effect[],
   exhaustible: boolean
   icon: string
   id: number
@@ -87,10 +112,10 @@ interface IItem extends IItemInstance {
   updatedAt: string
 }
 
-interface IEffect{
+interface Effect{
   name : string,
   type : string,
   description : string
 }
 
-export { IStore, IAlert, IAction, IUser, IStats, IHero, IItemInstance, IItem };
+export { Action, Store, SnackBarAlert, User, Stats, Hero, ItemInstance, Item };

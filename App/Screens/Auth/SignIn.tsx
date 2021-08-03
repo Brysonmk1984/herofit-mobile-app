@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, createRef } from 'react';
+import React, { useContext, useEffect, useState, FC } from 'react';
 import { View, ScrollView, Text, TextInput, StyleSheet, Button } from 'react-native';
 import { login } from '../../api/authentication';
 import { store } from '../../store';
@@ -6,8 +6,19 @@ import debugErrors from '../../common/debugErrors';
 import { updateAlerts } from '../../common/alerts';
 import fetchInitialData from '../../common/fetchInitialData';
 import ScreenContainer from '../../Components/ScreenContainer';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { Store } from '../../common/types';
 
-const SignIn = ({ navigation }) => {
+interface Navigation {
+  navigate: (p1: string, p2: { screen: string, params?: { screen: string } }) => void
+}
+
+interface SignInProps {
+  navigation: Navigation
+}
+
+
+const SignIn : FC<SignInProps>  = ({ navigation }) => {
   const { state, dispatch } = useContext(store);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

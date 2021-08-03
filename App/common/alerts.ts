@@ -1,11 +1,11 @@
 import randomToken from 'random-token';
-import { IAlert, IStore } from './interfaces';
+import { SnackBarAlert, Store } from './types';
 
 function alertAdder(current, newAlerts){
   newAlerts = Array.isArray(newAlerts) ? newAlerts : [newAlerts];
   const fadeOutAlerts = [];
   
-  const arrayWithIndexes = newAlerts.map((alert : IAlert, i : string) => {
+  const arrayWithIndexes = newAlerts.map((alert : SnackBarAlert, i : string) => {
       alert.index = randomToken(16);
       if(alert.persist){
         alert.persist = true;
@@ -24,7 +24,7 @@ function alertRemover(indiciesForRemoval : string[], dispatch : any){
   dispatch({type: 'REMOVE ALERTS', payload : { indiciesForRemoval }});
 }
 
-function updateAlerts(newAlerts : object[], state : IStore, dispatch : any){
+function updateAlerts(newAlerts : object[], state : Store, dispatch : any){
   // Alerts are NEW and need to be added with new indicies, then added to state with any other state
   const { newAlertArray, fadeOutAlerts }  = alertAdder(state.alerts, newAlerts);
 

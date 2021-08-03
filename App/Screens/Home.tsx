@@ -3,17 +3,17 @@ import { View, Text, StyleSheet, Button, FlatList, SectionList } from 'react-nat
 import ScreenContainer from '../Components/ScreenContainer';
 import debugErrors from '../common/debugErrors';
 import { store } from '../store';
-import { IStore, IItem } from '../common/interfaces';
+import { Store, Item } from '../common/types';
 interface HomeProps {
 
 }
 
 const Home: React.FC<HomeProps> = ({ navigation }) => {
-  const { state, dispatch } = useContext<IStore>(store);
-  console.log('!HERO', state.hero);
+  const { state, dispatch } = useContext<Store>(store);
+  console.log('!HERO`', state.hero);
   const { name, status, health, maxHealth, activityXP, battleXP, photonTokens, goToBattle, equipped } = state.hero;
   console.log('equiped array', equipped);
-  function renderItem({ item } : { IItem }){
+  function renderItem({ item } : { Item }){
     console.log("ITEM!", item);
     return <View>
       <Text>{ item.name }</Text>

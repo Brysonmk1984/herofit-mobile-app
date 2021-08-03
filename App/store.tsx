@@ -1,12 +1,16 @@
-import React, {createContext, useReducer} from 'react';
-import { IStore, IAction } from './common/interfaces';
+import React, {createContext, useReducer, Context} from 'react';
+import { Store, Action, Hero, SnackBarAlert } from './common/types';
 
-const initialState : IStore = { isLoading : true, isSignedIn : false, newUser : false, hero : null, alerts : [] };
-const store = createContext(initialState);
+interface InitialState {
+  isLoading : boolean, isSignedIn : boolean, newUser : boolean, hero : null | Hero, alerts : SnackBarAlert[]
+}
+const initialState : InitialState = { isLoading : true, isSignedIn : false, newUser : false, hero : null, alerts : [] };
+
+const store: Context<Store> = createContext(initialState);
 const { Provider } = store;
 
 const StateProvider : React.FC = ( { children } ) => {
-  const [state, dispatch] = useReducer((state : IStore, action : IAction) => {
+  const [state, dispatch] = useReducer((state, action) => {
 
     switch(action.type) {
       case 'TOGGLE LOADING': {

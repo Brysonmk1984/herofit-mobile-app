@@ -3,11 +3,11 @@ import { StyleSheet, Text, View, Button, Linking, Pressable } from 'react-native
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { Fonts, Colors, Spacing, AlertThemes, Buttons } from './styles';
 import { alertRemover } from './common/alerts';
-import { IAlert } from './common/interfaces';
+import { SnackBarAlert } from './common/types';
 
 
 
-const Alerts: React.FC<Alerts> = ({ alerts, dispatch } : { alerts : IAlert[], dispatch : React.Dispatch<any> }) => {
+const Alerts: React.FC<Alerts> = ({ alerts, dispatch } : { alerts : SnackBarAlert[], dispatch : React.Dispatch<any> }) => {
 
   function renderIcon(aType, aStyle){
     switch(aType){

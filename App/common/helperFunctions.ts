@@ -2,7 +2,7 @@
 //import { validateAdmin } from '../services/mockService';
 import avatars from './heroList.json';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { IHero, IItemInstance, IItem } from './interfaces';
+import { Hero, ItemInstance, Item } from './types';
 
 const lowercaseUnderscore = function(ally){
     if(ally !== null && typeof ally !== 'undefined'){
@@ -336,9 +336,9 @@ function capitalize(string : string){
 }
 
 // Combines item instances with default item templates
-function convertItemIdsToFullItems(itemInstances : IItemInstance[], defaultItems : IItem[]){
-  const combinedItems = itemInstances.map((itemInstance : IItemInstance) : IItem => {
-    const matchingItem = defaultItems.find((item : IItem) => item.id === itemInstance.itemID);
+function convertItemIdsToFullItems(itemInstances : ItemInstance[], defaultItems : Item[]){
+  const combinedItems = itemInstances.map((itemInstance : ItemInstance) : Item => {
+    const matchingItem = defaultItems.find((item : Item) => item.id === itemInstance.itemID);
     return Object.assign({}, itemInstance, matchingItem);
   });
 

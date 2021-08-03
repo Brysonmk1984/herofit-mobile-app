@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { View, Text } from 'react-native';
 import ScreenContainer from '../Components/ScreenContainer';
-import { IStore, IUser } from '../common/interfaces';
+import { Store, User } from '../common/types';
 import { store } from '../store';
 
 interface ProfileProps {
@@ -9,7 +9,7 @@ interface ProfileProps {
 }
 
 const Profile: React.FC<ProfileProps> = ({ navigation }) => {
-  const { state, dispatch } = useContext<IStore>(store);
+  const { state, dispatch } = useContext<Store>(store);
   const { hero } = state;
 
   return (

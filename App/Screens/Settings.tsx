@@ -3,7 +3,7 @@ import { Button, Alert } from 'react-native';
 import ScreenContainer from '../Components/ScreenContainer';
 import { clearJwtInLocalStorage } from '../common/jwtModule';
 import debugErrors from '../common/debugErrors';
-import { IStore, IUser } from '../common/interfaces';
+import { Store, User } from '../common/types';
 import { updateAlerts } from '../common/alerts';
 import { deleteAccount } from '../api/account';
 import { store } from '../store';
@@ -13,7 +13,7 @@ interface SettingsProps {
 }
 
 const Settings: React.FC<SettingsProps> = ({ navigation }) => {
-  const { state, dispatch } = useContext<IStore>(store);
+  const { state, dispatch } = useContext<Store>(store);
   const { hero } = state;
 
   const createDeleteAlert = () => {
@@ -32,7 +32,7 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
   
   function handleDeleteAccount(){
     // TODO: Delete immediately after account creation doesnt work, hero doesn't have ID
-    const user : IUser = state.user;
+    const user : User = state.user;
     console.log('HHH', hero);
     deleteAccount({ username: user.username, avatarID : hero.id, email : user.email })
     .then(async (data) =>{

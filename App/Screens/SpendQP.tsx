@@ -5,7 +5,7 @@ import spendQPReducer from '../common/SpendQPReducer';
 import { updateAlerts } from '../common/alerts';
 import { fetchAstrologySeason } from '../api/calculate';
 import debugErrors from '../common/debugErrors';
-import { IStats } from '../common/interfaces';
+import { Stats } from '../common/types';
 import ScreenContainer from '../Components/ScreenContainer';
 
 const SpendQP = ({ route, navigation }) => {
@@ -15,7 +15,7 @@ const SpendQP = ({ route, navigation }) => {
   // Hero is passed as a route param if it's a new user, otherwise grab the hero from state
   const hero = route.params.hero || state.hero;
   const newUser : boolean = state.newUser;
-  const initialState : IStats = { qp : newUser ? 10 : hero.qp, power : 100, health : 100, armor : 0, recovery : 5, fire : 0, earth : 0, water : 0, air : 0, aether : 0, qpPower : 0, qpHealth : 0, qpArmor : 0, qpRecovery : 0, qpFire : 0, qpEarth : 0, qpAir : 0, qpWater : 0, qpAether : 0 };
+  const initialState : Stats = { qp : newUser ? 10 : hero.qp, power : 100, health : 100, armor : 0, recovery : 5, fire : 0, earth : 0, water : 0, air : 0, aether : 0, qpPower : 0, qpHealth : 0, qpArmor : 0, qpRecovery : 0, qpFire : 0, qpEarth : 0, qpAir : 0, qpWater : 0, qpAether : 0 };
   const [ qpState, qpDispatch ] = useReducer(spendQPReducer, initialState);
 
 
