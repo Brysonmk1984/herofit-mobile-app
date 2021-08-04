@@ -7,7 +7,7 @@ import { updateAlerts } from '../../common/alerts';
 import fetchInitialData from '../../common/fetchInitialData';
 import ScreenContainer from '../../Components/ScreenContainer';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Store } from '../../common/types';
+import { Store, AppDispatchAction } from '../../common/types';
 
 interface Navigation {
   navigate: (p1: string, p2: { screen: string, params?: { screen: string } }) => void
@@ -22,7 +22,7 @@ const SignIn : FC<SignInProps>  = ({ navigation }) => {
   const { state, dispatch } = useContext(store);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [helperText, setHelperText] = useState(null);
+  const [helperText, setHelperText] = useState<string | null>(null);
   const [formIsValid, setFormIsValid] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -56,7 +56,7 @@ const SignIn : FC<SignInProps>  = ({ navigation }) => {
     }
   }
 
-  function handleEmailInput(val){
+  function handleEmailInput(val : string){
     setEmail(val);
     if(!val.includes('@')){
       setHelperText("Must be valid email address");
@@ -65,7 +65,7 @@ const SignIn : FC<SignInProps>  = ({ navigation }) => {
     }
   }
 
-  function handlePasswordInput(val){
+  function handlePasswordInput(val : string){
     setPassword(val);
     if(val.length < 8){
       setHelperText("Password must be at least 8 characters");

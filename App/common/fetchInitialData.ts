@@ -6,12 +6,13 @@ import { convertItemIdsToFullItems } from './helperFunctions';
 import { fetchBattleReport } from '../api/battle';
 import { updateAlerts } from './alerts';
 import debugErrors from "./debugErrors";
-import { User, Hero, Item, Store } from './types'
+import { User, Hero, Item, Store, AppDispatch, AppState } from './types'
+
 
 // FETCH ALL THE NEEDED DATA FOR INITIALIZING THE HOME SCREEN
 // Either accepts the jwt token and gets email from it in the case of already-valid jwt, or accepts email as a parameter in the case of signing in
 // user, hero, items, latestBattle
-async function fetchInitialData(token : string, dispatch : React.Dispatch<any>, state : Store, email : string | null = null){
+async function fetchInitialData(token : string, dispatch : AppDispatch, state : AppState, email : string | null = null){
   try{
     // Decode the JWT to get email, needed for fetching avatar
     if(token){

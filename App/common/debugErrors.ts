@@ -1,5 +1,5 @@
 import { emailAppError } from '../api/email';
-import { User } from './types';
+import { User, AppDispatch } from './types';
 
 interface IappError{
   status: number
@@ -13,7 +13,7 @@ interface IappError{
 type appError = IappError | string
 
 // Decides how to report users to end users and the dev team
-function debugErrors(error: appError, user? : User, dispatch? : React.Dispatch<any> ): string {
+function debugErrors(error: appError, user? : User, dispatch? : AppDispatch ): string {
   if(typeof error === 'string'){
     if(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging'){
       emailAppError({ status : 999, message : error, version : process.env.APP_VERSION, accountInfo : user });

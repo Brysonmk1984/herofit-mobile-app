@@ -1,35 +1,59 @@
-type ActionType = 'TOGGLE LOADING' | 'SET USER' | 'SET NEW USER';
+type ActionType = 'TOGGLE LOADING' | 'SET EXISTING USER INIT DATA' | 'SET ISSIGNEDIN' | 'SET NEW USER' | 'SET HERO' | 'SET USER' | 'SET ALERTS' | 'RESET DEFAULTS' | 'REMOVE ALERTS';
+
+interface ToggleLoadingAction {
+  type: 'TOGGLE LOADING', payload: { isLoading: boolean }
+}
+interface SetExistingUserInitDataAction {
+  type: 'SET EXISTING USER INIT DATA', payload: { user : User, hero : Hero, gameItems : Item, latestBattle : any, isSignedIn : boolean }
+}
+interface SetIsSignedInAction {
+  type : 'SET ISSIGNEDIN', payload : { isSignedIn : boolean }
+}
+interface SetNewUserAction {
+  type: 'SET NEW USER', payload: { newUser: boolean }
+}
+interface SetHeroAction {
+  type: 'SET HERO', payload: { hero : Hero }
+}
+interface SetUserAction {
+  type: 'SET USER', payload: { user: User}
+}
+interface SetAlertsAction {
+  type: 'SET ALERTS', payload: { alerts : SnackBarAlert[]}
+}
+interface ResetDefaultsAction {
+  type: 'RESET DEFAULTS', payload: { isLoading: boolean }
+}
+interface RemoveAlertsAction {
+  type: 'REMOVE ALERTS', payload: { indiciesForRemoval : string[] }
+}
+
+// Same as ShoppingListAction in example
+type AppAction = ToggleLoadingAction | SetExistingUserInitDataAction | SetIsSignedInAction | SetNewUserAction | SetHeroAction | SetUserAction | SetAlertsAction | ResetDefaultsAction | RemoveAlertsAction;
+type AppDispatch = (action: AppAction) => void
+
+type Payload = {
+  user : object, hero : object, gameItems : [], latestBattle : object, isSignedIn : boolean, isLoading : boolean,
+  newUser : boolean, alerts : SnackBarAlert[], indiciesForRemoval : string[]
+};
 
 interface Action<Payload = {}> {
-    type: ActionType
-    payload: Payload
+    type: ActionType;
+    payload: Payload;
+}
+interface AppState {
+  jwt: string | null,
+  isSignedIn: boolean
+  isLoading : boolean;
+  newUser : boolean;
+  hero : Hero | null;
+  alerts : SnackBarAlert[];
 }
 
 interface Store {
-  state: {
-    jwt: string,
-    isSignedIn: boolean
-    isLoading : boolean;
-    newUser : boolean;
-    hero : object | null;
-    alerts : object[];
-  }
+  state: AppState
   dispatch: <Payload = {}>(action: Action<Payload>) => void
 }
-
-// interface Store {
-  // jwt: string,
-  // isSignedIn: boolean
-  // isLoading : boolean;
-// }
-
-// interface Action {
-//   type : string;
-//   payload : {
-//     user : object, hero : object, gameItems : [], latestBattle : object, isSignedIn : boolean, isLoading : boolean,
-//     newUser : boolean, alerts : SnackBarAlert[], indiciesForRemoval : string[]
-//   };
-// }
 
 type linkOrConfirm = string | { text : string; cb : { () : void };}
 interface SnackBarAlert{
@@ -40,13 +64,6 @@ interface SnackBarAlert{
   config? : linkOrConfirm;
 }
 
-interface Action {
-  type : string;
-  payload : {
-    user : object, hero : object, gameItems : [], latestBattle : object, isSignedIn : boolean, isLoading : boolean,
-    newUser : boolean, alerts : SnackBarAlert[], indiciesForRemoval : string[]
-  };
-}
 
 interface User {
     id : number,
@@ -118,4 +135,5 @@ interface Effect{
   description : string
 }
 
-export { Action, Store, SnackBarAlert, User, Stats, Hero, ItemInstance, Item };
+
+export { Action, AppDispatch, AppState, AppAction, Store, SnackBarAlert, User, Stats, Hero, ItemInstance, Item };

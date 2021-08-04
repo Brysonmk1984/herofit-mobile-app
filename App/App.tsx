@@ -3,12 +3,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { store } from './store';
-import { Store } from './common/types';
+import { Store, AppDispatch } from './common/types';
 import * as Screens from './Screens';
 import { getJwtInLocalStorage } from './common/jwtModule';
 import Alerts from './Alerts';
 import { LogBox } from 'react-native';
 import fetchInitialData from './common/fetchInitialData';
+
 import { SelectHeroStackParamList, RootStackParamList, SidebarDrawerParamList, HomeWrapperStackParamList, WalkthroughStackParamList, AuthStackParamList } from './common/types-navigator';
 
 LogBox.ignoreLogs(['Reanimated 2']);
