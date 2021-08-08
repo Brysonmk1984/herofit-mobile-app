@@ -2,7 +2,9 @@ import React, { useContext, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { store } from './store';
+import { useFonts } from 'expo-font';
+import { loadAsync as fontLoadAsync } from 'expo-font';
+import { GlobalStateContext } from './store';
 import { Store, AppDispatch } from './common/types';
 import * as Screens from './Screens';
 import { getJwtInLocalStorage } from './common/jwtModule';
@@ -29,7 +31,7 @@ const RootStackScreen = ({ isSignedIn }) =>{
 // IN APP Second level Navigator, used for directing users who are already authorized
 const SidebarDrawer = createDrawerNavigator<SidebarDrawerParamList>();
 const DrawerScreen = () =>{
-  const { state, dispatch } = useContext<Store>(store);
+  const { state, dispatch } = useContext<Store>(GlobalStateContext);
 
   return <SidebarDrawer.Navigator>
     <SidebarDrawer.Screen name="HomeWrapperScreen" component={HomeWrapperScreen} />
@@ -47,7 +49,7 @@ const DrawerScreen = () =>{
 // IN APP Third level Navigator, used for Everything under HOME
 const HomeWrapperStack = createStackNavigator<HomeWrapperStackParamList>();
 const HomeWrapperScreen = () => {
-  const { state, dispatch } = useContext<Store>(store);
+  const { state, dispatch } = useContext<Store>(GlobalStateContext);
   return  <HomeWrapperStack.Navigator >
     <SidebarDrawer.Screen name="Home" component={Screens.Home} options={{ title : 'Home' }} /> 
   </HomeWrapperStack.Navigator>
@@ -58,7 +60,7 @@ const HomeWrapperScreen = () => {
 // IN APP Fourth level Navigator, used for Select Hero sequence for new users
 const WalkthroughStack = createStackNavigator<WalkthroughStackParamList>();
 const WalkthroughStackScreen = () =>{
-  const { state, dispatch } = useContext<Store>(store);
+  const { state, dispatch } = useContext<Store>(GlobalStateContext);
   
   return  <WalkthroughStack.Navigator >
     {/* <WalkthroughStack.Screen name="SelectCampaign" component={SelectCampaign}  options={{ title : 'Select Campaign' }} />
@@ -71,7 +73,7 @@ const WalkthroughStackScreen = () =>{
 // AUTH Second level Navigator, used for App Auth
 const AuthStack = createStackNavigator<AuthStackParamList>();
 const AuthStackScreen = () =>{
-  const { state, dispatch } = useContext<Store>(store);
+  const { state, dispatch } = useContext<Store>(GlobalStateContext);
   return <AuthStack.Navigator headerMode="none">
     {
       state.newUser ? <SelectHeroStack.Screen name="SelectHero" component={SelectHeroStackScreen} />
@@ -86,7 +88,7 @@ const AuthStackScreen = () =>{
 // AUTH Third level Navigator, used for Select Hero sequence for new users
 const SelectHeroStack = createStackNavigator<SelectHeroStackParamList>();
 const SelectHeroStackScreen = () =>{
-  const { state, dispatch } = useContext<Store>(store);
+  const { state, dispatch } = useContext<Store>(GlobalStateContext);
   
   return  <SelectHeroStack.Navigator >
     <SelectHeroStack.Screen name="SelectHeroHowTo" component={Screens.SelectHeroHowTo}  options={{ title : 'Select Hero' }} />
@@ -101,21 +103,33 @@ const SelectHeroStackScreen = () =>{
 
 
 const App: React.FC<AppProps> = ({}) => {
-  const { state, dispatch } = useContext<Store>(store);
+  const { state, dispatch } = useContext<Store>(GlobalStateContext);
   
 
 
   useEffect(() => {
+    // get the JWT and fonts from local storage with async storage, then get initial game data
     (async () =>{
-      const token = await getJwtInLocalStorage();
+      const [token, p2] = await Promise.all([
+        getJwtInLocalStorage(), 
+        fontLoadAsync({
+          'bebas-neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
+          'oswald': require('../assets/fonts/Oswald-VariableFont_wght.ttf'),
+          'pathway': require('../assets/fonts/PathwayGothicOne-Regular.ttf'),
+          // 'pragatiNarrow-bold': require('../assets/fonts/PragatiNarrow-Bold.ttf'),
+          // 'pragatiNarrow': require('../assets/fonts/PragatiNarrow-Regular.ttf'),
+          'rochester': require('../assets/fonts/Rochester-Regular.ttf')
+        })
+      ]);
+
       if(token){
-        console.log('THE TOKK', token, state);
         await fetchInitialData(token, dispatch, state);
       }
       dispatch({type : 'TOGGLE LOADING', payload : { isLoading : false } });
-    })()
-
+    })();
   }, []);
+
+  
 
   return (
     <NavigationContainer>

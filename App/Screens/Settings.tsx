@@ -6,14 +6,14 @@ import debugErrors from '../common/debugErrors';
 import { Store, User } from '../common/types';
 import { updateAlerts } from '../common/alerts';
 import { deleteAccount } from '../api/account';
-import { store } from '../store';
+import { GlobalStateContext } from '../store';
 
 interface SettingsProps {
 
 }
 
 const Settings: React.FC<SettingsProps> = ({ navigation }) => {
-  const { state, dispatch } = useContext<Store>(store);
+  const { state, dispatch } = useContext<Store>(GlobalStateContext);
   const { hero } = state;
 
   const createDeleteAlert = () => {

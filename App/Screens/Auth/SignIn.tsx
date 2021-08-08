@@ -1,13 +1,14 @@
-import React, { useContext, useEffect, useState, FC } from 'react';
-import { View, ScrollView, Text, TextInput, StyleSheet, Button } from 'react-native';
+import React, { useContext, useEffect, useState, FC, ReactNode, Context } from 'react';
+import { ScrollView, TextInput, StyleSheet } from 'react-native';
+import {  NativeBaseProvider, Box, View, Text, Heading, VStack, FormControl, Input, Link, Button, Icon, IconButton, HStack, Divider } from 'native-base';
 import { login } from '../../api/authentication';
-import { store } from '../../store';
+import { GlobalStateContext } from '../../store';
 import debugErrors from '../../common/debugErrors';
 import { updateAlerts } from '../../common/alerts';
 import fetchInitialData from '../../common/fetchInitialData';
 import ScreenContainer from '../../Components/ScreenContainer';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Store, AppDispatchAction } from '../../common/types';
+import { Store, AppDispatchAction, AppState, AppDispatch } from '../../common/types';
 
 interface Navigation {
   navigate: (p1: string, p2: { screen: string, params?: { screen: string } }) => void
@@ -19,7 +20,9 @@ interface SignInProps {
 
 
 const SignIn : FC<SignInProps>  = ({ navigation }) => {
-  const { state, dispatch } = useContext(store);
+  const { state, dispatch } = useContext(GlobalStateContext);
+
+  console.log('SIGNIN', state, dispatch);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [helperText, setHelperText] = useState<string | null>(null);
@@ -105,34 +108,42 @@ const SignIn : FC<SignInProps>  = ({ navigation }) => {
     <ScreenContainer>
       <View style={ styles.container }>
         <ScrollView>
-          <Text>Sign IN Screen</Text>
-          <Text>Has Token : { Boolean(state.jwt) } </Text>
-          <Button title="Select Hero" onPress={() => {
+          <Heading size="lg" color='primary.500'><Text fontFamily='heading' fontSize="3xl">Sign IN Screen</Text></Heading>
+          <Heading color="muted.400" size="xs">Has Token: { Boolean(state.jwt).toString() } </Heading>
+    
+          <Button onPress={() => {
             dispatch({ type: 'SET NEW USER', payload: { newUser : true }});
             return navigation.navigate('Auth',  { screen : 'SignIn'});
-          }} />
-          <TextInput
-            style={styles.input}
-            onChangeText={email => handleEmailInput(email)}
-            value={email}
-            placeholder="Email"
-          />
-          <TextInput
-            style={styles.input}
-            onChangeText={text => handlePasswordInput(text)}
-            value={password}
-            secureTextEntry={true}
-            autoCompleteType="password"
-            textContentType="password"
-            placeholder="Password"
-          />
-          <View>
-            <Text>{ helperText }</Text>
-          </View>
-          <View>
-            <Button title="Submit" disabled={formIsValid ? false : true} onPress={handleSignIn} />
-          </View>
-          <Button title="Add Alert" onPress={addAlert}></Button>
+          }}>Select Hero</Button>
+
+          <VStack space={2} mt={5}>
+            <FormControl>
+              <FormControl.Label _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>Email</FormControl.Label>
+              <Input
+                onChangeText={email => handleEmailInput(email)}
+                value={email}
+                placeholder="Email"
+              />
+            </FormControl>
+            <FormControl>
+              <FormControl.Label _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>Password</FormControl.Label>
+              <Input
+                onChangeText={text => handlePasswordInput(text)}
+                value={password}
+                secureTextEntry={true}
+                autoCompleteType="password"
+                textContentType="password"
+                placeholder="Password"
+              />
+            </FormControl>
+            <View>
+              <Text>{ helperText }</Text>
+            </View>
+            <View>
+              <Button /*colorScheme="water"*/ variant="solid" /*_text={ { color : 'base.water' } }*/ disabled={formIsValid ? false : true} onPress={handleSignIn}>Submit</Button>
+            </View>
+            <Button variant="outline" title="Add Alert" onPress={addAlert}>Add Alert</Button>
+          </VStack>
         </ScrollView>
       </View>
     </ScreenContainer>
@@ -143,24 +154,6 @@ export default SignIn;
 
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    //backgroundColor: 'red',
-    width: '100%'
-  },
-  button: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    marginVertical: 10,
-    borderRadius: 5
-  },
-  input: {
 
-    margin: 12,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-    borderWidth: 1,
-  },
+
 });

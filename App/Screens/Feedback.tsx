@@ -1,10 +1,11 @@
 import React, { useState, useContext } from 'react';
+import { NativeBaseProvider, Box, Center } from 'native-base';
 import { View, Text } from 'react-native';
 import ScreenContainer from '../Components/ScreenContainer';
 import { Store, User } from '../common/types';
 import { updateAlerts } from '../common/alerts';
 import debugErrors from '../common/debugErrors';
-import { store } from '../store';
+import { GlobalStateContext } from '../store';
 import { emailContactForm } from '../api/email';
 
 
@@ -13,7 +14,7 @@ interface FeedbackProps {
 }
 
 const Feedback: React.FC<FeedbackProps> = ({ navigation }) => {
-  const { state, dispatch } = useContext<Store>(store);
+  const { state, dispatch } = useContext<Store>(GlobalStateContext);
   const { user, hero, isSignedIn } = state;
 
   const [email, setEmail] = useState(isSignedIn ? hero.email : '');
@@ -50,10 +51,13 @@ const Feedback: React.FC<FeedbackProps> = ({ navigation }) => {
   }
 
   return (
-    <ScreenContainer>
-      <Text>Feedback Page</Text>
-    </ScreenContainer>
+    <NativeBaseProvider>
+      <Center flex={1}>
+        Feedback Page
+      </Center>
+    </NativeBaseProvider>
   );
+
 }
 
 export default Feedback;

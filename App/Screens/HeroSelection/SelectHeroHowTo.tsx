@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, Button, FlatList, SectionList } from 'react-native';
+import {  FlatList, SectionList,  Box, Center, View, Text, Heading, VStack, FormControl, Input, Link, Button, Icon, IconButton, HStack, Divider } from 'native-base';
 import debugErrors from '../../common/debugErrors';
-import { store } from '../../store';
+import { GlobalStateContext } from '../../store';
 import { getHeroList } from '../../api/authentication';
 import ScreenContainer from '../../Components/ScreenContainer';
 
 // How To Select Screen
 const SelectHeroHowTo = ({ navigation }) =>{
-  const { state, dispatch } = useContext(store);
+  const { state, dispatch } = useContext(GlobalStateContext);
   // Make API call to get hero data for the next screen
   const [heroList, setHeroList] = useState([]);
   const DATA = [
@@ -50,10 +50,16 @@ const SelectHeroHowTo = ({ navigation }) =>{
 
   return (
     <ScreenContainer>
-      <Text>The Dark Forces have breached the Twilight Seal and are causing havoc across Earth Realm!</Text>
-      <Text>It's up to you Hero, to grow strong through training and combat these malevolent forces.</Text>
-      <Text>Choosing your Hero:</Text>
-      <Text>Defaults:</Text>
+      <Box alignSelf={{ base: "center", md: "flex-start",
+      }} width={72} bg={'brand.100'} shadow={1}>
+        <Text textAlign="center"  fontFamily='cursive' pl={5} pr={5}>The Dark Forces have breached the Twilight Seal and are causing havoc across Earth Realm!</Text>
+      </Box>
+      <Divider my={2} />
+      {/* Can't seem to assign fontFamily to heading */}
+      <Heading>
+        <Text fontSize="xl" fontFamily='heading'>Choosing your Hero:</Text>
+      </Heading>
+      <Text color={'primary.500'}>Default Stats</Text>
       <FlatList 
         data={[
           {
@@ -82,23 +88,37 @@ const SelectHeroHowTo = ({ navigation }) =>{
           }
         ]}
         keyExtractor={(item, i) => i.toString()}
-        renderItem={({item}) => <View>
-          <Text>{item.trait}</Text>
-          <Text>{item.description}</Text>
-          <Text>Starting Value: {item.value}</Text>
-        </View>}
+        renderItem={({item}) => <Box px={5} py={2} rounded="md" my={2} bg="primary.300">
+          <HStack flex={2} space={2} mb={5} alignItems="center" justifyContent="space-between">
+            <Text flex="2" fontWeight="bold">{item.trait}</Text>
+            <Text flex="4">{item.description}</Text>
+            <Text flex="1" fontWeight="bold" fontSize="xl" textAlign="center">{item.value}</Text>
+          </HStack>
+        </Box>}
       />
-      <Text>Elemental Power:</Text>
+      <Divider my={2} />
+      <Text  color={'primary.500'}>Elemental Power</Text>
       <SectionList
         sections={DATA}
         keyExtractor={(item, index) => (item + index).toString()}
-        renderItem={({ item }) => <Item title={item} />}
+        renderItem={({ item }) => (
+          <Box px={5} py={2} rounded="md" my={2} bg="primary.200">
+            <Item title={item} />
+          </Box>
+        )}
         renderSectionHeader={({ section: { title } }) => (
-          <Text>{title}</Text>
+          <Text color={ 
+            title === 'Earth' ? 'base.earth':
+            title === 'Fire' ? 'base.fire':
+            title === 'Air' ? 'base.air':
+            title === 'Water' ? 'base.water': 
+            'base.aether' }>{title}</Text>
         )}
       />
-      <Text>The different Heroes have different starting elemental power. These values have only a small impact; ultimately your training and how you spend Quantum Points (talent points) will dictate how your hero developes.</Text>
-      <Button title="OK" onPress={() => navigation.push("SelectHero", { heroList })} />
+      <Box p="1" my="3" border={1} borderColor="primary.500">
+        <Text color="primary.500" fontSize="xs">The different Heroes have different starting elemental power. These values have only a small impact; ultimately your training and how you spend Quantum Points (talent points) will dictate how your hero developes.</Text>
+      </Box>
+      <Button onPress={() => navigation.push("SelectHero", { heroList })}>OK</Button>
     </ScreenContainer>
   )
 }

@@ -3,8 +3,7 @@ import { Store, Action, Hero, SnackBarAlert, AppState, AppDispatch, AppAction } 
 
 const initialState : AppState = { isLoading : true, isSignedIn : false, newUser : false, hero : null, alerts : [], jwt : null };
 
-const store = createContext<AppState>(initialState);
-const { Provider } = store;
+const GlobalStateContext = createContext(initialState);
 
 function appStateReducer(state : AppState, action : AppAction) : AppState {
 
@@ -61,12 +60,13 @@ function appStateReducer(state : AppState, action : AppAction) : AppState {
 const StateProvider : FC = ( { children } ) : ReactElement  => {
   
   const [state, dispatch] = useReducer(appStateReducer, initialState);
-  const providerValue : { state : AppState, dispatch : AppDispatch } = { state, dispatch }
+  //const providerValue : { state : AppState, dispatch : AppDispatch } = { state, dispatch };
+  console.log('STATE', state);
   return (
-    <Provider value={ providerValue }>
+    <GlobalStateContext.Provider value={ { state, dispatch } }>
       {children}
-    </Provider>
+    </GlobalStateContext.Provider>
   );
 };
 
-export { store, StateProvider }
+export { GlobalStateContext, StateProvider }

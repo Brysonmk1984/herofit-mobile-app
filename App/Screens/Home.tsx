@@ -2,14 +2,14 @@ import React, { useContext, useEffect, useState, createRef } from 'react';
 import { View, Text, StyleSheet, Button, FlatList, SectionList } from 'react-native';
 import ScreenContainer from '../Components/ScreenContainer';
 import debugErrors from '../common/debugErrors';
-import { store } from '../store';
+import { GlobalStateContext } from '../store';
 import { Store, Item } from '../common/types';
 interface HomeProps {
 
 }
 
 const Home: React.FC<HomeProps> = ({ navigation }) => {
-  const { state, dispatch } = useContext<Store>(store);
+  const { state, dispatch } = useContext<Store>(GlobalStateContext);
   console.log('!HERO`', state.hero);
   const { name, status, health, maxHealth, activityXP, battleXP, photonTokens, goToBattle, equipped } = state.hero;
   console.log('equiped array', equipped);

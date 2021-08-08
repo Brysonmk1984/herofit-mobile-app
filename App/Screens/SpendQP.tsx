@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, useReducer } from "react";
 import { View, Text, Button } from "react-native";
-import { store } from '../store';
+import { GlobalStateContext } from '../store';
 import spendQPReducer from '../common/SpendQPReducer';
 import { updateAlerts } from '../common/alerts';
 import { fetchAstrologySeason } from '../api/calculate';
@@ -10,7 +10,7 @@ import ScreenContainer from '../Components/ScreenContainer';
 
 const SpendQP = ({ route, navigation }) => {
   // Global State
-  const { state, dispatch } = useContext(store);
+  const { state, dispatch } = useContext(GlobalStateContext);
 
   // Hero is passed as a route param if it's a new user, otherwise grab the hero from state
   const hero = route.params.hero || state.hero;

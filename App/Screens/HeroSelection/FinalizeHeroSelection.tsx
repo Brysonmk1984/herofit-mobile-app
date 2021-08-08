@@ -2,7 +2,7 @@ import React, { useContext, useState, createRef } from 'react';
 import { View, Text, Button } from 'react-native';
 import DelayInput from "react-native-debounce-input";
 import debugErrors from '../../common/debugErrors';
-import { store } from '../../store';
+import { GlobalStateContext } from '../../store';
 import { getHeroList } from '../../api/authentication';
 import { checkAvatarName } from '../../api/avatar';
 import ScreenContainer from '../../Components/ScreenContainer';
@@ -15,7 +15,7 @@ const FinalizeHeroSelection = ({ route, navigation }) => {
   const [checkingMessage, setCheckingMessage] = useState(false);
   const [helperText, setHelperText] = useState(null);
   const inputRef = createRef();
-  const { state, dispatch } = useContext(store);
+  const { state, dispatch } = useContext(GlobalStateContext);
   const { hero } = route.params;
 
   function handleNameInput(name : string): void{
