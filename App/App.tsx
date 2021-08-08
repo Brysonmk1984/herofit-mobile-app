@@ -2,8 +2,8 @@ import React, { useContext, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { useFonts } from 'expo-font';
 import { loadAsync as fontLoadAsync } from 'expo-font';
+import { createIconSetFromIcoMoon } from '@expo/vector-icons';
 import { GlobalStateContext } from './store';
 import { Store, AppDispatch } from './common/types';
 import * as Screens from './Screens';
@@ -113,6 +113,7 @@ const App: React.FC<AppProps> = ({}) => {
       const [token, p2] = await Promise.all([
         getJwtInLocalStorage(), 
         fontLoadAsync({
+          'icomoon': require('../assets/fonts/icomoon.ttf'),
           'bebas-neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
           'oswald': require('../assets/fonts/Oswald-VariableFont_wght.ttf'),
           'pathway': require('../assets/fonts/PathwayGothicOne-Regular.ttf'),
@@ -120,7 +121,10 @@ const App: React.FC<AppProps> = ({}) => {
           // 'pragatiNarrow': require('../assets/fonts/PragatiNarrow-Regular.ttf'),
           'rochester': require('../assets/fonts/Rochester-Regular.ttf')
         })
+      
       ]);
+
+ 
 
       if(token){
         await fetchInitialData(token, dispatch, state);
