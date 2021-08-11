@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, FlatList, SectionList,  Box, Center, View, Text, Heading, VStack, FormControl, Input, Link, Button, IconButton, HStack, Divider } from 'native-base';
 import AnimatedLoader from "react-native-animated-loader";
 import ScreenContainer from '../../Components/ScreenContainer';
 
@@ -27,41 +27,21 @@ const Loading: React.FC<LoadingWrapperProps> = () => {
 
   return (
     <ScreenContainer>
-      <View style={[styles.container, styles.horizontal]}>
-        <View style={[styles.activityIndicator]}>
+      <VStack>
+        <View >
           <AnimatedLoader
             visible={true}
             overlayColor="rgba(255,255,255,0.75)"
             source={require("./loader.json")}
             speed={1}
           >
-            <Text>{ message }</Text>
+            <Text fontFamily='systemFont'>{ message }</Text>
           </AnimatedLoader>
         </View>
-      </View>
+      </VStack>
     </ScreenContainer>
   );
 
 }
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignSelf: "stretch",
-    zIndex : 1
-  },
-  horizontal: {
-    flexDirection: "row",
-    justifyContent: "center",
-    padding: 10
-  },
-  activityIndicator: {
-    alignSelf: 'center',
-    width:'100%',
-    height:'100%'
-  }
-});
 
 export default Loading;

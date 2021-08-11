@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { NativeBaseProvider, Box, Center } from 'native-base';
-import { View, Text } from 'react-native';
+import { Image, Pressable, FlatList, SectionList,  Box, Center, View, Text, Heading, VStack, FormControl, Input, Link, Button, IconButton, HStack, Divider } from 'native-base';
 import ScreenContainer from '../Components/ScreenContainer';
 import { Store, User } from '../common/types';
 import { updateAlerts } from '../common/alerts';
@@ -51,11 +50,9 @@ const Feedback: React.FC<FeedbackProps> = ({ navigation }) => {
   }
 
   return (
-    <NativeBaseProvider>
-      <Center flex={1}>
-        Feedback Page
-      </Center>
-    </NativeBaseProvider>
+    <ScreenContainer>
+        <View>Feedback Page</View>
+    </ScreenContainer>
   );
 
 }

@@ -345,4 +345,33 @@ function convertItemIdsToFullItems(itemInstances : ItemInstance[], defaultItems 
   return combinedItems;
 }
 
-export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getUrlParams, getUrlParamsAfterHash, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, getAvatarAlias, determineFoeClass, getImagePackage, getHeroImagePackage, getVillainImagePackage, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems,convertAorAn, capitalize };
+function getHeroImage(characterName) {
+  const lcName = lowercaseUnderscore(characterName);
+  switch (lcName) {
+    case "timber_terror":
+      return require('../../assets/images/heroes/timber_terror/timber_terror.webp');
+    case "repete":
+      return require('../../assets/images/heroes/repete/repete.webp');
+    case "filtron_five":
+      return require('../../assets/images/heroes/filtron_five/filtron_five.webp');
+    case "chrono_guy":
+      return require('../../assets/images/heroes/chrono_guy/chrono_guy.webp');
+    case "solar_celeste":
+      return require('../../assets/images/heroes/solar_celeste/solar_celeste.webp');
+    case "wilhelm_the_wild":
+      return require('../../assets/images/heroes/wilhelm_the_wild/wilhelm_the_wild.webp');
+    case "natural_ninja":
+        return require('../../assets/images/heroes/natural_ninja/natural_ninja.webp');
+    case "empath_aurelia":
+        return require('../../assets/images/heroes/empath_aurelia/empath_aurelia.webp');
+    case "boulder_bro":
+        return require('../../assets/images/heroes/boulder_bro/boulder_bro.webp');
+    case "compost_creature":
+        return require('../../assets/images/heroes/compost_creature/compost_creature.webp');
+    default:
+      throw new Error('No matching image');
+  }
+}
+
+
+export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getUrlParams, getUrlParamsAfterHash, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, getAvatarAlias, determineFoeClass, getImagePackage, getHeroImagePackage, getVillainImagePackage, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems,convertAorAn, capitalize, getHeroImage };

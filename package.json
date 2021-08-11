@@ -6,7 +6,7 @@
     "ios": "env-cmd -f .env.production expo start --ios",
     "web": "env-cmd -f .env.production start --web",
     "eject": "expo eject",
-    "lint" : "./node_modules/.bin/eslint"
+    "lint": "./node_modules/.bin/eslint"
   },
   "dependencies": {
     "@expo-google-fonts/spartan": "^0.2.0",
@@ -21,7 +21,7 @@
     "axios-retry": "^3.1.9",
     "expo": "~41.0.1",
     "expo-checkbox": "~1.0.3",
-    "expo-font": "~9.1.0",
+    "expo-font": "^9.1.0",
     "expo-status-bar": "~1.0.4",
     "jwt-decode": "^3.1.2",
     "lottie-react-native": "3.5.0",
@@ -38,11 +38,11 @@
     "react-native-reanimated": "~2.1.0",
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.0.0",
+    "react-native-svg": "12.1.0",
     "react-native-web": "~0.13.12",
     "styled-components": "^5.3.0",
     "styled-system": "^5.1.5",
-    "sync-storage": "^0.4.2",
-    "react-native-svg": "12.1.0"
+    "sync-storage": "^0.4.2"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",

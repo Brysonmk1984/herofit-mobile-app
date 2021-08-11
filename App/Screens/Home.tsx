@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, createRef } from 'react';
-import { View, Text, StyleSheet, Button, FlatList, SectionList } from 'react-native';
+import { Image, Pressable, FlatList, SectionList,  Box, Center, View, Text, Heading, VStack, FormControl, Input, Link, Button, IconButton, HStack, Divider } from 'native-base';
 import ScreenContainer from '../Components/ScreenContainer';
 import debugErrors from '../common/debugErrors';
 import { GlobalStateContext } from '../store';
@@ -48,7 +48,9 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
   return (
     <ScreenContainer>
       { renderHeroDetails() }
-      <Button title="Drawer" onPress={() => navigation.toggleDrawer()} />
+      <Button onPress={() => navigation.toggleDrawer()}>
+        Drawer
+      </Button>
     </ScreenContainer>
   )
 };

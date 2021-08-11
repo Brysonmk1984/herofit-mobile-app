@@ -1,5 +1,5 @@
 import React, { useContext, useState, createRef } from 'react';
-import { View, Text, Button } from 'react-native';
+import { Image, Pressable, FlatList, SectionList,  Box, Center, View, Text, Heading, VStack, FormControl, Input, Link, Button, IconButton, HStack, Divider } from 'native-base';
 import DelayInput from "react-native-debounce-input";
 import debugErrors from '../../common/debugErrors';
 import { GlobalStateContext } from '../../store';
@@ -65,7 +65,7 @@ const FinalizeHeroSelection = ({ route, navigation }) => {
 
   return (
     <ScreenContainer>
-      <View>
+      <VStack>
         <View>
           {
             checkingMessage ? 
@@ -89,8 +89,10 @@ const FinalizeHeroSelection = ({ route, navigation }) => {
           required={true}
           style={{ margin: 10, padding: 10, height: 40, borderColor: "gray", borderWidth: 1 }}
         />
-        <Button title="Let's Go!" disabled={!heroNameIsLegit} onPress={() => handleFinishSelection()} />
-      </View>
+        <Button disabled={!heroNameIsLegit} onPress={() => handleFinishSelection()}>
+          Let's Go!
+        </Button>
+      </VStack>
     </ScreenContainer>
   )
 }

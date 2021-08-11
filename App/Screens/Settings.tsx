@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Button, Alert } from 'react-native';
+import { Image, Pressable, FlatList, SectionList,  Box, Center, View, Text, Heading, VStack, FormControl, Input, Link, Button, IconButton, HStack, Divider } from 'native-base';
 import ScreenContainer from '../Components/ScreenContainer';
 import { clearJwtInLocalStorage } from '../common/jwtModule';
 import debugErrors from '../common/debugErrors';
@@ -55,8 +55,12 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
 
   return (
     <ScreenContainer>
-      <Button title="Delete JWT" onPress={signOut} />
-      <Button title="Delete ACCOUNT" onPress={() => createDeleteAlert()} />
+      <Button onPress={signOut}>
+        Delete JWT
+      </Button>
+      <Button onPress={() => createDeleteAlert()}>
+        Delete ACCOUNT
+      </Button>
     </ScreenContainer>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -14,7 +14,7 @@ import fetchInitialData from './common/fetchInitialData';
 
 import { SelectHeroStackParamList, RootStackParamList, SidebarDrawerParamList, HomeWrapperStackParamList, WalkthroughStackParamList, AuthStackParamList } from './common/types-navigator';
 
-LogBox.ignoreLogs(['Reanimated 2']);
+LogBox.ignoreLogs(['Reanimated 2', 'Remote debugger']);
 
 
 // ROOT First level Navigator, used to determine if the user should go through auth sequence of straight to the app
@@ -105,7 +105,7 @@ const SelectHeroStackScreen = () =>{
 const App: React.FC<AppProps> = ({}) => {
   const { state, dispatch } = useContext<Store>(GlobalStateContext);
   
-
+  const [fontsLoaded, setFontsLoaded] = useState(false);
 
   useEffect(() => {
     // get the JWT and fonts from local storage with async storage, then get initial game data
@@ -121,8 +121,8 @@ const App: React.FC<AppProps> = ({}) => {
           // 'pragatiNarrow': require('../assets/fonts/PragatiNarrow-Regular.ttf'),
           'rochester': require('../assets/fonts/Rochester-Regular.ttf')
         })
-      
       ]);
+      setFontsLoaded(true);
 
  
 
@@ -138,7 +138,7 @@ const App: React.FC<AppProps> = ({}) => {
   return (
     <NavigationContainer>
       {
-        state.isLoading ? <Screens.Loading />
+        state.isLoading || !fontsLoaded ? <Screens.Loading />
         : <RootStackScreen isSignedIn={state.isSignedIn} />
       }
       { state.alerts.length ? <Alerts alerts={state.alerts} dispatch={dispatch} />  : null }

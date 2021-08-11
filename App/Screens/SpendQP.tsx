@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useReducer } from "react";
-import { View, Text, Button } from "react-native";
+import { Image, Pressable, FlatList, SectionList,  Box, Center, View, Text, Heading, VStack, FormControl, Input, Link, Button, IconButton, HStack, Divider } from 'native-base';
 import { GlobalStateContext } from '../store';
 import spendQPReducer from '../common/SpendQPReducer';
 import { updateAlerts } from '../common/alerts';
@@ -64,39 +64,57 @@ const SpendQP = ({ route, navigation }) => {
       </View>
       <View>
         <Text>Power: </Text><Text>{qpState.power}</Text>
-        <Button title={'+'} onPress={() => incrementAttribute('power')} />
+        <Button onPress={() => incrementAttribute('power')}>
+          +
+        </Button>
       </View>
       <View>
         <Text>Health: </Text><Text>{qpState.health}</Text>
-        <Button title={'+'} onPress={() => incrementAttribute('health')} />
+        <Button onPress={() => incrementAttribute('health')}>
+          +
+        </Button>
       </View>
       <View>
         <Text>Armor: </Text><Text>{qpState.armor}</Text>
-        <Button title={'+'} onPress={() => incrementAttribute('armor')} />
+        <Button onPress={() => incrementAttribute('armor')}>
+          +
+        </Button>
       </View>
       <View>
         <Text>Recovery: </Text><Text>{qpState.recovery}</Text>
-        <Button title={'+'} onPress={() => incrementAttribute('recovery')} />
+        <Button onPress={() => incrementAttribute('recovery')}>
+          +
+        </Button>
       </View>
       <View>
         <Text>Fire: </Text><Text>{qpState.fire}</Text>
-        <Button title={'+'} onPress={() => incrementAttribute('fire')} />
+        <Button onPress={() => incrementAttribute('fire')}>
+          +
+        </Button>
       </View>
       <View>
         <Text>Earth: </Text><Text>{qpState.earth}</Text>
-        <Button title={'+'} onPress={() => incrementAttribute('earth')} />
+        <Button onPress={() => incrementAttribute('earth')}>
+          +
+        </Button>
       </View>
       <View>
         <Text>Water: </Text><Text>{qpState.water}</Text>
-        <Button title={'+'} onPress={() => incrementAttribute('water')} />
+        <Button onPress={() => incrementAttribute('water')}>
+          +
+        </Button>
       </View>
       <View>
         <Text>Air: </Text><Text>{qpState.air}</Text>
-        <Button title={'+'} onPress={() => incrementAttribute('air')} />
+        <Button onPress={() => incrementAttribute('air')}>
+          +
+        </Button>
       </View>
       <View>
         <Text>Aether: </Text><Text>{qpState.aether}</Text>
-        <Button title={'+'} onPress={() => incrementAttribute('aether')} />
+        <Button onPress={() => incrementAttribute('aether')}>
+          +
+        </Button>
       </View>
     </ScreenContainer>
   )
