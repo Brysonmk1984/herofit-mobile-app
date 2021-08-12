@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState, FC, ReactNode, Context } from 'react';
 import { ScrollView, TextInput, StyleSheet } from 'react-native';
-import {  NativeBaseProvider, Box, View, Text, Heading, VStack, FormControl, Input, Link, Button, Icon, IconButton, HStack, Divider } from 'native-base';
+import {  NativeBaseProvider, Box, View, Text, Heading, Center, VStack, FormControl, Input, Link, Button, Icon, IconButton, HStack, Divider } from 'native-base';
 import { login } from '../../api/authentication';
 import { GlobalStateContext } from '../../store';
 import debugErrors from '../../common/debugErrors';
@@ -94,56 +94,43 @@ const SignIn : FC<SignInProps>  = ({ navigation }) => {
   }, [state.isSignedIn]);
 
 
-  function myCB(){
-    console.log('works');
-  }
-
-  function addAlert(){
-    const message = Math.random();
-    updateAlerts([{ type : 'success', message, confirm: { text : 'cake', cb : myCB } }], state, dispatch);
-  }
-
-
   return (
     <ScreenContainer>
       <View style={ styles.container }>
         <ScrollView>
-          <Heading size="lg" color='primary.500'><Text fontFamily='heading' fontSize="3xl">Sign IN Screen</Text></Heading>
-          <Heading color="muted.400" size="xs">Has Token: { Boolean(state.jwt).toString() } </Heading>
-    
-          <Button onPress={() => {
-            dispatch({ type: 'SET NEW USER', payload: { newUser : true }});
-            return navigation.navigate('Auth',  { screen : 'SignIn'});
-          }}>Select Hero</Button>
+          <Center>
+            <Heading><Text fontFamily='heading' fontSize="5xl">Sign IN</Text></Heading>
+          </Center>    
 
-          <VStack space={2} mt={5}>
-            <FormControl>
-              <FormControl.Label _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>Email</FormControl.Label>
-              <Input
-                onChangeText={email => handleEmailInput(email)}
-                value={email}
-                placeholder="Email"
-              />
-            </FormControl>
-            <FormControl>
-              <FormControl.Label _text={{color: 'muted.700', fontSize: 'sm', fontWeight: 600}}>Password</FormControl.Label>
-              <Input
-                onChangeText={text => handlePasswordInput(text)}
-                value={password}
-                secureTextEntry={true}
-                autoCompleteType="password"
-                textContentType="password"
-                placeholder="Password"
-              />
-            </FormControl>
+            <View variant="pane">
+              <VStack space={2} mt={5}>
+                <FormControl>
+                  <Input
+                    onChangeText={email => handleEmailInput(email)}
+                    value={email}
+                    placeholder="Email"
+                    shadow={1}
+                  />
+                </FormControl>
+                <FormControl>
+                  <Input
+                    onChangeText={text => handlePasswordInput(text)}
+                    value={password}
+                    secureTextEntry={true}
+                    autoCompleteType="password"
+                    textContentType="password"
+                    placeholder="Password"
+                  />
+                </FormControl>
+              </VStack>
+            </View>
             <View>
               <Text>{ helperText }</Text>
             </View>
             <View>
               <Button /*colorScheme="water"*/ variant="solid" /*_text={ { color : 'base.water' } }*/ disabled={formIsValid ? false : true} onPress={handleSignIn}>Submit</Button>
             </View>
-            <Button variant="outline" title="Add Alert" onPress={addAlert}>Add Alert</Button>
-          </VStack>
+
         </ScrollView>
       </View>
     </ScreenContainer>

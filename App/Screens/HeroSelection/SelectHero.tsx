@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Image, Pressable, FlatList, SectionList,  Box, Center, View, Text, Heading, VStack, FormControl, Input, Link, Button, Icon, IconButton, HStack, Divider } from 'native-base';
+import { Image, Pressable, SectionList,FlatList,  Box, Center, View, Text, Heading, VStack, FormControl, Input, Link, Button, Icon, IconButton, HStack, Divider } from 'native-base';
 import { GlobalStateContext } from '../../store';
 import ScreenContainer from '../../Components/ScreenContainer';
 import { lowercaseUnderscore } from '../../common/helperFunctions';
@@ -21,7 +21,7 @@ const SelectHero = ({ route, navigation }) =>{
   const renderItem = ({ item : hero, index }) => {
     const lcName = lowercaseUnderscore(hero.character);
 
-    console.log('ITEM', hero, lcName,);
+    console.log('hero', lcName,);
     return <Box px={5} py={2} height={100} bg={`base.${lcName}`}>
       <Pressable  onPress={() => navigation.push("HeroDetails", { hero })}>
         <View>
@@ -68,7 +68,7 @@ const SelectHero = ({ route, navigation }) =>{
   /// map out each hero in list on screen
   return (
     <ScreenContainer fullView={true}>
-      <VStack flex={3}>
+      <VStack>
         <FlatList
           data={heroList}
           renderItem={renderItem}

@@ -53,14 +53,32 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
     dispatch({type : 'SET ISSIGNEDIN', payload :  { isSignedIn : false }});
   }
 
+
+  function myCB(){
+    console.log('works');
+  }
+
+  function addAlert(){
+    const message = Math.random();
+    updateAlerts([{ type : 'success', message, confirm: { text : 'cake', cb : myCB } }], state, dispatch);
+  }
+
   return (
     <ScreenContainer>
       <Button onPress={signOut}>
         Delete JWT
       </Button>
-      <Button onPress={() => createDeleteAlert()}>
+      <Button variant="warning" onPress={() => createDeleteAlert()}>
         Delete ACCOUNT
       </Button>
+      <Button onPress={() => {
+            dispatch({ type: 'SET NEW USER', payload: { newUser : true }});
+            dispatch({ type: 'SET ISSIGNEDIN', payload: { isSignedIn : false }});
+            return navigation.navigate('Auth',  { screen : 'SelectHero'});
+          }}>
+            Select Hero
+      </Button>
+      <Button variant="outline" title="Add Alert" onPress={addAlert}>Add Alert</Button>
     </ScreenContainer>
   );
 }
