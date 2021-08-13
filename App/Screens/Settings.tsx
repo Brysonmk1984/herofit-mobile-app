@@ -78,7 +78,7 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
           }}>
             Select Hero
       </Button>
-      <Button variant="outline" title="Add Alert" onPress={addAlert}>Add Alert</Button>
+      <Button variant="secondary" title="Add Alert" onPress={addAlert}>Add Alert</Button>
     </ScreenContainer>
   );
 }

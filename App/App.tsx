@@ -75,10 +75,10 @@ const AuthStack = createStackNavigator<AuthStackParamList>();
 const AuthStackScreen = () =>{
   const { state, dispatch } = useContext<Store>(GlobalStateContext);
   return <AuthStack.Navigator headerMode="none">
-    {
-      state.newUser ? <SelectHeroStack.Screen name="SelectHero" component={SelectHeroStackScreen} />
-      : <AuthStack.Screen name="SignIn" component={Screens.SignIn}  options={{ title : 'Sign In' }} />
-    }
+    
+    {/* {state.newUser ? :""} */}
+    <AuthStack.Screen name="SignIn" component={Screens.SignIn}  options={{ title : 'Sign In' }} />
+    <SelectHeroStack.Screen name="SelectHero" component={SelectHeroStackScreen} />
     <AuthStack.Screen name="Register" component={Screens.Register}  options={{ title : 'Register' }} />
   </AuthStack.Navigator>
 };

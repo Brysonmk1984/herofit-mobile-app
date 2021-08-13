@@ -1,18 +1,14 @@
-import React, { ReactNode } from 'react';
-import { Box, View } from 'native-base';
+import React from 'react';
+import { Flex, View } from 'native-base';
 
 interface ScreenContainerProps {
-  children : ReactNode,
-  fullView? : boolean
+  children : React.ReactNode,
 }
 
-export default function({ children, fullView } : ScreenContainerProps) {
+export default function({ children } : ScreenContainerProps) {
   return (
-    <Box safeArea flex={1}  bg="base.background" >
-      <View p={fullView ? 0 : 2} w={fullView ? "100%" : "90%"} mx='auto'>
-        {children}
-      </View>
-
-    </Box>
+    <Flex safeArea flex={1}  justify="space-between"  bg="base.background" p={0} w={"100%"} mx='auto' >
+      {children}
+    </Flex>
   )
 };

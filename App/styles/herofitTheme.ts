@@ -5,7 +5,10 @@ export default {
       // baseStyle on buttons doesn't seem to work!
       baseStyle: {
         rounded: 'md',
-        colorScheme: 'buttonPrimary',
+        bg: 'base.water',
+        // _text: {
+        //   color: 'base.primary',
+        // },
         marginLeft: 2,
         marginRight: 2
       },
@@ -16,7 +19,9 @@ export default {
       variants: {
         secondary: {
           bg: `muted.200`,
-          color: 'base.success', // This doesn't work... is there no way to customize Button text color here?
+          _text: {
+            color: 'base.success',
+          },
           border: 1,
           borderColor: 'base.success'
         },
@@ -38,6 +43,12 @@ export default {
         fontFamily: 'heading',
         fontSize: 100
       },
+    },
+    Link:{
+      baseStyle: {
+        _text: {color: "base.link"},
+      },
+
     },
     // Box : {
     //   baseStyle: {

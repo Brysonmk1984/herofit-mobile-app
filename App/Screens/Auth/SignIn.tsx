@@ -9,6 +9,8 @@ import fetchInitialData from '../../common/fetchInitialData';
 import ScreenContainer from '../../Components/ScreenContainer';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Store, AppDispatchAction, AppState, AppDispatch } from '../../common/types';
+import { Header, ScreenActionButton, Pane, HelperText } from '../../Components/CustomComponents';
+import { useDebouncedCallback } from 'use-debounce';
 
 interface Navigation {
   navigate: (p1: string, p2: { screen: string, params?: { screen: string } }) => void
@@ -30,11 +32,15 @@ const SignIn : FC<SignInProps>  = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
+
   async function handleSignIn (){
     setLoading(true);
-    setHelperText('');
+    setHelperText(null);
     
     try{
+      if(!formIsValid ){
+        throw new Error("Please complete the form.");
+      }
       dispatch({type : 'TOGGLE LOADING', payload : { isLoading : true } });
       const { user, tokenObject }  = await login({ email, password });
       setSuccess(true);
@@ -59,88 +65,85 @@ const SignIn : FC<SignInProps>  = ({ navigation }) => {
     }
   }
 
-  function handleEmailInput(val : string){
-    setEmail(val);
-    if(!val.includes('@')){
-      setHelperText("Must be valid email address");
-    }else{
-      setHelperText("");
-    }
+
+  function handleRegisterLink(){
+    console.log(1111);
+    console.log(state.newUser );
+    navigation.navigate('Auth', { screen: 'SelectHero'});
   }
 
-  function handlePasswordInput(val : string){
-    setPassword(val);
-    if(val.length < 8){
-      setHelperText("Password must be at least 8 characters");
-    }else{
-      setHelperText("");
-    }
-  }
-
-  useEffect(() => {
-    if(email.includes('@')){
-      if(password.length >= 8){
-        return setFormIsValid(true);
+  const debounced = useDebouncedCallback(
+    () => {
+      if(email.includes('@')){
+        if(password.length >= 8){
+          setHelperText(null)
+          return setFormIsValid(true);
+        }else{
+          if(password.length){
+            setHelperText("Password must be at least 8 characters");
+            return setFormIsValid(false);
+          }
+          setHelperText(null);
+        }
+      }else{
+        setHelperText("Must be valid email address");
       }
-    }
-    return setFormIsValid(false);
-  }, [email, password]);
+      setFormIsValid(false);
+    },500
+  );
+
+  function handleInputChange(text, field, updateFunction){
+    updateFunction(text);
+    debounced();
+  }
 
   useEffect(() =>{
     if(state.isSignedIn){
-      navigation.navigate('App', { screen: 'HomeWrapperScreen', params: { screen : 'Home'} });
+      navigation.navigate('Auth', { screen: 'HomeWrapperScreen', params: { screen : 'Home'} });
     }
    
   }, [state.isSignedIn]);
 
-
   return (
     <ScreenContainer>
-      <View style={ styles.container }>
-        <ScrollView>
-          <Center>
-            <Heading><Text fontFamily='heading' fontSize="5xl">Sign IN</Text></Heading>
-          </Center>    
+      <View>
+        <Header text="Sign In" /> 
 
-            <View variant="pane">
-              <VStack space={2} mt={5}>
-                <FormControl>
-                  <Input
-                    onChangeText={email => handleEmailInput(email)}
-                    value={email}
-                    placeholder="Email"
-                    shadow={1}
-                  />
-                </FormControl>
-                <FormControl>
-                  <Input
-                    onChangeText={text => handlePasswordInput(text)}
-                    value={password}
-                    secureTextEntry={true}
-                    autoCompleteType="password"
-                    textContentType="password"
-                    placeholder="Password"
-                  />
-                </FormControl>
-              </VStack>
+        <Pane>
+          <VStack space={8} mt={5}>         
+            <FormControl>
+              <Input
+                onChangeText={(text) => handleInputChange(text, 'email', setEmail)}
+                value={email}
+                placeholder="Email"
+                shadow={1}
+              />
+            </FormControl>
+            <FormControl>
+              <Input
+                onChangeText={(text) => handleInputChange(text, 'password', setPassword)}
+                value={password}
+                secureTextEntry={true}
+                autoCompleteType="password"
+                textContentType="password"
+                placeholder="Password"
+                onSubmitEditing={handleSignIn}
+              />
+            </FormControl>
+            { helperText && <HelperText text={helperText} /> }
+            <View alignItems="center">
+              <Text color="base.white">- or -</Text>
+              <Link onPress={handleRegisterLink} mt={1}>
+                GET STARTED
+              </Link>
             </View>
-            <View>
-              <Text>{ helperText }</Text>
-            </View>
-            <View>
-              <Button /*colorScheme="water"*/ variant="solid" /*_text={ { color : 'base.water' } }*/ disabled={formIsValid ? false : true} onPress={handleSignIn}>Submit</Button>
-            </View>
-
-        </ScrollView>
+          </VStack>
+        </Pane>
       </View>
+
+      <ScreenActionButton name="Let's Go!" disabled={formIsValid ? false : true} action={handleSignIn}  />
     </ScreenContainer>
   )
 }
 
 export default SignIn;
-
-
-const styles = StyleSheet.create({
-
-
-});
