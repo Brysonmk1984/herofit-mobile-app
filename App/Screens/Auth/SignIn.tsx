@@ -72,6 +72,10 @@ const SignIn : FC<SignInProps>  = ({ navigation }) => {
     navigation.navigate('Auth', { screen: 'SelectHero'});
   }
 
+  // function formValidation(arrayOfInputs, ){
+
+  // }
+
   const debounced = useDebouncedCallback(
     () => {
       if(email.includes('@')){
