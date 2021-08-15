@@ -8,13 +8,13 @@ interface ScreenActionProps {
 }
 
 const ScreenActionButton: React.FC<ScreenActionProps> = ({ name, disabled, action }) => {
-    return (
-      <View mx={50} mb={5}>
-        <Button disabled={disabled} onPress={action}>
-          { name }
-        </Button>
-      </View>
-    );
+  return (
+    <View mx={50} mb={5}>
+      <Button disabled={disabled} onPress={action}>
+        { name }
+      </Button>
+    </View>
+  );
 };
 
 export default ScreenActionButton;

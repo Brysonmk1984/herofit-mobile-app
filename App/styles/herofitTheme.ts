@@ -10,7 +10,16 @@ export default {
         //   color: 'base.primary',
         // },
         marginLeft: 2,
-        marginRight: 2
+        marginRight: 2,
+        _disabled:{
+          opacity:1,
+          backgroundColor:'primary.600',
+          // Doesn't work!
+          // _text: {
+          //   color : 'fire.500'
+          // }
+          
+        }
       },
       // defaultProps works
       defaultProps: {

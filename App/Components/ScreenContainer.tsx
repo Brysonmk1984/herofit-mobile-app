@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     borderTopColor: '#fff',
     borderBottomColor: '#E7EDDF',
     borderLeftColor: '#E7EDDF',
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   absolute: {
     position: "absolute",

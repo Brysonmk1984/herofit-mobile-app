@@ -76,8 +76,7 @@ const SignIn : FC<SignInProps>  = ({ navigation }) => {
 
   // }
 
-  const debounced = useDebouncedCallback(
-    () => {
+  const debounced = useDebouncedCallback(() => {
       if(email.includes('@')){
         if(password.length >= 8){
           setHelperText(null)
@@ -93,8 +92,7 @@ const SignIn : FC<SignInProps>  = ({ navigation }) => {
         setHelperText("Must be valid email address");
       }
       setFormIsValid(false);
-    },500
-  );
+    },500);
 
   function handleInputChange(text, field, updateFunction){
     updateFunction(text);
@@ -114,7 +112,7 @@ const SignIn : FC<SignInProps>  = ({ navigation }) => {
         <Header text="Sign In" /> 
 
         <Pane>
-          <VStack space={8} mt={5}>         
+          <VStack space={6} mt={5}>         
             <FormControl>
               <Input
                 onChangeText={(text) => handleInputChange(text, 'email', setEmail)}

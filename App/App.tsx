@@ -3,9 +3,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { loadAsync as fontLoadAsync } from 'expo-font';
-import { createIconSetFromIcoMoon } from '@expo/vector-icons';
 import { GlobalStateContext } from './store';
-import { Store, AppDispatch } from './common/types';
+import { Store } from './common/types';
 import * as Screens from './Screens';
 import { getJwtInLocalStorage } from './common/jwtModule';
 import Alerts from './Alerts';
@@ -20,7 +19,7 @@ LogBox.ignoreLogs(['Reanimated 2', 'Remote debugger']);
 // ROOT First level Navigator, used to determine if the user should go through auth sequence of straight to the app
 const RootStack = createStackNavigator<RootStackParamList>();
 const RootStackScreen = ({ isSignedIn }) =>{
-  return <RootStack.Navigator headerMode="none">
+  return <RootStack.Navigator headerMode="none" screenOptions={baseScreenStyle}>
     { isSignedIn ? <RootStack.Screen name="App" component={DrawerScreen} />
       : <RootStack.Screen name="Auth" component={AuthStackScreen} />
     }
@@ -33,7 +32,7 @@ const SidebarDrawer = createDrawerNavigator<SidebarDrawerParamList>();
 const DrawerScreen = () =>{
   const { state, dispatch } = useContext<Store>(GlobalStateContext);
 
-  return <SidebarDrawer.Navigator>
+  return <SidebarDrawer.Navigator headerMode="none" screenOptions={baseScreenStyle}>
     <SidebarDrawer.Screen name="HomeWrapperScreen" component={HomeWrapperScreen} />
     <SidebarDrawer.Screen name="Profile" component={Screens.Profile} />
     <SidebarDrawer.Screen name="Ranking" component={Screens.Ranking} />
@@ -50,7 +49,7 @@ const DrawerScreen = () =>{
 const HomeWrapperStack = createStackNavigator<HomeWrapperStackParamList>();
 const HomeWrapperScreen = () => {
   const { state, dispatch } = useContext<Store>(GlobalStateContext);
-  return  <HomeWrapperStack.Navigator >
+  return  <HomeWrapperStack.Navigator headerMode="none" screenOptions={baseScreenStyle} >
     <SidebarDrawer.Screen name="Home" component={Screens.Home} options={{ title : 'Home' }} /> 
   </HomeWrapperStack.Navigator>
 };
@@ -62,7 +61,7 @@ const WalkthroughStack = createStackNavigator<WalkthroughStackParamList>();
 const WalkthroughStackScreen = () =>{
   const { state, dispatch } = useContext<Store>(GlobalStateContext);
   
-  return  <WalkthroughStack.Navigator >
+  return  <WalkthroughStack.Navigator headerMode="none" screenOptions={baseScreenStyle} >
     {/* <WalkthroughStack.Screen name="SelectCampaign" component={SelectCampaign}  options={{ title : 'Select Campaign' }} />
     <WalkthroughStack.Screen name="RecordActivities" component={RecordActivities}  options={{ title : 'Record Activities' }} />
     <WalkthroughStack.Screen name="GoToBattle" component={GoToBattle}  options={{ title : 'Go To Battle' }} />
@@ -74,7 +73,7 @@ const WalkthroughStackScreen = () =>{
 const AuthStack = createStackNavigator<AuthStackParamList>();
 const AuthStackScreen = () =>{
   const { state, dispatch } = useContext<Store>(GlobalStateContext);
-  return <AuthStack.Navigator headerMode="none">
+  return <AuthStack.Navigator headerMode="none" screenOptions={baseScreenStyle}>
     
     {/* {state.newUser ? :""} */}
     <AuthStack.Screen name="SignIn" component={Screens.SignIn}  options={{ title : 'Sign In' }} />
@@ -90,7 +89,7 @@ const SelectHeroStack = createStackNavigator<SelectHeroStackParamList>();
 const SelectHeroStackScreen = () =>{
   const { state, dispatch } = useContext<Store>(GlobalStateContext);
   
-  return  <SelectHeroStack.Navigator >
+  return  <SelectHeroStack.Navigator headerMode="none" screenOptions={baseScreenStyle}>
     <SelectHeroStack.Screen name="SelectHeroHowTo" component={Screens.SelectHeroHowTo}  options={{ title : 'Select Hero' }} />
     <SelectHeroStack.Screen name="SelectHero" component={Screens.SelectHero}  options={{ title : 'Select Hero' }} />
     <SelectHeroStack.Screen name="HeroDetails" component={Screens.HeroDetails} options={{ title : 'Hero Details' }} />
@@ -149,3 +148,10 @@ const App: React.FC<AppProps> = ({}) => {
 
 export default App;
 
+const baseScreenStyle = {
+  cardStyle: { 
+    backgroundColor: '#fff',
+    borderBottomWidth:1,
+    borderBottomColor: '#E7EDDF' 
+  }
+}
