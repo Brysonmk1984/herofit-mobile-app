@@ -21,10 +21,9 @@ interface SignInProps {
 }
 
 
-const SignIn : FC<SignInProps>  = ({ navigation }) => {
+const SignIn : FC<SignInProps>  = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
 
-  console.log('SIGNIN', state, dispatch);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [helperText, setHelperText] = useState<string | null>(null);
@@ -67,8 +66,6 @@ const SignIn : FC<SignInProps>  = ({ navigation }) => {
 
 
   function handleRegisterLink(){
-    console.log(1111);
-    console.log(state.newUser );
     navigation.navigate('Auth', { screen: 'SelectHero'});
   }
 
@@ -107,10 +104,9 @@ const SignIn : FC<SignInProps>  = ({ navigation }) => {
   }, [state.isSignedIn]);
 
   return (
-    <ScreenContainer>
+    <ScreenContainer screenName={route.name}>
       <View>
         <Header text="Sign In" /> 
-
         <Pane>
           <VStack space={6} mt={5}>         
             <FormControl>

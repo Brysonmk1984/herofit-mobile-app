@@ -21,7 +21,6 @@ const login = async function(body){
         setJwtInLocalStorage(tokenObject);
         return { user, tokenObject };
     }).catch(({ request, response }) => {
-        console.log('Errr');
         throw handleHttpError(request, response);
     });
 };

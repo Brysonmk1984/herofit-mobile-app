@@ -76,6 +76,7 @@ const AuthStackScreen = () =>{
   return <AuthStack.Navigator headerMode="none" screenOptions={baseScreenStyle}>
     
     {/* {state.newUser ? :""} */}
+    
     <AuthStack.Screen name="SignIn" component={Screens.SignIn}  options={{ title : 'Sign In' }} />
     <SelectHeroStack.Screen name="SelectHero" component={SelectHeroStackScreen} />
     <AuthStack.Screen name="Register" component={Screens.Register}  options={{ title : 'Register' }} />

@@ -71,7 +71,11 @@ export default {
           padding: 3,
           shadow: 5,
           marginLeft: 2,
-          marginRight: 2
+          marginRight: 2,
+          borderTopColor : 'base.white',
+          borderTopWidth : 1,
+          borderRightColor : 'base.white',
+          borderRightWidth : 1
         },
       }
     }

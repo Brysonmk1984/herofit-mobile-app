@@ -4,9 +4,23 @@ import { Flex, View, Text } from 'native-base';
 import { BlurView } from 'expo-blur';
 interface ScreenContainerProps {
   children : React.ReactNode,
+  screenName? : string
 }
-const image = require('../../assets/images/backgrounds/boulder-bro-background.webp');
-export default function({ children } : ScreenContainerProps) {
+
+function determineImageBackground(page){
+  switch(page){
+    case 'SignIn':
+      return require('../../assets/images/backgrounds/boulder-bro-background.webp')
+    case 'Register':
+      return require('../../assets/images/backgrounds/scorching-archfiend-background.webp')
+    default:
+      return require('../../assets/images/backgrounds/boulder-bro-background.webp')
+  }
+}
+
+
+export default function ScreenContainer({ children, screenName } : ScreenContainerProps) {
+  const image = determineImageBackground(screenName);
   return (
     <View style={[styles.container, styles.absolute, styles.dropShadow ]}>
       

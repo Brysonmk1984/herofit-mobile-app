@@ -6,9 +6,9 @@ interface HeaderProps {
   text : string
 }
 
-export const Header: React.FC<HeaderProps> = ({ text }) => {
+export const Header: React.FC<HeaderProps> = ({ text, mb = 8 }) => {
   return(
-    <Center mt={3} mb={8}>
+    <Center mt={3} mb={mb}>
       <Heading >
         <Text style={Styles.textShadow} fontFamily='heading' fontSize="5xl">
           { text }
