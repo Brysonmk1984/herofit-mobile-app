@@ -15,7 +15,7 @@ interface PaneProps {
 
 const Pane: React.FC<PaneProps> = ({ children, mb = 0 }) => {
     return (
-      <View variant="pane" mx={5} mb={mb}>
+      <View variant="pane" px={2} mx={3} mb={mb}>
         { children }
       </View>
     );

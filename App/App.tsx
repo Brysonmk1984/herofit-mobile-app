@@ -13,7 +13,7 @@ import fetchInitialData from './common/fetchInitialData';
 
 import { SelectHeroStackParamList, RootStackParamList, SidebarDrawerParamList, HomeWrapperStackParamList, WalkthroughStackParamList, AuthStackParamList } from './common/types-navigator';
 
-LogBox.ignoreLogs(['Reanimated 2', 'Remote debugger']);
+LogBox.ignoreLogs(['Reanimated 2', 'Remote debugger', 'VirtualizedLists should never be nested']);
 
 
 // ROOT First level Navigator, used to determine if the user should go through auth sequence of straight to the app

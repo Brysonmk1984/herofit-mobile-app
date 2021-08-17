@@ -11,7 +11,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Store, AppDispatchAction, AppState, AppDispatch } from '../../common/types';
 import { Header, ScreenActionButton, Pane, HelperText } from '../../Components/CustomComponents';
 import { useDebouncedCallback } from 'use-debounce';
-
+import { RouteProp } from '@react-navigation/native';
 interface Navigation {
   navigate: (p1: string, p2: { screen: string, params?: { screen: string } }) => void
 }
@@ -23,7 +23,7 @@ interface SignInProps {
 
 const SignIn : FC<SignInProps>  = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
-
+console.log('RRRR', route);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [helperText, setHelperText] = useState<string | null>(null);

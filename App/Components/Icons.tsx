@@ -1,8 +1,21 @@
 import { Entypo, Foundation, FontAwesome5, Feather, Ionicons, FontAwesome, AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import React from 'react';
 import { createIconSetFromIcoMoon } from '@expo/vector-icons';
-import { Icon } from 'native-base';
+import { Icon, useTheme } from 'native-base';
 
+// function to keep consistent color value passing in props for both native-base and icomoon icons
+function getMatchingThemeColor(color : string, themeColors : string) : string{
+  const colorParts = color.split('.');
+  const colorPartsLength = colorParts.length;
+  
+  if(colorPartsLength > 2){
+    throw new Error('Invalid color format');
+  }else if(colorPartsLength === 2){
+    return themeColors[colorParts[0]][colorParts[1]]
+  }else{
+    return themeColors.base[color];
+  }
+}
 
 // Custom Icon Set loaded from IcoMoon config file.
 const IcoMoon = createIconSetFromIcoMoon(require('../../assets/custom-icons.json'),'icomoon','icomoon.ttf');
@@ -15,12 +28,14 @@ interface IconProps {
 
 // Returns the matching icon based on iconName prop
 const InGameIcons = ({ iconName, size, color } : IconProps) =>{
-  
+  const { colors : themeColors } = useTheme();
+  console.log('!!', themeColors);
+console.log(themeColors.base[color]);
   switch(iconName){
     // ACTIVITIES
     // Fire
     case 'run':
-      return <Icon as={FontAwesome5} name="run-fast" size={size} color={color} />
+      return <Icon as={MaterialCommunityIcons} name="run-fast" size={size} color={color} />
     case 'crossfit':
       return <Icon as={Feather} name="crosshair" size={size} color={color} />
     case 'stairs':
@@ -63,7 +78,7 @@ const InGameIcons = ({ iconName, size, color } : IconProps) =>{
     default:
       // If no icon is explicitly returned above, attempt to find icon from within icomoon custom icon set
       // If no icon is found within the custom icon set, return a question mark to show no icon was found. 
-      return <IcoMoon name={iconName} size={size} color={color} /> || <Icon as={FontAwesome} name="question-circle" size={size} color={color} />
+      return <IcoMoon name={iconName} size={size} color={getMatchingThemeColor(color, themeColors)} /> || <Icon as={FontAwesome} name="question-circle" size={size} color={color} />
   }
 }
 

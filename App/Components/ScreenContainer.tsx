@@ -10,9 +10,19 @@ interface ScreenContainerProps {
 function determineImageBackground(page){
   switch(page){
     case 'SignIn':
-      return require('../../assets/images/backgrounds/boulder-bro-background.webp')
+      return require('../../assets/images/backgrounds/boulder-bro-background.webp');
     case 'Register':
-      return require('../../assets/images/backgrounds/scorching-archfiend-background.webp')
+      return require('../../assets/images/backgrounds/scorching-archfiend-background.webp');
+    case 'SelectHeroHowTo':
+      return require('../../assets/images/backgrounds/repete-background.webp');
+    case 'SelectHero':
+      return require('../../assets/images/backgrounds/solar-warrior-background.webp');
+    case 'HeroDetails':
+      return require('../../assets/images/backgrounds/pets-background.webp');
+    case 'FinalizeHeroSelection':
+      return require('../../assets/images/backgrounds/pets-background-2.webp');
+    case 'SpendQP':
+      return require('../../assets/images/backgrounds/repete-background.webp');
     default:
       return require('../../assets/images/backgrounds/boulder-bro-background.webp')
   }

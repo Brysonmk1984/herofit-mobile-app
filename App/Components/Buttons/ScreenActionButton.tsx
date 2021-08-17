@@ -3,7 +3,7 @@ import { View, Button } from 'native-base';
 
 interface ScreenActionProps {
   name : string
-  disabled : boolean
+  disabled? : boolean
   action : () => void
 }
 

@@ -4,6 +4,7 @@ import { Center, Heading, Text } from 'native-base';
 
 interface HeaderProps {
   text : string
+  mb? : number
 }
 
 export const Header: React.FC<HeaderProps> = ({ text, mb = 8 }) => {
