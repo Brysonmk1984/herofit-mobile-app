@@ -47,6 +47,11 @@ export default {
         subheaderDivider : {
           mt: 3,
           mb: 3
+        },
+        statDivider : {
+          mt: 0,
+          mb: 0,
+          py: 0
         }
       }
     },
@@ -83,6 +88,21 @@ export default {
           borderRightColor : 'base.white',
           borderRightWidth : 1
         },
+        lorePane:{
+          bg: `primary.50`,
+          padding: 3,
+          shadow: 5,
+          marginLeft: 2,
+          marginRight: 2,
+          borderTopColor : 'base.brand',
+          borderTopWidth : 1,
+          borderRightColor : 'base.brand',
+          borderRightWidth : 1,
+          borderBottomColor : 'base.brand',
+          borderBottomWidth : 1,
+          borderLeftColor : 'base.brand',
+          borderLeftWidth : 1,
+        }
       }
     },
     VStack:{

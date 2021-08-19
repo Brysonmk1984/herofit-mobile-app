@@ -10,13 +10,13 @@ interface ScreenContainerProps {
 function determineImageBackground(page){
   switch(page){
     case 'SignIn':
-      return require('../../assets/images/backgrounds/boulder-bro-background.webp');
+      return require('../../assets/images/backgrounds/solar-warrior-background.webp');
     case 'Register':
       return require('../../assets/images/backgrounds/scorching-archfiend-background.webp');
     case 'SelectHeroHowTo':
       return require('../../assets/images/backgrounds/repete-background.webp');
     case 'SelectHero':
-      return require('../../assets/images/backgrounds/solar-warrior-background.webp');
+      return require('../../assets/images/backgrounds/hero-selection-background.webp');
     case 'HeroDetails':
       return require('../../assets/images/backgrounds/pets-background.webp');
     case 'FinalizeHeroSelection':
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     bottom: 0,
-    right: 0
+    right: 0,
   },
   dropShadow:{
     shadowColor: '#000',

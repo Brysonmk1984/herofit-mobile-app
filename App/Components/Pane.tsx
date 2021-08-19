@@ -4,7 +4,8 @@ import { IViewProps } from 'native-base/lib/typescript/components/basic/View/typ
 
 interface PaneProps {
   children : React.ReactNode,
-  mb? : number
+  mb? : number,
+  lore? : boolean
 }
 
 // interface IViewWithVariant extends React.ForwardRefExoticComponent<IViewProps & React.RefAttributes<unknown>> {
@@ -13,9 +14,9 @@ interface PaneProps {
 
 
 
-const Pane: React.FC<PaneProps> = ({ children, mb = 0 }) => {
+const Pane: React.FC<PaneProps> = ({ children, mb = 0, lore }) => {
     return (
-      <View variant="pane" px={2} mx={3} mb={mb}>
+      <View variant={ lore ? 'lorePane' : 'pane' } px={2} mx={3} mb={mb}>
         { children }
       </View>
     );

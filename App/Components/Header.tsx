@@ -7,7 +7,7 @@ interface HeaderProps {
   mb? : number
 }
 
-export const Header: React.FC<HeaderProps> = ({ text, mb = 8 }) => {
+export const Header: React.FC<HeaderProps> = ({ text, mb = 5 }) => {
   return(
     <Center mt={3} mb={mb}>
       <Heading >

@@ -29,8 +29,6 @@ interface IconProps {
 // Returns the matching icon based on iconName prop
 const InGameIcons = ({ iconName, size, color } : IconProps) =>{
   const { colors : themeColors } = useTheme();
-  console.log('!!', themeColors);
-console.log(themeColors.base[color]);
   switch(iconName){
     // ACTIVITIES
     // Fire

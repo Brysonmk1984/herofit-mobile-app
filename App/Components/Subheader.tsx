@@ -3,14 +3,16 @@ import { Center, Heading, Text, Divider } from 'native-base';
 
 interface Subheader {
   text : string
-  mb? : number
+  mb? : number,
+  mt? : number,
+  color? : string
 }
 
-export default function Subheader({ text, mb = 3 } : Subheader){
+export default function Subheader({ text, mt= 3, mb = 3, color } : Subheader){
   return(
-    <Center mt={3} mb={mb}>
+    <Center mt={mt} mb={mb}>
       <Heading >
-        <Text fontFamily='heading' fontSize="3xl">
+        <Text color={color} fontFamily='heading' fontSize="3xl">
           { text }
         </Text>
       </Heading>
