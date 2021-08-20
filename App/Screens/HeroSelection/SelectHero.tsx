@@ -12,8 +12,8 @@ const SelectHero = ({ route, navigation }) =>{
   // HeroCarousel is absolutely positioned and sits on top of the normal ScreenContainer
   return (
     <Box w="100%" h="100%">
-      <HeroCarousel heroList={heroList} setActiveHero={setActiveHero} />
-      <ScreenContainer  screenName={route.name}>
+      <HeroCarousel heroList={heroList} setActiveHero={setActiveHero} viewDetails={(pressedHero) => navigation.push("HeroDetails", { selectedHero : pressedHero })} />
+      <ScreenContainer screenName={route.name}>
         <Header mb={Dimensions.get('window').height * .4} text="Heroes" />
         <Pane>
           <View justifyContent="center"  >

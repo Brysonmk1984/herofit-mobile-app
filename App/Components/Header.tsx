@@ -5,13 +5,14 @@ import { Center, Heading, Text } from 'native-base';
 interface HeaderProps {
   text : string
   mb? : number
+  color? : string
 }
 
-export const Header: React.FC<HeaderProps> = ({ text, mb = 5 }) => {
+export const Header: React.FC<HeaderProps> = ({ text, mb = 5, color }) => {
   return(
     <Center mt={3} mb={mb}>
       <Heading >
-        <Text style={Styles.textShadow} fontFamily='heading' fontSize="5xl">
+        <Text color={color} style={Styles.textShadow} fontFamily='heading' fontSize="5xl">
           { text }
         </Text>
       </Heading>

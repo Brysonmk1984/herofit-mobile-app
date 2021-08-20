@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Dimensions, Platform, SafeAreaView, ImageBackground, StyleSheet } from 'react-native';
+import { Dimensions, Platform, SafeAreaView, ImageBackground, StyleSheet, Pressable } from 'react-native';
 import {  Image, NativeBaseProvider, Box, View, Text, Heading, Center, VStack, FormControl, Input, Link, Button, Icon, IconButton, HStack, Divider } from 'native-base';
 import Carousel from 'react-native-snap-carousel';
 import { getHeroImage } from '../common/helperFunctions';
@@ -8,15 +8,17 @@ const SLIDER_WIDTH = Dimensions.get('window').width;
 const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.65);
 const ITEM_HEIGHT = ITEM_WIDTH;
 
-export default function HeroCarousel({ heroList, setActiveHero }){
+export default function HeroCarousel({ heroList, setActiveHero, viewDetails }){
   
   function _renderItem({ item, index }){
     return (
-      <View bg={item.colors[0]} style={[styles.itemContainer]}>
-        <ImageBackground source={require('../../assets/images/layout/carousel-background.webp')}  resizeMode="cover" style={styles.panelBackground} >
-          <Image style={styles.heroImage} source={getHeroImage(item.character)} alt={item.alias} />
-        </ImageBackground>
-      </View>
+      <Pressable onPress={() => viewDetails(item)}>
+        <View bg={item.colors[0]} style={[styles.itemContainer]}>
+          <ImageBackground source={require('../../assets/images/layout/carousel-background.webp')}  resizeMode="cover" style={styles.panelBackground} >
+            <Image style={styles.heroImage} source={getHeroImage(item.character)} alt={item.alias} />
+          </ImageBackground>
+        </View>
+      </Pressable>
     );
   }
 
@@ -24,6 +26,7 @@ export default function HeroCarousel({ heroList, setActiveHero }){
     <SafeAreaView style={styles.carouselWrapper}>
       <View style={{ flex: 1, flexDirection:'row', justifyContent: 'center', }}>
         <Carousel
+         
           containerCustomStyle={styles.carouselContainer}
           onSnapToItem={(i) => setActiveHero(heroList[i])}
           data={heroList}

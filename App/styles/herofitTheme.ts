@@ -90,10 +90,10 @@ export default {
         },
         lorePane:{
           bg: `primary.50`,
-          padding: 3,
+          padding: 0,
           shadow: 5,
-          marginLeft: 2,
-          marginRight: 2,
+          marginLeft: 1,
+          marginRight: 1,
           borderTopColor : 'base.brand',
           borderTopWidth : 1,
           borderRightColor : 'base.brand',

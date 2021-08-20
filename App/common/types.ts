@@ -51,7 +51,7 @@ interface InitialAppState {
 }
 
 interface Store {
-  state: AppState
+  state: InitialAppState
   dispatch: <Payload = {}>(action: Action<Payload>) => void
 }
 

@@ -16,7 +16,7 @@ const FinalizeHeroSelection = ({ route, navigation }) => {
   const [helperText, setHelperText] = useState(null);
   const inputRef = createRef();
   const { state, dispatch } = useContext(GlobalStateContext);
-  const { hero } = route.params;
+  const { alias, character, description, history, air, water, earth, fire, colors } = route.params.selectedHero;
 
   function handleNameInput(name : string): void{
     setCheckingMessage(true);
@@ -56,15 +56,15 @@ const FinalizeHeroSelection = ({ route, navigation }) => {
     const namedHero = {
       name : heroName,
       //qp : 10,
-      ...hero
+      ...route.params.selectedHero
     }
 
-    return navigation.navigate('SpendQP', { hero : namedHero });
+    return navigation.push('SpendQP', { hero : namedHero });
   }
-
+  //console.log('CH', character, colors);
 
   return (
-    <ScreenContainer>
+    <ScreenContainer screenName={route.name} bg={colors[0]} hero={character}>
       <VStack>
         <View>
           {

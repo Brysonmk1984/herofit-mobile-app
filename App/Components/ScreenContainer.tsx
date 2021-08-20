@@ -5,41 +5,64 @@ import { BlurView } from 'expo-blur';
 interface ScreenContainerProps {
   children : React.ReactNode,
   screenName? : string
+  bg? : string
+  hero? : string
 }
 
-function determineImageBackground(page){
-  switch(page){
-    case 'SignIn':
-      return require('../../assets/images/backgrounds/solar-warrior-background.webp');
-    case 'Register':
-      return require('../../assets/images/backgrounds/scorching-archfiend-background.webp');
-    case 'SelectHeroHowTo':
-      return require('../../assets/images/backgrounds/repete-background.webp');
-    case 'SelectHero':
-      return require('../../assets/images/backgrounds/hero-selection-background.webp');
-    case 'HeroDetails':
-      return require('../../assets/images/backgrounds/pets-background.webp');
-    case 'FinalizeHeroSelection':
-      return require('../../assets/images/backgrounds/pets-background-2.webp');
-    case 'SpendQP':
-      return require('../../assets/images/backgrounds/repete-background.webp');
-    default:
-      return require('../../assets/images/backgrounds/boulder-bro-background.webp')
+function determineImageBackground({ type, name }){
+  if(type === 'art'){
+    switch(name){
+      case 'SignIn':
+        return require('../../assets/images/backgrounds/solar-warrior-background.webp');
+      case 'Register':
+        return require('../../assets/images/backgrounds/scorching-archfiend-background.webp');
+      case 'SelectHeroHowTo':
+        return require('../../assets/images/backgrounds/repete-background.webp');
+      case 'SelectHero':
+        return require('../../assets/images/backgrounds/hero-selection-background.webp');
+      // case 'HeroDetails':
+      //   return require('../../assets/images/backgrounds/pets-background.webp');
+      case 'FinalizeHeroSelection':
+        return require('../../assets/images/backgrounds/pets-background-2.webp');
+      case 'SpendQP':
+        return require('../../assets/images/backgrounds/repete-background.webp');
+      // case 'HeroDetails':
+      //   return require('../../assets/images/backgrounds/selection/boulder-bro-select-background.webp');
+      default:
+        return require('../../assets/images/backgrounds/boulder-bro-background.webp')
+    }
+  }else if(type ='hero'){
+    switch(name){
+      case 'Boulder Bro':
+        return require('../../assets/images/backgrounds/selection/boulder-bro-select-background.webp')
+      case 'Solar Celeste':
+        return require('../../assets/images/backgrounds/selection/solar-warrior-select-background.webp');
+      case 'Natural Ninja':
+        return require('../../assets/images/backgrounds/selection/natural-ninja-select-background.webp');
+      default:
+        return require('../../assets/images/backgrounds/selection/boulder-bro-select-background.webp');
+    }
   }
+  
 }
 
 
-export default function ScreenContainer({ children, screenName } : ScreenContainerProps) {
-  const image = determineImageBackground(screenName);
+
+export default function ScreenContainer({ children, screenName, bg, hero } : ScreenContainerProps) {
+  let image = determineImageBackground({ type : 'art', name : screenName });
+
+  if(hero){
+    image = determineImageBackground({ type : 'hero', name : hero });
+  }
+
   return (
     <View style={[styles.container, styles.absolute, styles.dropShadow ]}>
       
       <Flex safeArea flex={1}  justify="space-between" zIndex={10}  p={0} w={"100%"} mx='auto' >
-     
         {children}
       </Flex>
 
-      <ImageBackground source={image}  style={styles.image} resizeMode="cover" />
+      <ImageBackground source={image}  style={[styles.image, { backgroundColor : bg }]} resizeMode="cover" />
 
     </View>
   )
