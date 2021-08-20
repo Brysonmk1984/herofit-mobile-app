@@ -109,7 +109,7 @@ console.log('RRRR', route);
         <Header text="Sign In" /> 
         <Pane>
           <VStack space={6} mt={5}>         
-            <FormControl>
+            <FormControl isRequired isInvalid={helperText === 'Must be valid email address' ? true : false}>
               <Input
                 onChangeText={(text) => handleInputChange(text, 'email', setEmail)}
                 value={email}
@@ -117,7 +117,7 @@ console.log('RRRR', route);
                 shadow={1}
               />
             </FormControl>
-            <FormControl>
+            <FormControl isRequired isInvalid={helperText === 'Password must be at least 8 characters' ? true : false}>
               <Input
                 onChangeText={(text) => handleInputChange(text, 'password', setPassword)}
                 value={password}

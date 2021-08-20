@@ -55,6 +55,10 @@ export default {
         }
       }
     },
+    FormControl:{
+
+
+    },
     Heading: {
       baseStyle: {
         fontFamily: 'heading',
@@ -64,6 +68,9 @@ export default {
     Input: {
       baseStyle: {
         backgroundColor: 'base.white',
+        _invalid:{
+          color: "base.warning",
+        }
       },
       defaultProps: {
         shadow : 1
@@ -122,7 +129,7 @@ export default {
     aether : { 50: '#FFFFC2', 100: '#f1f1b7', 200: '#e4e4ad', 300: '#d6d6a3', 400: '#c7c797', 500: '#b6b68a', 600: '#a2a27b', 700: '#8b8b6a', 800: '#6e6e53', 900: '#404031'},
     buttonPrimary : { 50: '#356735', 100: '#356735', 200: '#356735', 300: '#356735', 400: '#356735', 500: '#356735', 600: '#356735', 700: '#356735', 800: '#356735', 900: '#356735'},
     buttonWarning : { 50: '#BF0000', 100: '#BF0000', 200: '#BF0000', 300: '#BF0000', 400: '#BF0000', 500: '#ff6700', 600: '#BF0000', 700: '#BF0000', 800: '#BF0000', 900: '#BF0000'},
-    base : { 'primary':'#242423', 'background':'#E7EDDF', 'white':'#ffffff', 'warning':'#BF0000', 'caution':'#ff6700', 'disabled':'#212121', 'success':'#356735', 'highlight':'#f1c85b', 'brand':'#d4af37', 'fire':'#e25822', 'earth':'#8A360F', 'water':'#0f5e9c', 'air':'#16a0f5', 'aether':'#FFFFC2', 'link': '#3792cb', 'health':'#A30216', 'armor':'#242130', 'power':'#303030', 'recovery':'#356735', 'timber_terror':'#3D2A18', 'repete':'#9B9B9B', 'filtron_five':'#EBEBEB', 'chrono_guy':'#4B4B4B', 'solar_celeste':'#EBDD49', 'wilhelm_the_wild':'#533B27', 'natural_ninja':'#0C2613', 'empath_aurelia':'#B9AF73', 'boulder_bro':'#986634', 'compost_creature':'#796D20' },
+    base : { 'primary':'#242423', 'background':'#E7EDDF', 'white':'#ffffff', 'info': '#16a0f5', 'warning':'#BF0000', 'error':'#BF0000', 'caution':'#ff6700', 'disabled':'#212121', 'success':'#356735', 'highlight':'#f1c85b', 'brand':'#d4af37', 'fire':'#e25822', 'earth':'#8A360F', 'water':'#0f5e9c', 'air':'#16a0f5', 'aether':'#FFFFC2', 'link': '#3792cb', 'health':'#A30216', 'armor':'#242130', 'power':'#303030', 'recovery':'#356735', 'timber_terror':'#3D2A18', 'repete':'#9B9B9B', 'filtron_five':'#EBEBEB', 'chrono_guy':'#4B4B4B', 'solar_celeste':'#EBDD49', 'wilhelm_the_wild':'#533B27', 'natural_ninja':'#0C2613', 'empath_aurelia':'#7D0110', 'boulder_bro':'#986634', 'compost_creature':'#796D20' },
   },
   fonts: {
     heading: 'bebas-neue',

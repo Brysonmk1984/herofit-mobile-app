@@ -35,10 +35,24 @@ function determineImageBackground({ type, name }){
     switch(name){
       case 'Boulder Bro':
         return require('../../assets/images/backgrounds/selection/boulder-bro-select-background.webp')
-      case 'Solar Celeste':
+      case 'Solar Warrior':
         return require('../../assets/images/backgrounds/selection/solar-warrior-select-background.webp');
       case 'Natural Ninja':
         return require('../../assets/images/backgrounds/selection/natural-ninja-select-background.webp');
+      case 'Wildspeaker':
+        return require('../../assets/images/backgrounds/selection/wildspeaker-select-background.webp');
+      case 'Empath':
+        return require('../../assets/images/backgrounds/selection/empath-select-background.webp');
+      case 'Filtron Five':
+        return require('../../assets/images/backgrounds/selection/filtron-five-select-background.webp');
+      case 'Scavenger Robot':
+        return require('../../assets/images/backgrounds/selection/scavenger-robot-select-background.webp');
+      case 'Timber Terror':
+        return require('../../assets/images/backgrounds/selection/timber-terror-select-background.webp');  
+      case 'Compost Creature':
+        return require('../../assets/images/backgrounds/selection/compost-creature-select-background.webp');
+      case 'Chrono Guy':
+        return require('../../assets/images/backgrounds/selection/chrono-guy-select-background.webp');    
       default:
         return require('../../assets/images/backgrounds/selection/boulder-bro-select-background.webp');
     }

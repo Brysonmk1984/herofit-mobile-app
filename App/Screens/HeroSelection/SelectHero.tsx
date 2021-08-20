@@ -18,7 +18,7 @@ const SelectHero = ({ route, navigation }) =>{
         <Pane>
           <View justifyContent="center"  >
             <Subheader mt={1} mb={0} text={activeHero.alias}  />
-            <Text  textAlign="center" fontSize="xl">{ activeHero.description }</Text>
+            <Text textAlign="center" fontSize="xl">{ activeHero.description }</Text>
           </View>
         </Pane>
         <ScreenActionButton name="View Details" action={() => navigation.push("HeroDetails", { selectedHero : activeHero })}  />

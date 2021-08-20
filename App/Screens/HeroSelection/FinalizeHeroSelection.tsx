@@ -1,38 +1,46 @@
-import React, { useContext, useState, createRef } from 'react';
-import { Image, Pressable, FlatList, SectionList,  Box, Center, View, Text, Heading, VStack, FormControl, Input, Link, Button, IconButton, HStack, Divider } from 'native-base';
-import DelayInput from "react-native-debounce-input";
+import React, { useState, useEffect } from 'react';
+import { FormControl, Input } from 'native-base';
 import debugErrors from '../../common/debugErrors';
-import { GlobalStateContext } from '../../store';
-import { getHeroList } from '../../api/authentication';
 import { checkAvatarName } from '../../api/avatar';
-import ScreenContainer from '../../Components/ScreenContainer';
+import { useDebounce } from 'use-debounce';
+import { ScreenContainer, Header, Subheader, ScreenActionButton, LoreText, Pane, StatDisplay, Icon, HelperText } from '../../Components/CustomComponents';
+
 
 // Finalize Hero Selection Screen 
 // Name the Hero and get finish initializing hero
 const FinalizeHeroSelection = ({ route, navigation }) => {
   const [heroName, setHeroName] = useState(null);
-  const [ heroNameIsLegit, setHeroNameIsLegit ] = useState(false);
-  const [checkingMessage, setCheckingMessage] = useState(false);
+  const [heroNameIsLegit, setHeroNameIsLegit] = useState(false);
   const [helperText, setHelperText] = useState(null);
-  const inputRef = createRef();
-  const { state, dispatch } = useContext(GlobalStateContext);
-  const { alias, character, description, history, air, water, earth, fire, colors } = route.params.selectedHero;
+  const [debouncedHeroName] = useDebounce(heroName, 1000);
+
+  const { alias, colors } = route.params.selectedHero;
 
   function handleNameInput(name : string): void{
-    setCheckingMessage(true);
+    setHeroName(name);
+    setHeroNameIsLegit(false);
+    if(name){
+      return setHelperText("Checking Availability...");
+    }
+    setHelperText(null);
+  }
+
+  function handleFinishSelection(){
+    const namedHero = {
+      name : heroName,
+      ...route.params.selectedHero
+    }
+    return navigation.push('SpendQP', { hero : namedHero });
+  }
+
+  useEffect(() =>{
+    const name = debouncedHeroName;
     checkAvatarName({ name })
     .then((data) =>{
-      setCheckingMessage(false);
-      if(data.error){
-        const error = data.error;
-        return debugErrors(error);
-      }
       const { availability } = data;
       if(availability){
-        setHeroName(name);
-
         if(name.length >= 3 && name.length <= 25){
-          setHelperText(null);
+          setHelperText("LooksGood!");
           setHeroNameIsLegit(true);
         }else{
           if(name.length < 3){
@@ -43,56 +51,32 @@ const FinalizeHeroSelection = ({ route, navigation }) => {
           setHeroNameIsLegit(false);
         }
       }else{
-        setHelperText("Hero Name is already in use, please select another!");
+        setHelperText("Hero Name is taken, please try again");
         setHeroNameIsLegit(false);
       }
+    }).catch((error) =>{
+      setHelperText(null);
+      return debugErrors(error);
     });
-    
-  }
-
-  function handleFinishSelection(){
-    
-
-    const namedHero = {
-      name : heroName,
-      //qp : 10,
-      ...route.params.selectedHero
-    }
-
-    return navigation.push('SpendQP', { hero : namedHero });
-  }
-  //console.log('CH', character, colors);
+  }, [debouncedHeroName]);
 
   return (
-    <ScreenContainer screenName={route.name} bg={colors[0]} hero={character}>
-      <VStack>
-        <View>
-          {
-            checkingMessage ? 
-              <View>
-                <Text>Checking Availability...</Text>
-              </View>
-            : helperText ? 
-              <View>
-                <Text>{ helperText }</Text>
-              </View> 
-            : null
-          }
-        </View>
-        <DelayInput
-          value={heroName}
-          minLength={3}
-          inputRef={inputRef}
-          onChangeText={value => handleNameInput(value)}
-          delayTimeout={400}
-          placeholder="Hero Name"
-          required={true}
-          style={{ margin: 10, padding: 10, height: 40, borderColor: "gray", borderWidth: 1 }}
-        />
-        <Button disabled={!heroNameIsLegit} onPress={() => handleFinishSelection()}>
-          Let's Go!
-        </Button>
-      </VStack>
+    <ScreenContainer screenName={route.name} bg={colors[0]} hero={alias}>
+        <Header text={"Hero Name"} color={colors[1]} />
+        <Pane>
+          <FormControl isRequired isInvalid={!heroNameIsLegit}>
+            <FormControl.Label>Choose an epic hero name</FormControl.Label>
+            <Input
+              value={heroName}
+              onChangeText={value => handleNameInput(value)}
+              placeholder="Hero Name"
+              shadow={1}
+            />
+          </FormControl>
+          { helperText && <HelperText type={helperText === 'Checking Availability...' ? 'caution' : heroNameIsLegit ? 'success' : 'error'} text={helperText} /> }
+        </Pane>
+
+      <ScreenActionButton disabled={!heroNameIsLegit} name="Let's Go!" action={handleFinishSelection}  />
     </ScreenContainer>
   )
 }

@@ -1,18 +1,35 @@
 import React from 'react';
 import { Center, Text, useTheme } from 'native-base';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+
+
+function renderIcon(type, colors){
+  switch(type){
+    case 'success':
+      return <Ionicons name="md-checkmark-circle" size={32} color={colors.base.success}  />
+    case 'warning':
+      return <Ionicons name="md-warning-sharp" size={32} color={colors.base.warning}  />
+    case 'error':
+      return <MaterialIcons name="error" size={32} color={colors.base.warning}  />
+    case 'info':
+      return <MaterialIcons name="info" size={32}  color={colors.base.info}  />
+    default:
+      return null;
+  }
+}
 
 interface HelperTextProps {
   text : string
+  type? : 'success' | 'error' | 'caution' | 'warning'
 }
 
-const HelperText: React.FC<HelperTextProps> = ({ text }) => {
+const HelperText: React.FC<HelperTextProps> = ({ text, type }) => {
   const { colors } = useTheme();
 
   return (
     <Center flexDirection="row">
-      <Ionicons name="warning-outline" size={32} color={colors.base.warning} />
-      <Text ml={5} color="base.warning">{text}</Text>
+      { renderIcon(type,colors) }
+      <Text ml={5} color={ colors.base[type] }>{text}</Text>
     </Center>
   );
 }
