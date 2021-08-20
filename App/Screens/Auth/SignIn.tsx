@@ -8,7 +8,7 @@ import { updateAlerts } from '../../common/alerts';
 import fetchInitialData from '../../common/fetchInitialData';
 import ScreenContainer from '../../Components/ScreenContainer';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Store, AppDispatchAction, AppState, AppDispatch } from '../../common/types';
+import { Store, AppDispatchAction, AppDispatch } from '../../common/types';
 import { Header, ScreenActionButton, Pane, HelperText } from '../../Components/CustomComponents';
 import { useDebouncedCallback } from 'use-debounce';
 import { RouteProp } from '@react-navigation/native';

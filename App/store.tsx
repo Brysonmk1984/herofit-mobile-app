@@ -1,9 +1,14 @@
 import React, {createContext, useReducer, Context, FC, ReactElement } from 'react';
-import { Store, Action, Hero, SnackBarAlert, AppState, AppDispatch, AppAction } from './common/types';
+import { Store, Action, Hero, SnackBarAlert, InitialAppState, AppDispatch, AppAction } from './common/types';
 
-const initialState : AppState = { isLoading : true, isSignedIn : false, newUser : false, hero : null, alerts : [], jwt : null };
+const initialState : InitialAppState = { isLoading : true, isSignedIn : false, newUser : false, hero : null, alerts : [], jwt : null };
 
-const GlobalStateContext = createContext(initialState);
+type AppState = typeof initialState;
+
+const GlobalStateContext = createContext<{
+  state : AppState,
+  dispatch : React.Dispatch<AppAction>
+}>({state : initialState, dispatch : () => {}});
 
 function appStateReducer(state : AppState, action : AppAction) : AppState {
 

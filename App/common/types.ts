@@ -41,7 +41,7 @@ interface Action<Payload = {}> {
     type: ActionType;
     payload: Payload;
 }
-interface AppState {
+interface InitialAppState {
   jwt: string | null,
   isSignedIn: boolean
   isLoading : boolean;
@@ -136,4 +136,4 @@ interface Effect{
 }
 
 
-export { Action, AppDispatch, AppState, AppAction, Store, SnackBarAlert, User, Stats, Hero, ItemInstance, Item };
+export { Action, AppDispatch, InitialAppState, AppAction, Store, SnackBarAlert, User, Stats, Hero, ItemInstance, Item };
