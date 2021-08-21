@@ -21,8 +21,10 @@ const RootStack = createStackNavigator<RootStackParamList>();
 const RootStackScreen = ({ isSignedIn }) =>{
   return <RootStack.Navigator headerMode="none" screenOptions={baseScreenStyle}>
     { isSignedIn ? <RootStack.Screen name="App" component={DrawerScreen} />
-      : <RootStack.Screen name="Auth" component={AuthStackScreen} />
+      : <SelectHeroStack.Screen name="SpendQP" component={Screens.SpendQP}  options={{ title : 'Quantum Points' }} />
+      //: <RootStack.Screen name="Auth" component={AuthStackScreen} />
     }
+    <RootStack.Screen name="Auth" component={AuthStackScreen} />
   </RootStack.Navigator>
 }
 
@@ -77,9 +79,12 @@ const AuthStackScreen = () =>{
     
     {/* {state.newUser ? :""} */}
     
-    <AuthStack.Screen name="SignIn" component={Screens.SignIn}  options={{ title : 'Sign In' }} />
+    <AuthStack.Screen name="SignIn" component={Screens.SignIn} />
     <SelectHeroStack.Screen name="SelectHero" component={SelectHeroStackScreen} />
-    <AuthStack.Screen name="Register" component={Screens.Register}  options={{ title : 'Register' }} />
+
+    {/* <RootStack.Screen name="Auth" component={AuthStackScreen} /> */}
+    <AuthStack.Screen name="Register" component={Screens.Register} />
+    
   </AuthStack.Navigator>
 };
 

@@ -6,6 +6,7 @@ interface Action { type : string, payload : IPayload }
 
 function spendQPReducer(state : Stats, action : Action) : Stats{
   const { type, payload } = action;
+
   switch(type){
     case "SET NEW USER DEFAULTS":{
       return { ...state, ...payload.newUserDefaults };

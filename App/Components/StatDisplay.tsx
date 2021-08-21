@@ -1,12 +1,14 @@
 import React from 'react'
-import { Image, Pressable, FlatList, SectionList,  Box, Center, View, Text, Heading, VStack, FormControl, Input, Link, Button, IconButton, HStack, Divider, useToken } from 'native-base';
-import { ScreenContainer, Header, Subheader, ScreenActionButton, LoreText, Pane, Icon } from './CustomComponents';
+import { Box, View, Text, HStack } from 'native-base';
+import Icon from './Icons';
 
 interface StatDisplayProps {
   stat : 'Power' | 'Health' | 'Armor' | 'Recovery' |  'Fire' | 'Earth' | 'Air' | 'Water' | 'Aether',
   value : number,
   description? : string
   size? : 'sm'
+  reversedColor? : boolean
+  iconWatermark? : boolean
 }
 
 interface StatDisplaySizes {
@@ -16,35 +18,75 @@ interface StatDisplaySizes {
   statSize2 : number
 }
 
-export default function StatDisplay({ stat, value, description, size } : StatDisplayProps){
-  const { iconSize, valueSize, statSize, statSize2 } = (() : StatDisplaySizes =>{
-    let iconSize = 50, valueSize = '2xl', statSize = 50, statSize2 = 35;
+export default function StatDisplay({ stat, value, description, size, reversedText, iconWatermark } : StatDisplayProps){
+  const { iconSize, valueSize, statSize, statSize2, descriptionSize } = (() : StatDisplaySizes =>{
+    let iconSize = 50, valueSize = '2xl', statSize = 50, statSize2 = 35, descriptionSize = 'sm';
    
     if(size === 'sm'){
-      iconSize = 30, valueSize = 'lg', statSize = 30, statSize2 = 16;
+      iconSize = 30, valueSize = 'lg', statSize = 30, statSize2 = 16, descriptionSize = 'xs';
+    }
+    if(iconWatermark){
+      iconSize = 120;
     }
     return { 
       iconSize,
       valueSize,
       statSize,
-      statSize2 
+      statSize2,
+      descriptionSize
     }
   })();
 
+  function renderIcon(iconWatermark, stat){
+    if(iconWatermark){
+      return <View position="absolute" left={"10%"} overflow="hidden" opacity={.2}>
+        <Icon iconName={stat} size={iconSize} color={iconColor} />
+      </View>
+    }
+    return <View>
+      <Icon iconName={stat} size={iconSize} color={iconColor} />
+    </View>
+  }
+
+  function renderNumberAndName(iconWatermark, stat){
+    if(iconWatermark){
+      return <View flex={2} alignItems="center" >
+        <Text color={textColor} fontFamily="heading" fontSize={value >= 100 ? statSize2 : statSize} textAlign="center"  lineHeight={size === 'sm' ? '40px' : '60px'}>{value}</Text>
+        <Text color={textColor} fontFamily="heading" fontSize={valueSize} lineHeight={size === 'sm' ? 5 : 6}>{stat}</Text>
+      </View>
+    }
+
+    return <View alignItems="center">
+      <Text color={textColor} fontFamily="heading" fontSize={value >= 100 ? statSize2 : statSize} textAlign="center"  lineHeight={size === 'sm' ? '40px' : '60px'}>{value}</Text>
+      <Text color={textColor} fontFamily="heading" fontSize={valueSize} lineHeight={size === 'sm' ? 5 : 6}>{stat}</Text>
+    </View>
+  }
+
+  function renderDescription(iconWatermark, stat, description){
+    if(!description){
+      return null;
+    }
+    if(iconWatermark){
+      return <View alignItems={iconWatermark ? 'flex-start' : 'flex-end'} flex={4}>
+        <Text opacity={.8} color={textColor} fontSize={descriptionSize}>{description}</Text>
+      </View>
+    }
+    return <View alignItems={iconWatermark ? 'flex-start' : 'flex-end'} flex={4}>
+      <Text color={textColor} textAlign="justify" fontSize={descriptionSize}>{description}</Text>
+    </View>
+    
+      
+  }
+
   const elementNameLC = stat.toLowerCase();
+  const iconColor = reversedText ? "base.white" : `base.${elementNameLC}`;
+  const textColor = reversedText ? "base.white" : null;
     return (
       <Box display="flex">
         <HStack space={2} alignItems="center" justifyContent="center">
-          <Icon iconName={elementNameLC} size={iconSize} color={`base.${elementNameLC}`} />
-          <View alignItems="center">
-            <Text fontFamily="heading" fontSize={value >= 100 ? statSize2 : statSize} textAlign="center"  lineHeight={size === 'sm' ? '40px' : '60px'}>{value}</Text>
-            <Text fontFamily="heading" fontSize={valueSize} lineHeight={size === 'sm' ? 5 : 6}>{stat}</Text>
-          </View>
-          {
-            description && <View alignItems='flex-end' flex={4}>
-            <Text textAlign="justify" fontSize="sm">{description}</Text>
-          </View>
-          }
+          { renderIcon(iconWatermark, elementNameLC) }
+          { renderNumberAndName(iconWatermark, elementNameLC) }
+          { renderDescription(iconWatermark, elementNameLC, description) }
         </HStack>
       </Box>
     );
