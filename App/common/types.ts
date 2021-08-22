@@ -48,7 +48,7 @@ interface InitialAppState {
   newUser : boolean;
   hero : Hero | null;
   alerts : SnackBarAlert[];
-  user : null;
+  user : User | null;
 }
 
 interface Store {

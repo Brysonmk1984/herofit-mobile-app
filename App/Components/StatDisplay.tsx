@@ -2,13 +2,16 @@ import React from 'react'
 import { Box, View, Text, HStack } from 'native-base';
 import Icon from './Icons';
 
+type Stat = 'Power' | 'Health' | 'Armor' | 'Recovery' |  'Fire' | 'Earth' | 'Air' | 'Water' | 'Aether'
+
 interface StatDisplayProps {
-  stat : 'Power' | 'Health' | 'Armor' | 'Recovery' |  'Fire' | 'Earth' | 'Air' | 'Water' | 'Aether',
-  value : number,
+  stat : Stat
+  value : number
   description? : string
   size? : 'sm'
   reversedColor? : boolean
   iconWatermark? : boolean
+  reversedText? : boolean
 }
 
 interface StatDisplaySizes {
@@ -16,9 +19,14 @@ interface StatDisplaySizes {
   valueSize : number | 'xs' | 'sm' | 'md' | 'lg' | '2xl'
   statSize : number
   statSize2 : number
+  descriptionSize : number | 'xs' | 'sm' | 'md' | 'lg' | '2xl'
 }
 
 export default function StatDisplay({ stat, value, description, size, reversedText, iconWatermark } : StatDisplayProps){
+  const elementNameLC = stat.toLowerCase() as Stat;
+  const iconColor = reversedText ? "base.white" : `base.${elementNameLC}`;
+  const textColor = reversedText ? "base.white" : null;
+
   const { iconSize, valueSize, statSize, statSize2, descriptionSize } = (() : StatDisplaySizes =>{
     let iconSize = 50, valueSize = '2xl', statSize = 50, statSize2 = 35, descriptionSize = 'sm';
    
@@ -37,7 +45,7 @@ export default function StatDisplay({ stat, value, description, size, reversedTe
     }
   })();
 
-  function renderIcon(iconWatermark, stat){
+  function renderIcon(iconWatermark : boolean, stat : Stat) : React.ReactElement{
     if(iconWatermark){
       return <View position="absolute" left={"10%"} overflow="hidden" opacity={.2}>
         <Icon iconName={stat} size={iconSize} color={iconColor} />
@@ -48,7 +56,7 @@ export default function StatDisplay({ stat, value, description, size, reversedTe
     </View>
   }
 
-  function renderNumberAndName(iconWatermark, stat){
+  function renderNumberAndName(iconWatermark : boolean, stat : Stat) : React.ReactElement{
     if(iconWatermark){
       return <View flex={2} alignItems="center" >
         <Text color={textColor} fontFamily="heading" fontSize={value >= 100 ? statSize2 : statSize} textAlign="center"  lineHeight={size === 'sm' ? '40px' : '60px'}>{value}</Text>
@@ -62,7 +70,7 @@ export default function StatDisplay({ stat, value, description, size, reversedTe
     </View>
   }
 
-  function renderDescription(iconWatermark, stat, description){
+  function renderDescription(iconWatermark : boolean, stat : Stat, description : string) : React.ReactElement{
     if(!description){
       return null;
     }
@@ -78,16 +86,13 @@ export default function StatDisplay({ stat, value, description, size, reversedTe
       
   }
 
-  const elementNameLC = stat.toLowerCase();
-  const iconColor = reversedText ? "base.white" : `base.${elementNameLC}`;
-  const textColor = reversedText ? "base.white" : null;
-    return (
-      <Box display="flex">
-        <HStack space={2} alignItems="center" justifyContent="center">
-          { renderIcon(iconWatermark, elementNameLC) }
-          { renderNumberAndName(iconWatermark, elementNameLC) }
-          { renderDescription(iconWatermark, elementNameLC, description) }
-        </HStack>
-      </Box>
-    );
+  return (
+    <Box display="flex">
+      <HStack space={2} alignItems="center" justifyContent="center">
+        { renderIcon(iconWatermark, elementNameLC) }
+        { renderNumberAndName(iconWatermark, elementNameLC) }
+        { renderDescription(iconWatermark, elementNameLC, description) }
+      </HStack>
+    </Box>
+  );
 }

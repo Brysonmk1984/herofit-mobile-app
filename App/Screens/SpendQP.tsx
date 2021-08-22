@@ -68,6 +68,18 @@ const SpendQP : React.FC<NavigatorProps> = ({ route, navigation } : NavigatorPro
         "description" : defaultStats.find(item => item.stat === attr).description
       }
   });
+
+  function _handleFinishSpendingQP(){
+    // If there if no QP left and the hero has been set,
+    const updatedHero = Object.assign({}, hero, { ...qpState, status : 'New Recruit' });
+    console.log('UH=', updatedHero);
+    const defaultHeroProperties = { statusFade : 0, equipped : [], goToBattle : false, restedEnough : true, healthRegenRate : 4, photonTokens : 0, activityXP : 0, battleXP : 0, thisLevelStartXp : 0, nextLevelStartXp : 67, battleDkos : 0, battleDraws : 0, battleLosses : 0, battleWins : 0, maxHealth : updatedHero.health, hasBeenUpgraded : false, }
+    const updatedHeroWithDefaults : InitialHero = Object.assign(updatedHero, defaultHeroProperties)
+    dispatch({ type: 'SET HERO', payload: { hero : updatedHeroWithDefaults } });
+    navigation.navigate('Auth', { screen : 'Register' });
+  }
+
+  
   // As long as hero has QP, let them increment stats
   const incrementAttribute = function(stat: string): void{
     console.log(qpState);
@@ -83,18 +95,6 @@ const SpendQP : React.FC<NavigatorProps> = ({ route, navigation } : NavigatorPro
     }
   }
 
-  function _handleFinishSpendingQP(){
-    // If there if no QP left and the hero has been set,
-    const updatedHero = Object.assign({}, hero, { ...qpState, status : 'New Recruit' });
-    console.log('UH=', updatedHero);
-    const defaultHeroProperties = { statusFade : 0, equipped : [], goToBattle : false, restedEnough : true, healthRegenRate : 4, photonTokens : 0, activityXP : 0, battleXP : 0, thisLevelStartXp : 0, nextLevelStartXp : 67, battleDkos : 0, battleDraws : 0, battleLosses : 0, battleWins : 0, maxHealth : updatedHero.health, hasBeenUpgraded : false, }
-    const updatedHeroWithDefaults : InitialHero = Object.assign(updatedHero, defaultHeroProperties)
-    dispatch({ type: 'SET HERO', payload: { hero : updatedHeroWithDefaults } });
-    navigation.navigate('Auth', { screen : 'Register' });
-  }
-
-
-  
   
   useEffect(() =>{
     if(state.newUser === true){

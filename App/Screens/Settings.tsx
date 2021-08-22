@@ -14,7 +14,7 @@ interface SettingsProps {
 }
 
 const Settings: React.FC<SettingsProps> = ({ navigation }) => {
-  const { state, dispatch } = useContext<Store>(GlobalStateContext);
+  const { state, dispatch } = useContext(GlobalStateContext);
   const { hero } = state;
 
   const createDeleteAlert = () => {

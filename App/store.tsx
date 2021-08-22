@@ -1,20 +1,16 @@
 import React, {createContext, useReducer, Context, FC, ReactElement } from 'react';
-import { Store, Action, Hero, SnackBarAlert, InitialAppState, AppDispatch, AppAction } from './common/types';
+import { InitialAppState, AppAction } from './common/types';
 
-const initialState : InitialAppState = { isLoading : true, isSignedIn : false, newUser : false, hero : null, alerts : [], jwt : null };
+const initialState : InitialAppState = { isLoading : true, isSignedIn : false, newUser : false, hero : null, alerts : [], jwt : null, user : null };
 
 type AppState = typeof initialState;
 
-const GlobalStateContext = createContext<{
-  state : AppState,
-  dispatch : React.Dispatch<AppAction>
-}>({state : initialState, dispatch : () => {}});
+const GlobalStateContext = createContext<{ state : AppState, dispatch : React.Dispatch<AppAction>}>({state : initialState, dispatch : () => {}});
 
 function appStateReducer(state : AppState, action : AppAction) : AppState {
 
   switch(action.type) {
     case 'TOGGLE LOADING': {
-      console.log('TOGGLE LOAD', action.payload);
       const { isLoading } = action.payload;
       if(typeof isLoading === 'undefined'){
         return Object.assign({}, state, { isLoading : !state.isLoading });
@@ -22,8 +18,8 @@ function appStateReducer(state : AppState, action : AppAction) : AppState {
       return Object.assign({}, state, { isLoading });
     }
     case 'SET EXISTING USER INIT DATA': {
-      const { user, hero, gameItems, latestBattle, isSignedIn } = action.payload;
-      return { ...state, ...{ user, hero, gameItems, latestBattle, isSignedIn } };
+      const existingUserInitData = action.payload;
+      return { ...state, ...existingUserInitData };
     }
     case 'SET ISSIGNEDIN': {
       const { isSignedIn } = action.payload;
@@ -62,11 +58,9 @@ function appStateReducer(state : AppState, action : AppAction) : AppState {
 
 }
 
-const StateProvider = ( { children } : { children : React.ReactChildren } ) : ReactElement  => {
-  
+const StateProvider = ( { children } : { children : React.ReactNode } ) : ReactElement  => {
   const [state, dispatch] = useReducer(appStateReducer, initialState);
-  //const providerValue : { state : AppState, dispatch : AppDispatch } = { state, dispatch };
-  console.log('STATE', state);
+
   return (
     <GlobalStateContext.Provider value={ { state, dispatch } }>
       {children}

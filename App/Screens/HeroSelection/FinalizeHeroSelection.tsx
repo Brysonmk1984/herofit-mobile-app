@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { FormControl, Input } from 'native-base';
+import { useDebounce } from 'use-debounce';
 import { GlobalStateContext } from '../../store';
 import debugErrors from '../../common/debugErrors';
 import { checkAvatarName } from '../../api/avatar';
-import { useDebounce } from 'use-debounce';
+
 import { ScreenContainer, Header, Subheader, ScreenActionButton, LoreText, Pane, StatDisplay, Icon, HelperText } from '../../Components/CustomComponents';
 
 
@@ -18,7 +19,6 @@ const FinalizeHeroSelection = ({ route, navigation }) => {
   const [debouncedHeroName] = useDebounce(heroName, 500);
 
   const { alias, colors } = route.params.selectedHero;
-  console.log('!!', route.params.selectedHero);
   function handleFinishSelection(){
     
     const namedHero = {
@@ -40,7 +40,6 @@ const FinalizeHeroSelection = ({ route, navigation }) => {
     .then((data) =>{
       const { availability } = data;
 
-      console.log('AVAIL!', availability);
       if(availability){
         if(name.length >= 3 && name.length <= 25){
           setHelperText("Looks good!");
