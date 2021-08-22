@@ -5,37 +5,53 @@ import spendQPReducer from '../common/SpendQPReducer';
 import { updateAlerts } from '../common/alerts';
 import { fetchAstrologySeason } from '../api/calculate';
 import debugErrors from '../common/debugErrors';
-import { Stats } from '../common/types';
+import { Stats, InitialHero, Hero } from '../common/types';
 import { ScreenContainer, Header, Subheader, ScreenActionButton, LoreText, Pane, StatDisplay, Icon, HelperText } from '../Components/CustomComponents';
 import defaultStats from '../common/defaultStats.json';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RouteProp } from '@react-navigation/native';
 
-const mockHero = {
-  "character": "Chrono Guy",
-  "alias": "Chrono Guy",
-  "description": "Time Traveling Renegade",
-  "history": "This enigmatic time traveler has been appearing with increasing frequency as the world has descended into chaos. While he has explained publicly that he's from two thousand years in the future and here to 'maintain the timeline of order', it's unclear what his exact motives are, who he works for and what the implications are of his very existence.",
-  "image": "../../../assets/images/heroes/chrono_guy/chrono_guy.webp",
-  "fire": 0,
-  "earth": 0,
-  "water": 0,
-  "air": 10,
-  "colors": [
-      "#4B4B4B",
-      "#E25926"
-  ]
+
+interface NavigatorProps {
+  route: RouteProp<any,any>
+  navigation: StackNavigationProp<any,any>
 }
 
-const SpendQP = ({ route, navigation }) => {
+/*
+  FOR TESTING SPENDQP PAGE
+*/
+// const mockHero = {
+//   "character": "Chrono Guy",
+//   "alias": "Chrono Guy",
+//   "description": "Time Traveling Renegade",
+//   "history": "This enigmatic time traveler has been appearing with increasing frequency as the world has descended into chaos. While he has explained publicly that he's from two thousand years in the future and here to 'maintain the timeline of order', it's unclear what his exact motives are, who he works for and what the implications are of his very existence.",
+//   "image": "../../../assets/images/heroes/chrono_guy/chrono_guy.webp",
+//   "fire": 0,
+//   "earth": 0,
+//   "water": 0,
+//   "air": 10,
+//   "colors": [
+//       "#4B4B4B",
+//       "#E25926"
+//   ]
+// }
+
+/* TS - React function component that takes in one parameter called Navigator Props
+  The parameter type is referencing the NavigatorProps Generic passed in,
+  Which is referencing the NavigatorProps Interface
+*/
+const SpendQP : React.FC<NavigatorProps> = ({ route, navigation } : NavigatorProps ) => {
   // Global State
   const { state, dispatch } = useContext(GlobalStateContext);
 
   // Hero is passed as a route param if it's a new user, otherwise grab the hero from state
-  //const hero = route.params.hero || state.hero;
-  //const newUser : boolean = state.newUser;
-  const hero = mockHero;
-  const newUser = true;
-
-
+  const hero = route.params.hero || state.hero;
+  const newUser : boolean = state.newUser;
+  /*
+  FOR TESTING SPENDQP PAGE
+*/
+  //const hero = mockHero;
+  //const newUser = true;
 
 
 
@@ -58,18 +74,28 @@ const SpendQP = ({ route, navigation }) => {
     if(qpState.qp > 0){
       return qpDispatch({ type : 'INCREMENT VALUE', payload : { stat } });
     }else if(newUser && qpState.qp === 0){
-      // If there if no QP left and the hero has been set,
-      const updatedHero = Object.assign({}, hero, { ...qpState, status : 'New Recruit' });
-      
-      dispatch({ type: 'SET NEW USER', payload: { newUser : false }});
-      dispatch({ type: 'SET HERO', payload: { hero : updatedHero } });
 
-      return navigation.navigate('Auth', { screen : 'Register' });
+      
+      //dispatch({ type: 'SET NEW USER', payload: { newUser : false }});
+      _handleFinishSpendingQP();
     }else{
       // TODO: write code for spending all QP when NOT new user
     }
   }
 
+  function _handleFinishSpendingQP(){
+    // If there if no QP left and the hero has been set,
+    const updatedHero = Object.assign({}, hero, { ...qpState, status : 'New Recruit' });
+    console.log('UH=', updatedHero);
+    const defaultHeroProperties = { statusFade : 0, equipped : [], goToBattle : false, restedEnough : true, healthRegenRate : 4, photonTokens : 0, activityXP : 0, battleXP : 0, thisLevelStartXp : 0, nextLevelStartXp : 67, battleDkos : 0, battleDraws : 0, battleLosses : 0, battleWins : 0, maxHealth : updatedHero.health, hasBeenUpgraded : false, }
+    const updatedHeroWithDefaults : InitialHero = Object.assign(updatedHero, defaultHeroProperties)
+    dispatch({ type: 'SET HERO', payload: { hero : updatedHeroWithDefaults } });
+    navigation.navigate('Auth', { screen : 'Register' });
+  }
+
+
+  
+  
   useEffect(() =>{
     if(state.newUser === true){
 
@@ -93,11 +119,6 @@ const SpendQP = ({ route, navigation }) => {
   return (
     <ScreenContainer screenName={route.name}>
       <Header text={`Quantum Points [${qpState.qp}]`} />
-      {/* {
-        newUser && (<View>
-        <Text  textAlign="center">Stat points effect your battles and recovery</Text>
-      </View>)
-      } */}
       { newUser &&  <Center mt={0} mb={5}>
         <Heading >
           <Text color="primary.800" fontFamily='heading' fontSize="xl">
@@ -129,7 +150,7 @@ const SpendQP = ({ route, navigation }) => {
         />
       </ScrollView>
       
-      <ScreenActionButton disabled={qpState.qp > 0} name="Let's Go!" action={() => navigation.navigate('Auth', { screen : 'Register' })}  />
+      <ScreenActionButton name="Let's Go!" action={_handleFinishSpendingQP}  />
     </ScreenContainer>
   )
 }

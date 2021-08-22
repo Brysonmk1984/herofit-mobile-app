@@ -121,10 +121,10 @@ const Register = ({ navigation, route }) => {
 
   async function handleSignUp(){
     setLoading(true);
-    const { email, firstName, lastName, username : displayName, password, emailMarketingOptIn } = state;
+    const { email, firstName, lastName, displayName : username, password, emailMarketingOptIn } = formState;
 
     try{
-      const data = await register({ email, firstName, lastName, username : displayName, password, emailMarketingOptIn });
+      const data = await register({ email, firstName, lastName, username, password, emailMarketingOptIn });
       setSuccess(true);
       const { user, tokenObject } : { user : object, tokenObject : string } = data;
 
@@ -225,6 +225,7 @@ const Register = ({ navigation, route }) => {
               </HStack>
             </FormControl>
             { formState.helperText ? <HelperText text={formState.helperText} />  : null }
+
           </VStack>
         </Pane>
       </ScrollView>

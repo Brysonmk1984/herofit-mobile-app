@@ -12,6 +12,7 @@ import { Store, AppDispatchAction, AppDispatch } from '../../common/types';
 import { Header, ScreenActionButton, Pane, HelperText } from '../../Components/CustomComponents';
 import { useDebouncedCallback } from 'use-debounce';
 import { RouteProp } from '@react-navigation/native';
+
 interface Navigation {
   navigate: (p1: string, p2: { screen: string, params?: { screen: string } }) => void
 }

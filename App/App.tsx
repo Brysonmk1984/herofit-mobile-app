@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { LogBox, Dimensions } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -8,23 +9,28 @@ import { Store } from './common/types';
 import * as Screens from './Screens';
 import { getJwtInLocalStorage } from './common/jwtModule';
 import Alerts from './Alerts';
-import { LogBox } from 'react-native';
 import fetchInitialData from './common/fetchInitialData';
 
 import { SelectHeroStackParamList, RootStackParamList, SidebarDrawerParamList, HomeWrapperStackParamList, WalkthroughStackParamList, AuthStackParamList } from './common/types-navigator';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 LogBox.ignoreLogs(['Reanimated 2', 'Remote debugger', 'VirtualizedLists should never be nested']);
 
-
+const height = Dimensions.get("window").height;
 // ROOT First level Navigator, used to determine if the user should go through auth sequence of straight to the app
 const RootStack = createStackNavigator<RootStackParamList>();
 const RootStackScreen = ({ isSignedIn }) =>{
   return <RootStack.Navigator headerMode="none" screenOptions={baseScreenStyle}>
     { isSignedIn ? <RootStack.Screen name="App" component={DrawerScreen} />
-      : <SelectHeroStack.Screen name="SpendQP" component={Screens.SpendQP}  options={{ title : 'Quantum Points' }} />
-      //: <RootStack.Screen name="Auth" component={AuthStackScreen} />
+      //: <SelectHeroStack.Screen name="SpendQP" component={Screens.SpendQP}  options={{ title : 'Quantum Points' }} />
+      : <RootStack.Screen name="Auth" component={AuthStackScreen} />
     }
-    <RootStack.Screen name="Auth" component={AuthStackScreen} />
+
+    {/* <RootStack.Screen name="Auth" component={AuthStackScreen} />
+    <RootStack.Screen name="App" component={DrawerScreen} /> */}
+      
+  
+
   </RootStack.Navigator>
 }
 
@@ -142,11 +148,13 @@ const App: React.FC<AppProps> = ({}) => {
 
   return (
     <NavigationContainer>
-      {
-        state.isLoading || !fontsLoaded ? <Screens.Loading />
-        : <RootStackScreen isSignedIn={state.isSignedIn} />
-      }
-      { state.alerts.length ? <Alerts alerts={state.alerts} dispatch={dispatch} />  : null }
+      <SafeAreaView style={{ height }}>
+        {
+          state.isLoading || !fontsLoaded ? <Screens.Loading />
+          : <RootStackScreen isSignedIn={state.isSignedIn} />
+        }
+        { state.alerts.length ? <Alerts alerts={state.alerts} dispatch={dispatch} />  : null }
+      </SafeAreaView>
     </NavigationContainer>
   )
 

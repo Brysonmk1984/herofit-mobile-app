@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, ImageBackground } from 'react-native';
+import { StyleSheet, ImageBackground, Dimensions } from 'react-native';
 import { Flex, View, Text } from 'native-base';
 import { BlurView } from 'expo-blur';
 interface ScreenContainerProps {

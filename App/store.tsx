@@ -62,7 +62,7 @@ function appStateReducer(state : AppState, action : AppAction) : AppState {
 
 }
 
-const StateProvider : FC = ( { children } ) : ReactElement  => {
+const StateProvider = ( { children } : { children : React.ReactChildren } ) : ReactElement  => {
   
   const [state, dispatch] = useReducer(appStateReducer, initialState);
   //const providerValue : { state : AppState, dispatch : AppDispatch } = { state, dispatch };

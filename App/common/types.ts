@@ -48,6 +48,7 @@ interface InitialAppState {
   newUser : boolean;
   hero : Hero | null;
   alerts : SnackBarAlert[];
+  user : null;
 }
 
 interface Store {
@@ -95,14 +96,18 @@ interface Stats {
   [stat:string] : number
 }
 
-interface Hero {
+interface InitialHero {
   name : string, status: string, statusFade : number,
   equipped : ItemInstance[], goToBattle : boolean, restedEnough : boolean, healthRegenRate : number, photonTokens : string, 
   activityXP : number, battleXP : number, thisLevelStartXp : number, nextLevelStartXp : number,
   battleDkos: number, battleDraws: number, battleLosses: number, battleWins: number,
   power: number,health: number, maxHealth : string, armor: number,recovery: number,fire: number,earth: number,water: number,air: number,aether: number,
   qpPower: number,qpHealth: number,qpArmor: number,qpRecovery: number,qpFire: number,qpEarth: number,qpAir: number,qpWater: number,qpAether: number,
-  hasBeenUpgraded : boolean, owner : string, id : number, character : string, createdAt : string, updatedAt : string, userId : string
+  hasBeenUpgraded : boolean,
+}
+
+interface Hero extends InitialHero {
+  owner : string, id : number, character : string, createdAt : string, updatedAt : string, userId : string
 }
 
 interface ItemInstance {
@@ -136,4 +141,4 @@ interface Effect{
 }
 
 
-export { Action, AppDispatch, InitialAppState, AppAction, Store, SnackBarAlert, User, Stats, Hero, ItemInstance, Item };
+export { Action, AppDispatch, InitialAppState, AppAction, Store, SnackBarAlert, User, Stats, Hero, InitialHero, ItemInstance, Item };
