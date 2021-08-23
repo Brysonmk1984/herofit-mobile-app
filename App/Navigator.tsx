@@ -9,7 +9,7 @@ import { Drawer } from '@material-ui/core';
 // ROOT First level Navigator, used to determine if the user should go through auth sequence of straight to the app
 const RootStack = createStackNavigator();
 const RootStackScreen = ({ isSignedIn }) => {
-  return <RootStack.Navigator headerMode="none" screenOptions={baseScreenStyle}>
+  return <RootStack.Navigator screenOptions={{headerShown : false, ...baseScreenStyle}}>
     { isSignedIn 
       ? <RootStack.Screen name="App" component={DrawerScreen} />
       : <RootStack.Screen name="Auth" component={AuthStackScreen} />
@@ -20,7 +20,7 @@ const RootStackScreen = ({ isSignedIn }) => {
 // IN AUTH Second level Navigator, used for App Auth
 const AuthStack = createStackNavigator();
 const AuthStackScreen = () =>{
-  return <AuthStack.Navigator headerMode="none" screenOptions={baseScreenStyle}>
+  return <AuthStack.Navigator screenOptions={{headerShown : false, ...baseScreenStyle}}>
     <AuthStack.Screen name="SignIn" component={Screens.SignIn} />
     <AuthStack.Screen name="Register" component={Screens.Register} />
     <AuthStack.Screen name="SelectHeroHowTo" component={Screens.SelectHeroHowTo}  options={{ title : 'Select Hero' }} />
@@ -34,7 +34,7 @@ const AuthStackScreen = () =>{
 // IN APP Second level Navigator, used for directing users who are already authorized
 const SidebarDrawer = createDrawerNavigator();
 const DrawerScreen = () =>{
-  return <SidebarDrawer.Navigator headerMode="none" screenOptions={baseScreenStyle}>
+  return <SidebarDrawer.Navigator screenOptions={{headerShown : false, ...baseScreenStyle}}>
     <SidebarDrawer.Screen name="Home" component={Screens.Home} />
     <SidebarDrawer.Screen name="Profile" component={Screens.Profile} />
     <SidebarDrawer.Screen name="Ranking" component={Screens.Ranking} />

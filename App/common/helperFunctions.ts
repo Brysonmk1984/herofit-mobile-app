@@ -102,7 +102,6 @@ async function getLsWithExpiry(key) {
       }
       return item.value;
     }catch(e){
-      console.log('Error Retrieving LS Item', e);
       return null;
     }
 
