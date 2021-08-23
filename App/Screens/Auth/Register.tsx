@@ -6,7 +6,7 @@ import { insertAvatar } from '../../api/avatar';
 import { GlobalStateContext } from '../../store';
 import debugErrors from '../../common/debugErrors';
 import { updateAlerts } from '../../common/alerts';
-import ScreenContainer from '../../Components/ScreenContainer';
+import ScreenContainer from '../../Components/ScreenContainer/ScreenContainer';
 import { Header, ScreenActionButton, Pane, HelperText } from '../../Components/CustomComponents';
 import { useDebouncedCallback } from 'use-debounce';
 

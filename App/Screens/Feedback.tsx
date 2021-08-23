@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Image, Pressable, FlatList, SectionList,  Box, Center, View, Text, Heading, VStack, FormControl, Input, Link, Button, IconButton, HStack, Divider } from 'native-base';
-import ScreenContainer from '../Components/ScreenContainer';
+import ScreenContainer from '../Components/ScreenContainer/ScreenContainer';
 import { Store, User } from '../common/types';
 import { updateAlerts } from '../common/alerts';
 import debugErrors from '../common/debugErrors';

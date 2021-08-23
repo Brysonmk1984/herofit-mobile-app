@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Image, Pressable, FlatList, SectionList,  Box, Center, View, Text, Heading, VStack, FormControl, Input, Link, Button, IconButton, HStack, Divider } from 'native-base';
 import AnimatedLoader from "react-native-animated-loader";
-import ScreenContainer from '../../Components/ScreenContainer';
+import ScreenContainer from '../../Components/ScreenContainer/ScreenContainer';
 
 interface LoadingWrapperProps {
 

@@ -1,17 +1,24 @@
 import React, { useContext, useEffect, useState, FC, ReactNode, Context } from 'react';
 import { ScrollView, TextInput, StyleSheet } from 'react-native';
-import {  NativeBaseProvider, Box, View, Text, Heading, Center, VStack, FormControl, Input, Link, Button, Icon, IconButton, HStack, Divider } from 'native-base';
+import { NativeBaseProvider, Box, View, Text, Heading, Center, VStack, FormControl, Input, Link, Button, Icon, IconButton, HStack, Divider } from 'native-base';
 import { login } from '../../api/authentication';
 import { GlobalStateContext } from '../../store';
 import debugErrors from '../../common/debugErrors';
 import { updateAlerts } from '../../common/alerts';
 import fetchInitialData from '../../common/fetchInitialData';
-import ScreenContainer from '../../Components/ScreenContainer';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Store, AppDispatchAction, AppDispatch } from '../../common/types';
-import { Header, ScreenActionButton, Pane, HelperText } from '../../Components/CustomComponents';
+import { Store, AppDispatch } from '../../common/types';
+import { Header, ScreenContainer, ScreenActionButton, Pane, HelperText } from '../../Components/CustomComponents';
 import { useDebouncedCallback } from 'use-debounce';
 import { RouteProp } from '@react-navigation/native';
+
+// interface AuthStackParamList{
+//   Home: undefined;
+//   Profile: { userId: string };
+//   Feed: { sort: 'latest' | 'top' } | undefined;
+// }
+
+// type Props = StackNavigationProp<RootStackParamList, 'SignIn'>;
 
 interface Navigation {
   navigate: (p1: string, p2: { screen: string, params?: { screen: string } }) => void
@@ -24,7 +31,6 @@ interface SignInProps {
 
 const SignIn : FC<SignInProps>  = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
-console.log('RRRR', route);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [helperText, setHelperText] = useState<string | null>(null);
@@ -67,7 +73,7 @@ console.log('RRRR', route);
 
 
   function handleRegisterLink(){
-    navigation.navigate('Auth', { screen: 'SelectHero'});
+    navigation.push('SelectHeroHowTo');
   }
 
   // function formValidation(arrayOfInputs, ){

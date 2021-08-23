@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState, createRef } from 'react';
 import { Image, Pressable, FlatList, SectionList,  Box, Center, View, Text, Heading, VStack, FormControl, Input, Link, Button, IconButton, HStack, Divider } from 'native-base';
-import ScreenContainer from '../Components/ScreenContainer';
+import ScreenContainer from '../Components/ScreenContainer/ScreenContainer';
 import debugErrors from '../common/debugErrors';
 import { GlobalStateContext } from '../store';
 import { Store, Item } from '../common/types';

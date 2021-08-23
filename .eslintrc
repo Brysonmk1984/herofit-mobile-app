@@ -35,7 +35,7 @@
     "no-use-before-define": "off",
     "no-multiple-empty-lines": "off",
     "import/namespace": "off",
-    "@typescript-eslint/no-use-before-define": ["error"],
+    "@typescript-eslint/no-use-before-define": "off",
     "quotes" : "off",
     "import/extensions": [
       "error",
