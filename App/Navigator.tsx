@@ -4,7 +4,6 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { RootStackParamList, SidebarDrawerParamList, AuthStackParamList } from './common/types-navigator';
 import herofitTheme from './styles/herofitTheme';
 import * as Screens from './Screens';
-import { Drawer } from '@material-ui/core';
 
 // ROOT First level Navigator, used to determine if the user should go through auth sequence of straight to the app
 const RootStack = createStackNavigator();

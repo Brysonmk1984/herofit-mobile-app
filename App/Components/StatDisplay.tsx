@@ -1,8 +1,8 @@
 import React from 'react'
 import { Box, View, Text, HStack } from 'native-base';
 import Icon from './Icons';
+import { Stat } from '../common/types';
 
-type Stat = 'Power' | 'Health' | 'Armor' | 'Recovery' |  'Fire' | 'Earth' | 'Air' | 'Water' | 'Aether'
 
 interface StatDisplayProps {
   stat : Stat
@@ -14,12 +14,14 @@ interface StatDisplayProps {
   reversedText? : boolean
 }
 
+type nativeBaseSizes = number | 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'| '3xl'| '4xl'| '5xl'| '6xl';
+
 interface StatDisplaySizes {
   iconSize : number
-  valueSize : number | 'xs' | 'sm' | 'md' | 'lg' | '2xl'
+  valueSize : nativeBaseSizes
   statSize : number
   statSize2 : number
-  descriptionSize : number | 'xs' | 'sm' | 'md' | 'lg' | '2xl'
+  descriptionSize : nativeBaseSizes
 }
 
 export default function StatDisplay({ stat, value, description, size, reversedText, iconWatermark } : StatDisplayProps){
@@ -28,7 +30,7 @@ export default function StatDisplay({ stat, value, description, size, reversedTe
   const textColor = reversedText ? "base.white" : null;
 
   const { iconSize, valueSize, statSize, statSize2, descriptionSize } = (() : StatDisplaySizes =>{
-    let iconSize = 50, valueSize = '2xl', statSize = 50, statSize2 = 35, descriptionSize = 'sm';
+    let iconSize = 50, valueSize : nativeBaseSizes = '2xl', statSize = 50, statSize2 = 35, descriptionSize : nativeBaseSizes = 'sm';
    
     if(size === 'sm'){
       iconSize = 30, valueSize = 'lg', statSize = 30, statSize2 = 16, descriptionSize = 'xs';

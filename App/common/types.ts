@@ -140,5 +140,7 @@ interface Effect{
   description : string
 }
 
+type Stat = 'Power' | 'Health' | 'Armor' | 'Recovery' |  'Fire' | 'Earth' | 'Air' | 'Water' | 'Aether'
 
-export { Action, AppDispatch, InitialAppState, AppAction, Store, SnackBarAlert, User, Stats, Hero, InitialHero, ItemInstance, Item };
+
+export { Action, AppDispatch, InitialAppState, AppAction, Store, SnackBarAlert, User, Stats, Hero, InitialHero, ItemInstance, Item, Stat };
