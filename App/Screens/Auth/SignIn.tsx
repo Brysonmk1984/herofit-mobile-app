@@ -11,13 +11,18 @@ import { Store, AppDispatch } from '../../common/types';
 import { Header, ScreenContainer, ScreenActionButton, Pane, HelperText } from '../../Components/CustomComponents';
 import { useDebouncedCallback } from 'use-debounce';
 import { RouteProp } from '@react-navigation/native';
+import { AuthStackParamList } from './common/types-navigator';
 
-// interface AuthStackParamList{
-//   Home: undefined;
-//   Profile: { userId: string };
-//   Feed: { sort: 'latest' | 'top' } | undefined;
-// }
 
+// type AuthStackParamList = {
+//   SignIn: undefined
+//   Register: undefined
+//   SelectHeroHowTo: undefined
+//   SelectHero: undefined
+//   HeroDetails: undefined
+//   FinalizeHeroSelection: undefined
+//   SpendQP: undefined
+// };
 // type Props = StackNavigationProp<RootStackParamList, 'SignIn'>;
 
 interface Navigation {
@@ -25,7 +30,8 @@ interface Navigation {
 }
 
 interface SignInProps {
-  navigation: Navigation
+  //navigation: Navigation
+  navigation: StackNavigationProp<AuthStackParamList, 'SignIn'>
 }
 
 
@@ -102,13 +108,6 @@ const SignIn : FC<SignInProps>  = ({ navigation, route }) => {
     updateFunction(text);
     debounced();
   }
-
-  useEffect(() =>{
-    if(state.isSignedIn){
-      navigation.navigate('Auth', { screen: 'HomeWrapperScreen', params: { screen : 'Home'} });
-    }
-   
-  }, [state.isSignedIn]);
 
   return (
     <ScreenContainer screenName={route.name}>

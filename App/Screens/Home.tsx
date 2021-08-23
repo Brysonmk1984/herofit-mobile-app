@@ -8,7 +8,7 @@ interface HomeProps {
 
 }
 
-const Home: React.FC<HomeProps> = ({ navigation }) => {
+const Home: React.FC<HomeProps> = ({ navigation, route }) => {
   const { state, dispatch } = useContext<Store>(GlobalStateContext);
   console.log('!HERO`', state.hero);
   const { name, status, health, maxHealth, activityXP, battleXP, photonTokens, goToBattle, equipped } = state.hero;
@@ -46,7 +46,7 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
   }, [state.isSignedIn]);
 
   return (
-    <ScreenContainer>
+    <ScreenContainer screenName={route.name}>
       { renderHeroDetails() }
       <Button onPress={() => navigation.toggleDrawer()}>
         Drawer

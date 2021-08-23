@@ -12,7 +12,7 @@ interface FeedbackProps {
 
 }
 
-const Feedback: React.FC<FeedbackProps> = ({ navigation }) => {
+const Feedback: React.FC<FeedbackProps> = ({ navigation, route }) => {
   const { state, dispatch } = useContext<Store>(GlobalStateContext);
   const { user, hero, isSignedIn } = state;
 

@@ -8,7 +8,7 @@ interface ItemsProps {
 
 }
 
-const Items: React.FC<ItemsProps> = ({ navigation }) => {
+const Items: React.FC<ItemsProps> = ({ navigation, route }) => {
   const { state, dispatch } = useContext<Store>(GlobalStateContext);
   const { hero } = state;
 

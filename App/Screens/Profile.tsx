@@ -8,7 +8,7 @@ interface ProfileProps {
 
 }
 
-const Profile: React.FC<ProfileProps> = ({ navigation }) => {
+const Profile: React.FC<ProfileProps> = ({ navigation, route }) => {
   const { state, dispatch } = useContext<Store>(GlobalStateContext);
   const { hero } = state;
 

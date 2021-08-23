@@ -8,7 +8,7 @@ interface RankingProps {
 
 }
 
-const Ranking: React.FC<RankingProps> = ({ navigation }) => {
+const Ranking: React.FC<RankingProps> = ({ navigation, route }) => {
   const { state, dispatch } = useContext<Store>(GlobalStateContext);
   const { hero } = state;
 

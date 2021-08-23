@@ -20,12 +20,6 @@ type SidebarDrawerParamList = {
   Settings : undefined
 };
 
-type HomeWrapperStackParamList = {
-  Home : undefined
-};
-
-type WalkthroughStackParamList = {};
-
 type AuthStackParamList = {
   SignIn: undefined
   Register: undefined
@@ -36,4 +30,4 @@ type AuthStackParamList = {
   SpendQP: undefined
 };
 
-export { RootStackParamList, SidebarDrawerParamList, HomeWrapperStackParamList, WalkthroughStackParamList, AuthStackParamList }
+export { RootStackParamList, SidebarDrawerParamList, AuthStackParamList }

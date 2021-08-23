@@ -8,7 +8,7 @@ interface InventoryProps {
 
 }
 
-const Inventory: React.FC<InventoryProps> = ({ navigation }) => {
+const Inventory: React.FC<InventoryProps> = ({ navigation, route }) => {
   const { state, dispatch } = useContext<Store>(GlobalStateContext);
   const { hero } = state;
 

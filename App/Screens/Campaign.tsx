@@ -8,7 +8,7 @@ interface CampaignProps {
 
 }
 
-const Campaign: React.FC<CampaignProps> = ({ navigation }) => {
+const Campaign: React.FC<CampaignProps> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { hero } = state;
 

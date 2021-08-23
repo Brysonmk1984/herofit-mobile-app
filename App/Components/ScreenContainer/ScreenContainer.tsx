@@ -72,13 +72,10 @@ export default function ScreenContainer({ children, screenName, bg, hero } : Scr
 
   return (
     <View style={[styles.container, styles.absolute, styles.dropShadow ]}>
-      
-      <Flex safeArea flex={1}  justify="space-between" zIndex={10}  p={0} w={"100%"} mx='auto' >
+      <Flex flex={1}  justify="space-between" zIndex={10}  p={0} w={"100%"} mx='auto' >
         {children}
       </Flex>
-
       <ImageBackground source={image}  style={[styles.image, { backgroundColor : bg }]} resizeMode="cover" />
-
     </View>
   )
 };

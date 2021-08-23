@@ -13,7 +13,7 @@ interface SettingsProps {
 
 }
 
-const Settings: React.FC<SettingsProps> = ({ navigation }) => {
+const Settings: React.FC<SettingsProps> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { hero } = state;
 
@@ -65,7 +65,7 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
   }
 
   return (
-    <ScreenContainer>
+    <ScreenContainer screenName={route.name}>
       <Button onPress={signOut}>
         Delete JWT
       </Button>
