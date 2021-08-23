@@ -22,14 +22,14 @@ interface SetAlertsAction {
   type: 'SET ALERTS', payload: { alerts : SnackBarAlert[]}
 }
 interface ResetDefaultsAction {
-  type: 'RESET DEFAULTS', payload: { isLoading: boolean }
+  type: 'RESET DEFAULTS'
 }
 interface RemoveAlertsAction {
   type: 'REMOVE ALERTS', payload: { indiciesForRemoval : string[] }
 }
 
 // Same as ShoppingListAction in example
-type AppAction = ToggleLoadingAction | SetExistingUserInitDataAction | SetIsSignedInAction | SetNewUserAction | SetHeroAction | SetUserAction | SetAlertsAction | ResetDefaultsAction | RemoveAlertsAction;
+type AppAction = ToggleLoadingAction | SetExistingUserInitDataAction | SetIsSignedInAction | SetNewUserAction | SetHeroAction | SetUserAction | SetAlertsAction | ResetDefaultsAction  | RemoveAlertsAction;
 type AppDispatch = (action: AppAction) => void
 
 type Payload = {

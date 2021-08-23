@@ -6,13 +6,13 @@ import { convertItemIdsToFullItems } from './helperFunctions';
 import { fetchBattleReport } from '../api/battle';
 import { updateAlerts } from './alerts';
 import debugErrors from "./debugErrors";
-import { User, Hero, Item, Store, AppDispatch, AppState } from './types'
+import { User, Hero, Item, AppDispatch, InitialAppState } from './types'
 
 
 // FETCH ALL THE NEEDED DATA FOR INITIALIZING THE HOME SCREEN
 // Either accepts the jwt token and gets email from it in the case of already-valid jwt, or accepts email as a parameter in the case of signing in
 // user, hero, items, latestBattle
-async function fetchInitialData(token : string, dispatch : AppDispatch, state : AppState, email : string | null = null){
+async function fetchInitialData(token : string, dispatch : AppDispatch, state : InitialAppState, email : string | null = null){
   try{
     // Decode the JWT to get email, needed for fetching avatar
     if(token){
@@ -28,13 +28,11 @@ async function fetchInitialData(token : string, dispatch : AppDispatch, state : 
 
     // Takes item instance IDs and assigns full items to the hero under 'equipped' property
     const equipped = convertItemIdsToFullItems(hero.equipped, items);
-    console.log(equipped);
+
     hero.equipped = equipped;
     dispatch({type : 'SET EXISTING USER INIT DATA', payload : { user, hero, items, latestBattle, isSignedIn : true } });
   } catch(error){
-    console.log('EE', error);
     let message, alertType;
-
     
     if(error.status === 401){
       // JWT has expired, just warn user so they can log in again
@@ -46,7 +44,6 @@ async function fetchInitialData(token : string, dispatch : AppDispatch, state : 
       alertType = 'error';
     }
 
-    console.log('MM', message);
     debugErrors(error);
     updateAlerts([{ type : alertType, message }], state, dispatch);
     dispatch({ type : 'RESET DEFAULTS' });

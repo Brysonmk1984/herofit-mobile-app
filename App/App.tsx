@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { LogBox, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
@@ -47,7 +47,7 @@ const App: React.FC = () => {
     <NavigationContainer>
       <SafeAreaView style={{ height }}>
         {
-          state.isLoading && !fontsLoaded ? <Loading />
+          (state.isLoading || !fontsLoaded) ? <Loading />
           : <RootStackScreen isSignedIn={state.isSignedIn} />
         }
         { state.alerts.length ? <Alerts alerts={state.alerts} dispatch={dispatch} />  : null }
