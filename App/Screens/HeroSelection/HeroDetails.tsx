@@ -2,9 +2,10 @@ import React, { useEffect } from 'react';
 import { Image, ScrollView, Pressable, FlatList, SectionList,  Box, Center, View, Text, Heading, VStack, FormControl, Input, Link, Button, IconButton, HStack, Divider, useToken } from 'native-base';
 import { ScreenContainer, Header, Subheader, ScreenActionButton, LoreText, Pane, StatDisplay, Icon } from '../../Components/CustomComponents';
 import { getHeroImage } from '../../common/helperFunctions';
+import { AuthStackProps } from '../../common/types-navigator';
 
 // Hero Details Screen
-const HeroDetails = ({ route, navigation }) => {
+const HeroDetails = ({ route, navigation } : AuthStackProps<'HeroDetails'>) => {
   const { alias, character, description, history, air, water, earth, fire, colors } = route.params.selectedHero;
 
   

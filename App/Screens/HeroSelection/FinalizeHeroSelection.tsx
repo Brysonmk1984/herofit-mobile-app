@@ -6,11 +6,12 @@ import debugErrors from '../../common/debugErrors';
 import { checkAvatarName } from '../../api/avatar';
 
 import { ScreenContainer, Header, Subheader, ScreenActionButton, LoreText, Pane, StatDisplay, Icon, HelperText } from '../../Components/CustomComponents';
+import { AuthStackProps } from '../../common/types-navigator';
 
 
 // Finalize Hero Selection Screen 
 // Name the Hero and get finish initializing hero
-const FinalizeHeroSelection = ({ route, navigation }) => {
+const FinalizeHeroSelection = ({ route, navigation } : AuthStackProps<'FinalizeHeroSelection'>) => {
   const { state, dispatch } = useContext(GlobalStateContext);
 
   const [heroName, setHeroName] = useState(null);

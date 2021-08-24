@@ -1,12 +1,13 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { RootStackParamList, SidebarDrawerParamList, AuthStackParamList } from './common/types-navigator';
 import herofitTheme from './styles/herofitTheme';
 import * as Screens from './Screens';
+import { AuthStackParamList, MainDrawerParamList, RootStackParamList } from './common/types-navigator';
 
 // ROOT First level Navigator, used to determine if the user should go through auth sequence of straight to the app
-const RootStack = createStackNavigator();
+// TS - Ben doesn't pass a generic here, but the docs do.
+const RootStack = createStackNavigator<RootStackParamList>();
 const RootStackScreen = ({ isSignedIn }) => {
   return <RootStack.Navigator screenOptions={{headerShown : false, ...baseScreenStyle}}>
     { isSignedIn 
@@ -17,7 +18,7 @@ const RootStackScreen = ({ isSignedIn }) => {
 }
 
 // IN AUTH Second level Navigator, used for App Auth
-const AuthStack = createStackNavigator();
+const AuthStack = createStackNavigator<AuthStackParamList>();
 const AuthStackScreen = () =>{
   return <AuthStack.Navigator screenOptions={{headerShown : false, ...baseScreenStyle}}>
     <AuthStack.Screen name="SignIn" component={Screens.SignIn} />
@@ -31,18 +32,18 @@ const AuthStackScreen = () =>{
 };
 
 // IN APP Second level Navigator, used for directing users who are already authorized
-const SidebarDrawer = createDrawerNavigator();
+const MainDrawer = createDrawerNavigator<MainDrawerParamList>();
 const DrawerScreen = () =>{
-  return <SidebarDrawer.Navigator screenOptions={{headerShown : false, ...baseScreenStyle}}>
-    <SidebarDrawer.Screen name="Home" component={Screens.Home} />
-    <SidebarDrawer.Screen name="Profile" component={Screens.Profile} />
-    <SidebarDrawer.Screen name="Ranking" component={Screens.Ranking} />
-    <SidebarDrawer.Screen name="Campaign" component={Screens.Campaign} />
-    <SidebarDrawer.Screen name="Inventory" component={Screens.Inventory} />
-    <SidebarDrawer.Screen name="Items" component={Screens.Items} />
-    <SidebarDrawer.Screen name="Feedback" component={Screens.Feedback} />
-    <SidebarDrawer.Screen name="Settings" component={Screens.Settings} /> 
-  </SidebarDrawer.Navigator>
+  return <MainDrawer.Navigator screenOptions={{headerShown : false, ...baseScreenStyle}}>
+    <MainDrawer.Screen name="Home" component={Screens.Home} />
+    <MainDrawer.Screen name="Profile" component={Screens.Profile} />
+    <MainDrawer.Screen name="Ranking" component={Screens.Ranking} />
+    <MainDrawer.Screen name="Campaign" component={Screens.Campaign} />
+    <MainDrawer.Screen name="Inventory" component={Screens.Inventory} />
+    <MainDrawer.Screen name="Items" component={Screens.Items} />
+    <MainDrawer.Screen name="Feedback" component={Screens.Feedback} />
+    <MainDrawer.Screen name="Settings" component={Screens.Settings} /> 
+  </MainDrawer.Navigator>
 }
 
 export default RootStackScreen;

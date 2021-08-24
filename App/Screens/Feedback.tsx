@@ -6,13 +6,10 @@ import { updateAlerts } from '../common/alerts';
 import debugErrors from '../common/debugErrors';
 import { GlobalStateContext } from '../store';
 import { emailContactForm } from '../api/email';
+import { MainDrawerParamList } from '../common/types-navigator';
 
 
-interface FeedbackProps {
-
-}
-
-const Feedback: React.FC<FeedbackProps> = ({ navigation, route }) => {
+const Feedback : React.FC<MainDrawerParamList> = ({ navigation, route }) => {
   const { state, dispatch } = useContext<Store>(GlobalStateContext);
   const { user, hero, isSignedIn } = state;
 

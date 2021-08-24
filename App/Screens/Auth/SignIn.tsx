@@ -1,41 +1,15 @@
-import React, { useContext, useEffect, useState, FC, ReactNode, Context } from 'react';
-import { ScrollView, TextInput, StyleSheet } from 'react-native';
-import { NativeBaseProvider, Box, View, Text, Heading, Center, VStack, FormControl, Input, Link, Button, Icon, IconButton, HStack, Divider } from 'native-base';
+import React, { useContext, useState } from 'react';
+import { View, Text, VStack, FormControl, Input, Link } from 'native-base';
 import { login } from '../../api/authentication';
 import { GlobalStateContext } from '../../store';
 import debugErrors from '../../common/debugErrors';
 import { updateAlerts } from '../../common/alerts';
 import fetchInitialData from '../../common/fetchInitialData';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { Store, AppDispatch } from '../../common/types';
 import { Header, ScreenContainer, ScreenActionButton, Pane, HelperText } from '../../Components/CustomComponents';
 import { useDebouncedCallback } from 'use-debounce';
-import { RouteProp } from '@react-navigation/native';
-import { AuthStackParamList } from './common/types-navigator';
+import { AuthStackProps } from '../../common/types-navigator';
 
-
-// type AuthStackParamList = {
-//   SignIn: undefined
-//   Register: undefined
-//   SelectHeroHowTo: undefined
-//   SelectHero: undefined
-//   HeroDetails: undefined
-//   FinalizeHeroSelection: undefined
-//   SpendQP: undefined
-// };
-// type Props = StackNavigationProp<RootStackParamList, 'SignIn'>;
-
-interface Navigation {
-  navigate: (p1: string, p2: { screen: string, params?: { screen: string } }) => void
-}
-
-interface SignInProps {
-  //navigation: Navigation
-  navigation: StackNavigationProp<AuthStackParamList, 'SignIn'>
-}
-
-
-const SignIn : FC<SignInProps>  = ({ navigation, route }) => {
+const SignIn = ({ navigation, route } : AuthStackProps<'SignIn'> ) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

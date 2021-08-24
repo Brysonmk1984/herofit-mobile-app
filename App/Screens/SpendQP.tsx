@@ -8,14 +8,7 @@ import debugErrors from '../common/debugErrors';
 import { Stats, InitialHero, Hero } from '../common/types';
 import { ScreenContainer, Header, Subheader, ScreenActionButton, LoreText, Pane, StatDisplay, Icon, HelperText } from '../Components/CustomComponents';
 import defaultStats from '../common/defaultStats.json';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RouteProp } from '@react-navigation/native';
-
-
-interface NavigatorProps {
-  route: RouteProp<any,any>
-  navigation: StackNavigationProp<any,any>
-}
+import { AuthStackProps } from "../common/types-navigator";
 
 /*
   FOR TESTING SPENDQP PAGE
@@ -36,11 +29,7 @@ interface NavigatorProps {
 //   ]
 // }
 
-/* TS - React function component that takes in one parameter called Navigator Props
-  The parameter type is referencing the NavigatorProps Generic passed in,
-  Which is referencing the NavigatorProps Interface
-*/
-const SpendQP : React.FC<NavigatorProps> = ({ route, navigation } : NavigatorProps ) => {
+const SpendQP = ({ route, navigation } : AuthStackProps<'SpendQP'> ) => {
   // Global State
   const { state, dispatch } = useContext(GlobalStateContext);
 
@@ -79,7 +68,7 @@ const SpendQP : React.FC<NavigatorProps> = ({ route, navigation } : NavigatorPro
     navigation.navigate('Auth', { screen : 'Register' });
   }
 
-  
+
   // As long as hero has QP, let them increment stats
   const incrementAttribute = function(stat: string): void{
     console.log(qpState);

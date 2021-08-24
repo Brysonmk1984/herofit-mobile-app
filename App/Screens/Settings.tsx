@@ -4,16 +4,14 @@ import { Image, Pressable, FlatList, SectionList,  Box, Center, View, Text, Head
 import ScreenContainer from '../Components/ScreenContainer/ScreenContainer';
 import { clearJwtInLocalStorage } from '../common/jwtModule';
 import debugErrors from '../common/debugErrors';
-import { Store, User } from '../common/types';
+import { User } from '../common/types';
 import { updateAlerts } from '../common/alerts';
 import { deleteAccount } from '../api/account';
 import { GlobalStateContext } from '../store';
+import { MainDrawerProps } from '../common/types-navigator';
 
-interface SettingsProps {
 
-}
-
-const Settings: React.FC<SettingsProps> = ({ navigation, route }) => {
+const Settings: React.FC<MainDrawerProps<'Settings'>> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { hero } = state;
 

@@ -9,6 +9,7 @@ import { updateAlerts } from '../../common/alerts';
 import ScreenContainer from '../../Components/ScreenContainer/ScreenContainer';
 import { Header, ScreenActionButton, Pane, HelperText } from '../../Components/CustomComponents';
 import { useDebouncedCallback } from 'use-debounce';
+import { AuthStackProps } from '../../common/types-navigator';
 
 function formReducer(state, action){
   function checkValidForm({ email, displayName, password, passwordConfirm }){
@@ -78,7 +79,7 @@ function formReducer(state, action){
   }
 }
 
-const Register = ({ navigation, route }) => {
+const Register = ({ navigation, route } : AuthStackProps<'Register'>) => {
   console.log(navigation, route);
   const { state, dispatch } = useContext(GlobalStateContext);
   const initialFormState = {

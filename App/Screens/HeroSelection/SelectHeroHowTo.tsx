@@ -4,9 +4,10 @@ import debugErrors from '../../common/debugErrors';
 import { getHeroList } from '../../api/authentication';
 import { ScreenContainer, Header, Subheader, ScreenActionButton, Pane, Icon, StatDisplay } from '../../Components/CustomComponents';
 import defaultStats from '../../common/defaultStats.json';
+import { AuthStackProps } from '../../common/types-navigator';
 
 // How To Select Screen
-export default function SelectHeroHowTo({ navigation, route }){
+export default function SelectHeroHowTo({ navigation, route } : AuthStackProps<'SelectHeroHowTo'>){
   // Make API call to get hero data for the next screen
   const [heroList, setHeroList] = useState([]);
   console.log('HL', heroList);

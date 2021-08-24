@@ -3,9 +3,10 @@ import { Dimensions } from 'react-native';
 import { Image, Pressable, SectionList,FlatList,  Box, Center, View, Text, Heading, VStack, FormControl, Input, Link, Button, IconButton, HStack, Divider } from 'native-base';
 import HeroCarousel from '../../Components/HeroCarousel';
 import { ScreenContainer, Header, Subheader, ScreenActionButton, Pane, Icon } from '../../Components/CustomComponents';
+import { AuthStackProps } from '../../common/types-navigator';
 
 // Select Hero Screen
-const SelectHero = ({ route, navigation }) =>{
+const SelectHero = ({ route, navigation } : AuthStackProps<'SelectHero'>) =>{
   const { heroList } = route.params;
   const [activeHero, setActiveHero] = useState(heroList[0]);
 

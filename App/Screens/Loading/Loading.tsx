@@ -2,12 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Image, Pressable, FlatList, SectionList,  Box, Center, View, Text, Heading, VStack, FormControl, Input, Link, Button, IconButton, HStack, Divider } from 'native-base';
 import AnimatedLoader from "react-native-animated-loader";
 import ScreenContainer from '../../Components/ScreenContainer/ScreenContainer';
+import { MainDrawerProps } from '../../common/types-navigator';
 
-interface LoadingWrapperProps {
-
-}
-
-const Loading: React.FC<LoadingWrapperProps> = () => {
+const Loading : React.FC<MainDrawerProps<'Loading'>> = () => {
   const messages = ['powering up...', 'one last squat...', 'power walking to the server...','making sure we are using proper...', '"only five more miles"...', 'communing with the elements...', 'Doing pull-ups on our database...'];
   const [ message, setMessage ] = useState('powering up...');
 

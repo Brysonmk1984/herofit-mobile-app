@@ -3,17 +3,16 @@ import { Image, Pressable, FlatList, SectionList,  Box, Center, View, Text, Head
 import ScreenContainer from '../Components/ScreenContainer/ScreenContainer';
 import debugErrors from '../common/debugErrors';
 import { GlobalStateContext } from '../store';
-import { Store, Item } from '../common/types';
-interface HomeProps {
+import { Item } from '../common/types';
+import { MainDrawerProps } from '../common/types-navigator';
 
-}
 
-const Home: React.FC<HomeProps> = ({ navigation, route }) => {
-  const { state, dispatch } = useContext<Store>(GlobalStateContext);
+const Home : React.FC<MainDrawerProps<'Home'>> = ({ navigation, route }) => {
+  const { state, dispatch } = useContext(GlobalStateContext);
   console.log('!HERO`', state.hero);
   const { name, status, health, maxHealth, activityXP, battleXP, photonTokens, goToBattle, equipped } = state.hero;
   console.log('equiped array', equipped);
-  function renderItem({ item } : { Item }){
+  function renderItem({ item } : Item ){
     console.log("ITEM!", item);
     return <View>
       <Text>{ item.name }</Text>
