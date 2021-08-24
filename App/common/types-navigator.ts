@@ -1,21 +1,7 @@
 
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-
-interface StartingElementalPower { fire : number, earth : number, water : number, air : number }
-
-interface HeroChoice {
-  active : boolean
-  character : string
-  alias : string
-  elms : StartingElementalPower
-  skills : string[]
-  ultimate : string,
-  colors : string[],
-  image : string,
-  description : string,
-  history : string
-}
+import { HeroChoice } from './types';
 
 /*
 REACT NAVIGATOR TYPES

@@ -10,6 +10,7 @@ import Alerts from './Alerts';
 import debugErrors from './common/debugErrors';
 import fetchInitialData from './common/fetchInitialData';
 import useJwt from './common/hooks/useJwt';
+import { getHeroAlias  } from './common/helperFunctions';
 LogBox.ignoreLogs(['Reanimated 2', 'Remote debugger', 'VirtualizedLists should never be nested']);
 
 const height = Dimensions.get("window").height;
@@ -40,12 +41,19 @@ const App: React.FC = () => {
     
     if(jwt){
       initialData();
+    }else{
+      dispatch({type : 'TOGGLE LOADING', payload : { isLoading : false } });
     }
   }, [jwt]);
-
+  console.log(state.isLoading ,!fontsLoaded, getHeroAlias('Repete'));
   return (
     <NavigationContainer>
       <SafeAreaView style={{ height }}>
+        {/* If app is loading -> state.isLoading === true
+          OR
+          If Font have not been loaded  -> fontLoaded === false
+          Show loading, otherwise show view
+        */}
         {
           (state.isLoading || !fontsLoaded) ? <Loading />
           : <RootStackScreen isSignedIn={state.isSignedIn} />

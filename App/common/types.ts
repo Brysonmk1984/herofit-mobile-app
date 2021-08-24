@@ -130,7 +130,7 @@ interface Item extends ItemInstance {
   lore: string | null,
   name: string,
   ptCost: number | null
-  type: string
+  type: 'skin' | 'title' | 'pet' | 'consumable' | 'codex'
   updatedAt: string
 }
 
@@ -143,4 +143,34 @@ interface Effect{
 type Stat = 'Power' | 'Health' | 'Armor' | 'Recovery' |  'Fire' | 'Earth' | 'Air' | 'Water' | 'Aether'
 
 
-export { Action, AppDispatch, InitialAppState, AppAction, Store, SnackBarAlert, User, Stats, Hero, InitialHero, ItemInstance, Item, Stat };
+interface StartingElementalPower { fire : number, earth : number, water : number, air : number }
+
+type CharacterName = "Compost Creature" | "Wilhelm the Wild" | "Repete" | "Filtron Five" | "Solar Celeste" | "Empath Aurelia" | "Boulder Bro" | "Chrono Guy" | "Timber Terror" | "Natural Ninja"
+type CharacterAlias = "Compost Creature" | "Wildspeaker" | "Scavenger Robot" | "Filtron Five" | "Solar Warrior" | "Empath" | "Boulder Bro" | "Chrono Guy" | "Timber Terror" | "Natural Ninja"
+
+interface HeroChoice {
+  active : boolean
+  character : CharacterName
+  alias : CharacterAlias
+  elms : StartingElementalPower
+  skills : string[]
+  ultimate : string,
+  colors : string[],
+  image : string,
+  description : string,
+  history : string
+}
+
+type SpiritFoes = 'wraith' | 'specter' | 'apparition' | 'banshee' | 'poltergeist' | 'phantasm' | 'shade' | 'phantom' | 'shadow-self'
+type ElementalFoes = 'gusty rascal' | 'rock skipper' | 'flame fiend' | 'splash artist' | 'wheezing jinn' | 'granite golem' | 'burning jinn' | 'cyclonic siren' | 'storming oni' | 'hulking aggro crag' | 'scorching archfiend' | 'high priestess of the tides'
+type TitanFoes = 'plaguebringer'
+
+interface FoeClasses{
+  spirits : SpiritFoes
+  elementals : ElementalFoes
+  titans : TitanFoes
+}
+
+type FoeTypes = SpiritFoes | ElementalFoes | TitanFoes
+
+export { Action, AppDispatch, InitialAppState, AppAction, Store, SnackBarAlert, User, Stats, Hero, InitialHero, ItemInstance, Item, Stat, HeroChoice, CharacterName, CharacterAlias, SpiritFoes, ElementalFoes, TitanFoes, FoeTypes, FoeClasses };
