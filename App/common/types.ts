@@ -165,12 +165,14 @@ type SpiritFoes = 'wraith' | 'specter' | 'apparition' | 'banshee' | 'poltergeist
 type ElementalFoes = 'gusty rascal' | 'rock skipper' | 'flame fiend' | 'splash artist' | 'wheezing jinn' | 'granite golem' | 'burning jinn' | 'cyclonic siren' | 'storming oni' | 'hulking aggro crag' | 'scorching archfiend' | 'high priestess of the tides'
 type TitanFoes = 'plaguebringer'
 
+type FoeTypes = SpiritFoes | ElementalFoes | TitanFoes;
+
 interface FoeClasses{
-  spirits : SpiritFoes
-  elementals : ElementalFoes
-  titans : TitanFoes
+  spirits : SpiritFoes[]
+  elementals : ElementalFoes[]
+  titans : TitanFoes[]
 }
 
-type FoeTypes = SpiritFoes | ElementalFoes | TitanFoes
 
-export { Action, AppDispatch, InitialAppState, AppAction, Store, SnackBarAlert, User, Stats, Hero, InitialHero, ItemInstance, Item, Stat, HeroChoice, CharacterName, CharacterAlias, SpiritFoes, ElementalFoes, TitanFoes, FoeTypes, FoeClasses };
+
+export { Action, AppDispatch, InitialAppState, AppAction, Store, SnackBarAlert, User, Stats, Hero, InitialHero, ItemInstance, Item, Stat, HeroChoice, CharacterName, CharacterAlias, FoeTypes, FoeClasses };

@@ -1,7 +1,7 @@
 
 import heroList from './heroList.json';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ItemInstance, Item, FoeTypes, FoeClasses, HeroChoice, CharacterName, CharacterAlias, SpiritFoes, ElementalFoes, TitanFoes } from './types';
+import { ItemInstance, Item, FoeTypes, FoeClasses, HeroChoice, CharacterName, CharacterAlias} from './types';
 
 function capitalize(string : string){
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -138,10 +138,10 @@ function getHeroAlias(character : CharacterName) : CharacterAlias {
 }
 
 function determineFoeClass(type : FoeTypes){
-  const foeClasses = {
-    spirits : ['wraith', 'specter', 'apparition','banshee','poltergeist','phantasm','shade','phantom', 'shadow-self'] as SpiritFoes[],
-    elementals : ['gusty rascal', 'rock skipper', 'flame fiend', 'splash artist', 'wheezing jinn', 'granite golem', 'burning jinn', 'cyclonic siren', 'storming oni', 'hulking aggro crag', 'scorching archfiend', 'high priestess of the tides'] as ElementalFoes[],
-    titans : ['plaguebringer'] as TitanFoes[]
+  const foeClasses : FoeClasses = {
+    spirits : ['wraith', 'specter', 'apparition','banshee','poltergeist','phantasm','shade','phantom', 'shadow-self'],
+    elementals : ['gusty rascal', 'rock skipper', 'flame fiend', 'splash artist', 'wheezing jinn', 'granite golem', 'burning jinn', 'cyclonic siren', 'storming oni', 'hulking aggro crag', 'scorching archfiend', 'high priestess of the tides'],
+    titans : ['plaguebringer']
   }
   let parentClass = null;
   for(let targetClass in foeClasses ){
