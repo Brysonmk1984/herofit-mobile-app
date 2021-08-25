@@ -5,12 +5,13 @@ import { getHeroList } from '../../api/authentication';
 import { ScreenContainer, Header, Subheader, ScreenActionButton, Pane, Icon, StatDisplay } from '../../Components/CustomComponents';
 import defaultStats from '../../common/defaultStats.json';
 import { AuthStackProps } from '../../common/types-navigator';
+import { HeroChoice } from '../../common/types';
 
 // How To Select Screen
 export default function SelectHeroHowTo({ navigation, route } : AuthStackProps<'SelectHeroHowTo'>){
   // Make API call to get hero data for the next screen
-  const [heroList, setHeroList] = useState([]);
-  console.log('HL', heroList);
+  const [heroList, setHeroList] = useState<HeroChoice[] | []>([]);
+
   useEffect(() =>{
     // Fetch list of Heroes from server so it's ready for the next screen
     getHeroList()

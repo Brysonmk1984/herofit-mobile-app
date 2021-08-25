@@ -4,16 +4,17 @@ import { Image, Pressable, SectionList,FlatList,  Box, Center, View, Text, Headi
 import HeroCarousel from '../../Components/HeroCarousel';
 import { ScreenContainer, Header, Subheader, ScreenActionButton, Pane, Icon } from '../../Components/CustomComponents';
 import { AuthStackProps } from '../../common/types-navigator';
+import { HeroChoice } from '../../common/types';
 
 // Select Hero Screen
-const SelectHero = ({ route, navigation } : AuthStackProps<'SelectHero'>) =>{
+const SelectHero = ({ route, navigation } : AuthStackProps<'SelectHero'>) => {
   const { heroList } = route.params;
   const [activeHero, setActiveHero] = useState(heroList[0]);
 
   // HeroCarousel is absolutely positioned and sits on top of the normal ScreenContainer
   return (
     <Box w="100%" h="100%">
-      <HeroCarousel heroList={heroList} setActiveHero={setActiveHero} viewDetails={(pressedHero) => navigation.push("HeroDetails", { selectedHero : pressedHero })} />
+      <HeroCarousel heroList={heroList} setActiveHero={setActiveHero} viewDetails={(pressedHero : HeroChoice) => navigation.push("HeroDetails", { selectedHero : pressedHero })} />
       <ScreenContainer screenName={route.name}>
         <Header mb={Dimensions.get('window').height * .4} text="Heroes" />
         <Pane>

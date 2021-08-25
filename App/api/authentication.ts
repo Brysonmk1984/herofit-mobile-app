@@ -4,6 +4,7 @@ import { axiosOptions } from './axiosDefaults';
 import handleHttpError from './handleHttpError';
 import { setJwtInLocalStorage } from '../common/jwtModule';
 import Constants from 'expo-constants';
+import { HeroChoice } from '../common/types';
 const endpoint : string = Constants.manifest.extra.HF_ENDPOINT;
 
 let axios = _axios.create();
@@ -115,7 +116,7 @@ const resendEmailConfirmation = async function(body){
     });
 }
 
-const getHeroList = async function(){
+const getHeroList = async function() : Promise<HeroChoice[]>{
   return axios.get(`${endpoint}auth/hero-list`, await  axiosOptions())
   .then(({ data }) =>{
     return data.data;

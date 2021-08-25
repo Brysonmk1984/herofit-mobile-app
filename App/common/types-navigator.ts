@@ -33,8 +33,12 @@ type AuthStackParamList = {
   SelectHero: {
     heroList : HeroChoice[]
   }
-  HeroDetails: undefined
-  FinalizeHeroSelection: undefined
+  HeroDetails: {
+    selectedHero : HeroChoice
+  }
+  FinalizeHeroSelection: {
+    selectedHero : HeroChoice
+  }
   SpendQP: undefined
 };
 

@@ -6,17 +6,9 @@ import { AuthStackProps } from '../../common/types-navigator';
 
 // Hero Details Screen
 const HeroDetails = ({ route, navigation } : AuthStackProps<'HeroDetails'>) => {
-  const { alias, character, description, history, air, water, earth, fire, colors } = route.params.selectedHero;
-
+  const { alias, character, description, history, elms, colors } = route.params.selectedHero;
+  const { air, water, earth, fire } = elms;
   
-  // accessing theme colors
-  // const [fire, earth, water, air] = useToken(
-  //   // the key within the theme, in this case `theme.colors`
-  //   "colors",
-  //   // the subkey(s), resolving to `theme.colors.warning.1`
-  //   ["base.fire", "base.earth", "base.water", "base.air"]
-  // );
-
   useEffect(() =>{
     navigation.setOptions({ title: alias });
   }, []);
