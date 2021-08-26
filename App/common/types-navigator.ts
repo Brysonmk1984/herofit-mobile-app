@@ -1,7 +1,7 @@
 
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { HeroChoice } from './types';
+import { HeroChoice, Hero, CharacterName, StartingElementalPower, CharacterAlias, SelectedHero, HeroWithStats, DefaultHeroProperties } from './types';
 
 /*
 REACT NAVIGATOR TYPES
@@ -24,6 +24,7 @@ type MainDrawerParamList = {
   Feedback : undefined
   Settings : undefined
   Loading : undefined
+  SpendQP : undefined
 };
 
 type AuthStackParamList = {
@@ -37,9 +38,13 @@ type AuthStackParamList = {
     selectedHero : HeroChoice
   }
   FinalizeHeroSelection: {
-    selectedHero : HeroChoice
+    selectedHero : SelectedHero,
+    alias : CharacterAlias
+    colors : [string, string]
   }
-  SpendQP: undefined
+  SpendQP: {
+    hero : SelectedHero & { name : string }
+  }
 };
 
 interface AuthStackProps <T extends keyof AuthStackParamList> {

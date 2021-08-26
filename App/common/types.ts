@@ -13,7 +13,7 @@ interface SetNewUserAction {
   type: 'SET NEW USER', payload: { newUser: boolean }
 }
 interface SetHeroAction {
-  type: 'SET HERO', payload: { hero : Hero }
+  type: 'SET HERO', payload: { hero : Hero | (HeroWithStats & DefaultHeroProperties) }
 }
 interface SetUserAction {
   type: 'SET USER', payload: { user: User}
@@ -46,8 +46,8 @@ interface InitialAppState {
   isSignedIn: boolean
   isLoading : boolean;
   newUser : boolean;
-  hero : Hero | null;
-  alerts : SnackBarAlert[];
+  hero : Hero | (HeroWithStats & DefaultHeroProperties) | null;
+  alerts : SnackBarAlertWithIndex[];
   user : User | null;
 }
 
@@ -58,12 +58,12 @@ interface Store {
 
 type linkOrConfirm = string | { text : string; cb : { () : void };}
 interface SnackBarAlert{
-  index: string;
   type : string;
   message : string;
   persist? : boolean;
   config? : linkOrConfirm;
 }
+type SnackBarAlertWithIndex = SnackBarAlert & { index : string };
 
 
 interface User {
@@ -72,7 +72,6 @@ interface User {
     username : string,
     email : string,
     firstName : string,
-    lastName : string,
     isFake : boolean,
     latestActivityUpdate : string,
     stravaAccessToken : string,
@@ -87,28 +86,42 @@ interface User {
     dataSrcId : string,
     emailMarketingOptIn : boolean,
     updatedAt : string
+    loggedIn : boolean
 }
 
 interface Stats {
-  //qp : number,
-  //power: number,health: number,armor: number,recovery: number,fire: number,earth: number,water: number,air: number,aether: number,
-  //qpPower: number,qpHealth: number,qpArmor: number,qpRecovery: number,qpFire: number,qpEarth: number,qpAir: number,qpWater: number,qpAether: number
-  [stat:string] : number
+  qp : number,
+  power: number,health: number,armor: number,recovery: number,fire: number,earth: number,water: number,air: number,aether: number,
+  qpPower: number,qpHealth: number,qpArmor: number,qpRecovery: number,qpFire: number,qpEarth: number,qpAir: number,qpWater: number,qpAether: number
+  //[stat:string] : number
 }
 
-interface InitialHero {
-  name : string, status: string, statusFade : number,
-  equipped : ItemInstance[], goToBattle : boolean, restedEnough : boolean, healthRegenRate : number, photonTokens : string, 
-  activityXP : number, battleXP : number, thisLevelStartXp : number, nextLevelStartXp : number,
-  battleDkos: number, battleDraws: number, battleLosses: number, battleWins: number,
-  power: number,health: number, maxHealth : string, armor: number,recovery: number,fire: number,earth: number,water: number,air: number,aether: number,
+// Named Hero, character types
+// uses properties from HeroChoice
+interface HeroTemplate{
+  name : string
+  character : CharacterName
+}
+
+type StatusType = 'Rested' | 'Recovering' | 'Knocked Out' | 'Infected'
+
+// Defaults for user's new Hero
+interface DefaultHeroProperties {
+  status : StatusType, statusFade: number, equipped: [], goToBattle: boolean, restedEnough: boolean, healthRegenRate: number, photonTokens: number, activityXP: number, battleXP: number, thisLevelStartXp: number, 
+  nextLevelStartXp: number, battleDkos: number, battleDraws: number, battleLosses: number, battleWins: number, maxHealth: number, hasBeenUpgraded: boolean 
+}
+
+  interface HeroWithStats extends DefaultHeroProperties, HeroTemplate {
+  power: number,health: number, armor: number,recovery: number,fire: number,earth: number,water: number,air: number,aether: number,
   qpPower: number,qpHealth: number,qpArmor: number,qpRecovery: number,qpFire: number,qpEarth: number,qpAir: number,qpWater: number,qpAether: number,
-  hasBeenUpgraded : boolean,
 }
 
-interface Hero extends InitialHero {
-  owner : string, id : number, character : string, createdAt : string, updatedAt : string, userId : string
+interface ExistingHeroProperties {
+  owner : string, id : number, character : string, createdAt : string, updatedAt : string, userId : string,
 }
+
+// A user's Hero that includes the final DB fields not directly related to the game
+type Hero = ExistingHeroProperties & HeroWithStats;
 
 interface ItemInstance {
   equipped : boolean,
@@ -148,6 +161,7 @@ interface StartingElementalPower { fire : number, earth : number, water : number
 type CharacterName = "Compost Creature" | "Wilhelm the Wild" | "Repete" | "Filtron Five" | "Solar Celeste" | "Empath Aurelia" | "Boulder Bro" | "Chrono Guy" | "Timber Terror" | "Natural Ninja"
 type CharacterAlias = "Compost Creature" | "Wildspeaker" | "Scavenger Robot" | "Filtron Five" | "Solar Warrior" | "Empath" | "Boulder Bro" | "Chrono Guy" | "Timber Terror" | "Natural Ninja"
 
+// HeroChoice is used for hero selection, where as Hero is used to represent the user's Hero
 interface HeroChoice {
   active : boolean
   character : CharacterName
@@ -160,6 +174,9 @@ interface HeroChoice {
   description : string,
   history : string
 }
+
+// Hero object received going into FinalizeHeroSelection from HeroDetails
+type SelectedHero = StartingElementalPower & {  character : CharacterName }
 
 type SpiritFoes = 'wraith' | 'specter' | 'apparition' | 'banshee' | 'poltergeist' | 'phantasm' | 'shade' | 'phantom' | 'shadow-self'
 type ElementalFoes = 'gusty rascal' | 'rock skipper' | 'flame fiend' | 'splash artist' | 'wheezing jinn' | 'granite golem' | 'burning jinn' | 'cyclonic siren' | 'storming oni' | 'hulking aggro crag' | 'scorching archfiend' | 'high priestess of the tides'
@@ -175,4 +192,4 @@ interface FoeClasses{
 
 
 
-export { Action, AppDispatch, InitialAppState, AppAction, Store, SnackBarAlert, User, Stats, Hero, InitialHero, ItemInstance, Item, Stat, HeroChoice, CharacterName, CharacterAlias, FoeTypes, FoeClasses };
+export { Action, AppDispatch, InitialAppState, AppAction, Store, SnackBarAlert, SnackBarAlertWithIndex, User, Stats, Hero, ExistingHeroProperties, HeroTemplate, StartingElementalPower, SelectedHero, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, Stat, HeroChoice, CharacterName, CharacterAlias, FoeTypes, FoeClasses };

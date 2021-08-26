@@ -4,7 +4,7 @@ import { axiosOptions } from './axiosDefaults';
 import handleHttpError from './handleHttpError';
 import { setJwtInLocalStorage } from '../common/jwtModule';
 import Constants from 'expo-constants';
-import { HeroChoice } from '../common/types';
+import { HeroChoice, User } from '../common/types';
 const endpoint : string = Constants.manifest.extra.HF_ENDPOINT;
 
 let axios = _axios.create();
@@ -26,7 +26,9 @@ const login = async function(body){
     });
 };
 
-const register = async function(body){
+interface RegisterBody{ email : string, firstName : string, username : string, password : string, emailMarketingOptIn : boolean }
+
+const register = async function(body : RegisterBody) : Promise<{user:User}>{
     return axios.post(`${endpoint}auth/register`, body, await axiosOptions())
     .then(async ({ data }) => {
         const { user, tokenObject } = data.data;

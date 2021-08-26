@@ -132,6 +132,24 @@ function cloneObj(obj : AnyObject, deep = false){
   return result
 }
 
+function convertAorAn(nextWord : string){
+  const vowels = ['a','e','i','o','u'];
+  const firstLetterIsVowel = vowels.includes(nextWord[0].toLowerCase());
+  return firstLetterIsVowel === true ? 'an' : 'a';
+}
+
+// Takes in an object along with an array of property values
+// Returns a new object that has all property keys from the array assigned with 
+// corresponding property values from the objectInQuestion
+// USEFUL FOR type narrowing
+function subsetObject(objectInQuestion: object, propertyNames: string[]): object {
+  const filteredObject = {};
+  propertyNames.forEach(p => {
+    filteredObject[p] = objectInQuestion[p];
+  });
+  return filteredObject;
+}
+
 function getHeroAlias(character : CharacterName) : CharacterAlias {
   const heroes : HeroChoice[] = heroList as HeroChoice[];
   return heroes.find((h) => h.character === character)?.alias;
@@ -201,12 +219,6 @@ function convertItemArrayToCategories(items : Item[]){
   };
 }
 
-function convertAorAn(nextWord : string){
-  const vowels = ['a','e','i','o','u'];
-  const firstLetterIsVowel = vowels.includes(nextWord[0].toLowerCase());
-  return firstLetterIsVowel === true ? 'an' : 'a';
-}
-
 // Combines item instances with default item templates
 function convertItemIdsToFullItems(itemInstances : ItemInstance[], defaultItems : Item[]){
   const combinedItems = itemInstances.map((itemInstance : ItemInstance) : Item => {
@@ -216,6 +228,7 @@ function convertItemIdsToFullItems(itemInstances : ItemInstance[], defaultItems 
 
   return combinedItems;
 }
+
 
 function getHeroImage(characterName : string) : string {
   const lcName = lowercaseUnderscore(characterName);
@@ -245,4 +258,4 @@ function getHeroImage(characterName : string) : string {
   }
 }
 
-export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, getHeroAlias, determineFoeClass, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems,convertAorAn, capitalize, getHeroImage };
+export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, convertAorAn, subsetObject, getHeroAlias, determineFoeClass, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems, capitalize, getHeroImage };
