@@ -33,8 +33,8 @@ function appStateReducer(state: AppState, action: AppAction): AppState {
       return { ...state, hero };
     }
     case "SET USER": {
-      const { user } = action.payload;
-      return { ...state, user };
+      const { user, isSignedIn } = action.payload;
+      return { ...state, user, isSignedIn };
     }
     case "SET ALERTS": {
       const { alerts } = action.payload;

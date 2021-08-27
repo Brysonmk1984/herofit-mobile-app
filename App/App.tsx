@@ -16,6 +16,7 @@ LogBox.ignoreLogs(["Reanimated 2", "Remote debugger", "VirtualizedLists should n
 const height = Dimensions.get("window").height;
 const App: React.FC = () => {
   const { state, dispatch } = useContext(GlobalStateContext);
+
   const [jwt] = useJwt();
   const [fontsLoaded] = useFonts({
     icomoon: require("../assets/fonts/icomoon.ttf"),
@@ -29,34 +30,40 @@ const App: React.FC = () => {
 
   // GET INITIAL APP DATA if JWT exists
   useEffect(() => {
-    async function initialData() {
-      try {
-        await fetchInitialData(jwt, dispatch, state);
-      } catch (error) {
-        debugErrors(error);
-      } finally {
-        dispatch({
-          type: "TOGGLE LOADING",
-          payload: { isLoading: false },
-        });
-      }
-    }
-
     if (jwt) {
+      // local JWT check happened, JWT is definitely still present. Use it to fetch user data,
+      // Then after data returns, hide loading indicator / allow the app homepage to be presented
+      async function initialData() {
+        try {
+          await fetchInitialData(jwt as string, dispatch, state);
+        } catch (error) {
+          debugErrors(error);
+        } finally {
+          setTimeout(() => {
+            dispatch({
+              type: "TOGGLE LOADING",
+              payload: { isLoading: false },
+            });
+          }, 2000);
+        }
+      }
       initialData();
-    } else {
+    } else if (jwt === false) {
+      // local JWT check happened, it's not there so stop loading which will show signin page
       dispatch({ type: "TOGGLE LOADING", payload: { isLoading: false } });
     }
   }, [jwt]);
-  console.log(state.isLoading, !fontsLoaded, getHeroAlias("Repete"));
+
+  console.log(state.isLoading, fontsLoaded);
+
   return (
     <NavigationContainer>
       <SafeAreaView style={{ height }}>
         {/* If app is loading -> state.isLoading === true
-              OR
-              If Font have not been loaded  -> fontLoaded === false
-              Show loading, otherwise show view
-            */}
+          OR
+          If Font have not been loaded  -> fontLoaded === false
+          Show loading, otherwise show view
+        */}
         {state.isLoading || !fontsLoaded ? <Loading /> : <RootStackScreen isSignedIn={state.isSignedIn} />}
         {state.alerts.length ? <Alerts alerts={state.alerts} dispatch={dispatch} /> : null}
       </SafeAreaView>

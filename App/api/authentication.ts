@@ -32,10 +32,7 @@ const register = async function(body : RegisterBody) : Promise<{user:User}>{
     return axios.post(`${endpoint}auth/register`, body, await axiosOptions())
     .then(async ({ data }) => {
         const { user, tokenObject } = data.data;
-        console.log('USER', user);
-        console.log('TOKEN OBJ', tokenObject);
         await setJwtInLocalStorage(tokenObject);
-        console.log('SET JWT');
         return { user };
     }).catch(({ request, response }) => {
         throw handleHttpError(request, response);

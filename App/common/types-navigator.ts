@@ -1,5 +1,5 @@
 
-import { RouteProp } from '@react-navigation/native';
+import { NavigatorScreenParams, RouteProp, CompositeScreenProps } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { HeroChoice, Hero, CharacterName, StartingElementalPower, CharacterAlias, SelectedHero, HeroWithStats, DefaultHeroProperties } from './types';
 
@@ -9,13 +9,12 @@ REACT NAVIGATOR TYPES
 
 // PARAM LISTS - If I pass props to the screens, they need to be added here
 type RootStackParamList = {
-  App : undefined,
-  Auth : undefined
+  App : MainDrawerParamList,
+  Auth : AuthStackParamList
 };
 
 type MainDrawerParamList = {
   Home : undefined
-  HomeWrapperScreen : undefined
   Profile : undefined
   Ranking : undefined
   Campaign : undefined
@@ -27,9 +26,11 @@ type MainDrawerParamList = {
   SpendQP : undefined
 };
 
+
 type AuthStackParamList = {
   SignIn: undefined
-  Register: undefined
+  Register: NavigatorScreenParams<MainDrawerParamList["Home"]>
+ 
   SelectHeroHowTo: undefined
   SelectHero: {
     heroList : HeroChoice[]
@@ -47,6 +48,7 @@ type AuthStackParamList = {
   }
 };
 
+
 interface AuthStackProps <T extends keyof AuthStackParamList> {
   navigation: StackNavigationProp<AuthStackParamList, T>
   route : RouteProp<AuthStackParamList, T>
@@ -62,4 +64,4 @@ interface RootStackProps <T extends keyof RootStackParamList> {
   route : RouteProp<RootStackParamList, T>
 }
 
-export { AuthStackParamList, MainDrawerParamList, RootStackParamList, AuthStackProps, MainDrawerProps, RootStackProps }
+export { AuthStackParamList, MainDrawerParamList, RootStackParamList, AuthStackProps, MainDrawerProps, RootStackProps, AuthAppCompositeProps }

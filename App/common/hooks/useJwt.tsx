@@ -1,14 +1,23 @@
-import { useState } from "react";
-import { getJwtInLocalStorage } from '../jwtModule';
+import axios from "axios";
+import { useEffect, useState } from "react";
+import debugErrors from "../debugErrors";
+import { getJwtInLocalStorage } from "../jwtModule";
 
-export default function useJwt(){
-  const [ jwt, setJwt ] = useState(null);
- 
-  async function getJwt(){
-    const jwt = await getJwtInLocalStorage();
-    setJwt(jwt);
-  }
-  getJwt();
+export default function useJwt(): [boolean, React.Dispatch<any>] | [string, React.Dispatch<any>] {
+  const [jwt, setJwt] = useState(null);
 
-  return [ jwt ];
+  useEffect(() => {
+    const cancelToken = axios.CancelToken;
+    const { token } = cancelToken.source();
+    async function getJwt() {
+      try {
+        const jwt = await getJwtInLocalStorage();
+        setJwt(jwt);
+      } catch (error) {
+        debugErrors(error);
+      }
+    }
+    getJwt();
+  }, []);
+  return [jwt, setJwt];
 }

@@ -16,10 +16,10 @@ interface SetHeroAction {
   type: 'SET HERO', payload: { hero : Hero | (HeroWithStats & DefaultHeroProperties) }
 }
 interface SetUserAction {
-  type: 'SET USER', payload: { user: User}
+  type: 'SET USER', payload: { user: User, isSignedIn : boolean}
 }
 interface SetAlertsAction {
-  type: 'SET ALERTS', payload: { alerts : SnackBarAlert[]}
+  type: 'SET ALERTS', payload: { alerts : SnackBarAlertWithIndex[]}
 }
 interface ResetDefaultsAction {
   type: 'RESET DEFAULTS'
@@ -86,7 +86,6 @@ interface User {
     dataSrcId : string,
     emailMarketingOptIn : boolean,
     updatedAt : string
-    loggedIn : boolean
 }
 
 interface Stats {

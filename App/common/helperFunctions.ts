@@ -56,7 +56,7 @@ function setLsWithExpiry(key : string, value : string, ttl : number) {
   return AsyncStorage.setItem(key, JSON.stringify(item))
 }
 
-async function getLsWithExpiry(key : string) : Promise<string | null> {
+async function getLsWithExpiry(key : string) : Promise<string | false> {
   try{
     const itemStr = await AsyncStorage.getItem(key);
     if(!itemStr){
@@ -69,11 +69,11 @@ async function getLsWithExpiry(key : string) : Promise<string | null> {
       // If the item is expired, delete the item from storage
       // and return null
       AsyncStorage.removeItem(key);
-      return null;
+      return false;
     }
     return item.value;
   }catch(e){
-    return null;
+    return false;
   }
 }
 

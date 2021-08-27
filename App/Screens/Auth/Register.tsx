@@ -10,6 +10,7 @@ import ScreenContainer from "../../Components/ScreenContainer/ScreenContainer";
 import { Header, ScreenActionButton, Pane, HelperText } from "../../Components/CustomComponents";
 import { useDebouncedCallback } from "use-debounce";
 import { AuthStackProps } from "../../common/types-navigator";
+import { User } from "../../common/types";
 
 // prettier-ignore
 interface FormState { email: string; firstName: string; username: string; password: string; emailMarketingOptIn: boolean; helperText: string; formIsValid: boolean; }
@@ -72,6 +73,7 @@ function formReducer(state: FormState, action: FormAction): FormState {
       return { ...updatedState, formIsValid, helperText };
     }
     case "EMAIL MARKETING OPT IN TOGGLE": {
+      console.log("LOOK", action.emailMarketingOptIn);
       return { ...state, emailMarketingOptIn: action.emailMarketingOptIn };
     }
     default:
@@ -95,16 +97,17 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
   const [success, setSuccess] = useState(false);
 
   // first time sign up, need to insert avinsertAvatarIntoDb
-  async function handlePostRegister(user) {
-    dispatch({ type: "SET USER", payload: { user, loggedIn: true } });
+  async function handlePostRegister(user: User) {
+    dispatch({ type: "SET USER", payload: { user, isSignedIn: true } });
 
     try {
       const data = await insertAvatar({ avatar: state.hero, email: user.email, userId: user.id });
       console.log("data from inserting av into db", data);
       dispatch({ type: "SET ISSIGNEDIN", payload: { isSignedIn: true } });
-      dispatch({ type: "SET ALERTS", payload: { alerts: [{ type: "success", message: `Account creation successful!` }] } });
+      updateAlerts([{ type: "success", message: `Account creation successful!` }], state, dispatch);
       setTimeout(() => {
-        navigation.navigate("App", { screen: "HomeWrapperScreen", params: { screen: "Home" } });
+        //@ts-ignore - Can't figure out how to add strong typing for nested navigators
+        navigation.navigate("App");
       }, 1500);
     } catch (error) {
       // Error getting Avatar, should only happen if DB connection issues
@@ -121,7 +124,7 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
     try {
       const data = await register({ email, firstName, username, password, emailMarketingOptIn });
       setSuccess(true);
-      const { user, tokenObject }: { user: object; tokenObject: string } = data;
+      const { user } = data;
 
       updateAlerts([{ type: "success", message: "Please check your email to verify account. Check your spam folder if the message is not in your inbox.", persist: true }], state, dispatch);
       handlePostRegister(user);
@@ -152,7 +155,7 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
             {formState.helperText ? <HelperText text={formState.helperText} type={formState.formIsValid ? "success" : "error"} /> : null}
             <FormControl>
               <HStack my={2} px={0}>
-                <Checkbox colorScheme="success" value={formState.emailMarketingOptIn} isChecked={formState.emailMarketingOptIn} onChange={emailMarketingOptIn => formDispatch({ type: "EMAIL MARKETING OPT IN TOGGLE", emailMarketingOptIn })} accessibilityLabel="This is an email optin checkbox" defaultIsChecked />
+                <Checkbox colorScheme="success" value={formState.emailMarketingOptIn.toString()} onChange={emailMarketingOptIn => formDispatch({ type: "EMAIL MARKETING OPT IN TOGGLE", emailMarketingOptIn })} accessibilityLabel="This is an email optin checkbox" defaultIsChecked />
                 <Text px={5} mt={-1}>
                   Receive content-related emails no more than once per month
                 </Text>
