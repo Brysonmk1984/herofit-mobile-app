@@ -138,18 +138,6 @@ function convertAorAn(nextWord : string){
   return firstLetterIsVowel === true ? 'an' : 'a';
 }
 
-// Takes in an object along with an array of property values
-// Returns a new object that has all property keys from the array assigned with 
-// corresponding property values from the objectInQuestion
-// USEFUL FOR type narrowing
-function subsetObject(objectInQuestion: object, propertyNames: string[]): object {
-  const filteredObject = {};
-  propertyNames.forEach(p => {
-    filteredObject[p] = objectInQuestion[p];
-  });
-  return filteredObject;
-}
-
 function getHeroAlias(character : CharacterName) : CharacterAlias {
   const heroes : HeroChoice[] = heroList as HeroChoice[];
   return heroes.find((h) => h.character === character)?.alias;
@@ -258,4 +246,4 @@ function getHeroImage(characterName : string) : string {
   }
 }
 
-export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, convertAorAn, subsetObject, getHeroAlias, determineFoeClass, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems, capitalize, getHeroImage };
+export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, convertAorAn, getHeroAlias, determineFoeClass, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems, capitalize, getHeroImage };

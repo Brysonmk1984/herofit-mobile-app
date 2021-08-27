@@ -10,7 +10,7 @@ import { ScreenContainer, Header, Subheader, ScreenActionButton, LoreText, Pane,
 import defaultStats from "../common/defaultStats.json";
 import { AuthStackProps } from "../common/types-navigator";
 import { DEFAULT_HERO_PROPERTIES, EXISTING_HERO_PROPERTIES } from "../common/CONSTANTS";
-import { subsetObject } from "../common/helperFunctions";
+import { objectIsOfType } from "../common/typeGuards";
 
 /*
   FOR TESTING SPENDQP PAGE
@@ -57,18 +57,6 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
     };
   });
 
-  function checkIfExistingHero(newOrExistingHero: (SelectedHero & { name: string }) | Hero) {
-    const existingHeroProperties = EXISTING_HERO_PROPERTIES;
-
-    let allPropertiesExist = true;
-    for (let property in subsetObject(newOrExistingHero, existingHeroProperties)) {
-      if (newOrExistingHero[property] === null || typeof newOrExistingHero[property] === "undefined") {
-        allPropertiesExist = false;
-      }
-    }
-    return allPropertiesExist;
-  }
-
   function _handleFinishSpendingQP() {
     // prettier-ignore
     interface QpDefaults { aether: number; air: number; armor: number; earth: number; fire: number; health: number; power: number; qp: number; qpAether: number; qpAir: number; qpArmor: number; qpEarth: number; qpFire: number; qpHealth: number; qpPower: number; qpRecovery: number; qpWater: number; recovery: number; water: number; }
@@ -76,7 +64,9 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
     // Hero After QP spent
     const updatedHero: SelectedHero & QpDefaults & { name: string } = Object.assign({}, hero, { ...qpState });
 
-    if (checkIfExistingHero(updatedHero)) {
+    // Need to perform a check using a "User-Defined Type Guard" to see if it's an existing user or new user based on Hero properties
+    const existingHeroProperties = EXISTING_HERO_PROPERTIES;
+    if (objectIsOfType<Hero>(updatedHero, existingHeroProperties)) {
       // If hero is an existing Hero, check against existing Hero type and pop navigation stack
       // Not sure why I need to add the assertion at the end... the conditional affirms it's an existing user
       const updatedHero: Hero = Object.assign({}, hero, { ...qpState }) as unknown as Hero;
