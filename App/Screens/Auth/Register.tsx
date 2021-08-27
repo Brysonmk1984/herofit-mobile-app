@@ -94,7 +94,7 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  // first time signup, need to insert avinsertAvatarIntoDb
+  // first time sign up, need to insert avinsertAvatarIntoDb
   async function handlePostRegister(user) {
     dispatch({ type: "SET USER", payload: { user, loggedIn: true } });
 

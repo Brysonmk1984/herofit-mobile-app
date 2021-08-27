@@ -1,7 +1,11 @@
 // Takes in an object along with an array of property values
 // Returns a new object that has all property keys from the array assigned with 
 // corresponding property values from the objectInQuestion
-function _subsetObject<T>(objectInQuestion: (T | object), propertyNames: string[]): object {
+function _subsetObject<T,K>(objectInQuestion: (T | object), propertyNames: K): (T | object){
+  if (!Array.isArray(propertyNames)) {
+    throw new Error('propertyNames must be an array!');
+  }
+
   const filteredObject = {};
   propertyNames.forEach(p => {
     filteredObject[p] = objectInQuestion[p];
@@ -11,8 +15,12 @@ function _subsetObject<T>(objectInQuestion: (T | object), propertyNames: string[
 
 // Takes in an object along with an array of property values
 // Returns a boolean determining whether or not an object is of the passed in type
-function objectIsOfType<T>(objectInQuestion : (T | object), propertyNames : string[]) : objectInQuestion is T{
-  const filteredObject = _subsetObject<T>(objectInQuestion, propertyNames);
+// Also tells the typescript compiler that objectInQuestion is in fact the passed in T variable
+function objectIsOfType<T, K>(objectInQuestion : (T | object), propertyNames : K) : objectInQuestion is T{
+  if(typeof objectInQuestion !== 'object'){
+    throw new Error('objectInQuestion must be an object!');
+  }
+  const filteredObject = _subsetObject<T, K>(objectInQuestion, propertyNames) as object;
 
   let allPropertiesExist = true;
   for (let property in filteredObject) {

@@ -5,7 +5,7 @@ import spendQPReducer from "../common/SpendQPReducer";
 import { updateAlerts } from "../common/alerts";
 import { fetchAstrologySeason } from "../api/calculate";
 import debugErrors from "../common/debugErrors";
-import { Stats, HeroTemplate, Hero, HeroWithStats, SelectedHero, DefaultHeroProperties } from "../common/types";
+import { Stats, HeroTemplate, Hero, HeroWithStats, SelectedHero, DefaultHeroProperties, ExistingHeroProperties, EachHeroProperty } from "../common/types";
 import { ScreenContainer, Header, Subheader, ScreenActionButton, LoreText, Pane, StatDisplay, Icon, HelperText } from "../Components/CustomComponents";
 import defaultStats from "../common/defaultStats.json";
 import { AuthStackProps } from "../common/types-navigator";
@@ -66,7 +66,9 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
 
     // Need to perform a check using a "User-Defined Type Guard" to see if it's an existing user or new user based on Hero properties
     const existingHeroProperties = EXISTING_HERO_PROPERTIES;
-    if (objectIsOfType<Hero>(updatedHero, existingHeroProperties)) {
+
+    type PropertySubsetArray = keyof Pick<Hero, EachHeroProperty>;
+    if (objectIsOfType<Hero, PropertySubsetArray[]>(updatedHero, existingHeroProperties)) {
       // If hero is an existing Hero, check against existing Hero type and pop navigation stack
       // Not sure why I need to add the assertion at the end... the conditional affirms it's an existing user
       const updatedHero: Hero = Object.assign({}, hero, { ...qpState }) as unknown as Hero;
