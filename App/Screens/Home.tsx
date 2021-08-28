@@ -5,14 +5,13 @@ import debugErrors from "../common/debugErrors";
 import { GlobalStateContext } from "../store";
 import { Item } from "../common/types";
 import { MainDrawerProps } from "../common/types-navigator";
+import GlobalModal from "../Components/Modal/GlobalModal";
 
 const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
-  console.log("!HERO`", state.hero);
+  const [modalOpen, setModalOpen] = useState(false);
   const { name, status, health, maxHealth, activityXP, battleXP, photonTokens, goToBattle, equipped } = state.hero;
-  console.log("equiped array", equipped);
   function renderItem({ item }: Item) {
-    console.log("ITEM!", item);
     return (
       <View>
         <Text>{item.name}</Text>
@@ -32,6 +31,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
         <Text>PT: {photonTokens}</Text>
         <Text>Awaiting Battle: {String(goToBattle)}</Text>
         <FlatList data={equipped} renderItem={renderItem} keyExtractor={(item, i) => i.toString()} />
+        <Button onPress={() => setModalOpen(true)}>Open Modal</Button>
       </View>
     );
   }
@@ -39,6 +39,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   return (
     <ScreenContainer screenName={route.name}>
       {renderHeroDetails()}
+      <GlobalModal modalOpen={modalOpen} modalAction={setModalOpen} />
       <Button onPress={() => navigation.toggleDrawer()}>Drawer</Button>
     </ScreenContainer>
   );

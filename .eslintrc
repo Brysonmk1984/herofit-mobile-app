@@ -27,14 +27,18 @@
     "react-native/no-color-literals": 2,
     "react-native/no-raw-text": "off",
     "react-native/no-single-element-style-arrays": 2,
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+    "react-native/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+    //These don't work
+    "react-native/jsx-first-prop-new-line": [6, "never"],
+    "react-native/jsx-max-props-per-line": [6,{ "maximum": 6, "when": "multiline" }],
+    //
     "prefer-destructuring" : "off",
-    "@typescript-eslint/no-explicit-any": "off",
     "object-curly-newline": "off",
     "no-unused-vars": "off",
     "no-use-before-define": "off",
     "no-multiple-empty-lines": "off",
     "import/namespace": "off",
+    "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-use-before-define": "off",
     "quotes" : "off",
     "import/extensions": [
