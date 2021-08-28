@@ -11,6 +11,7 @@ import debugErrors from "./common/debugErrors";
 import fetchInitialData from "./common/fetchInitialData";
 import useJwt from "./common/hooks/useJwt";
 import { getHeroAlias } from "./common/helperFunctions";
+import { View } from "native-base";
 LogBox.ignoreLogs(["Reanimated 2", "Remote debugger", "VirtualizedLists should never be nested"]);
 
 const height = Dimensions.get("window").height;
@@ -58,7 +59,7 @@ const App: React.FC = () => {
 
   return (
     <NavigationContainer>
-      <SafeAreaView style={{ height }}>
+      <View style={{ height }}>
         {/* If app is loading -> state.isLoading === true
           OR
           If Font have not been loaded  -> fontLoaded === false
@@ -66,7 +67,7 @@ const App: React.FC = () => {
         */}
         {state.isLoading || !fontsLoaded ? <Loading /> : <RootStackScreen isSignedIn={state.isSignedIn} />}
         {state.alerts.length ? <Alerts alerts={state.alerts} dispatch={dispatch} /> : null}
-      </SafeAreaView>
+      </View>
     </NavigationContainer>
   );
 };

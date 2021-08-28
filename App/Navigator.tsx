@@ -17,6 +17,7 @@ const AuthStack = createStackNavigator<AuthStackParamList>();
 const AuthStackScreen = () => {
   return (
     <AuthStack.Navigator screenOptions={{ headerShown: false, ...baseScreenStyle }}>
+      <AuthStack.Screen name="Splash" component={Screens.Splash} />
       <AuthStack.Screen name="SignIn" component={Screens.SignIn} />
       <AuthStack.Screen name="Register" component={Screens.Register} />
       <AuthStack.Screen name="SelectHeroHowTo" component={Screens.SelectHeroHowTo} options={{ title: "Select Hero" }} />

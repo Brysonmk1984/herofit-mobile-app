@@ -28,6 +28,7 @@ type MainDrawerParamList = {
 
 
 type AuthStackParamList = {
+  Splash: undefined
   SignIn: undefined
   Register: NavigatorScreenParams<MainDrawerParamList["Home"]>
  
