@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useContext, useReducer } from "react";
 import { Image, Pressable, FlatList, SectionList, Box, Center, ScrollView, View, Text, Heading, VStack, FormControl, Input, Link, Button, IconButton, HStack, Divider } from "native-base";
-import { GlobalStateContext } from "../store";
-import spendQPReducer from "../common/SpendQPReducer";
-import { updateAlerts } from "../common/alerts";
-import { fetchAstrologySeason } from "../api/calculate";
-import debugErrors from "../common/debugErrors";
-import { Stats, HeroTemplate, Hero, HeroWithStats, SelectedHero, DefaultHeroProperties, ExistingHeroProperties, EachHeroProperty } from "../common/types";
-import { ScreenContainer, Header, Subheader, ScreenActionButton, LoreText, Pane, StatDisplay, Icon, HelperText } from "../Components/CustomComponents";
-import defaultStats from "../common/defaultStats.json";
-import { AuthStackProps } from "../common/types-navigator";
-import { DEFAULT_HERO_PROPERTIES, EXISTING_HERO_PROPERTIES } from "../common/CONSTANTS";
-import { objectIsOfType } from "../common/typeGuards";
+import { GlobalStateContext } from "../../store";
+import spendQPReducer from "../../common/SpendQPReducer";
+import { updateAlerts } from "../../common/alerts";
+import { fetchAstrologySeason } from "../../api/calculate";
+import debugErrors from "../../common/debugErrors";
+import { Stats, HeroTemplate, Hero, HeroWithStats, SelectedHero, DefaultHeroProperties, ExistingHeroProperties, EachHeroProperty, ExistingHeroPropertiesAsUnion } from "../../common/types";
+import { ScreenContainer, Header, Subheader, ScreenActionButton, LoreText, Pane, StatDisplay, Icon, HelperText } from "../../Components/CustomComponents";
+import defaultStats from "../../common/defaultStats.json";
+import { AuthStackProps } from "../../common/types-navigator";
+import { DEFAULT_HERO_PROPERTIES, EXISTING_HERO_PROPERTIES } from "../../common/CONSTANTS";
+import { objectIsOfType } from "../../common/typeGuards";
 
 /*
   FOR TESTING SPENDQP PAGE
@@ -67,7 +67,9 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
     // Need to perform a check using a "User-Defined Type Guard" to see if it's an existing user or new user based on Hero properties
     const existingHeroProperties = EXISTING_HERO_PROPERTIES;
 
-    type PropertySubsetArray = keyof Pick<Hero, EachHeroProperty>;
+    // PropertySubsetArray = Pick<Hero, EachHeroProperty> is saying type Hero, but only with properties contianed in EachHeroProperty. Then get the keys only so it's as a union type rather than an interface
+    type PropertySubsetArray = keyof Pick<Hero, ExistingHeroPropertiesAsUnion>;
+    // PropertySubsetArray[] is an array of Hero properties that are JUST the properties that are present on existing Heroes
     if (objectIsOfType<Hero, PropertySubsetArray[]>(updatedHero, existingHeroProperties)) {
       // If hero is an existing Hero, check against existing Hero type and pop navigation stack
       // Not sure why I need to add the assertion at the end... the conditional affirms it's an existing user

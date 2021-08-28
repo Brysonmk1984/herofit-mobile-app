@@ -115,7 +115,7 @@ interface DefaultHeroProperties {
   qpPower: number,qpHealth: number,qpArmor: number,qpRecovery: number,qpFire: number,qpEarth: number,qpAir: number,qpWater: number,qpAether: number,
 }
 
-type EachHeroProperty = "owner" | "id" | "character" | "createdAt" | "updatedAt" | "userId"
+type ExistingHeroPropertiesAsUnion = "owner" | "id" | "character" | "createdAt" | "updatedAt" | "userId"
 
 interface ExistingHeroProperties {
   owner : string, id : number, character : string, createdAt : string, updatedAt : string, userId : string,
@@ -193,4 +193,4 @@ interface FoeClasses{
 
 
 
-export { Action, AppDispatch, InitialAppState, AppAction, Store, SnackBarAlert, SnackBarAlertWithIndex, User, Stats, Hero, EachHeroProperty, ExistingHeroProperties, HeroTemplate, StartingElementalPower, SelectedHero, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, Stat, HeroChoice, CharacterName, CharacterAlias, FoeTypes, FoeClasses };
+export { Action, AppDispatch, InitialAppState, AppAction, Store, SnackBarAlert, SnackBarAlertWithIndex, User, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, HeroTemplate, StartingElementalPower, SelectedHero, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, Stat, HeroChoice, CharacterName, CharacterAlias, FoeTypes, FoeClasses };

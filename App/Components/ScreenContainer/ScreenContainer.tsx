@@ -31,8 +31,9 @@ function determineImageBackground({ type, name }) {
       // case 'HeroDetails':
       //   return require('../../../assets/images/backgrounds/selection/boulder-bro-select-background.webp');
       case "Splash":
+        return require("../../../assets/images/backgrounds/splash-background-day.webp");
       case "Loading":
-        return require("../../../assets/images/backgrounds/splash-background.webp");
+        return require("../../../assets/images/backgrounds/splash-background-night.webp");
       default:
         return require("../../../assets/images/backgrounds/repete-background.webp");
     }

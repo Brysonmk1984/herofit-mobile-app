@@ -21,6 +21,6 @@ import Settings from "./Screens/Settings";
 
 // MULTI-USE SCREENS
 import Loading from "./Screens/Loading/Loading";
-import SpendQP from "./Screens/SpendQP";
+import SpendQP from "./Screens/Common/SpendQP";
 
 export { Splash, SignIn, Register, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection, Home, Profile, Ranking, Campaign, Inventory, Items, Feedback, Settings, Loading, SpendQP };

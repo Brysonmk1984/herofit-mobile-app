@@ -26,7 +26,7 @@ export default function SelectHeroHowTo({ navigation, route }: AuthStackProps<"S
   return (
     <ScreenContainer screenName={route.name}>
       <ScrollView mb={5}>
-        <Header mb={3} text="Just One Thing" />
+        <Header mb={3} text="One More Thing" />
         <VStack mb={3}>
           <Pane>
             <Text textAlign="justify" fontSize="xs">
