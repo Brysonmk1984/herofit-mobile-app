@@ -50,14 +50,6 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
     }
   }
 
-  function handleRegisterLink() {
-    navigation.push("SelectHeroHowTo");
-  }
-
-  // function formValidation(arrayOfInputs, ){
-
-  // }
-
   const debounced = useDebouncedCallback(() => {
     if (email.includes("@")) {
       if (password.length >= 8) {
@@ -96,7 +88,7 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
             {helperText && <HelperText text={helperText} />}
             <View alignItems="center">
               <Text color="base.white">- or -</Text>
-              <Link onPress={handleRegisterLink} mt={1}>
+              <Link onPress={() => navigation.push("AboutGame")} mt={1}>
                 GET STARTED
               </Link>
             </View>

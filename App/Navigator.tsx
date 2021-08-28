@@ -20,6 +20,7 @@ const AuthStackScreen = () => {
       <AuthStack.Screen name="Splash" component={Screens.Splash} />
       <AuthStack.Screen name="SignIn" component={Screens.SignIn} />
       <AuthStack.Screen name="Register" component={Screens.Register} />
+      <AuthStack.Screen name="AboutGame" component={Screens.AboutGame} options={{ title: "The Game" }} />
       <AuthStack.Screen name="SelectHeroHowTo" component={Screens.SelectHeroHowTo} options={{ title: "Select Hero" }} />
       <AuthStack.Screen name="SelectHero" component={Screens.SelectHero} options={{ title: "Select Hero" }} />
       <AuthStack.Screen name="HeroDetails" component={Screens.HeroDetails} options={{ title: "Hero Details" }} />

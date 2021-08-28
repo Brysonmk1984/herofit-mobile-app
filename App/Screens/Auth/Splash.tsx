@@ -20,7 +20,7 @@ const Splash = ({ navigation, route }: AuthStackProps<"Splash">) => {
           </Text>
         </View>
         <View w={200} mt={70} mx={50}>
-          <Button shadow={9} border={1} borderColor="base.brand" onPress={() => navigation.push("SelectHeroHowTo")}>
+          <Button shadow={9} border={1} borderColor="base.brand" onPress={() => navigation.push("AboutGame")}>
             GET STARTED
           </Button>
 

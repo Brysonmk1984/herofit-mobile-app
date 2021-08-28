@@ -11,7 +11,7 @@ interface ScreenContainerProps {
   fullWidth?: boolean;
 }
 
-function determineImageBackground({ type, name }) {
+function determineImageBackground({ type, name }: { type: string; name: string }) {
   if (type === "art") {
     switch (name) {
       case "SignIn":
@@ -22,14 +22,12 @@ function determineImageBackground({ type, name }) {
         return require("../../../assets/images/backgrounds/repete-background.webp");
       case "SelectHero":
         return require("../../../assets/images/backgrounds/hero-selection-background.webp");
-      // case 'HeroDetails':
-      //   return require('../../../assets/images/backgrounds/pets-background.webp');
       case "FinalizeHeroSelection":
         return require("../../../assets/images/backgrounds/pets-background-2.webp");
       case "SpendQP":
         return require("../../../assets/images/backgrounds/qp-background.webp");
-      // case 'HeroDetails':
-      //   return require('../../../assets/images/backgrounds/selection/boulder-bro-select-background.webp');
+      case "AboutGame":
+        return require("../../../assets/images/backgrounds/boulder-bro-background.webp");
       case "Splash":
         return require("../../../assets/images/backgrounds/splash-background-day.webp");
       case "Loading":

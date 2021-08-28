@@ -31,7 +31,7 @@ type AuthStackParamList = {
   Splash: undefined
   SignIn: undefined
   Register: NavigatorScreenParams<MainDrawerParamList["Home"]>
- 
+  AboutGame: undefined
   SelectHeroHowTo: undefined
   SelectHero: {
     heroList : HeroChoice[]

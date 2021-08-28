@@ -16,7 +16,7 @@ const SelectHero = ({ route, navigation }: AuthStackProps<"SelectHero">) => {
     <Box w="100%" h="100%">
       <HeroCarousel heroList={heroList} setActiveHero={setActiveHero} viewDetails={(pressedHero: HeroChoice) => navigation.push("HeroDetails", { selectedHero: pressedHero })} />
       <ScreenContainer screenName={route.name}>
-        <Header mb={Dimensions.get("window").height * 0.4} text="Heroes" />
+        <Header mb={Dimensions.get("window").height * 0.45} text="Heroes" />
         <Pane>
           <View justifyContent="center">
             <Subheader mt={1} mb={0} text={activeHero.alias} />
