@@ -5,7 +5,7 @@ import debugErrors from "../common/debugErrors";
 import { GlobalStateContext } from "../store";
 import { Item } from "../common/types";
 import { MainDrawerProps } from "../common/types-navigator";
-import GlobalModal from "../Components/Modal/GlobalModal";
+import CharacterModal from "../Components/Modal/CharacterModal";
 
 const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -39,7 +39,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   return (
     <ScreenContainer screenName={route.name}>
       {renderHeroDetails()}
-      <GlobalModal modalOpen={modalOpen} modalAction={setModalOpen} />
+      <CharacterModal modalOpen={modalOpen} modalAction={setModalOpen} />
       <Button onPress={() => navigation.toggleDrawer()}>Drawer</Button>
     </ScreenContainer>
   );

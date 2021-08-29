@@ -1,4 +1,4 @@
-import { Entypo, Foundation, FontAwesome5, Feather, Ionicons, FontAwesome, AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Entypo, Foundation, FontAwesome5, Feather, Ionicons, FontAwesome, AntDesign, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 import { createIconSetFromIcoMoon } from "@expo/vector-icons";
 import { Icon, useTheme } from "native-base";
@@ -71,7 +71,14 @@ const InGameIcons = ({ iconName, size, color }: IconProps) => {
     case "workout":
     case "other":
       return <Icon as={MaterialCommunityIcons} name="arm-flex" size={size} color={color} />;
-
+    case "success":
+      return <Icon as={Ionicons} name="md-checkmark-circle" size={size} color={color} />;
+    case "warning":
+      return <Icon as={Ionicons} name="md-warning-sharp" size={size} color={color} />;
+    case "error":
+      return <Icon as={MaterialIcons} name="md-checkmark-circle" size={size} color={color} />;
+    case "info":
+      return <Icon as={Foundation} name="md-checkmark-circle" size={size} color={color} />;
     // DEFAULT: ICOMOON ICON OR NONE FOUND
     default:
       // If no icon is explicitly returned above, attempt to find icon from within icomoon custom icon set
