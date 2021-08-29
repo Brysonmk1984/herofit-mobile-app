@@ -11,7 +11,7 @@ const CharacterModal = ({ modalOpen, modalAction }: { modalOpen: boolean; modalA
     <Modal isOpen={modalOpen} onClose={() => modalAction(false)} _backdrop={{ backgroundColor: "layout.modalBackdrop" }}>
       <Modal.Content p={0}>
         <CharacterHeader>
-          <Image w={105} position="absolute" left={-12} top={-40} alignSelf={"flex-end"} source={require("../../../assets/images/misc/sensei-modal-header.webp")} size={100} alt={"Master Sensei Owl"} />
+          <Image w={105} position="absolute" left={-12} top={-20} alignSelf={"flex-end"} source={require("../../../assets/images/misc/sensei-modal-header.webp")} size={100} alt={"Master Sensei Owl"} />
           <CharacterDialog>
             <Text pr={5} lineHeight={16} fontSize={15} fontFamily="handwriting">
               Your health is too low!!! Eat somedddd more protsadadas ein and get much stronger before you go batore you go battle the dark forces
