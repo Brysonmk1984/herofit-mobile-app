@@ -51,7 +51,7 @@ export default function SelectHeroHowTo({ navigation, route }: AuthStackProps<"S
           </Pane>
         </VStack>
       </ScrollView>
-      <ScreenActionButton name="OK" action={() => navigation.push("SelectHero", { heroList })} />
+      <ScreenActionButton text="OK" action={() => navigation.push("SelectHero", { heroList })} />
     </ScreenContainer>
   );
 }

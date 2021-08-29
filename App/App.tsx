@@ -27,6 +27,7 @@ const App: React.FC = () => {
     // 'pragatiNarrow-bold': require('../assets/fonts/PragatiNarrow-Bold.ttf'),
     // 'pragatiNarrow': require('../assets/fonts/PragatiNarrow-Regular.ttf'),
     rochester: require("../assets/fonts/Rochester-Regular.ttf"),
+    shadowsIntoLight: require("../assets/fonts/ShadowsIntoLight-Regular.ttf"),
   });
 
   // GET INITIAL APP DATA if JWT exists

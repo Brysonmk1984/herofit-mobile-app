@@ -164,7 +164,7 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
           </VStack>
         </Pane>
       </ScrollView>
-      <ScreenActionButton name="Let's Go!" disabled={formState.formIsValid ? false : true} action={handleSignUp} />
+      <ScreenActionButton text="Let's Go!" disabled={formState.formIsValid ? false : true} action={handleSignUp} />
     </ScreenContainer>
   );
 };

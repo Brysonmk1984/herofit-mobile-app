@@ -41,7 +41,7 @@ const HeroDetails = ({ route, navigation }: AuthStackProps<"HeroDetails">) => {
           <LoreText lore={history} />
         </Pane>
       </ScrollView>
-      <ScreenActionButton name="Select" action={handleFinalizeHeroSelection} />
+      <ScreenActionButton text="Select" action={handleFinalizeHeroSelection} />
     </ScreenContainer>
   );
 };

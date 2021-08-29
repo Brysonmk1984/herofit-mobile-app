@@ -81,7 +81,7 @@ const FinalizeHeroSelection = ({ route, navigation }: AuthStackProps<"FinalizeHe
         {helperText && <HelperText type={helperText === "Checking Availability..." ? "caution" : heroNameIsLegit ? "success" : "error"} text={helperText} />}
       </Pane>
 
-      <ScreenActionButton disabled={!heroNameIsLegit} name="Next" action={handleFinishSelection} />
+      <ScreenActionButton disabled={!heroNameIsLegit} text="Next" action={handleFinishSelection} />
     </ScreenContainer>
   );
 };

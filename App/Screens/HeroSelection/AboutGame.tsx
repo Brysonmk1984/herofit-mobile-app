@@ -98,7 +98,7 @@ export default function AboutGame({ navigation, route }: AuthStackProps<"AboutGa
           </Pane>
         </VStack>
       </ScrollView>
-      <ScreenActionButton name="OK" action={() => navigation.push("SelectHeroHowTo")} />
+      <ScreenActionButton text="OK" action={() => navigation.push("SelectHeroHowTo")} />
     </ScreenContainer>
   );
 }

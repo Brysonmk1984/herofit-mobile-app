@@ -25,7 +25,7 @@ const SelectHero = ({ route, navigation }: AuthStackProps<"SelectHero">) => {
             </Text>
           </View>
         </Pane>
-        <ScreenActionButton name="View Details" action={() => navigation.push("HeroDetails", { selectedHero: activeHero })} />
+        <ScreenActionButton text="View Details" action={() => navigation.push("HeroDetails", { selectedHero: activeHero })} />
       </ScreenContainer>
     </Box>
   );

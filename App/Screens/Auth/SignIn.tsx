@@ -96,7 +96,7 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
         </Pane>
       </View>
 
-      <ScreenActionButton name="Let's Go!" disabled={formIsValid ? false : true} action={handleSignIn} />
+      <ScreenActionButton text="Let's Go!" disabled={formIsValid ? false : true} action={handleSignIn} />
     </ScreenContainer>
   );
 };

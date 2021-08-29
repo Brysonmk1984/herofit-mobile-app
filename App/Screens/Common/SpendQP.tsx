@@ -154,7 +154,7 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
         />
       </ScrollView>
 
-      <ScreenActionButton name="Let's Go!" action={_handleFinishSpendingQP} />
+      <ScreenActionButton text="Let's Go!" action={_handleFinishSpendingQP} />
     </ScreenContainer>
   );
 };
