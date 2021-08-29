@@ -1,17 +1,17 @@
-import React from 'react'
-import { View, Button } from 'native-base';
+import React from "react";
+import { View, Button } from "native-base";
 
 interface ScreenActionProps {
-  name : string
-  disabled? : boolean
-  action : () => void
+  name: string;
+  disabled?: boolean;
+  action: () => void;
 }
 
 const ScreenActionButton: React.FC<ScreenActionProps> = ({ name, disabled, action }) => {
   return (
-    <View mx={50} mb={5}>
+    <View mx={50} my={3}>
       <Button disabled={disabled} onPress={action}>
-        { name }
+        {name}
       </Button>
     </View>
   );

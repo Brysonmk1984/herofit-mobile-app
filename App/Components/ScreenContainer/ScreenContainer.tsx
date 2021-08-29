@@ -2,13 +2,13 @@ import React from "react";
 import { StyleSheet, ImageBackground } from "react-native";
 import { Flex, View } from "native-base";
 import herofitTheme from "../../styles/herofitTheme";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 interface ScreenContainerProps {
   children: React.ReactNode;
   screenName?: string;
   bg?: string;
   hero?: string;
-  fullWidth?: boolean;
 }
 
 function determineImageBackground({ type, name }: { type: string; name: string }) {
@@ -63,7 +63,7 @@ function determineImageBackground({ type, name }: { type: string; name: string }
   }
 }
 
-export default function ScreenContainer({ children, screenName, bg, hero, fullWidth = false }: ScreenContainerProps) {
+export default function ScreenContainer({ children, screenName, bg, hero }: ScreenContainerProps) {
   let image = determineImageBackground({ type: "art", name: screenName });
 
   if (hero) {
@@ -71,10 +71,13 @@ export default function ScreenContainer({ children, screenName, bg, hero, fullWi
   }
 
   return (
-    <View style={[fullWidth ? { ...styles.container, ...styles.fullWidth } : styles.container, styles.absolute, styles.dropShadow]}>
-      <Flex flex={1} justify="space-between" zIndex={10} p={0} w={"100%"} mx="auto">
-        {children}
-      </Flex>
+    <View style={[styles.wrapper, styles.absolute]}>
+      <SafeAreaView style={styles.container}>
+        <Flex flex={1} justify="space-between" zIndex={10} p={0} w={"100%"} mx="auto">
+          {children}
+        </Flex>
+      </SafeAreaView>
+
       <ImageBackground source={image} style={[styles.image, { backgroundColor: bg }]} resizeMode="cover" />
     </View>
   );
@@ -82,16 +85,15 @@ export default function ScreenContainer({ children, screenName, bg, hero, fullWi
 
 const { background, white, black } = herofitTheme.colors.base;
 const styles = StyleSheet.create({
+  wrapper: {
+    marginTop: -2,
+    elevation: 100,
+    zIndex: 100,
+  },
   container: {
-    margin: 8,
-    marginTop: 0,
-    borderRadius: 5,
-    borderWidth: 1,
-    borderRightColor: white,
-    borderTopColor: white,
-    borderBottomColor: background,
-    borderLeftColor: background,
-    overflow: "hidden",
+    height: "100%",
+    elevation: 100,
+    zIndex: 100,
   },
   absolute: {
     position: "absolute",
@@ -99,12 +101,6 @@ const styles = StyleSheet.create({
     left: 0,
     bottom: 0,
     right: 0,
-  },
-  dropShadow: {
-    shadowColor: black,
-    shadowOpacity: 0.8,
-    shadowRadius: 5,
-    elevation: 2,
   },
   image: {
     justifyContent: "center",
@@ -114,12 +110,8 @@ const styles = StyleSheet.create({
     left: 0,
     top: 0,
     zIndex: 0,
+    elevation: 0,
     backgroundColor: background,
     overflow: "hidden",
-  },
-  fullWidth: {
-    margin: 0,
-    borderRadius: 0,
-    borderWidth: 0,
   },
 });
