@@ -7,17 +7,23 @@ export default function useJwt(): [boolean, React.Dispatch<any>] | [string, Reac
   const [jwt, setJwt] = useState(null);
 
   useEffect(() => {
-    const cancelToken = axios.CancelToken;
-    const { token } = cancelToken.source();
-    async function getJwt() {
-      try {
-        const jwt = await getJwtInLocalStorage();
-        setJwt(jwt);
-      } catch (error) {
-        debugErrors(error);
+    let isMounted = true;
+
+    if (isMounted) {
+      async function getJwt() {
+        try {
+          const jwt = await getJwtInLocalStorage();
+          setJwt(jwt);
+        } catch (error) {
+          debugErrors(error);
+        }
       }
+      getJwt();
     }
-    getJwt();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
   return [jwt, setJwt];
 }

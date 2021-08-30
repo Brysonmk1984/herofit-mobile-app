@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Text, VStack, FormControl, Input, Link } from "native-base";
 import { login } from "../../api/authentication";
 import { GlobalStateContext } from "../../store";
@@ -72,6 +72,9 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
     updateFunction(text);
     debounced();
   }
+
+  // TODO : need to cleanup ASYNC tasks
+  useEffect(() => {}, []);
 
   return (
     <ScreenContainer screenName={route.name}>

@@ -10,6 +10,7 @@ function setJwtInLocalStorage({ token, expiresIn }){
 };
 
 function getJwtInLocalStorage(){
+  
   return getLsWithExpiry('herofit-jwt');
 }
 
