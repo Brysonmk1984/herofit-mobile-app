@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState, createRef } from "react";
-import { Image, Pressable, FlatList, SectionList, Box, Center, View, Text, Heading, VStack, FormControl, Input, Link, Button, IconButton, HStack, Divider } from "native-base";
+import { Image, Pressable, FlatList, SectionList, Box, Center, View, Text, Heading, VStack, FormControl, Input, Link, Button, IconButton, HStack, Divider, ScrollView } from "native-base";
 import ScreenContainer from "../Components/ScreenContainer/ScreenContainer";
 import debugErrors from "../common/debugErrors";
 import { GlobalStateContext } from "../store";
 import { Item } from "../common/types";
 import { MainDrawerProps } from "../common/types-navigator";
-import CharacterModal from "../Components/Modal/CharacterModal";
+import { CharacterModal, FeedbackModal, BasicModal } from "../Components/Modal/Modals";
+import { ActionHeader, BodyContent } from "../Components/Modal/Content";
 
 const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -39,7 +40,19 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   return (
     <ScreenContainer screenName={route.name}>
       {renderHeroDetails()}
-      <CharacterModal modalOpen={modalOpen} modalAction={setModalOpen} />
+      <CharacterModal modalOpen={modalOpen} modalAction={setModalOpen} speech="OOO You have been working out!">
+        <ActionHeader type="Success" text="You Did it!" />
+        <BodyContent>
+          <Text>THE CONTENT</Text>
+        </BodyContent>
+      </CharacterModal>
+
+      <BasicModal modalOpen={modalOpen} modalAction={setModalOpen} title="BIG SURPRISE!">
+        <BodyContent>
+          <Text>THE CONTENT</Text>
+        </BodyContent>
+      </BasicModal>
+
       <Button onPress={() => navigation.toggleDrawer()}>Drawer</Button>
     </ScreenContainer>
   );

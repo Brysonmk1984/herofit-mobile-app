@@ -6,6 +6,6 @@ import Pane from "./Pane";
 import HelperText from "./HelperText";
 import LoreText from "./LoreText";
 import StatDisplay from "./StatDisplay";
-import Icon from "./Icons";
+import Icon from "./Icon";
 
 export { ScreenContainer, Header, Subheader, ScreenActionButton, LoreText, Pane, HelperText, StatDisplay, Icon };

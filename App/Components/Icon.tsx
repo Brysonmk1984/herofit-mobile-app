@@ -72,12 +72,16 @@ const InGameIcons = ({ iconName, size, color }: IconProps) => {
     case "other":
       return <Icon as={MaterialCommunityIcons} name="arm-flex" size={size} color={color} />;
     case "success":
+    case "Success":
       return <Icon as={Ionicons} name="md-checkmark-circle" size={size} color={color} />;
     case "warning":
+    case "Warning":
       return <Icon as={Ionicons} name="md-warning-sharp" size={size} color={color} />;
     case "error":
+    case "Error":
       return <Icon as={MaterialIcons} name="md-checkmark-circle" size={size} color={color} />;
     case "info":
+    case "Info":
       return <Icon as={Foundation} name="md-checkmark-circle" size={size} color={color} />;
     // DEFAULT: ICOMOON ICON OR NONE FOUND
     default:
