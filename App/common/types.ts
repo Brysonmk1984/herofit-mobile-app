@@ -27,9 +27,15 @@ interface ResetDefaultsAction {
 interface RemoveAlertsAction {
   type: 'REMOVE ALERTS', payload: { indiciesForRemoval : string[] }
 }
+interface AddModalAction{
+  type: 'ADD MODAL', payload: { id : string }
+}
+interface RemoveModalAction{
+  type: 'REMOVE MODAL', payload: { id : string }
+}
 
 // Same as ShoppingListAction in example
-type AppAction = ToggleLoadingAction | SetExistingUserInitDataAction | SetIsSignedInAction | SetNewUserAction | SetHeroAction | SetUserAction | SetAlertsAction | ResetDefaultsAction  | RemoveAlertsAction;
+type AppAction = ToggleLoadingAction | SetExistingUserInitDataAction | SetIsSignedInAction | SetNewUserAction | SetHeroAction | SetUserAction | SetAlertsAction | ResetDefaultsAction  | RemoveAlertsAction | AddModalAction | RemoveModalAction;
 type AppDispatch = (action: AppAction) => void
 
 type Payload = {
@@ -49,6 +55,7 @@ interface InitialAppState {
   hero : Hero | (HeroWithStats & DefaultHeroProperties) | null;
   alerts : SnackBarAlertWithIndex[];
   user : User | null;
+  modalQueue : string[];
 }
 
 interface Store {

@@ -1,7 +1,7 @@
 import React, { createContext, useReducer, Context, FC, ReactElement } from "react";
 import { InitialAppState, AppAction } from "./common/types";
 
-const initialState: InitialAppState = { isLoading: true, isSignedIn: false, newUser: false, hero: null, alerts: [], jwt: null, user: null };
+const initialState: InitialAppState = { isLoading: true, isSignedIn: false, newUser: false, hero: null, alerts: [], jwt: null, user: null, modalQueue: [] };
 
 type AppState = typeof initialState;
 
@@ -50,6 +50,28 @@ function appStateReducer(state: AppState, action: AppAction): AppState {
         alerts: state.alerts.filter(alert => {
           return !indiciesForRemoval.includes(alert.index);
         }),
+      };
+    }
+    case "ADD MODAL": {
+      const { id } = action.payload;
+      // Shouldn't happen
+      if (state.modalQueue.includes(id)) {
+        return state;
+      }
+      const modalQueue = [...state.modalQueue, id];
+      return {
+        ...state,
+        modalQueue,
+      };
+    }
+    case "REMOVE MODAL": {
+      const { id } = action.payload;
+      const modalQueue = [...state.modalQueue];
+      // Remove matching ID
+      modalQueue.splice(modalQueue.indexOf(id), 1);
+      return {
+        ...state,
+        modalQueue,
       };
     }
     default:

@@ -28,9 +28,16 @@
     "react-native/no-raw-text": "off",
     "react-native/no-single-element-style-arrays": 2,
     "react-native/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+    
     //These don't work
-    "react-native/jsx-first-prop-new-line": [6, "never"],
-    "react-native/jsx-max-props-per-line": [6,{ "maximum": 6, "when": "multiline" }],
+    //"react-native/jsx-first-prop-new-line": [6, "never"],
+    // "react-native/jsx-max-props-per-line": ["error", {
+    //   "maximum": {
+    //     "single": 6,
+    //     "multi": 7
+    //   },
+    //   "when": "always"
+    // }],
     //
     "prefer-destructuring" : "off",
     "object-curly-newline": "off",
