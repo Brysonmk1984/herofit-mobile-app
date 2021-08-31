@@ -7,6 +7,8 @@ import { CharacterDialog } from "./CharacterDialog";
 import { IActionHeader } from "./Content";
 import Icon from "../Icon";
 import { GlobalStateContext } from "../../store";
+import { closeModal } from "../../common/modalController";
+import { Feedback } from "../Forms/FeedbackForm";
 
 interface ICharacterModal {
   id: string;
@@ -29,7 +31,7 @@ function getCharacterImage(character) {
 function CharacterModal({ children, id, modalOpen, modalAction, character = "Master Sensei Owl", speech, actionHeader }: ICharacterModal) {
   const { dispatch } = useContext(GlobalStateContext);
   return (
-    <Modal isOpen={modalOpen} onClose={() => dispatch({ type: "REMOVE MODAL", payload: { id } })} _backdrop={{ backgroundColor: "layout.modalBackdrop" }}>
+    <Modal isOpen={modalOpen} onClose={() => closeModal(id, dispatch)} _backdrop={{ backgroundColor: "layout.modalBackdrop" }}>
       <Modal.Content p={0}>
         <CharacterHeader>
           <Image w={105} position="absolute" left={-12} top={-20} alignSelf={"flex-end"} source={getCharacterImage(character)} size={100} alt={character} />
@@ -51,21 +53,29 @@ interface IFeedbackModal {
   modalOpen: boolean;
   modalAction: (modalOpen: boolean) => void;
   id: string;
+  title: string;
   children?: React.ReactChild | React.ReactChild[];
 }
 
 function renderFormBody(children: React.ReactChild | React.ReactChild[] | null) {
-  return { children };
+  const childCount = React.Children.count(children);
+  console.log("CC", childCount);
+  if (childCount > 0) {
+    return children;
+  } else {
+    return <Feedback />;
+  }
 }
 
 function FeedbackModal({ children, id, modalOpen, modalAction }: IFeedbackModal) {
   const { dispatch } = useContext(GlobalStateContext);
+
   return (
-    <Modal isOpen={modalOpen} onClose={() => dispatch({ type: "REMOVE MODAL", payload: { id } })}>
+    <Modal isOpen={modalOpen} onClose={() => closeModal(id, dispatch)}>
       <Modal.Content>
         <ModalCloseButton backgroundColor="primary.50" />
         <Modal.Header>Modal Title</Modal.Header>
-        <Modal.Body>{children}</Modal.Body>
+        <Modal.Body>{renderFormBody(children)}</Modal.Body>
         <Modal.Footer>
           <Button w="100%" onPress={() => modalAction(false)} borderTopRightRadius={0} borderTopLeftRadius={0}>
             SAVE
@@ -87,7 +97,7 @@ interface IBasicModal {
 function BasicModal({ children, id, modalOpen, modalAction, title }: IBasicModal) {
   const { dispatch } = useContext(GlobalStateContext);
   return (
-    <Modal isOpen={modalOpen} onClose={() => dispatch({ type: "REMOVE MODAL", payload: { id } })}>
+    <Modal isOpen={modalOpen} onClose={() => closeModal(id, dispatch)}>
       <Modal.Content>
         <ModalCloseButton backgroundColor="primary.50" />
         <Modal.Header>

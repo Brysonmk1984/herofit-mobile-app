@@ -68,7 +68,7 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
     setFormIsValid(false);
   }, 500);
 
-  function handleInputChange(text, field, updateFunction) {
+  function handleInputChange(text: string, updateFunction: React.Dispatch<React.SetStateAction<string>>) {
     updateFunction(text);
     debounced();
   }
@@ -83,10 +83,10 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
         <Pane>
           <VStack space={6} mt={5}>
             <FormControl isRequired isInvalid={helperText === "Must be valid email address" ? true : false}>
-              <Input onChangeText={text => handleInputChange(text, "email", setEmail)} value={email} placeholder="Email" shadow={1} />
+              <Input onChangeText={text => handleInputChange(text, setEmail)} value={email} placeholder="Email" shadow={1} />
             </FormControl>
             <FormControl isRequired isInvalid={helperText === "Password must be at least 8 characters" ? true : false}>
-              <Input onChangeText={text => handleInputChange(text, "password", setPassword)} value={password} secureTextEntry={true} autoCompleteType="password" textContentType="password" placeholder="Password" onSubmitEditing={handleSignIn} />
+              <Input onChangeText={text => handleInputChange(text, setPassword)} value={password} secureTextEntry={true} autoCompleteType="password" textContentType="password" placeholder="Password" onSubmitEditing={handleSignIn} />
             </FormControl>
             {helperText && <HelperText text={helperText} />}
             <View alignItems="center">

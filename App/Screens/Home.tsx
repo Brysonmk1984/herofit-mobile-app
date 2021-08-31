@@ -52,15 +52,15 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
     );
   }
 
-  useEffect(() => {
-    console.log("MQ=", state.modalQueue);
-  }, [state.modalQueue]);
+  // useEffect(() => {
+  //   console.log("MQ=", state.modalQueue);
+  // }, [state.modalQueue]);
 
-  useEffect(() => {
-    setTimeout(() => {
-      openModal("levelUp", dispatch);
-    }, 6000);
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     openModal("levelUp", dispatch);
+  //   }, 6000);
+  // }, []);
 
   return (
     <ScreenContainer screenName={route.name}>
@@ -78,11 +78,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
         </BodyContent>
       </BasicModal>
 
-      <FeedbackModal id="feedback" modalOpen={state.modalQueue[0] === "feedback"} title="Your feedback is welcome">
-        <BodyContent>
-          <Text>Feedback content</Text>
-        </BodyContent>
-      </FeedbackModal>
+      <FeedbackModal id="feedback" modalOpen={state.modalQueue[0] === "feedback"} title="Your feedback is welcome"></FeedbackModal>
 
       <Button onPress={() => navigation.toggleDrawer()}>Drawer</Button>
     </ScreenContainer>
