@@ -6,53 +6,33 @@ import { updateAlerts } from "../common/alerts";
 import debugErrors from "../common/debugErrors";
 import { GlobalStateContext } from "../store";
 import { emailContactForm } from "../api/email";
-import { MainDrawerParamList } from "../common/types-navigator";
+import { MainDrawerProps } from "../common/types-navigator";
 import FeedbackForm from "../Components/Forms/FeedbackForm";
 import { Header } from "../Components/CustomComponents";
 
-const Feedback: React.FC<MainDrawerParamList> = ({ navigation, route }) => {
+const Feedback: React.FC<MainDrawerProps<"Feedback">> = ({ route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
-  const { user, hero, isSignedIn } = state;
-
-  // const [email, setEmail] = useState(isSignedIn ? hero.email : "");
-  // const [message, setMessage] = useState("");
-
-  // // Handle change of email input and elements and update states
-  // function handleEmailChange(e) {
-  //   const email = e.target.value;
-  //   setEmail(email);
-  // }
-
-  // // Handle change of textarea and update states
-  // function handleMessageChange(e) {
-  //   const message = e.target.value;
-  //   setMessage(message);
-  // }
 
   // // Handle submit of form: send form data to back end, which handles sending the email logic
-  function handleSubmit(body: { email: string; message: string }) {
-    console.log("submit", body);
-    //dispatch({ type: "TOGGLE LOADING" });
+  async function handleSubmit(body: { email: string; feedbackType: string; message: string }) {
+    const { email, feedbackType, message } = body;
+    const accountInfo = { username: state.user.username, firstName: state.user.firstName, email: state.user.email };
 
-    // emailContactForm({ email, message, accountInfo: user })
-    //   .then(data => {
-    //     updateAlerts([{ type: "success", message: "Message sent! We will get back to you shortly!" }], state, dispatch);
-    //     setMessage("");
-    //     dispatch({ type: "TOGGLE LOADING" });
-    //   })
-    //   .catch(error => {
-    //     // Error sending Form Message
-    //     const errorMessage = debugErrors(error, user);
-    //     updateAlerts([{ type: "error", message: `${errorMessage}` }], state, dispatch);
-    //     dispatch({ type: "TOGGLE LOADING" });
-    //   });
+    try {
+      await emailContactForm({ email, feedbackType, message, accountInfo });
+      updateAlerts([{ type: "success", message: "Message sent! We will get back to you shortly!" }], state, dispatch);
+    } catch (error) {
+      // Error sending Form Message
+      const errorMessage = debugErrors(error, state.user);
+      updateAlerts([{ type: "error", message: `${errorMessage}` }], state, dispatch);
+    }
   }
 
   return (
     <ScreenContainer screenName={route.name}>
       <ScrollView>
         <Header text="Feedback" />
-        <FeedbackForm formAction={body => handleSubmit(body)} />
+        <FeedbackForm userEmail={state.user?.email || null} formAction={body => handleSubmit(body)} />
       </ScrollView>
     </ScreenContainer>
   );

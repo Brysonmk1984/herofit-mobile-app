@@ -8,7 +8,7 @@ import { IActionHeader } from "./Content";
 import Icon from "../Icon";
 import { GlobalStateContext } from "../../store";
 import { closeModal } from "../../common/modalController";
-import { Feedback } from "../Forms/FeedbackForm";
+import FeedbackForm from "../Forms/FeedbackForm";
 
 interface ICharacterModal {
   id: string;
@@ -63,7 +63,7 @@ function renderFormBody(children: React.ReactChild | React.ReactChild[] | null) 
   if (childCount > 0) {
     return children;
   } else {
-    return <Feedback />;
+    return <FeedbackForm />;
   }
 }
 
