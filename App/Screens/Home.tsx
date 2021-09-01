@@ -8,6 +8,7 @@ import { MainDrawerProps } from "../common/types-navigator";
 import { CharacterModal, FeedbackModal, BasicModal } from "../Components/Modal/Modals";
 import { ActionHeader, BodyContent } from "../Components/Modal/Content";
 import useModal from "../common/hooks/useModal";
+import FeedbackChoiceForm from "../Components/Forms/FeedbackChoiceForm";
 
 const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -53,15 +54,13 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
     );
   }
 
-  // useEffect(() => {
-  //   console.log("MQ=", state.modalQueue);
-  // }, [state.modalQueue]);
+  function feedbackSubmitted() {
+    console.log("SUBMITTED");
+  }
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     openModal("levelUp", dispatch);
-  //   }, 6000);
-  // }, []);
+  function formActionHappens(id) {
+    console.log("FA HAPPENED!");
+  }
 
   return (
     <ScreenContainer screenName={route.name}>
@@ -79,7 +78,9 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
         </BodyContent>
       </BasicModal>
 
-      <FeedbackModal id="feedback" modalOpen={state.modalQueue[0] === "feedback"} title="Your feedback is welcome"></FeedbackModal>
+      <FeedbackModal id="feedback" modalOpen={state.modalQueue[0] === "feedback"} title="Quick Question">
+        <FeedbackChoiceForm id="feedback" title={"How would you feel if you could never play HeroFit again?"} postSubmitAction={() => formActionHappens("feedback")} />
+      </FeedbackModal>
 
       <Button onPress={() => navigation.toggleDrawer()}>Drawer</Button>
     </ScreenContainer>

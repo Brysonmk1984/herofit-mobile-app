@@ -3,16 +3,20 @@ import { View, VStack, FormControl, Input, TextArea, Button, Dropdown, Select, C
 import HelperText from "../HelperText";
 import Pane from "../Pane";
 import { useDebouncedCallback } from "use-debounce/lib";
+import { updateAlerts } from "../../common/alerts";
+import debugErrors from "../../common/debugErrors";
+import { emailContactForm } from "../../api/email";
+import { GlobalStateContext } from "../../store";
 
 interface FeedbackFormProps {
-  userEmail: string | null;
-  formAction: ({ email, feedbackType, message }: { email: string; feedbackType: string; message: string }) => void;
+  postSubmitAction?: (data?: any) => void;
 }
 
-const FeedbackForm: React.FC<FeedbackFormProps> = ({ userEmail, formAction }) => {
-  const [email, setEmail] = useState(userEmail ?? null);
+const FeedbackForm: React.FC<FeedbackFormProps> = ({ postSubmitAction }) => {
+  const { state, dispatch } = useContext(GlobalStateContext);
+  const [email, setEmail] = useState(state?.user.email ?? null);
   const [feedbackType, setFeedbackType] = useState("General Comment");
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState(null);
   const [helperText, setHelperText] = useState<string | null>(null);
   const [formIsValid, setFormIsValid] = useState(false);
 
@@ -34,18 +38,33 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ userEmail, formAction }) =>
     setFormIsValid(false);
   }, 500);
 
-  function handleInputChange(text: string, updateFunction: React.Dispatch<React.SetStateAction<string>>) {
+  function _handleInputChange(text: string, updateFunction: React.Dispatch<React.SetStateAction<string>>) {
     updateFunction(text);
     debounced();
   }
 
-  function handleFormAction() {
+  function _handleFormAction() {
     setHelperText(null);
     setEmail(null);
     setFeedbackType("General Comment");
     setMessage(null);
     setFormIsValid(false);
-    formAction({ email, feedbackType, message });
+    _handleSubmit({ email, feedbackType, message });
+  }
+
+  // // Handle submit of form: send form data to back end, which handles sending the email logic
+  async function _handleSubmit(body: { email: string; feedbackType: string; message: string }) {
+    const { email, feedbackType, message } = body;
+    const accountInfo = { username: state.user.username, firstName: state.user.firstName, email: state.user.email };
+
+    try {
+      await emailContactForm({ email, feedbackType, message, accountInfo });
+      updateAlerts([{ type: "success", message: "Message sent! We will get back to you shortly!" }], state, dispatch);
+    } catch (error) {
+      // Error sending Form Message
+      const errorMessage = debugErrors(error, state.user);
+      updateAlerts([{ type: "error", message: `${errorMessage}` }], state, dispatch);
+    }
   }
 
   return (
@@ -75,14 +94,14 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ userEmail, formAction }) =>
           </FormControl>
           <FormControl isRequired isInvalid={helperText === "Must be valid email address" ? true : false}>
             <FormControl.Label>Email</FormControl.Label>
-            <Input isRequired onChangeText={text => handleInputChange(text, setEmail)} value={email} placeholder="Enter Email" shadow={1} />
+            <Input isRequired onChangeText={text => _handleInputChange(text, setEmail)} value={email} placeholder="Enter Email" shadow={1} />
           </FormControl>
           <FormControl isRequired isInvalid={helperText === "Message must be at least 10 characters" ? true : false}>
             <FormControl.Label>Message</FormControl.Label>
-            <TextArea textAlignVertical="top" justifyContent="flex-start" placeholder="Enter Message" totalLines={5} onChangeText={text => handleInputChange(text, setMessage)} value={message} />
+            <TextArea textAlignVertical="top" justifyContent="flex-start" placeholder="Enter Message" totalLines={5} onChangeText={text => _handleInputChange(text, setMessage)} value={message} />
           </FormControl>
           {helperText && <HelperText type={formIsValid ? "success" : "error"} text={helperText} />}
-          <Button disabled={!formIsValid} onPress={() => handleFormAction()}>
+          <Button disabled={!formIsValid} onPress={() => _handleFormAction()}>
             Send Feedback
           </Button>
         </VStack>

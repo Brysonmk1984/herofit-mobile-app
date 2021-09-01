@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Button, Modal, Center, NativeBaseProvider, Text, Box, Image, View, ScrollView } from "native-base";
 import CharacterModalActionButton from "./CharacterModalActionButton";
 import ModalCloseButton from "./ModalCloseButton";
@@ -9,11 +9,13 @@ import Icon from "../Icon";
 import { GlobalStateContext } from "../../store";
 import useModal from "../../common/hooks/useModal";
 import FeedbackForm from "../Forms/FeedbackForm";
+import FeedbackChoiceForm from "../Forms/FeedbackChoiceForm";
+import debugErrors from "../../common/debugErrors";
 
 interface ICharacterModal {
   id: string;
   modalOpen: boolean;
-  modalAction: (modalOpen: boolean) => void;
+  modalAction?: (modalOpen: boolean) => void;
   speech: string;
   children: React.ReactChild[];
   character?: "Master Sensei Owl";
@@ -51,36 +53,27 @@ function CharacterModal({ children, id, modalOpen, modalAction, character = "Mas
 
 interface IFeedbackModal {
   modalOpen: boolean;
-  modalAction: (modalOpen: boolean) => void;
+  //modalAction: () => void;
   id: string;
   title: string;
+  closeable?: boolean;
   children?: React.ReactChild | React.ReactChild[];
 }
 
-function renderFormBody(children: React.ReactChild | React.ReactChild[] | null) {
-  const childCount = React.Children.count(children);
-  console.log("CC", childCount);
-  if (childCount > 0) {
-    return children;
-  } else {
-    return <FeedbackForm />;
-  }
-}
-
-function FeedbackModal({ children, id, modalOpen, modalAction }: IFeedbackModal) {
+function FeedbackModal({ children, id, modalOpen, title, closeable = false }: IFeedbackModal) {
   const { openModal, closeModal } = useModal();
-
   return (
-    <Modal isOpen={modalOpen} onClose={() => closeModal(id)}>
-      <Modal.Content>
-        <ModalCloseButton backgroundColor="primary.50" />
-        <Modal.Header>Modal Title</Modal.Header>
-        <Modal.Body>{renderFormBody(children)}</Modal.Body>
-        <Modal.Footer>
-          <Button w="100%" onPress={() => modalAction(false)} borderTopRightRadius={0} borderTopLeftRadius={0}>
-            SAVE
-          </Button>
-        </Modal.Footer>
+    <Modal isOpen={modalOpen} onClose={() => closeModal(id)} closeOnOverlayClick={closeable} isKeyboardDismissabl={closeable}>
+      <Modal.Content p={2}>
+        {closeable && <ModalCloseButton backgroundColor="primary.50" />}
+        <Modal.Header pl={4} py={4}>
+          <Text fontSize="2xl" fontFamily="heading">
+            {title}
+          </Text>
+        </Modal.Header>
+        <Modal.Body p={0} justifyContent="center">
+          {children}
+        </Modal.Body>
       </Modal.Content>
     </Modal>
   );
@@ -89,7 +82,7 @@ function FeedbackModal({ children, id, modalOpen, modalAction }: IFeedbackModal)
 interface IBasicModal {
   id: string;
   modalOpen: boolean;
-  modalAction: (modalOpen: boolean) => void;
+  modalAction?: (modalOpen: boolean) => void;
   children: React.ReactChild | React.ReactChild[];
   title: string;
 }

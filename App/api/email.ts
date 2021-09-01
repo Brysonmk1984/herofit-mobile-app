@@ -3,13 +3,25 @@ import axiosRetry from "axios-retry";
 import { axiosOptions } from "./axiosDefaults";
 import handleHttpError from "./handleHttpError";
 import Constants from "expo-constants";
-import { User } from "../common/types";
 const endpoint: string = Constants.manifest.extra.HF_ENDPOINT;
 
 let axios = _axios.create();
 axiosRetry(axios, { retries: 3 });
 
-const emailFeedbackData = async function (body) {
+interface FeedbackChoiceBody {
+  email: string;
+  username: string;
+  title: string;
+  opinion: string;
+  openResponse?: string | null;
+  accountInfo: {
+    email: FeedbackChoiceBody["email"];
+    username: FeedbackChoiceBody["username"];
+    firstName: string | null;
+  };
+}
+
+const emailFeedbackData = async function (body: FeedbackChoiceBody) {
   return axios
     .post(`${endpoint}email/feedback-data`, body, await axiosOptions())
     .then(({ data }) => {
@@ -61,4 +73,4 @@ const emailAppError = async function (body) {
     });
 };
 
-export { emailFeedbackData, emailSurveyData, emailContactForm, emailAppError };
+export { emailFeedbackData, FeedbackChoiceBody, emailSurveyData, emailContactForm, emailAppError };
