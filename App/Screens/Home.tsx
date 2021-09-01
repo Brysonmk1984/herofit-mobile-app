@@ -7,10 +7,11 @@ import { Item } from "../common/types";
 import { MainDrawerProps } from "../common/types-navigator";
 import { CharacterModal, FeedbackModal, BasicModal } from "../Components/Modal/Modals";
 import { ActionHeader, BodyContent } from "../Components/Modal/Content";
-import { openModal, closeModal } from "../common/modalController";
+import useModal from "../common/hooks/useModal";
 
 const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
+  const { openModal, closeModal } = useModal();
   const { name, status, health, maxHealth, activityXP, battleXP, photonTokens, goToBattle, equipped } = state.hero;
 
   function renderItem({ item }: Item) {
@@ -35,7 +36,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
         <FlatList data={equipped} renderItem={renderItem} keyExtractor={(item, i) => i.toString()} />
         <Button
           onPress={() => {
-            openModal("feedback", dispatch);
+            openModal("feedback");
           }}
         >
           Open Modal
@@ -43,7 +44,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
 
         <Button
           onPress={() => {
-            openModal("patchUpdate", dispatch);
+            openModal("patchUpdate");
           }}
         >
           Open Modal

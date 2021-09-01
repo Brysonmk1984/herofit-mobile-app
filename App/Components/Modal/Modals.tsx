@@ -7,7 +7,7 @@ import { CharacterDialog } from "./CharacterDialog";
 import { IActionHeader } from "./Content";
 import Icon from "../Icon";
 import { GlobalStateContext } from "../../store";
-import { closeModal } from "../../common/modalController";
+import useModal from "../../common/hooks/useModal";
 import FeedbackForm from "../Forms/FeedbackForm";
 
 interface ICharacterModal {
@@ -29,9 +29,9 @@ function getCharacterImage(character) {
 }
 
 function CharacterModal({ children, id, modalOpen, modalAction, character = "Master Sensei Owl", speech, actionHeader }: ICharacterModal) {
-  const { dispatch } = useContext(GlobalStateContext);
+  const { openModal, closeModal } = useModal();
   return (
-    <Modal isOpen={modalOpen} onClose={() => closeModal(id, dispatch)} _backdrop={{ backgroundColor: "layout.modalBackdrop" }}>
+    <Modal isOpen={modalOpen} onClose={() => closeModal(id)} _backdrop={{ backgroundColor: "layout.modalBackdrop" }}>
       <Modal.Content p={0}>
         <CharacterHeader>
           <Image w={105} position="absolute" left={-12} top={-20} alignSelf={"flex-end"} source={getCharacterImage(character)} size={100} alt={character} />
@@ -68,10 +68,10 @@ function renderFormBody(children: React.ReactChild | React.ReactChild[] | null) 
 }
 
 function FeedbackModal({ children, id, modalOpen, modalAction }: IFeedbackModal) {
-  const { dispatch } = useContext(GlobalStateContext);
+  const { openModal, closeModal } = useModal();
 
   return (
-    <Modal isOpen={modalOpen} onClose={() => closeModal(id, dispatch)}>
+    <Modal isOpen={modalOpen} onClose={() => closeModal(id)}>
       <Modal.Content>
         <ModalCloseButton backgroundColor="primary.50" />
         <Modal.Header>Modal Title</Modal.Header>
@@ -95,9 +95,10 @@ interface IBasicModal {
 }
 
 function BasicModal({ children, id, modalOpen, modalAction, title }: IBasicModal) {
-  const { dispatch } = useContext(GlobalStateContext);
+  const { openModal, closeModal } = useModal();
+
   return (
-    <Modal isOpen={modalOpen} onClose={() => closeModal(id, dispatch)}>
+    <Modal isOpen={modalOpen} onClose={() => closeModal(id)}>
       <Modal.Content>
         <ModalCloseButton backgroundColor="primary.50" />
         <Modal.Header>

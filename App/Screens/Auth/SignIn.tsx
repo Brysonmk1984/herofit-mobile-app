@@ -88,7 +88,7 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
             <FormControl isRequired isInvalid={helperText === "Password must be at least 8 characters" ? true : false}>
               <Input onChangeText={text => handleInputChange(text, setPassword)} value={password} secureTextEntry={true} autoCompleteType="password" textContentType="password" placeholder="Password" onSubmitEditing={handleSignIn} />
             </FormControl>
-            {helperText && <HelperText text={helperText} />}
+            {helperText && <HelperText type={formIsValid ? "success" : "error"} text={helperText} />}
             <View alignItems="center">
               <Text color="base.white">- or -</Text>
               <Link onPress={() => navigation.push("AboutGame")} mt={1}>
