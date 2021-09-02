@@ -5,12 +5,7 @@ import ModalCloseButton from "./ModalCloseButton";
 import { CharacterHeader } from "./CharacterHeader";
 import { CharacterDialog } from "./CharacterDialog";
 import { IActionHeader } from "./Content";
-import Icon from "../Icon";
-import { GlobalStateContext } from "../../store";
 import useModal from "../../common/hooks/useModal";
-import FeedbackForm from "../Forms/FeedbackForm";
-import FeedbackChoiceForm from "../Forms/FeedbackChoiceForm";
-import debugErrors from "../../common/debugErrors";
 
 interface ICharacterModal {
   id: string;
