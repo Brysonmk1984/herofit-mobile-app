@@ -1,12 +1,13 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "target": "es2015",
+    "target": "esnext",
     "strict": true,
     "allowJs": true,
     "checkJs": false,
     "jsx": "react-native",
-    "incremental": true
+    "incremental": true,
+    "skipLibCheck": true,
   },
   "include" : ["src/**/*"],
   "exclude": ["node_modules/**/*"]
