@@ -1,7 +1,7 @@
 import React, { createContext, useReducer, Context, FC, ReactElement } from "react";
 import { InitialAppState, AppAction } from "./common/types";
 
-const initialState: InitialAppState = { isLoading: true, isSignedIn: false, newUser: false, hero: null, alerts: [], jwt: null, user: null, modalQueue: [] };
+const initialState: InitialAppState = { isLoading: true, isSignedIn: false, userStatus: "active", hero: null, alerts: [], jwt: null, user: null, modalQueue: [] };
 
 type AppState = typeof initialState;
 
@@ -24,9 +24,10 @@ function appStateReducer(state: AppState, action: AppAction): AppState {
       const { isSignedIn } = action.payload;
       return { ...state, isSignedIn };
     }
-    case "SET NEW USER": {
-      const { newUser } = action.payload;
-      return { ...state, newUser };
+    // Used to determine if User is "active" | "new" | "unconfirmed"
+    case "SET USER STATUS": {
+      const { userStatus } = action.payload;
+      return { ...state, userStatus };
     }
     case "SET HERO": {
       const { hero } = action.payload;

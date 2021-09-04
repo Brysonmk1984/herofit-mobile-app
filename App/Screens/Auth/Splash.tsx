@@ -1,11 +1,19 @@
 import { StyleSheet, View as RNView } from "react-native";
 import { View, Text, Heading, Button, Link, Center } from "native-base";
-import React from "react";
+import React, { useContext } from "react";
 import { AuthStackProps } from "../../common/types-navigator";
 import { Header, ScreenContainer } from "../../Components/CustomComponents";
 import herofitTheme from "../../styles/herofitTheme";
+import { GlobalStateContext } from "../../store";
 
 const Splash = ({ navigation, route }: AuthStackProps<"Splash">) => {
+  const { state, dispatch } = useContext(GlobalStateContext);
+
+  function handleGetStarted() {
+    dispatch({ type: "SET USER STATUS", payload: { userStatus: "new" } });
+    navigation.push("AboutGame");
+  }
+
   return (
     <ScreenContainer screenName={route.name} fullWidth={true}>
       <View justifyContent="center" alignItems="center" h="100%">
@@ -20,7 +28,7 @@ const Splash = ({ navigation, route }: AuthStackProps<"Splash">) => {
           </Text>
         </View>
         <View w={200} mt={70} mx={50}>
-          <Button shadow={9} border={1} borderColor="base.brand" onPress={() => navigation.push("AboutGame")}>
+          <Button shadow={9} border={1} borderColor="base.brand" onPress={handleGetStarted}>
             GET STARTED
           </Button>
 

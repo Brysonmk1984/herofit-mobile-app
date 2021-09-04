@@ -26,6 +26,7 @@ const AuthStackScreen = () => {
       <AuthStack.Screen name="HeroDetails" component={Screens.HeroDetails} options={{ title: "Hero Details" }} />
       <AuthStack.Screen name="FinalizeHeroSelection" component={Screens.FinalizeHeroSelection} options={{ title: "Finalize Hero Selection" }} />
       <AuthStack.Screen name="SpendQP" component={Screens.SpendQP} options={{ title: "Quantum Points" }} />
+      <MainDrawer.Screen name="Home" component={Screens.Home} />
     </AuthStack.Navigator>
   );
 };

@@ -37,7 +37,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
         <FlatList data={equipped} renderItem={renderItem} keyExtractor={(item, i) => i.toString()} />
         <Button
           onPress={() => {
-            openModal("feedback");
+            openModal("confirmEmail");
           }}
         >
           Open Modal
@@ -45,7 +45,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
 
         <Button
           onPress={() => {
-            openModal("patchUpdate");
+            openModal("levelUp");
           }}
         >
           Open Modal
@@ -62,25 +62,87 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
     console.log("FA HAPPENED!");
   }
 
+  useEffect(() => {
+    if (state.userStatus === "new") {
+      setTimeout(() => {
+        openModal("SignUp");
+      }, 2000);
+    } else if (state.userStatus === "unconfirmed") {
+      setTimeout(() => {
+        openModal("ChooseActivityEntry");
+      }, 2000);
+    }
+  }, []);
+
   return (
     <ScreenContainer screenName={route.name}>
       {renderHeroDetails()}
-      <CharacterModal id="levelUp" modalOpen={state.modalQueue[0] === "levelUp"} speech="OOO You have been working out!">
-        <ActionHeader type="Success" text="You Did it!" />
+      {/* SIGNUP MODAL */}
+      <CharacterModal id="SignUp" modalOpen={state.modalQueue[0] === "SignUp"} speech="What's this? a new student? hmmm... I'll consider it. Tell me about yourself, drifter." modalAction={() => navigation.push("Register")}>
+        <ActionHeader type="warning" text="Sign Up to Save your Hero" />
         <BodyContent>
-          <Text>THE CONTENT</Text>
+          <View p={3} backgroundColor="base.background">
+            <Heading borderBottomWidth={2} borderColor="primary.900" textAlign="center">
+              <Text fontSize="2xl" fontFamily="heading">
+                The Hero's Initiation
+              </Text>
+            </Heading>
+            <Box pl={10}>
+              <Text strikeThrough={true} opacity={0.5}>
+                1. Choose your Hero
+              </Text>
+              <Text>2. Create a HeroFit Account</Text>
+              <Text>3. Choose Strava or Manual Mode</Text>
+            </Box>
+          </View>
         </BodyContent>
       </CharacterModal>
 
-      <BasicModal id="patchUpdate" modalOpen={state.modalQueue[0] === "patchUpdate"} title="BIG SURPRISE!">
+      {/* CONFIRM EMAIL MODAL */}
+      <BasicModal id="confirmEmail" modalOpen={state.modalQueue[0] === "confirmEmail"} title="Please Confirm Your Email!">
+        <ActionHeader type="warning" text="Confirm Email & Receive +5 QP" />
         <BodyContent>
-          <Text>THE CONTENT</Text>
+          <View p={3} backgroundColor="base.background">
+            <Text fontWeight="bold">
+              Please click the link in your email inbox at: <Text>{state.user.email}</Text>
+            </Text>
+            <Text>Be sure to check the spam folder if it's not there.</Text>
+          </View>
         </BodyContent>
       </BasicModal>
 
-      <FeedbackModal id="feedback" modalOpen={state.modalQueue[0] === "feedback"} title="Quick Question">
+      {/* ACTIVITY ENTRY MODAL */}
+      <CharacterModal id="ChooseActivityEntry" modalOpen={state.modalQueue[0] === "ChooseActivityEntry"} speech="What's this? a new student? hmmm... I'll consider it. Tell me about yourself, drifter." modalAction={() => navigation.push("Register")}>
+        <ActionHeader type="warning" text="Sign Up to Save your Hero" />
+        <BodyContent>
+          <View p={3} backgroundColor="base.background">
+            <Heading borderBottomWidth={2} borderColor="primary.900" textAlign="center">
+              <Text fontSize="2xl" fontFamily="heading">
+                The Hero's Initiation
+              </Text>
+            </Heading>
+            <Box pl={10}>
+              <Text strikeThrough={true} opacity={0.5}>
+                1. Choose your Hero
+              </Text>
+              <Text strikeThrough={true} opacity={0.5}>
+                2. Create a HeroFit Account
+              </Text>
+              <Text>3. Choose Strava or Manual Mode</Text>
+            </Box>
+          </View>
+        </BodyContent>
+      </CharacterModal>
+
+      {/* <BasicModal id="patchUpdate" modalOpen={state.modalQueue[0] === "patchUpdate"} title="BIG SURPRISE!">
+        <BodyContent>
+          <Text>THE CONTENT</Text>
+        </BodyContent>
+      </BasicModal> */}
+
+      {/* <FeedbackModal id="feedback" modalOpen={state.modalQueue[0] === "feedback"} title="Quick Question">
         <FeedbackChoiceForm id="feedback" title={"How would you feel if you could never play HeroFit again?"} postSubmitAction={() => formActionHappens("feedback")} />
-      </FeedbackModal>
+      </FeedbackModal> */}
 
       <Button onPress={() => navigation.toggleDrawer()}>Drawer</Button>
     </ScreenContainer>

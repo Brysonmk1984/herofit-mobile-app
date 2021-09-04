@@ -12,9 +12,9 @@ interface SetIsSignedInAction {
   type: "SET ISSIGNEDIN";
   payload: { isSignedIn: boolean };
 }
-interface SetNewUserAction {
-  type: "SET NEW USER";
-  payload: { newUser: boolean };
+interface SetUserStatusAction {
+  type: "SET USER STATUS";
+  payload: { userStatus: UserStatus };
 }
 interface SetHeroAction {
   type: "SET HERO";
@@ -45,7 +45,7 @@ interface RemoveModalAction {
 }
 
 // Same as ShoppingListAction in example
-type AppAction = ToggleLoadingAction | SetExistingUserInitDataAction | SetIsSignedInAction | SetNewUserAction | SetHeroAction | SetUserAction | SetAlertsAction | ResetDefaultsAction | RemoveAlertsAction | AddModalAction | RemoveModalAction;
+type AppAction = ToggleLoadingAction | SetExistingUserInitDataAction | SetIsSignedInAction | SetUserStatusAction | SetHeroAction | SetUserAction | SetAlertsAction | ResetDefaultsAction | RemoveAlertsAction | AddModalAction | RemoveModalAction;
 type AppDispatch = (action: AppAction) => void;
 
 type Payload = {
@@ -55,7 +55,7 @@ type Payload = {
   latestBattle: object;
   isSignedIn: boolean;
   isLoading: boolean;
-  newUser: boolean;
+  userStatus: UserStatus;
   alerts: SnackBarAlert[];
   indiciesForRemoval: string[];
 };
@@ -64,11 +64,14 @@ interface Action<Payload = {}> {
   type: ActionType;
   payload: Payload;
 }
+
+type UserStatus = "new" | "unconfirmed" | "active";
+
 interface InitialAppState {
   jwt: string | null;
   isSignedIn: boolean;
   isLoading: boolean;
-  newUser: boolean;
+  userStatus: UserStatus;
   hero: Hero | (HeroWithStats & DefaultHeroProperties) | null;
   alerts: SnackBarAlertWithIndex[];
   user: User | null;

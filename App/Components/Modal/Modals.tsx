@@ -33,14 +33,14 @@ function CharacterModal({ children, id, modalOpen, modalAction, character = "Mas
         <CharacterHeader>
           <Image w={105} position="absolute" left={-12} top={-20} alignSelf={"flex-end"} source={getCharacterImage(character)} size={100} alt={character} />
           <CharacterDialog>
-            <Text pr={5} lineHeight="16px" fontSize={15} fontFamily="handwriting">
+            <Text pr={3} lineHeight="16px" fontSize={15} fontFamily="handwriting">
               {speech}
             </Text>
           </CharacterDialog>
           <ModalCloseButton backgroundColor="base.background" />
         </CharacterHeader>
         <View paddingBottom={74}>{children}</View>
-        <CharacterModalActionButton text={"ACCEPT"} action={() => modalAction(false)} />
+        <CharacterModalActionButton text={"Sign Up"} action={() => modalAction(false)} />
       </Modal.Content>
     </Modal>
   );
@@ -58,7 +58,7 @@ interface IFeedbackModal {
 function FeedbackModal({ children, id, modalOpen, title, closeable = false }: IFeedbackModal) {
   const { openModal, closeModal } = useModal();
   return (
-    <Modal isOpen={modalOpen} onClose={() => closeModal(id)} closeOnOverlayClick={closeable} isKeyboardDismissabl={closeable}>
+    <Modal isOpen={modalOpen} onClose={() => closeModal(id)} closeOnOverlayClick={closeable} isKeyboardDismissable={closeable}>
       <Modal.Content p={2}>
         {closeable && <ModalCloseButton backgroundColor="primary.50" />}
         <Modal.Header pl={4} py={4}>
@@ -87,19 +87,21 @@ function BasicModal({ children, id, modalOpen, modalAction, title }: IBasicModal
 
   return (
     <Modal isOpen={modalOpen} onClose={() => closeModal(id)}>
-      <Modal.Content>
+      <Modal.Content p={0}>
         <ModalCloseButton backgroundColor="primary.50" />
-        <Modal.Header>
-          <Text fontSize="2xl" fontFamily="heading">
-            {title}
-          </Text>
+        <Modal.Header px={5} py={6}>
+          <View>
+            <Text fontSize="2xl" fontFamily="heading" overflow="hidden">
+              {title}
+            </Text>
+          </View>
         </Modal.Header>
-        <Modal.Body>{children}</Modal.Body>
-        <Modal.Footer>
-          <Button w="100%" onPress={() => modalAction(false)} borderTopRightRadius={0} borderTopLeftRadius={0}>
+        <Box overflow="hidden">{children}</Box>
+        <Box p={2} pb={4}>
+          <Button onPress={() => modalAction(false)} borderTopRightRadius={0} borderTopLeftRadius={0}>
             SAVE
           </Button>
-        </Modal.Footer>
+        </Box>
       </Modal.Content>
     </Modal>
   );

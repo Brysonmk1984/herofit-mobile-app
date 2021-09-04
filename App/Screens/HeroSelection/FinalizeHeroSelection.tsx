@@ -66,10 +66,6 @@ const FinalizeHeroSelection = ({ route, navigation }: AuthStackProps<"FinalizeHe
       });
   }, [debouncedHeroName]);
 
-  useEffect(() => {
-    dispatch({ type: "SET NEW USER", payload: { newUser: true } });
-  }, []);
-
   return (
     <ScreenContainer screenName={route.name} bg={colors[0]} hero={alias}>
       <Header text={"Hero Name"} color={colors[1]} />

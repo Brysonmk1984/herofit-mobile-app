@@ -37,14 +37,14 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
 
   // Hero is passed as a route param if it's a new user, otherwise grab the hero from state
   const hero = route.params.hero ?? state.hero;
-  const newUser: boolean = state.newUser;
+  const userStatus = state.userStatus;
   /*
   FOR TESTING SPENDQP PAGE
 */
   //const hero = mockHero;
-  //const newUser = true;
+  //const userStatus = "new";
 
-  const initialState: Stats = { qp: newUser ? 10 : hero.qp, power: 100, health: 100, armor: 0, recovery: 5, fire: 0, earth: 0, water: 0, air: 0, aether: 0, qpPower: 0, qpHealth: 0, qpArmor: 0, qpRecovery: 0, qpFire: 0, qpEarth: 0, qpAir: 0, qpWater: 0, qpAether: 0 };
+  const initialState: Stats = { qp: userStatus === "new" ? 10 : hero.qp, power: 100, health: 100, armor: 0, recovery: 5, fire: 0, earth: 0, water: 0, air: 0, aether: 0, qpPower: 0, qpHealth: 0, qpArmor: 0, qpRecovery: 0, qpFire: 0, qpEarth: 0, qpAir: 0, qpWater: 0, qpAether: 0 };
   const [qpState, qpDispatch] = useReducer(spendQPReducer, initialState);
 
   const attributes = ["Power", "Health", "Armor", "Recovery", "Fire", "Earth", "Water", "Air", "Aether"];
@@ -83,7 +83,8 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
       const updatedHeroWithDefaults: HeroWithStats & DefaultHeroProperties = Object.assign(DEFAULT_HERO_PROPERTIES, updatedHero, { maxHealth: updatedHero.health, status: "Rested" });
       console.log("DONE SETTINGS STATS ON HERO", updatedHeroWithDefaults);
       dispatch({ type: "SET HERO", payload: { hero: updatedHeroWithDefaults } });
-      navigation.push("Register");
+      //navigation.push("Register");
+      navigation.push("Home");
     }
   }
 
@@ -91,8 +92,7 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
   const incrementAttribute = function (stat: string): void {
     if (qpState.qp > 0) {
       return qpDispatch({ type: "INCREMENT VALUE", payload: { stat } });
-    } else if (newUser && qpState.qp === 0) {
-      //dispatch({ type: 'SET NEW USER', payload: { newUser : false }});
+    } else if (userStatus === "new" && qpState.qp === 0) {
       _handleFinishSpendingQP();
     } else {
       // TODO: write code for spending all QP when NOT new user
@@ -100,7 +100,7 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
   };
 
   useEffect(() => {
-    if (state.newUser === true) {
+    if (userStatus === "new") {
       // Fetch Astrology season for initial bonus based on season
       (async () => {
         try {
@@ -115,12 +115,12 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
         }
       })();
     }
-  }, [state.newUser]);
+  }, [userStatus]);
 
   return (
     <ScreenContainer screenName={route.name}>
       <Header text={`Quantum Points [${qpState.qp}]`} />
-      {newUser && (
+      {userStatus === "new" && (
         <Center mt={0} mb={5}>
           <Heading>
             <Text color="primary.800" fontFamily="heading" fontSize="xl">

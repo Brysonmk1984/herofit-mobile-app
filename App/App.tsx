@@ -56,8 +56,6 @@ const App: React.FC = () => {
     }
   }, [jwt]);
 
-  console.log(state.isLoading, fontsLoaded);
-
   return (
     <NavigationContainer>
       <View style={{ height }}>
