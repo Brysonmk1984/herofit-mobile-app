@@ -39,8 +39,6 @@ export default function SelectHeroHowTo({ navigation, route }: AuthStackProps<"S
               data={defaultStats.filter(item => item.stat !== "Aether")}
               keyExtractor={(item, i) => i.toString()}
               renderItem={({ item }) => {
-                console.log("ITEM", item);
-
                 return (
                   <Box py={2} my={2} borderBottomWidth={1} borderBottomColor="primary.300">
                     <StatDisplay stat={item.stat} value={item.value} description={item.description} />

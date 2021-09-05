@@ -6,6 +6,7 @@ import { CharacterHeader } from "./CharacterHeader";
 import { CharacterDialog } from "./CharacterDialog";
 import { IActionHeader } from "./Content";
 import useModal from "../../common/hooks/useModal";
+import { ActionButton } from "./ActionButton";
 
 interface ICharacterModal {
   id: string;
@@ -15,6 +16,7 @@ interface ICharacterModal {
   children: React.ReactChild[];
   character?: "Master Sensei Owl";
   actionHeader?: IActionHeader;
+  buttonText?: string;
 }
 
 function getCharacterImage(character) {
@@ -25,7 +27,7 @@ function getCharacterImage(character) {
   }
 }
 
-function CharacterModal({ children, id, modalOpen, modalAction, character = "Master Sensei Owl", speech, actionHeader }: ICharacterModal) {
+function CharacterModal({ children, id, modalOpen, modalAction, character = "Master Sensei Owl", speech, buttonText = "OK" }: ICharacterModal) {
   const { openModal, closeModal } = useModal();
   return (
     <Modal isOpen={modalOpen} onClose={() => closeModal(id)} _backdrop={{ backgroundColor: "layout.modalBackdrop" }}>
@@ -40,7 +42,7 @@ function CharacterModal({ children, id, modalOpen, modalAction, character = "Mas
           <ModalCloseButton backgroundColor="base.background" />
         </CharacterHeader>
         <View paddingBottom={74}>{children}</View>
-        <CharacterModalActionButton text={"Sign Up"} action={() => modalAction(false)} />
+        <CharacterModalActionButton buttonText={buttonText} action={() => modalAction(false)} />
       </Modal.Content>
     </Modal>
   );
@@ -77,12 +79,14 @@ function FeedbackModal({ children, id, modalOpen, title, closeable = false }: IF
 interface IBasicModal {
   id: string;
   modalOpen: boolean;
-  modalAction?: (modalOpen: boolean) => void;
-  children: React.ReactChild | React.ReactChild[];
   title: string;
+  children: React.ReactChild | React.ReactChild[];
+  modalAction?: (modalOpen: boolean) => void;
+  buttonText?: string;
+  disabled?: boolean;
 }
 
-function BasicModal({ children, id, modalOpen, modalAction, title }: IBasicModal) {
+function BasicModal({ children, id, modalOpen, modalAction, title, buttonText = "OK", disabled = false }: IBasicModal) {
   const { openModal, closeModal } = useModal();
 
   return (
@@ -98,9 +102,9 @@ function BasicModal({ children, id, modalOpen, modalAction, title }: IBasicModal
         </Modal.Header>
         <Box overflow="hidden">{children}</Box>
         <Box p={2} pb={4}>
-          <Button onPress={() => modalAction(false)} borderTopRightRadius={0} borderTopLeftRadius={0}>
-            SAVE
-          </Button>
+          <ActionButton disabled={disabled} action={modalAction}>
+            {buttonText}
+          </ActionButton>
         </Box>
       </Modal.Content>
     </Modal>

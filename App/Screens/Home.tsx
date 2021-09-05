@@ -9,10 +9,13 @@ import { CharacterModal, FeedbackModal, BasicModal } from "../Components/Modal/M
 import { ActionHeader, BodyContent } from "../Components/Modal/Content";
 import useModal from "../common/hooks/useModal";
 import FeedbackChoiceForm from "../Components/Forms/FeedbackChoiceForm";
+import { getUser } from "../api/user";
+import { updateAlerts } from "../common/alerts";
 
 const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { openModal, closeModal } = useModal();
+  const [emailUnconfirmed, setEmailUnconfirmed] = useState(false);
   const { name, status, health, maxHealth, activityXP, battleXP, photonTokens, goToBattle, equipped } = state.hero;
 
   function renderItem({ item }: Item) {
@@ -62,14 +65,36 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
     console.log("FA HAPPENED!");
   }
 
+  async function handleEmailConfirmed() {
+    console.log("myaction!");
+    try {
+      const { user } = await getUser({ email: state.user.email });
+      console.log("UPDATED USER!", user);
+      if (user.active) {
+        // ADD 5QP
+        // Open next modal
+      } else {
+        updateAlerts([{ type: "error", message: "Email Has not been confirmed; please click the link in your inbox." }], state, dispatch);
+      }
+    } catch (error) {
+      debugErrors(error, state.user);
+    }
+  }
+
   useEffect(() => {
+    console.log("SU", state.user, state.userStatus);
     if (state.userStatus === "new") {
       setTimeout(() => {
         openModal("SignUp");
       }, 2000);
     } else if (state.userStatus === "unconfirmed") {
+      setEmailUnconfirmed(true);
       setTimeout(() => {
-        openModal("ChooseActivityEntry");
+        openModal("confirmEmail");
+        // Timeout is only to prevent the user from clicking the action button right away without checking email
+        setTimeout(() => {
+          setEmailUnconfirmed(false);
+        }, 4000);
       }, 2000);
     }
   }, []);
@@ -99,14 +124,17 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
       </CharacterModal>
 
       {/* CONFIRM EMAIL MODAL */}
-      <BasicModal id="confirmEmail" modalOpen={state.modalQueue[0] === "confirmEmail"} title="Please Confirm Your Email!">
+      <BasicModal id="confirmEmail" modalOpen={state.modalQueue[0] === "confirmEmail"} modalAction={handleEmailConfirmed} disabled={emailUnconfirmed} title="Please Confirm Your Email!" buttonText="Ok, I did it!">
         <ActionHeader type="warning" text="Confirm Email & Receive +5 QP" />
         <BodyContent>
-          <View p={3} backgroundColor="base.background">
-            <Text fontWeight="bold">
-              Please click the link in your email inbox at: <Text>{state.user.email}</Text>
+          <View p={3} backgroundColor="base.background" alignItems="center">
+            <Text fontWeight="bold">Please click the link in your inbox at: </Text>
+            <Text my={7} color="base.highlight">
+              {state.user?.email}
             </Text>
-            <Text>Be sure to check the spam folder if it's not there.</Text>
+            <Text fontSize="xs" fontStyle="italic">
+              *Be sure to check the spam folder if it's not there.
+            </Text>
           </View>
         </BodyContent>
       </BasicModal>

@@ -104,6 +104,7 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
       const data = await insertAvatar({ avatar: state.hero, email: user.email, userId: user.id });
       console.log("data from inserting av into db", data);
       dispatch({ type: "SET ISSIGNEDIN", payload: { isSignedIn: true } });
+      dispatch({ type: "SET USER STATUS", payload: { userStatus: "unconfirmed" } });
       updateAlerts([{ type: "success", message: `Account creation successful!` }], state, dispatch);
       setTimeout(() => {
         //@ts-ignore - Can't figure out how to add strong typing for nested navigators

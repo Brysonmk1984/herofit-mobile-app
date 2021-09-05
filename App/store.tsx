@@ -1,7 +1,7 @@
 import React, { createContext, useReducer, Context, FC, ReactElement } from "react";
 import { InitialAppState, AppAction } from "./common/types";
 
-const initialState: InitialAppState = { isLoading: true, isSignedIn: false, userStatus: "active", hero: null, alerts: [], jwt: null, user: null, modalQueue: [] };
+const initialState: InitialAppState = { isLoading: true, isSignedIn: false, userStatus: "new", hero: null, alerts: [], jwt: null, user: null, modalQueue: [] };
 
 type AppState = typeof initialState;
 
