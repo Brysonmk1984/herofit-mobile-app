@@ -35,7 +35,7 @@ function CharacterModal({ children, id, modalOpen, modalAction, character = "Mas
         <CharacterHeader>
           <Image w={105} position="absolute" left={-12} top={-20} alignSelf={"flex-end"} source={getCharacterImage(character)} size={100} alt={character} />
           <CharacterDialog>
-            <Text pr={3} lineHeight="16px" fontSize={15} fontFamily="handwriting">
+            <Text pr={3} lineHeight="20px" fontSize={15} fontFamily="handwriting">
               {speech}
             </Text>
           </CharacterDialog>

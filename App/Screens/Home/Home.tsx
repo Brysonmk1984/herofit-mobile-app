@@ -1,22 +1,26 @@
 import React, { useContext, useEffect, useState, createRef } from "react";
-import { Image, Pressable, FlatList, SectionList, Box, Center, View, Text, Heading, VStack, FormControl, Input, Link, Button, IconButton, HStack, Divider, ScrollView } from "native-base";
-import ScreenContainer from "../Components/ScreenContainer/ScreenContainer";
-import debugErrors from "../common/debugErrors";
-import { GlobalStateContext } from "../store";
-import { Item } from "../common/types";
-import { MainDrawerProps } from "../common/types-navigator";
-import { CharacterModal, FeedbackModal, BasicModal } from "../Components/Modal/Modals";
-import { ActionHeader, BodyContent } from "../Components/Modal/Content";
-import useModal from "../common/hooks/useModal";
-import FeedbackChoiceForm from "../Components/Forms/FeedbackChoiceForm";
-import { getUser } from "../api/user";
-import { updateAlerts } from "../common/alerts";
+import { Image, Pressable, FlatList, SectionList, Box, Center, View, Text, Heading, VStack, FormControl, Input, Link, Button, IconButton, HStack, Divider, ScrollView, Radio } from "native-base";
+import ScreenContainer from "../../Components/ScreenContainer/ScreenContainer";
+import debugErrors from "../../common/debugErrors";
+import { GlobalStateContext } from "../../store";
+import { Item } from "../../common/types";
+import { MainDrawerProps } from "../../common/types-navigator";
+import { CharacterModal, FeedbackModal, BasicModal } from "../../Components/Modal/Modals";
+import { ActionHeader, BodyContent } from "../../Components/Modal/Content";
+import useModal from "../../common/hooks/useModal";
+import FeedbackChoiceForm from "../../Components/Forms/FeedbackChoiceForm";
+import { getUser } from "../../api/user";
+import { updateAlerts } from "../../common/alerts";
+import { ActivityEntrySelect } from "../../Components/Forms/ActivityEntrySelect";
+import { insertManualDataSrcId, insertStravaCredentials } from "../../api/authentication";
+import updateDataSrcId from "./AuthFlow";
 
 const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { openModal, closeModal } = useModal();
   const [emailUnconfirmed, setEmailUnconfirmed] = useState(false);
-  const { name, status, health, maxHealth, activityXP, battleXP, photonTokens, goToBattle, equipped } = state.hero;
+  const [activityRadioValue, setActivityRadioValue] = useState(null);
+  const { name, status, health, maxHealth, activityXP, battleXP, photonTokens, goToBattle, equipped, qp } = state.hero;
 
   function renderItem({ item }: Item) {
     return (
@@ -71,7 +75,13 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
       const { user } = await getUser({ email: state.user.email });
       console.log("UPDATED USER!", user);
       if (user.active) {
-        // ADD 5QP
+        dispatch({ type: "SET USER", payload: { user } });
+        dispatch({ type: "SET HERO", payload: { hero: { ...state.hero, qp: qp + 5 } } });
+
+        setTimeout(() => {
+          closeModal("confirmEmail");
+          openModal("ChooseActivityLogging");
+        }, 3000);
         // Open next modal
       } else {
         updateAlerts([{ type: "error", message: "Email Has not been confirmed; please click the link in your inbox." }], state, dispatch);
@@ -82,7 +92,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   }
 
   useEffect(() => {
-    console.log("SU", state.user, state.userStatus);
+    console.log("SU", state.userStatus, state.user.dataSrcId);
     if (state.userStatus === "new") {
       setTimeout(() => {
         openModal("SignUp");
@@ -90,12 +100,19 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
     } else if (state.userStatus === "unconfirmed") {
       setEmailUnconfirmed(true);
       setTimeout(() => {
-        openModal("confirmEmail");
+        openModal("ConfirmEmail");
         // Timeout is only to prevent the user from clicking the action button right away without checking email
         setTimeout(() => {
           setEmailUnconfirmed(false);
         }, 4000);
       }, 2000);
+    } else if (!state.user.dataSrcId) {
+      console.log("!!!!IN", state.user.dataSrcId);
+      openModal("ChooseActivityEntry");
+      // setTimeout(() => {
+
+      //   openModal("ChooseActivityEntry");
+      // }, 2000);
     }
   }, []);
 
@@ -124,31 +141,20 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
       </CharacterModal>
 
       {/* CONFIRM EMAIL MODAL */}
-      <BasicModal id="confirmEmail" modalOpen={state.modalQueue[0] === "confirmEmail"} modalAction={handleEmailConfirmed} disabled={emailUnconfirmed} title="Please Confirm Your Email!" buttonText="Ok, I did it!">
+      <BasicModal id="ConfirmEmail" modalOpen={state.modalQueue[0] === "ConfirmEmail"} modalAction={handleEmailConfirmed} disabled={emailUnconfirmed} title="Please Confirm Your Email!" buttonText="Ok, I did it!">
         <ActionHeader type="warning" text="Confirm Email & Receive +5 QP" />
         <BodyContent>
-          <View p={3} backgroundColor="base.background" alignItems="center">
-            <Text fontWeight="bold">Please click the link in your inbox at: </Text>
-            <Text my={7} color="base.highlight">
-              {state.user?.email}
-            </Text>
-            <Text fontSize="xs" fontStyle="italic">
-              *Be sure to check the spam folder if it's not there.
-            </Text>
-          </View>
-        </BodyContent>
-      </BasicModal>
-
-      {/* ACTIVITY ENTRY MODAL */}
-      <CharacterModal id="ChooseActivityEntry" modalOpen={state.modalQueue[0] === "ChooseActivityEntry"} speech="What's this? a new student? hmmm... I'll consider it. Tell me about yourself, drifter." modalAction={() => navigation.push("Register")}>
-        <ActionHeader type="warning" text="Sign Up to Save your Hero" />
-        <BodyContent>
-          <View p={3} backgroundColor="base.background">
-            <Heading borderBottomWidth={2} borderColor="primary.900" textAlign="center">
-              <Text fontSize="2xl" fontFamily="heading">
-                The Hero's Initiation
+          {emailUnconfirmed ? (
+            <View p={3} backgroundColor="base.background" alignItems="center">
+              <Text fontWeight="bold">Please click the link in your inbox at: </Text>
+              <Text my={7} color="base.highlight">
+                {state.user?.email}
               </Text>
-            </Heading>
+              <Text fontSize="xs" fontStyle="italic">
+                *Be sure to check the spam folder if it's not there.
+              </Text>
+            </View>
+          ) : (
             <Box pl={10}>
               <Text strikeThrough={true} opacity={0.5}>
                 1. Choose your Hero
@@ -158,7 +164,15 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
               </Text>
               <Text>3. Choose Strava or Manual Mode</Text>
             </Box>
-          </View>
+          )}
+        </BodyContent>
+      </BasicModal>
+
+      {/* ACTIVITY ENTRY MODAL */}
+      <CharacterModal id="ChooseActivityEntry" modalOpen={state.modalQueue[0] === "ChooseActivityEntry"} speech="Now that you're a pupil in my Dojo?, we'll need to hold you accountable!" modalAction={() => updateDataSrcId(state.user.email, activityRadioValue)} disabled={!state.user.dataSrcId}>
+        <ActionHeader type="info" text="How will you log activities?" />
+        <BodyContent>
+          <ActivityEntrySelect activityRadioValue={activityRadioValue} setActivityRadioValue={setActivityRadioValue} />
         </BodyContent>
       </CharacterModal>
 

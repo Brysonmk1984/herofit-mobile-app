@@ -11,7 +11,7 @@ import HeroDetails from "./Screens/HeroSelection/HeroDetails";
 import FinalizeHeroSelection from "./Screens/HeroSelection/FinalizeHeroSelection";
 
 // AUTHENTICATED SCREENS
-import Home from "./Screens/Home";
+import Home from "./Screens/Home/Home";
 import Profile from "./Screens/Profile";
 import Ranking from "./Screens/Ranking";
 import Campaign from "./Screens/Campaign";

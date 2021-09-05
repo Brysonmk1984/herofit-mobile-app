@@ -22,7 +22,7 @@ interface SetHeroAction {
 }
 interface SetUserAction {
   type: "SET USER";
-  payload: { user: User; isSignedIn: boolean };
+  payload: { user: User; isSignedIn?: boolean };
 }
 interface SetAlertsAction {
   type: "SET ALERTS";
@@ -182,6 +182,7 @@ interface HeroWithStats extends DefaultHeroProperties, HeroTemplate {
   water: number;
   air: number;
   aether: number;
+  qp: number;
   qpPower: number;
   qpHealth: number;
   qpArmor: number;
