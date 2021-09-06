@@ -27,7 +27,7 @@ function getCharacterImage(character) {
   }
 }
 
-function CharacterModal({ children, id, modalOpen, modalAction, character = "Master Sensei Owl", speech, buttonText = "OK" }: ICharacterModal) {
+function CharacterModal({ children, id, modalOpen, modalAction, character = "Master Sensei Owl", speech, buttonText }: ICharacterModal) {
   const { openModal, closeModal } = useModal();
   return (
     <Modal isOpen={modalOpen} onClose={() => closeModal(id)} _backdrop={{ backgroundColor: "layout.modalBackdrop" }}>
@@ -42,7 +42,7 @@ function CharacterModal({ children, id, modalOpen, modalAction, character = "Mas
           <ModalCloseButton backgroundColor="base.background" />
         </CharacterHeader>
         <View paddingBottom={74}>{children}</View>
-        <CharacterModalActionButton buttonText={buttonText} action={() => modalAction(false)} />
+        {buttonText && <CharacterModalActionButton buttonText={buttonText} action={() => modalAction(false)} />}
       </Modal.Content>
     </Modal>
   );
