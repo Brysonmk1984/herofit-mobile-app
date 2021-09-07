@@ -150,7 +150,8 @@ const getHeroList = async function (): Promise<HeroChoice[]> {
 };
 
 // A user chooses 'Manual Mode' instead of strava
-const insertManualDataSrcId = async function (body: { email: string }): Promise<{ user: User }> {
+const createManualDataSrcId = async function (body: { email: string }): Promise<{ user: User }> {
+  console.log("BODD", body);
   return axios
     .post(`${endpoint}auth/generate-datasrcid`, body, await axiosOptions())
     .then(({ data }) => {
@@ -161,4 +162,4 @@ const insertManualDataSrcId = async function (body: { email: string }): Promise<
     });
 };
 
-export { login, register, getStravaClientCredentials, insertStravaCredentials, fetchLatestPatchDetails, updateSeenLatestPatch, resetPassword, sendPasswordResetEmailVerification, sendVerificationCode, resendEmailConfirmation, getHeroList, insertManualDataSrcId };
+export { login, register, getStravaClientCredentials, insertStravaCredentials, fetchLatestPatchDetails, updateSeenLatestPatch, resetPassword, sendPasswordResetEmailVerification, sendVerificationCode, resendEmailConfirmation, getHeroList, createManualDataSrcId };

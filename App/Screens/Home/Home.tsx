@@ -3,7 +3,7 @@ import { Image, Pressable, FlatList, SectionList, Box, Center, View, Text, Headi
 import ScreenContainer from "../../Components/ScreenContainer/ScreenContainer";
 import debugErrors from "../../common/debugErrors";
 import { GlobalStateContext } from "../../store";
-import { Item } from "../../common/types";
+import { Item, User } from "../../common/types";
 import { MainDrawerProps } from "../../common/types-navigator";
 import { CharacterModal, FeedbackModal, BasicModal } from "../../Components/Modal/Modals";
 import { ActionHeader, BodyContent } from "../../Components/Modal/Content";
@@ -12,9 +12,9 @@ import FeedbackChoiceForm from "../../Components/Forms/FeedbackChoiceForm";
 import { getUser } from "../../api/user";
 import { updateAlerts } from "../../common/alerts";
 import { ActivityEntrySelect } from "../../Components/Forms/ActivityEntrySelect";
-import { insertManualDataSrcId, insertStravaCredentials } from "../../api/authentication";
-import updateDataSrcId from "./AuthFinalSteps/AuthFlow";
+//import updateDataSrcId from "./AuthFinalSteps/AuthFlow";
 import StravaConnect from "./AuthFinalSteps/StravaConnect";
+import { createManualDataSrcId } from "../../api/authentication";
 
 const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -64,22 +64,33 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
 
   async function handleEmailConfirmed() {
     console.log("myaction!");
+
     try {
       // * First time the user is assigned
       const { user } = await getUser({ email: state.user.email });
       console.log("UPDATED USER!", user);
       if (user.active) {
-        dispatch({ type: "SET USER", payload: { user } });
+        dispatch({ type: "SET USER", payload: { user, isSignedIn: true } });
         dispatch({ type: "SET HERO", payload: { hero: { ...state.hero, qp: qp + 5 } } });
 
         setTimeout(() => {
-          closeModal("confirmEmail");
-          openModal("ChooseActivityLogging");
-        }, 3000);
+          openModal("ChooseActivityEntry");
+        }, 2000);
         // Open next modal
       } else {
         updateAlerts([{ type: "error", message: "Email Has not been confirmed; please click the link in your inbox." }], state, dispatch);
       }
+    } catch (error) {
+      debugErrors(error, state.user);
+    }
+  }
+
+  async function handleManualDetails(email: string) {
+    try {
+      const { user } = await createManualDataSrcId({ email });
+      dispatch({ type: "SET USER", payload: { user, isSignedIn: true } });
+      closeModal("ChooseActivityEntry");
+      openModal("SignupFinished");
     } catch (error) {
       debugErrors(error, state.user);
     }
@@ -101,12 +112,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
         }, 4000);
       }, 2000);
     } else if (state.user === null || !state.user.dataSrcId) {
-      //console.log("!!!!IN", state.user?.dataSrcId);
       openModal("ChooseActivityEntry");
-      // setTimeout(() => {
-
-      //   openModal("ChooseActivityEntry");
-      // }, 2000);
     }
   }, []);
 
@@ -150,6 +156,38 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
               </Text>
             </View>
           ) : (
+            <>
+              <Heading borderBottomWidth={2} borderColor="primary.900" textAlign="center">
+                <Text fontSize="2xl" fontFamily="heading">
+                  The Hero's Initiation
+                </Text>
+              </Heading>
+              <Box pl={10}>
+                <Text strikeThrough={true} opacity={0.5}>
+                  1. Choose your Hero
+                </Text>
+                <Text strikeThrough={true} opacity={0.5}>
+                  2. Create a HeroFit Account
+                </Text>
+                <Text>3. Confirm Email</Text>
+                <Text>4. Choose Strava or Manual Mode</Text>
+              </Box>
+            </>
+          )}
+        </BodyContent>
+      </BasicModal>
+
+      {/* ACTIVITY ENTRY MODAL */}
+      <CharacterModal id="ChooseActivityEntry" modalOpen={state.modalQueue[0] === "ChooseActivityEntry"} speech="Now that you're a pupil in my Dojo?, we'll need to hold you accountable!" disabled={!state.user?.dataSrcId}>
+        <ActionHeader type="info" text="How will you log activities?" />
+        <BodyContent>
+          <ActivityEntrySelect activityRadioValue={activityRadioValue} setActivityRadioValue={setActivityRadioValue} />
+          {/* <View p={3} backgroundColor="base.background">
+            <Heading borderBottomWidth={2} borderColor="primary.900" textAlign="center">
+              <Text fontSize="2xl" fontFamily="heading">
+                The Hero's Initiation
+              </Text>
+            </Heading>
             <Box pl={10}>
               <Text strikeThrough={true} opacity={0.5}>
                 1. Choose your Hero
@@ -157,27 +195,41 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
               <Text strikeThrough={true} opacity={0.5}>
                 2. Create a HeroFit Account
               </Text>
-              <Text>3. Confirm Email</Text>
+              <Text strikeThrough={true} opacity={0.5}>
+                3. Confirm Email
+              </Text>
               <Text>4. Choose Strava or Manual Mode</Text>
             </Box>
-          )}
-        </BodyContent>
-      </BasicModal>
-
-      {/* ACTIVITY ENTRY MODAL */}
-      <CharacterModal id="ChooseActivityEntry" modalOpen={state.modalQueue[0] === "ChooseActivityEntry"} speech="Now that you're a pupil in my Dojo?, we'll need to hold you accountable!" modalAction={() => updateDataSrcId(state.user?.email, activityRadioValue)} disabled={!state.user?.dataSrcId}>
-        <ActionHeader type="info" text="How will you log activities?" />
-        <BodyContent>
-          <ActivityEntrySelect activityRadioValue={activityRadioValue} setActivityRadioValue={setActivityRadioValue} />
-          {activityRadioValue === "Strava" && <StravaConnect />}
+          </View> */}
+          {activityRadioValue === "Strava" ? <StravaConnect /> : activityRadioValue === "Manual" ? <Button onPress={() => handleManualDetails(state.user.email)}>DONE</Button> : null}
         </BodyContent>
       </CharacterModal>
 
-      {/* <BasicModal id="patchUpdate" modalOpen={state.modalQueue[0] === "patchUpdate"} title="BIG SURPRISE!">
+      {/* SIGNUP ALL COMPLETE! */}
+      <CharacterModal id="SignupFinished" modalOpen={state.modalQueue[0] === "SignupFinished"} speech="Promise you show great amounts of, my fledgling. Now Go do your exercises!" buttonText="OK, GREAT!">
+        <ActionHeader type="success" text="All Done!" />
         <BodyContent>
-          <Text>THE CONTENT</Text>
+          <Heading borderBottomWidth={2} borderColor="primary.900" textAlign="center">
+            <Text fontSize="2xl" fontFamily="heading">
+              The Hero's Initiation
+            </Text>
+          </Heading>
+          <Box pl={10}>
+            <Text strikeThrough={true} opacity={0.5}>
+              1. Choose your Hero
+            </Text>
+            <Text strikeThrough={true} opacity={0.5}>
+              2. Create a HeroFit Account
+            </Text>
+            <Text strikeThrough={true} opacity={0.5}>
+              3. Confirm Email
+            </Text>
+            <Text strikeThrough={true} opacity={0.5}>
+              4. Choose Strava or Manual Mode
+            </Text>
+          </Box>
         </BodyContent>
-      </BasicModal> */}
+      </CharacterModal>
 
       {/* <FeedbackModal id="feedback" modalOpen={state.modalQueue[0] === "feedback"} title="Quick Question">
         <FeedbackChoiceForm id="feedback" title={"How would you feel if you could never play HeroFit again?"} postSubmitAction={() => formActionHappens("feedback")} />

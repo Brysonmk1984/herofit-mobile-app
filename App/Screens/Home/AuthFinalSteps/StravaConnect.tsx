@@ -4,7 +4,9 @@ import { makeRedirectUri, useAuthRequest } from "expo-auth-session";
 import { Button } from "native-base";
 import { handleStravaDetails } from "./AuthFlow";
 import { getStravaClientCredentials } from "../../../api/authentication";
-WebBrowser.maybeCompleteAuthSession();
+
+// For Web Only
+//WebBrowser.maybeCompleteAuthSession();
 
 // Endpoint
 const discovery = {

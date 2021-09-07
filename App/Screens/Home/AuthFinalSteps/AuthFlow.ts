@@ -27,9 +27,4 @@ async function handleStravaDetails(): Promise<{ user: User; credentialsForDB: Cr
   return { user, credentialsForDB };
 }
 
-async function handleManualDetails(email): Promise<{ user: User }> {
-  const { user } = await insertManualDataSrcId(email);
-  return { user };
-}
-
-export { handleStravaDetails, handleManualDetails };
+export { handleStravaDetails };
