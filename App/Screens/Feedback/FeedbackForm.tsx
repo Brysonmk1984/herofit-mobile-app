@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { View, VStack, FormControl, Input, TextArea, Button, Dropdown, Select, CheckIcon } from "native-base";
-import HelperText from "../HelperText";
-import Pane from "../Pane";
+import HelperText from "../../Components/HelperText";
+import Pane from "../../Components/Pane";
 import { useDebouncedCallback } from "use-debounce/lib";
 import { updateAlerts } from "../../common/alerts";
 import debugErrors from "../../common/debugErrors";

@@ -1,9 +1,9 @@
 import React from "react";
 import { ScrollView } from "native-base";
-import ScreenContainer from "../Components/ScreenContainer/ScreenContainer";
-import { MainDrawerProps } from "../common/types-navigator";
-import FeedbackForm from "../Components/Forms/FeedbackForm";
-import { Header } from "../Components/CustomComponents";
+import ScreenContainer from "../../Components/ScreenContainer/ScreenContainer";
+import { MainDrawerProps } from "../../common/types-navigator";
+import FeedbackForm from "./FeedbackForm";
+import { Header } from "../../Components/CustomComponents";
 
 const Feedback: React.FC<MainDrawerProps<"Feedback">> = ({ route }) => {
   return (

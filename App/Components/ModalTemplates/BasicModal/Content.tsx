@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, ScrollView } from "native-base";
-import { Icon } from "../CustomComponents";
+import { Icon } from "../../CustomComponents";
 
 // TODO: switch this to use typescript 4.1 Mapped types for case insensitivity
 export interface IActionHeader {

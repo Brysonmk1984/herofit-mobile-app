@@ -17,7 +17,7 @@ import Ranking from "./Screens/Ranking";
 import Campaign from "./Screens/Campaign";
 import Inventory from "./Screens/Inventory";
 import Items from "./Screens/Items";
-import Feedback from "./Screens/Feedback";
+import Feedback from "./Screens/Feedback/Feedback";
 import Settings from "./Screens/Settings";
 
 // MULTI-USE SCREENS
