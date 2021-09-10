@@ -27,8 +27,7 @@
     "react-native/no-color-literals": 2,
     "react-native/no-raw-text": "off",
     "react-native/no-single-element-style-arrays": 2,
-    "react-native/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
-    
+    //"react-native/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
     //These don't work
     //"react-native/jsx-first-prop-new-line": [6, "never"],
     // "react-native/jsx-max-props-per-line": ["error", {
