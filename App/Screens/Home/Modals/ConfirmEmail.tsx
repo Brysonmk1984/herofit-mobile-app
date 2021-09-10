@@ -3,6 +3,7 @@ import { Heading, Box, View, Text, ScrollView } from "native-base";
 import { BasicModal } from "../../../Components/ModalTemplates/ModalTemplates";
 import { ActionHeader, BodyContent } from "../../../Components/ModalTemplates/BasicModal/Content";
 import { GlobalStateContext } from "../../../store";
+import HeroInitiationChecklist from "./Components/HeroInitiationChecklist";
 
 interface ConfirmEmailProps {
   id: string;
@@ -17,7 +18,7 @@ const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
     // Timeout is only to prevent the user from clicking the action button right away without checking email
     setTimeout(() => {
       setDisableButton(false);
-    }, 4000);
+    }, 8000);
   }, []);
 
   return (
@@ -25,32 +26,7 @@ const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
       <ActionHeader type="warning" text="Confirm Email & Receive +5 QP" />
       <BodyContent>
         <ScrollView>
-          <View p={3} backgroundColor="base.background" alignItems="center">
-            <Text fontWeight="bold">Please click the link in your inbox at: </Text>
-            <Text my={3} color="base.highlight">
-              {state.user?.email}
-            </Text>
-            <Text fontSize="xs" fontStyle="italic">
-              *Be sure to check the spam folder if it's not there.
-            </Text>
-          </View>
-          <View>
-            <Heading borderBottomWidth={2} borderColor="primary.900" textAlign="center">
-              <Text fontSize="2xl" fontFamily="heading">
-                The Hero's Initiation
-              </Text>
-            </Heading>
-            <Box pl={10}>
-              <Text strikeThrough={true} opacity={0.5}>
-                1. Choose your Hero
-              </Text>
-              <Text strikeThrough={true} opacity={0.5}>
-                2. Create a HeroFit Account
-              </Text>
-              <Text>3. Confirm Email</Text>
-              <Text>4. Choose Strava or Manual Mode</Text>
-            </Box>
-          </View>
+          <HeroInitiationChecklist crossedOut={[true, true]} />
         </ScrollView>
       </BodyContent>
     </BasicModal>

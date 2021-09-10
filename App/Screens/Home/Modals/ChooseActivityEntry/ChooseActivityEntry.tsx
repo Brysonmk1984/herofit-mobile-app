@@ -8,6 +8,7 @@ import { GlobalStateContext } from "../../../../store";
 import { createManualDataSrcId } from "../../../../api/authentication";
 import debugErrors from "../../../../common/debugErrors";
 import useModal from "../../../../common/hooks/useModal";
+import HeroInitiationChecklist from "../Components/HeroInitiationChecklist";
 
 interface ChooseActivityEntryProps {
   id: string;
@@ -23,6 +24,7 @@ const ChooseActivityEntry: React.FC<ChooseActivityEntryProps> = ({ id }) => {
   async function handleManualDetails(email: string) {
     try {
       const { user } = await createManualDataSrcId({ email });
+
       dispatch({ type: "SET USER", payload: { user, isSignedIn: true } });
       closeModal("ChooseActivityEntry");
       openModal("SignupFinished");
@@ -37,32 +39,14 @@ const ChooseActivityEntry: React.FC<ChooseActivityEntryProps> = ({ id }) => {
     } else if (activityRadioValue === "Manual") {
       setConfirmButton({ modalAction: () => handleManualDetails(state.user.email), buttonText: "Done" });
     }
-  }, []);
+  }, [activityRadioValue]);
 
   return (
     <CharacterModal id={id} modalOpen={state.modalQueue[0] === id} speech="Now that you're a pupil in my Dojo?, we'll need to hold you accountable!" disabled={!activityRadioValue} modalAction={confirmButton.modalAction} buttonText={confirmButton.buttonText}>
       <ActionHeader type="info" text="How will you log activities?" />
       <BodyContent>
         <ActivityEntrySelect activityRadioValue={activityRadioValue} setActivityRadioValue={setActivityRadioValue} />
-        {/* <View p={3} backgroundColor="base.background">
-          <Heading borderBottomWidth={2} borderColor="primary.900" textAlign="center">
-            <Text fontSize="2xl" fontFamily="heading">
-              The Hero's Initiation
-            </Text>
-          </Heading>
-          <Box pl={10}>
-            <Text strikeThrough={true} opacity={0.5}>
-              1. Choose your Hero
-            </Text>
-            <Text strikeThrough={true} opacity={0.5}>
-              2. Create a HeroFit Account
-            </Text>
-            <Text strikeThrough={true} opacity={0.5}>
-              3. Confirm Email
-            </Text>
-            <Text>4. Choose Strava or Manual Mode</Text>
-          </Box>
-        </View> */}
+        {/* <HeroInitiationChecklist crossedOut={[true, true, true]} /> */}
       </BodyContent>
     </CharacterModal>
   );

@@ -74,14 +74,14 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
       // If hero is an existing Hero, check against existing Hero type and pop navigation stack
       // Not sure why I need to add the assertion at the end... the conditional affirms it's an existing user
       const updatedHero: Hero = Object.assign({}, hero, { ...qpState }) as unknown as Hero;
-      console.log("DONE SETTINGS STATS ON HERO", updatedHero);
+      //console.log("DONE SETTINGS STATS ON HERO", updatedHero);
       dispatch({ type: "SET HERO", payload: { hero: updatedHero } });
       //go back to previous (home) screen
       navigation.pop();
     } else {
       // Otherwise, if hero is not an existing hero, assign all the correct properties for new heroes
       const updatedHeroWithDefaults: HeroWithStats & DefaultHeroProperties = Object.assign(DEFAULT_HERO_PROPERTIES, updatedHero, { maxHealth: updatedHero.health, status: "Rested" });
-      console.log("DONE SETTINGS STATS ON HERO", updatedHeroWithDefaults);
+      //console.log("DONE SETTINGS STATS ON HERO", updatedHeroWithDefaults);
       dispatch({ type: "SET HERO", payload: { hero: updatedHeroWithDefaults } });
       //navigation.push("Register");
       navigation.push("Home");

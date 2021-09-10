@@ -73,22 +73,21 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   }
 
   useEffect(() => {
-    console.log("SU", state.userStatus, state.user);
+    //console.log("SU", state.userStatus, state.user);
     if (state.userStatus === "new") {
-      openModal("SignUp", 2000);
+      openModal("SignupToSave", 2000);
     } else if (state.userStatus === "unconfirmed") {
       openModal("ConfirmEmail", 2000);
-    } else if (state.user === null || !state.user.dataSrcId) {
+    } else if (state.user === null || !state.user?.dataSrcId) {
       openModal("ChooseActivityEntry", 2000);
     }
-  }, []);
+  }, [state.userStatus, state.user, state.user?.dataSrcId]);
 
   return (
     <ScreenContainer screenName={route.name}>
       {renderHeroDetails()}
       <Button onPress={() => openModal("FeedbackChoice")}>Open Form Modal</Button>
       <Button onPress={() => navigation.toggleDrawer()}>Drawer</Button>
-
       {/* MODALS */}
       <SignupToSave id="SignupToSave" modalAction={() => navigation.push("Register")} />
       <ConfirmEmail id="ConfirmEmail" modalAction={handleEmailConfirmed} />

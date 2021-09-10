@@ -93,8 +93,6 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
     formIsValid: false,
   };
   const [formState, formDispatch] = useReducer(formReducer, initialFormState);
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
 
   // first time sign up, need to insert avinsertAvatarIntoDb
   async function handlePostRegister(user: User) {
@@ -102,14 +100,9 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
 
     try {
       const data = await insertAvatar({ avatar: state.hero, email: user.email, userId: user.id });
-      console.log("data from inserting av into db", data);
-      dispatch({ type: "SET ISSIGNEDIN", payload: { isSignedIn: true } });
-      dispatch({ type: "SET USER STATUS", payload: { userStatus: "unconfirmed" } });
       updateAlerts([{ type: "success", message: `Account creation successful!` }], state, dispatch);
-      setTimeout(() => {
-        //@ts-ignore - Can't figure out how to add strong typing for nested navigators
-        navigation.navigate("App");
-      }, 1500);
+      dispatch({ type: "SET HERO", payload: { hero: data.avatar } });
+      dispatch({ type: "SET ISSIGNEDIN", payload: { isSignedIn: true } });
     } catch (error) {
       // Error getting Avatar, should only happen if DB connection issues
       debugErrors(error, user);
@@ -119,14 +112,12 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
   }
 
   async function handleSignUp() {
-    setLoading(true);
     const { email, firstName, username: username, password, emailMarketingOptIn } = formState;
 
     try {
       const data = await register({ email, firstName, username, password, emailMarketingOptIn });
-      setSuccess(true);
       const { user } = data;
-
+      dispatch({ type: "SET USER STATUS", payload: { userStatus: "unconfirmed" } });
       updateAlerts([{ type: "success", message: "Please check your email to verify account. Check your spam folder if the message is not in your inbox.", persist: true }], state, dispatch);
       handlePostRegister(user);
     } catch (error) {
