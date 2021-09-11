@@ -115,7 +115,7 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
     const { email, firstName, username: username, password, emailMarketingOptIn } = formState;
 
     try {
-      const data = await register({ email, firstName, username, password, emailMarketingOptIn });
+      const data = await register({ email, firstName, username, password, emailMarketingOptIn, isMobileApp: true });
       const { user } = data;
       dispatch({ type: "SET USER STATUS", payload: { userStatus: "unconfirmed" } });
       updateAlerts([{ type: "success", message: "Please check your email to verify account. Check your spam folder if the message is not in your inbox.", persist: true }], state, dispatch);

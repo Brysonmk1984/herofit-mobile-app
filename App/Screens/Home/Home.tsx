@@ -6,7 +6,6 @@ import { GlobalStateContext } from "../../store";
 import { Item, User } from "../../common/types";
 import { MainDrawerProps } from "../../common/types-navigator";
 import useModal from "../../common/hooks/useModal";
-
 import { getUser } from "../../api/user";
 import { updateAlerts } from "../../common/alerts";
 
@@ -14,6 +13,7 @@ import { updateAlerts } from "../../common/alerts";
 
 import { createManualDataSrcId } from "../../api/authentication";
 import { ChooseActivityEntry, SignupToSave, SignupFinished, ConfirmEmail, FeedbackChoice } from "./Modals/Modals";
+import { makeRedirectUri, useAuthRequest } from "expo-auth-session";
 
 const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -49,8 +49,6 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   }
 
   async function handleEmailConfirmed() {
-    console.log("myaction!");
-
     try {
       // * First time the user is assigned
       const { user } = await getUser({ email: state.user.email });

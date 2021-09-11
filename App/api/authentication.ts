@@ -33,6 +33,7 @@ interface RegisterBody {
   username: string;
   password: string;
   emailMarketingOptIn: boolean;
+  isMobileApp: true;
 }
 
 const register = async function (body: RegisterBody): Promise<{ user: User }> {

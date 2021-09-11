@@ -2,9 +2,9 @@ import React, { useContext } from "react";
 import { StyleSheet, Linking } from "react-native";
 import { Text, View, Pressable } from "native-base";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { AlertThemes } from "./styles";
-import { alertRemover } from "./common/alerts";
-import { SnackBarAlertWithIndex } from "./common/types";
+import { AlertThemes } from "../styles";
+import { alertRemover } from "../common/alerts";
+import { SnackBarAlertWithIndex } from "../common/types";
 
 interface Alerts {
   alerts: SnackBarAlertWithIndex[];
@@ -83,13 +83,14 @@ const Alerts: React.FC<Alerts> = ({ alerts, dispatch }) => {
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    display: "none",
+
     bottom: 0,
     left: 0,
     width: "100%",
     justifyContent: "center",
     alignSelf: "flex-end",
-    zIndex: 1000,
+    zIndex: 100001,
+    elevation: 100001,
     opacity: 0.9,
   },
   iconColumn: {

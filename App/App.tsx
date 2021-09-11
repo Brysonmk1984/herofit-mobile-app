@@ -6,7 +6,7 @@ import { useFonts } from "expo-font";
 import { GlobalStateContext } from "./store";
 import RootStackScreen from "./Navigator";
 import { Loading } from "./Screens";
-import Alerts from "./Alerts";
+import Alerts from "./Components/Alerts";
 import debugErrors from "./common/debugErrors";
 import fetchInitialData from "./common/fetchInitialData";
 import useJwt from "./common/hooks/useJwt";
@@ -64,8 +64,8 @@ const App: React.FC = () => {
           If Font have not been loaded  -> fontLoaded === false
           Show loading, otherwise show view
         */}
-        {state.isLoading || !fontsLoaded ? <Loading /> : <RootStackScreen isSignedIn={state.isSignedIn} />}
         {state.alerts.length ? <Alerts alerts={state.alerts} dispatch={dispatch} /> : null}
+        {state.isLoading || !fontsLoaded ? <Loading /> : <RootStackScreen isSignedIn={state.isSignedIn} />}
       </View>
     </NavigationContainer>
   );
