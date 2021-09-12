@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import * as WebBrowser from "expo-web-browser";
 import { makeRedirectUri, useAuthRequest } from "expo-auth-session";
 import { Button } from "native-base";
-import { handleStravaDetails } from "./AuthFlow";
-import { getStravaClientCredentials } from "../../../api/authentication";
+import { handleStravaDetails } from "../../AuthFinalSteps/AuthFlow";
+import { getStravaClientCredentials } from "../../../../api/authentication";
 
 // For Web Only
 //WebBrowser.maybeCompleteAuthSession();
@@ -25,8 +25,7 @@ export default function StravaConnect({ email }) {
         // For usage in bare and standalone
         // the "redirect" must match your "Authorization Callback Domain" in the Strava dev console.
         //native: "your.app://redirect",
-        useProxy: false,
-        native: "herofit.io",
+        useProxy: true,
       }),
     },
     discovery,
@@ -42,16 +41,8 @@ export default function StravaConnect({ email }) {
   useEffect(() => {
     (async () => {
       const { clientId, clientSecret } = await getStravaClientCredentials();
+      console.log("CI", clientId);
       setClientId(clientId);
-
-      const cake = makeRedirectUri({
-        // For usage in bare and standalone
-        // the "redirect" must match your "Authorization Callback Domain" in the Strava dev console.
-        //native: "your.app://redirect",
-        native: "herofit.io",
-        useProxy: false,
-      });
-      console.log("CAKE", cake);
     })();
   }, []);
 

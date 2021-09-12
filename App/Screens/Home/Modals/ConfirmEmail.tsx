@@ -21,18 +21,18 @@ const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
   const [showChecklist, setShowChecklist] = useState(true);
   console.log(state.user.email);
 
-  const [request, response, promptAsync] = useAuthRequest(
-    {
-      redirectUri: makeRedirectUri({
-        // For usage in bare and standalone
-        // the "redirect" must match your "Authorization Callback Domain" in the Strava dev console.
-        //native: "your.app://redirect",
-        useProxy: false,
-        native: "herofit://test",
-      }),
-    },
-    discovery,
-  );
+  // const [request, response, promptAsync] = useAuthRequest(
+  //   {
+  //     redirectUri: makeRedirectUri({
+  //       // For usage in bare and standalone
+  //       // the "redirect" must match your "Authorization Callback Domain" in the Strava dev console.
+  //       //native: "your.app://redirect",
+  //       useProxy: false,
+  //       native: "herofit://test",
+  //     }),
+  //   },
+  //   discovery,
+  // );
 
   function resendEmailLink() {
     try {

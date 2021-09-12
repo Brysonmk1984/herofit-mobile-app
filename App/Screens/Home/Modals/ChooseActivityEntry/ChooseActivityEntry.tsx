@@ -1,14 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ActivityEntrySelect } from "./ActivityEntrySelect";
-import StravaConnect from "../../AuthFinalSteps/StravaConnect";
+import StravaConnect from "./StravaConnect";
 import { CharacterModal } from "../../../../Components/ModalTemplates/ModalTemplates";
 import { ActionHeader, BodyContent } from "../../../../Components/ModalTemplates/BasicModal/Content";
-import { Button } from "react-native";
 import { GlobalStateContext } from "../../../../store";
 import { createManualDataSrcId } from "../../../../api/authentication";
 import debugErrors from "../../../../common/debugErrors";
 import useModal from "../../../../common/hooks/useModal";
-import HeroInitiationChecklist from "../Components/HeroInitiationChecklist";
 
 interface ChooseActivityEntryProps {
   id: string;
@@ -42,11 +40,12 @@ const ChooseActivityEntry: React.FC<ChooseActivityEntryProps> = ({ id }) => {
   }, [activityRadioValue]);
 
   return (
-    <CharacterModal id={id} modalOpen={state.modalQueue[0] === id} speech="Now that you're a pupil in my Dojo?, we'll need to hold you accountable!" disabled={!activityRadioValue} modalAction={confirmButton.modalAction} buttonText={confirmButton.buttonText}>
+    <CharacterModal id={id} modalOpen={state.modalQueue[0] === id} speech="Now that you're a pupil in my Dojo?, we'll need to hold you accountable!" disabled={!activityRadioValue} modalAction={confirmButton.modalAction} buttonText={activityRadioValue === "Manual" ? confirmButton.buttonText : null}>
       <ActionHeader type="info" text="How will you log activities?" />
       <BodyContent>
         <ActivityEntrySelect activityRadioValue={activityRadioValue} setActivityRadioValue={setActivityRadioValue} />
         {/* <HeroInitiationChecklist crossedOut={[true, true, true]} /> */}
+        {activityRadioValue === "Strava" && <StravaConnect email={state.user.email} />}
       </BodyContent>
     </CharacterModal>
   );
