@@ -4,6 +4,9 @@ import { makeRedirectUri, useAuthRequest } from "expo-auth-session";
 import { Button } from "native-base";
 import { handleStravaDetails } from "../../AuthFinalSteps/AuthFlow";
 import { getStravaClientCredentials } from "../../../../api/authentication";
+// Only needed because useAuthRequest needs an initial value for redirectUri
+import Constants from "expo-constants";
+const REDIRECT_URI: string = Constants.manifest.extra.APP_STRAVA_REDIRECT_URI;
 
 // For Web Only
 //WebBrowser.maybeCompleteAuthSession();
@@ -17,16 +20,23 @@ const discovery = {
 
 export default function StravaConnect({ email }) {
   const [clientId, setClientId] = useState();
+  const [redirectUri, setRedirectUri] = useState(null);
   const [request, response, promptAsync] = useAuthRequest(
     {
       clientId,
       scopes: ["activity:read_all"],
-      redirectUri: makeRedirectUri({
-        // For usage in bare and standalone
-        // the "redirect" must match your "Authorization Callback Domain" in the Strava dev console.
-        //native: "your.app://redirect",
-        useProxy: true,
-      }),
+      redirectUri: redirectUri || `${REDIRECT_URI}`,
+      // redirectUri: makeRedirectUri({
+      //   // For usage in bare and standalone
+      //   // the "redirect" must match your "Authorization Callback Domain" in the Strava dev console.
+      //   //native: "your.app://redirect",
+      //   //useProxy: true,
+      //   //"https://herofitgame.com"
+      // }),
+      // redirectUri: makeRedirectUri({
+      //   useProxy: false,
+      //   native: "herofit://redirect",
+      // }),
     },
     discovery,
   );
@@ -40,9 +50,10 @@ export default function StravaConnect({ email }) {
 
   useEffect(() => {
     (async () => {
-      const { clientId, clientSecret } = await getStravaClientCredentials();
+      const { clientId, redirectUri } = await getStravaClientCredentials();
       console.log("CI", clientId);
       setClientId(clientId);
+      setRedirectUri(redirectUri);
     })();
   }, []);
 

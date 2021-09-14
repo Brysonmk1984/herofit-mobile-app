@@ -74,7 +74,7 @@ const sendPasswordResetEmailVerification = async function (body) {
 
 const getStravaClientCredentials = async function () {
   return axios
-    .get(`${endpoint}auth/strava-client-credentials`, await axiosOptions())
+    .get(`${endpoint}auth/strava-client-credentials-app`, await axiosOptions())
     .then(({ data }) => {
       return data.data;
     })
