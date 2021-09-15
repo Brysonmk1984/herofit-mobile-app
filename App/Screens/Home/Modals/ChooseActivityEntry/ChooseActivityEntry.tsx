@@ -8,7 +8,7 @@ import { createManualDataSrcId } from "../../../../api/authentication";
 import debugErrors from "../../../../common/debugErrors";
 import useModal from "../../../../common/hooks/useModal";
 import * as Linking from "expo-linking";
-import useStravaConnect from "./Strava/StravaConnect";
+import useStravaConnect from "./Strava/useStravaConnect";
 import HelperText from "../../../../Components/HelperText";
 
 interface ChooseActivityEntryProps {
@@ -26,7 +26,6 @@ const ChooseActivityEntry: React.FC<ChooseActivityEntryProps> = ({ id }) => {
   async function handleManualDetails(email: string) {
     try {
       const { user } = await createManualDataSrcId({ email });
-
       dispatch({ type: "SET USER", payload: { user, isSignedIn: true } });
       closeModal("ChooseActivityEntry");
       openModal("SignupFinished");
@@ -39,7 +38,6 @@ const ChooseActivityEntry: React.FC<ChooseActivityEntryProps> = ({ id }) => {
     getStravaCredentials();
     setConfirmButton({ modalAction: () => {}, buttonText: "Connect Strava" });
     Linking.addEventListener("url", handleStravaRedirect);
-    //return Linking.addEventListener("url", handleStravaRedirect);
   }
 
   // DEPENDING ON WHICH RADIO IS CLICKED, EITHER HANDLE STRAVA OR MANUAL DETAILS
@@ -48,8 +46,6 @@ const ChooseActivityEntry: React.FC<ChooseActivityEntryProps> = ({ id }) => {
       //let stravaLinkEventListener;
       if (activityRadioValue === "Strava") {
         // Sets the state for all the strava details, then sets the event listener
-        //stravaLinkEventListener =
-
         _handleStravaDetails();
       } else if (activityRadioValue === "Manual") {
         Linking.removeEventListener("url", handleStravaRedirect);
@@ -62,7 +58,9 @@ const ChooseActivityEntry: React.FC<ChooseActivityEntryProps> = ({ id }) => {
   useEffect(() => {
     if (stravaSuccess) {
       closeModal("ChooseActivityEntry");
-      openModal("SignupFinished");
+      setTimeout(() => {
+        openModal("SignupFinished");
+      }, 1500);
     }
   }, [stravaSuccess]);
 
