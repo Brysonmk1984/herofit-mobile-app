@@ -152,7 +152,6 @@ const getHeroList = async function (): Promise<HeroChoice[]> {
 
 // A user chooses 'Manual Mode' instead of strava
 const createManualDataSrcId = async function (body: { email: string }): Promise<{ user: User }> {
-  console.log("BODD", body);
   return axios
     .post(`${endpoint}auth/generate-datasrcid`, body, await axiosOptions())
     .then(({ data }) => {
