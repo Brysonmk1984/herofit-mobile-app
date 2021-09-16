@@ -49,7 +49,12 @@ const register = async function (body: RegisterBody): Promise<{ user: User }> {
     });
 };
 
-const resetPassword = async function (body) {
+interface ResetPasswordParams {
+  email: string;
+  token: string;
+  password: string;
+}
+const resetPassword = async function (body: ResetPasswordParams) {
   return axios
     .post(`${endpoint}auth/reset-password`, body, await axiosOptions())
     .then(({ data }) => {
@@ -61,7 +66,7 @@ const resetPassword = async function (body) {
 };
 
 // Only Meant for password reset
-const sendPasswordResetEmailVerification = async function (body) {
+const sendPasswordResetEmailVerification = async function (body: { email: string; isApp: true }) {
   return axios
     .post(`${endpoint}auth/reset-password-confirm-email`, body, await axiosOptions())
     .then(({ data }) => {

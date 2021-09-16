@@ -23,6 +23,21 @@
         "backgroundColor": "#FFFFFF"
       }
     },
+    "ios": {
+      "infoPlist": {
+         "LSApplicationQueriesSchemes": [
+            "message",
+            "readdle-spark",
+            "airmail",
+            "ms-outlook",
+            "googlegmail",
+            "inbox-gmail",
+            "ymail",
+            "superhuman",
+            "yandexmail"
+         ]
+      }
+   },
     "web": {
       "favicon": "./assets/favicon.png"
     }

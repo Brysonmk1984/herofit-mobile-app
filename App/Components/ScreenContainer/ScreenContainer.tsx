@@ -15,6 +15,7 @@ function determineImageBackground({ type, name }: { type: string; name: string }
   if (type === "art") {
     switch (name) {
       case "SignIn":
+      case "ForgotPassword":
         return require("../../../assets/images/backgrounds/pets-background.webp");
       case "Register":
         return require("../../../assets/images/backgrounds/pets-background-2.webp");

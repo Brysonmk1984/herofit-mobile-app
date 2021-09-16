@@ -28,6 +28,7 @@ type MainDrawerParamList = {
 type AuthStackParamList = {
   Splash: undefined;
   SignIn: undefined;
+  ForgotPassword: undefined;
   Register: NavigatorScreenParams<MainDrawerParamList["Home"]>;
   AboutGame: undefined;
   SelectHeroHowTo: undefined;

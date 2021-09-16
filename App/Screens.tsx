@@ -2,6 +2,7 @@
 import Splash from "./Screens/Auth/Splash";
 import SignIn from "./Screens/Auth/SignIn";
 import Register from "./Screens/Auth/Register";
+import ForgotPassword from "./Screens/Auth/ForgotPassword";
 
 // HERO SELECTION
 import AboutGame from "./Screens/HeroSelection/AboutGame";
@@ -24,4 +25,4 @@ import Settings from "./Screens/Settings";
 import Loading from "./Screens/Loading/Loading";
 import SpendQP from "./Screens/Common/SpendQP";
 
-export { Splash, SignIn, Register, AboutGame, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection, Home, Profile, Ranking, Campaign, Inventory, Items, Feedback, Settings, Loading, SpendQP };
+export { Splash, SignIn, Register, ForgotPassword, AboutGame, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection, Home, Profile, Ranking, Campaign, Inventory, Items, Feedback, Settings, Loading, SpendQP };

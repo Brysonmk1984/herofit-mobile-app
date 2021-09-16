@@ -90,9 +90,8 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
             </FormControl>
             {helperText && <HelperText type={formIsValid ? "success" : "error"} text={helperText} />}
             <View alignItems="center">
-              <Text color="base.white">- or -</Text>
-              <Link onPress={() => navigation.push("AboutGame")} mt={1}>
-                GET STARTED
+              <Link onPress={() => navigation.push("ForgotPassword")} mt={1}>
+                Forgot Password?
               </Link>
             </View>
           </VStack>
