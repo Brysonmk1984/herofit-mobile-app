@@ -50,6 +50,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ attributes }) => {
           closeOnDragDown={true}
           closeOnPressMask={false}
           height={bottomDrawerHeight}
+          openDuration={750}
           customStyles={{
             wrapper: {
               backgroundColor: "transparent",
@@ -63,17 +64,6 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ attributes }) => {
           }}
         >
           <Box flexDirection="row">
-            <Button m={1} flex={1}>
-              Inventory
-            </Button>
-            <Button m={1} flex={1}>
-              Profile
-            </Button>
-            <Button m={1} flex={1}>
-              Campaign
-            </Button>
-          </Box>
-          <Box flexDirection="row">
             <StatDisplay flex={1} statColor={colors.base.highlight} stat="Power" value={power} reversedText size="sm" />
             <StatDisplay flex={1} statColor={colors.base.highlight} stat="Recovery" value={recovery} reversedText size="sm" />
             <StatDisplay flex={1} statColor={colors.base.highlight} stat="Armor" value={armor} reversedText size="sm" />
@@ -84,6 +74,17 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ attributes }) => {
             <StatDisplay flex={1} statColor={colors.base.highlight} stat="Earth" value={earth} reversedText size="sm" />
             <StatDisplay flex={1} statColor={colors.base.highlight} stat="Water" value={water} reversedText size="sm" />
             <StatDisplay flex={1} statColor={colors.base.highlight} stat="Air" value={air} reversedText size="sm" />
+          </Box>
+          <Box flexDirection="row">
+            <Button m={1} flex={1}>
+              Inventory
+            </Button>
+            <Button m={1} flex={1}>
+              Profile
+            </Button>
+            <Button m={1} flex={1}>
+              Campaign
+            </Button>
           </Box>
         </RBSheet>
       </View>
