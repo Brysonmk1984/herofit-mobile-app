@@ -4,7 +4,9 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import herofitTheme from "./styles/herofitTheme";
 import * as Screens from "./Screens";
 import { AuthStackParamList, MainDrawerParamList, RootStackParamList } from "./common/types-navigator";
-
+import { DrawerIndicator } from "./Components/DrawerIndicator";
+import { AntDesign } from "@expo/vector-icons";
+import { Icon } from "native-base";
 // ROOT First level Navigator, used to determine if the user should go through auth sequence of straight to the app
 // TS - Ben doesn't pass a generic here, but the docs do.
 const RootStack = createStackNavigator<RootStackParamList>();
@@ -36,8 +38,8 @@ const AuthStackScreen = () => {
 const MainDrawer = createDrawerNavigator<MainDrawerParamList>();
 const DrawerScreen = () => {
   return (
-    <MainDrawer.Navigator screenOptions={{ headerShown: false, ...baseScreenStyle }}>
-      <MainDrawer.Screen name="Home" component={Screens.Home} />
+    <MainDrawer.Navigator drawerPosition="right" screenOptions={{ headerShown: false, ...baseScreenStyle }}>
+      <MainDrawer.Screen options={{ drawerIcon: ({ focused, size }) => <Icon as={AntDesign} name="home" size={10} color="base.link" /> }} name="Home" component={Screens.Home} />
       <MainDrawer.Screen name="Profile" component={Screens.Profile} />
       <MainDrawer.Screen name="Ranking" component={Screens.Ranking} />
       <MainDrawer.Screen name="Campaign" component={Screens.Campaign} />

@@ -12,6 +12,7 @@ import fetchInitialData from "./common/fetchInitialData";
 import useJwt from "./common/hooks/useJwt";
 import { getHeroAlias } from "./common/helperFunctions";
 import { View } from "native-base";
+import { DrawerIndicator } from "./Components/DrawerIndicator";
 LogBox.ignoreLogs(["Reanimated 2", "Remote debugger", "VirtualizedLists should never be nested"]);
 
 const height = Dimensions.get("window").height;

@@ -14,6 +14,9 @@ import { updateAlerts } from "../../common/alerts";
 import { createManualDataSrcId } from "../../api/authentication";
 import { ChooseActivityEntry, SignupToSave, SignupFinished, ConfirmEmail, FeedbackChoice } from "./Modals/Modals";
 import { makeRedirectUri, useAuthRequest } from "expo-auth-session";
+import { DrawerIndicator } from "../../Components/DrawerIndicator";
+import Background from "./Modals/Components/Background";
+import BottomDrawer from "./Modals/Components/BottomDrawer";
 
 const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -83,9 +86,11 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
 
   return (
     <ScreenContainer screenName={route.name}>
+      <Background />
       {renderHeroDetails()}
-      <Button onPress={() => openModal("FeedbackChoice")}>Open Form Modal</Button>
-      <Button onPress={() => navigation.toggleDrawer()}>Drawer</Button>
+      <DrawerIndicator action={() => navigation.toggleDrawer()} />
+      <BottomDrawer />
+
       {/* MODALS */}
       <SignupToSave id="SignupToSave" modalAction={() => navigation.push("Register")} />
       <ConfirmEmail id="ConfirmEmail" modalAction={handleEmailConfirmed} />
