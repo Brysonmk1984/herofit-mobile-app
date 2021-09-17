@@ -22,7 +22,8 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { openModal } = useModal();
   const { name, status, health, maxHealth, activityXP, battleXP, photonTokens, goToBattle, equipped, qp } = state.hero;
-
+  const attributesForBottomConsole = (({ power, recovery, armor, fire, earth, water, air, aether }) => ({ power, recovery, armor, fire, earth, water, air, aether }))(state.hero);
+  console.log("SH", attributesForBottomConsole);
   function renderItem({ item }: Item) {
     return (
       <View>
@@ -89,7 +90,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
       <Background />
       {renderHeroDetails()}
       <DrawerIndicator action={() => navigation.toggleDrawer()} />
-      <BottomDrawer />
+      <BottomDrawer attributes={attributesForBottomConsole} />
 
       {/* MODALS */}
       <SignupToSave id="SignupToSave" modalAction={() => navigation.push("Register")} />

@@ -11,6 +11,8 @@ interface StatDisplayProps {
   reversedColor?: boolean;
   iconWatermark?: boolean;
   reversedText?: boolean;
+  flex?: number;
+  statColor?: string;
 }
 
 type nativeBaseSizes = number | "xxs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl";
@@ -23,9 +25,10 @@ interface StatDisplaySizes {
   descriptionSize: nativeBaseSizes;
 }
 
-export default function StatDisplay({ stat, value, description, size, reversedText, iconWatermark }: StatDisplayProps) {
+export default function StatDisplay({ stat, value, description, size, reversedText, iconWatermark, flex, statColor }: StatDisplayProps) {
   const elementNameLC = stat.toLowerCase() as Stat;
   const iconColor = reversedText ? "base.white" : `base.${elementNameLC}`;
+  const numberColor = statColor ? statColor : reversedText ? "base.white" : null;
   const textColor = reversedText ? "base.white" : null;
 
   const { iconSize, valueSize, statSize, statSize2, descriptionSize } = ((): StatDisplaySizes => {
@@ -36,7 +39,7 @@ export default function StatDisplay({ stat, value, description, size, reversedTe
       descriptionSize: nativeBaseSizes = "sm";
 
     if (size === "sm") {
-      (iconSize = 30), (valueSize = "lg"), (statSize = 30), (statSize2 = 16), (descriptionSize = "xs");
+      (iconSize = 30), (valueSize = "lg"), (statSize = 30), (statSize2 = 28), (descriptionSize = "xs");
     }
     if (iconWatermark) {
       iconSize = 120;
@@ -69,7 +72,7 @@ export default function StatDisplay({ stat, value, description, size, reversedTe
     if (iconWatermark) {
       return (
         <View flex={2} alignItems="center">
-          <Text color={textColor} fontFamily="heading" fontSize={value >= 100 ? statSize2 : statSize} textAlign="center" lineHeight={size === "sm" ? "40px" : "60px"}>
+          <Text color={numberColor} fontFamily="heading" fontSize={value >= 100 ? statSize2 : statSize} textAlign="center" lineHeight={size === "sm" ? "40px" : "60px"}>
             {value}
           </Text>
           <Text color={textColor} fontFamily="heading" fontSize={valueSize} lineHeight={size === "sm" ? 5 : 6}>
@@ -81,7 +84,7 @@ export default function StatDisplay({ stat, value, description, size, reversedTe
 
     return (
       <View alignItems="center">
-        <Text color={textColor} fontFamily="heading" fontSize={value >= 100 ? statSize2 : statSize} textAlign="center" lineHeight={size === "sm" ? "40px" : "60px"}>
+        <Text color={numberColor} fontFamily="heading" fontSize={value >= 100 ? statSize2 : statSize} textAlign="center" lineHeight={size === "sm" ? "40px" : "60px"}>
           {value}
         </Text>
         <Text color={textColor} fontFamily="heading" fontSize={valueSize} lineHeight={size === "sm" ? 5 : 6}>
@@ -114,7 +117,7 @@ export default function StatDisplay({ stat, value, description, size, reversedTe
   }
 
   return (
-    <Box display="flex">
+    <Box display="flex" flex={flex}>
       <HStack space={2} alignItems="center" justifyContent="center">
         {renderIcon(iconWatermark, elementNameLC)}
         {renderNumberAndName(iconWatermark, elementNameLC)}
