@@ -7,6 +7,7 @@ import moment from "moment";
 // COMMON
 import debugErrors from "../../../../../common/debugErrors";
 import { GlobalStateContext } from "../../../../../store";
+import useAxios from "../../../../../common/hooks/useAxios";
 // API
 import stravaEndpoints, { STRAVA_REDIRECT_URI } from "./stravaEndpoints";
 import { insertStravaCredentials, getStravaClientCredentials } from "../../../../../api/authentication";
@@ -37,6 +38,8 @@ function useStravaConnect() {
   const [redirectUri, setRedirectUri] = useState(null);
   const [clientSecret, setClientSecret] = useState(null);
   const [stravaSuccess, setStravaSuccess] = useState(false);
+  const [data, loading, error] = useAxios(null, null, false, null);
+
   // One-Time Strava Auth Request
   const [request, response, promptAsync] = AuthSession.useAuthRequest({ clientId, scopes: ["activity:read_all"], redirectUri: redirectUri || `${STRAVA_REDIRECT_URI}` }, stravaEndpoints);
 
