@@ -17,13 +17,16 @@ import { makeRedirectUri, useAuthRequest } from "expo-auth-session";
 import { DrawerIndicator } from "../../Components/DrawerIndicator";
 import Background from "./Modals/Components/Background";
 import BottomDrawer from "./Modals/Components/BottomDrawer";
+import { getHeroImage } from "../../common/helperFunctions";
+import { HeroImage } from "./Modals/Components/HeroImage";
 
 const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { openModal } = useModal();
+  const H = state.hero;
   const { name, status, health, maxHealth, activityXP, battleXP, photonTokens, goToBattle, equipped, qp } = state.hero;
   const attributesForBottomConsole = (({ power, recovery, armor, fire, earth, water, air, aether }) => ({ power, recovery, armor, fire, earth, water, air, aether }))(state.hero);
-  console.log("SH", attributesForBottomConsole);
+  console.log("SH", H);
   function renderItem({ item }: Item) {
     return (
       <View>
@@ -89,6 +92,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
     <ScreenContainer screenName={route.name}>
       <Background />
       {renderHeroDetails()}
+      <HeroImage character={H.character} alias={H.alias} skin={equipped.find(i => i.type === "skin")?.name} status={H.status} />
       <DrawerIndicator action={() => navigation.toggleDrawer()} />
       <BottomDrawer attributes={attributesForBottomConsole} />
 

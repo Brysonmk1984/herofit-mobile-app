@@ -147,13 +147,14 @@ interface Stats {
 interface HeroTemplate {
   name: string;
   character: CharacterName;
+  alias: CharacterAlias;
 }
 
-type StatusType = "Rested" | "Recovering" | "Knocked Out" | "Infected";
+type HeroStatus = "Rested" | "Recovering" | "Knocked Out" | "Infected";
 
 // Defaults for user's new Hero
 interface DefaultHeroProperties {
-  status: StatusType;
+  status: HeroStatus;
   statusFade: number;
   equipped: [];
   goToBattle: boolean;
@@ -279,4 +280,6 @@ interface FoeClasses {
   titans: TitanFoes[];
 }
 
-export { Action, AppDispatch, InitialAppState, AppAction, Store, SnackBarAlert, SnackBarAlertWithIndex, User, UserStatus, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, HeroTemplate, StartingElementalPower, SelectedHero, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, Stat, HeroChoice, CharacterName, CharacterAlias, FoeTypes, FoeClasses };
+type Skin = "shadow_self" | "ascended_self" | "gale_force" | "fire_brand" | "earth_shaker" | "tide_caller";
+
+export { Action, AppDispatch, InitialAppState, AppAction, Store, SnackBarAlert, SnackBarAlertWithIndex, User, UserStatus, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, HeroTemplate, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, Stat, HeroChoice, CharacterName, CharacterAlias, FoeTypes, FoeClasses, Skin };
