@@ -280,6 +280,8 @@ interface FoeClasses {
   titans: TitanFoes[];
 }
 
-type Skin = "shadow_self" | "ascended_self" | "gale_force" | "fire_brand" | "earth_shaker" | "tide_caller";
+type Tint = "fire_tint" | "earth_tint" | "water_tint" | "air_tint" | "banshee_tint" | "poltergeist_tint" | "specter_tint" | "wraith_tint" | "phantom_tint" | "phantasm_tint" | "shade_tint" | "apparition_tint";
+type UniqueImageSkin = "shadow_self" | "ascended_self" | "gale_force" | "fire_brand" | "earth_shaker" | "tide_caller";
+type Skin = UniqueImageSkin | Tint;
 
-export { Action, AppDispatch, InitialAppState, AppAction, Store, SnackBarAlert, SnackBarAlertWithIndex, User, UserStatus, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, HeroTemplate, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, Stat, HeroChoice, CharacterName, CharacterAlias, FoeTypes, FoeClasses, Skin };
+export { Action, AppDispatch, InitialAppState, AppAction, Store, SnackBarAlert, SnackBarAlertWithIndex, User, UserStatus, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, HeroTemplate, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, Stat, HeroChoice, CharacterName, CharacterAlias, FoeTypes, FoeClasses, Skin, UniqueImageSkin, Tint };

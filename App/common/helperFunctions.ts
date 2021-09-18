@@ -3,27 +3,40 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ItemInstance, Item, FoeTypes, FoeClasses, HeroChoice, CharacterName, CharacterAlias, Skin } from "./types";
 import { getBoulderBroImage, getChronoGuyImage, getCompostCreatureImage, getEmpathAureliaImage, getFiltronFiveImage, getNaturalNinjaImage, getRepeteImage, getSolarCelesteImage, getTimberTerrorImage, getWilhelmTheWildImage } from "./heroImageVariants";
 
-function capitalize(string: string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
+function capitalize<T = string>(val: T) {
+  if (typeof val === "string") {
+    return val.charAt(0).toUpperCase() + val.slice(1);
+  }
+  throw new Error(`${val} is not a String; can't transform`);
 }
 
-const lowercaseUnderscore = function (val: string) {
-  return val?.replace(/\s+/g, "_").toLowerCase() ?? undefined;
-};
-
-const lowercaseDash = function (val: string) {
-  return val?.replace(/\s+/g, "-").toLowerCase() ?? undefined;
-};
-
-const lowercaseSpace = function (val: string) {
-  return val?.replace(/\s+/g, "-").toLowerCase() ?? undefined;
-};
-
-const titlecaseUnderscore = function (val: string) {
-  if (val !== null && typeof val !== "undefined") {
-    val = val[0].toUpperCase() + val.substring(1);
-    return val.replace(/\s+/g, "_");
+const lowercaseUnderscore = function <T = string>(val: T) {
+  if (typeof val === "string") {
+    return val.replace(/\s+/g, "_").toLowerCase();
   }
+  throw new Error(`${val} is not a String; can't transform`);
+};
+
+const lowercaseDash = function <T = string>(val: T) {
+  if (typeof val === "string") {
+    val.replace(/\s+/g, "-").toLowerCase();
+  }
+  throw new Error(`${val} is not a String; can't transform`);
+};
+
+const lowercaseSpace = function <T = string>(val: T) {
+  if (typeof val === "string") {
+    return val.replace(/\s+/g, "-").toLowerCase();
+  }
+  throw new Error(`${val} is not a String; can't transform`);
+};
+
+const titlecaseUnderscore = function <T = string>(val: T) {
+  if (typeof val === "string") {
+    const uppercaseVal = val[0].toUpperCase() + val.substring(1);
+    return uppercaseVal.replace(/\s+/g, "_");
+  }
+  throw new Error(`${val} is not a String; can't transform`);
 };
 
 const shuffleArray = function (array: any[]) {
@@ -248,7 +261,13 @@ function getHeroImage(characterName: string): number {
 
 function getHeroCostumeImage(characterName: string, skin: Skin | null): number {
   const lcName = lowercaseUnderscore(characterName);
-  const lcSkin = lowercaseUnderscore(skin) as Skin;
+  const lcSkin = lowercaseUnderscore<Skin>(skin);
+
+  const isTint = skin.includes("Tint");
+  if (isTint) {
+    return getTintedHeroImage(lcName, lcSkin);
+  }
+
   switch (lcName) {
     case "timber_terror":
       return getTimberTerrorImage(lcSkin);
