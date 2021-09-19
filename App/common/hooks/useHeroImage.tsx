@@ -1,26 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { getHeroCostumeImage, getHeroImage } from "../helperFunctions";
+import { getHeroImage } from "../helperFunctions";
 import { Skin } from "../types";
 
-export const useCharacterImage = (character: string): [number, React.Dispatch<React.SetStateAction<number>>] => {
-  const [char, setChar] = useState(getHeroImage(character));
+const useHeroImage = (character: string, skin?: Skin): { baseImage: number; costumeImage: number; isTint: boolean } => {
+  const isTint = skin?.includes("Tint") ?? false;
 
-  return [char, setChar];
+  // BASE CHARACTER IMAGE
+  const [baseImage, setBaseImage] = useState(getHeroImage(character));
+  // CHARACTER WITH COSTUME - EITHER TINT OR NEW IMAGE
+  const [costumeImage, setCostumeImage] = useState(getHeroImage(character, skin));
+
+  // When the skin changes (only from switching in inventory), set new skin to state
+  useEffect(() => {
+    setCostumeImage(getHeroImage(character, skin));
+  }, [skin]);
+
+  return { baseImage, costumeImage, isTint };
 };
 
-export const useCostumeImage = (character: string, skin: Skin | null): [number, React.Dispatch<React.SetStateAction<number>>, boolean] => {
-  const isTint = skin.includes("Tint");
-
-  // If Skin is a tint, just return regular character image, otherwise  get actual unique image
-  const [costume, setCostume] = isTint ? useState(getHeroImage(character)) : useState(getHeroCostumeImage(character, skin));
-
-  return [costume, setCostume, isTint];
-};
-
-// interface useStatusImageProps {
-//   character : string
-// }
-
-// export const useStatusImage = ({character} : useStatusImageProps) => {
-//   return ();
-// }
+export default useHeroImage;

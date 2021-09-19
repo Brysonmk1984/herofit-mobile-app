@@ -1,10 +1,7 @@
 import { Box, Center, Image } from "native-base";
 import React from "react";
-import { Dimensions } from "react-native";
-import { getHeroCostumeImage } from "../../../../common/helperFunctions";
-import { useCharacterImage, useCostumeImage } from "../../../../common/hooks/useHeroImage";
+import useHeroImage from "../../../../common/hooks/useHeroImage";
 import { CharacterName, CharacterAlias, HeroStatus, Skin } from "../../../../common/types";
-import { HueRotate } from "gl-react-expo";
 
 interface HeroImageProps {
   character: CharacterName;
@@ -13,9 +10,8 @@ interface HeroImageProps {
   skin?: Skin;
 }
 
-export const HeroImage: React.FC<HeroImageProps> = ({ character, alias, skin = null, status }) => {
-  const [char, setChar] = useCharacterImage(character);
-  const [costume, setCostume, isTint] = useCostumeImage(character, skin);
+export const HeroImage: React.FC<HeroImageProps> = ({ character, alias, skin, status }) => {
+  const { baseImage, costumeImage, isTint } = useHeroImage(character, skin);
 
   const tintHexMap = {
     "Fire Tint": "#e25822",
@@ -52,19 +48,19 @@ export const HeroImage: React.FC<HeroImageProps> = ({ character, alias, skin = n
     "Shade Tint": 0.2,
     "Apparition Tint": 0.3,
   };
-
+  //"Rested" | "Recovering" | "Knocked Out" | "Infected";
   if (isTint) {
     return (
       <Center flex={2}>
         <Box w={275} h={275}>
           {" "}
           {/* Base Color tint */}
-          <Image position="absolute" style={{ tintColor: tintHexMap[skin], opacity: tintOpacityMap[skin] || 1 }} source={costume} size={275} alt={alias} />
+          <Image position="absolute" style={{ tintColor: tintHexMap[skin], opacity: tintOpacityMap[skin] || 1 }} source={costumeImage} size={275} alt={alias} />
           {/* IMAGE - Shown on top of overlay */}
-          <Image position="absolute" style={{ opacity: darknessMap[skin] || 0.5 }} source={costume} size={275} alt={alias} />
+          <Image position="absolute" style={{ opacity: darknessMap[skin] || 0.5 }} source={costumeImage} size={275} alt={alias} />
         </Box>
       </Center>
     );
   }
-  return <Center flex={2}>{<Image source={costume} size={275} alt={alias} />}</Center>;
+  return <Center flex={2}>{<Image source={costumeImage} size={275} alt={alias} />}</Center>;
 };

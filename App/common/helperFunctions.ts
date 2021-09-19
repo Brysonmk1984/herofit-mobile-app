@@ -231,7 +231,7 @@ function convertItemIdsToFullItems(itemInstances: ItemInstance[], defaultItems: 
   return combinedItems;
 }
 
-function getHeroImage(characterName: string): number {
+function _getBaseHeroImage(characterName: string): number {
   const lcName = lowercaseUnderscore(characterName);
   switch (lcName) {
     case "timber_terror":
@@ -259,15 +259,15 @@ function getHeroImage(characterName: string): number {
   }
 }
 
-function getHeroCostumeImage(characterName: string, skin: Skin | null): number {
-  const lcName = lowercaseUnderscore(characterName);
-  const lcSkin = lowercaseUnderscore<Skin>(skin);
-
-  const isTint = skin.includes("Tint");
-  if (isTint) {
-    return getTintedHeroImage(lcName, lcSkin);
+function getHeroImage(characterName: string, skin?: Skin | null): number {
+  // No skin / costume; just return base character image
+  if (!skin) {
+    return _getBaseHeroImage(characterName);
   }
 
+  // Figure out which Skin / Costume to use
+  const lcName = lowercaseUnderscore(characterName);
+  const lcSkin = lowercaseUnderscore<Skin>(skin);
   switch (lcName) {
     case "timber_terror":
       return getTimberTerrorImage(lcSkin);
@@ -294,4 +294,4 @@ function getHeroCostumeImage(characterName: string, skin: Skin | null): number {
   }
 }
 
-export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, convertAorAn, getHeroAlias, determineFoeClass, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems, capitalize, getHeroImage, getHeroCostumeImage };
+export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, convertAorAn, getHeroAlias, determineFoeClass, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems, capitalize, getHeroImage };
