@@ -2,13 +2,13 @@ import { Box, Center, Image } from "native-base";
 import React from "react";
 import { tintHexMap, tintOpacityMap, darknessMap } from "../../../../common/hexAndOpacityMaps";
 import useHeroImage from "../../../../common/hooks/useHeroImage";
-import { CharacterName, CharacterAlias, HeroStatus, Skin } from "../../../../common/types";
+import { CharacterName, CharacterAlias, HeroStatus, SkinName } from "../../../../common/types";
 
 interface HeroImageProps {
   character: CharacterName;
   alias: CharacterAlias;
-  status: HeroStatus;
-  skin?: Skin;
+  status?: HeroStatus;
+  skin?: SkinName;
 }
 
 export const HeroImage: React.FC<HeroImageProps> = ({ character, alias, skin, status }) => {
@@ -45,7 +45,8 @@ export const HeroImage: React.FC<HeroImageProps> = ({ character, alias, skin, st
     );
   }
 
-  if (status !== "Rested") {
+  // If status isn't passed in, skip this check
+  if (status && status !== "Rested") {
     // Return status effect tint on unique image costume or base skin
     return renderHeroUnderStatusEffect();
   } else if (isTint) {

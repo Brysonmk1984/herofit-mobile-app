@@ -1,6 +1,6 @@
 import heroList from "./heroList.json";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ItemInstance, Item, FoeTypes, FoeClasses, HeroChoice, CharacterName, CharacterAlias, Skin } from "./types";
+import { ItemInstance, Item, FoeTypes, FoeClasses, HeroChoice, CharacterName, CharacterAlias, Skin, SkinName } from "./types";
 import { getBoulderBroImage, getChronoGuyImage, getCompostCreatureImage, getEmpathAureliaImage, getFiltronFiveImage, getNaturalNinjaImage, getRepeteImage, getSolarCelesteImage, getTimberTerrorImage, getWilhelmTheWildImage } from "./heroImageVariants";
 
 function capitalize<T = string>(val: T) {
@@ -259,7 +259,7 @@ function _getBaseHeroImage(characterName: string): number {
   }
 }
 
-function getHeroImage(characterName: string, skin?: Skin | null): number {
+function getHeroImage(characterName: string, skin?: SkinName): number {
   // No skin / costume; just return base character image
   if (!skin) {
     return _getBaseHeroImage(characterName);
@@ -294,4 +294,16 @@ function getHeroImage(characterName: string, skin?: Skin | null): number {
   }
 }
 
-export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, convertAorAn, getHeroAlias, determineFoeClass, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems, capitalize, getHeroImage };
+function equippedSkin(equipped: Item[]): SkinName | undefined {
+  return equipped.find(i => i.type === "skin")?.name as SkinName | undefined;
+}
+
+function equippedPet(equipped: Item[]): string | undefined {
+  return equipped.find(i => i.type === "pet")?.name;
+}
+
+function equippedTitle(equipped: Item[]): string | undefined {
+  return equipped.find(i => i.type === "title")?.name;
+}
+
+export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, convertAorAn, getHeroAlias, determineFoeClass, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems, capitalize, getHeroImage, equippedSkin, equippedPet, equippedTitle };

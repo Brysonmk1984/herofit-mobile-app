@@ -3,7 +3,7 @@ import { Image, Pressable, FlatList, SectionList, Box, Center, View, Text, Headi
 import ScreenContainer from "../../Components/ScreenContainer/ScreenContainer";
 import debugErrors from "../../common/debugErrors";
 import { GlobalStateContext } from "../../store";
-import { Item, User } from "../../common/types";
+import { Item, SkinName, User } from "../../common/types";
 import { MainDrawerProps } from "../../common/types-navigator";
 import useModal from "../../common/hooks/useModal";
 import { getUser } from "../../api/user";
@@ -17,7 +17,7 @@ import { makeRedirectUri, useAuthRequest } from "expo-auth-session";
 import { DrawerIndicator } from "../../Components/DrawerIndicator";
 import Background from "./Modals/Components/Background";
 import BottomDrawer from "./Modals/Components/BottomDrawer";
-import { getHeroImage } from "../../common/helperFunctions";
+import { equippedSkin, getHeroImage } from "../../common/helperFunctions";
 import { HeroImage } from "./Modals/Components/HeroImage";
 
 const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
@@ -26,7 +26,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const H = state.hero;
   const { name, status, health, maxHealth, activityXP, battleXP, photonTokens, goToBattle, equipped, qp } = state.hero;
   const attributesForBottomConsole = (({ power, recovery, armor, fire, earth, water, air, aether }) => ({ power, recovery, armor, fire, earth, water, air, aether }))(state.hero);
-  console.log("SH", H);
+  console.log("SH", equipped);
   function renderItem({ item }: Item) {
     return (
       <View>
@@ -92,7 +92,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
     <ScreenContainer screenName={route.name}>
       <Background />
       {renderHeroDetails()}
-      <HeroImage character={H.character} alias={H.alias} skin={equipped.find(i => i.type === "skin")?.name} status={H.status} />
+      <HeroImage character={H.character} alias={H.alias} skin={equippedSkin(equipped)} status={H.status} />
       <DrawerIndicator action={() => navigation.toggleDrawer()} />
       <BottomDrawer attributes={attributesForBottomConsole} />
 
