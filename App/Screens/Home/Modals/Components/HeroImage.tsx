@@ -1,5 +1,6 @@
 import { Box, Center, Image } from "native-base";
 import React from "react";
+import { tintHexMap, tintOpacityMap, darknessMap } from "../../../../common/hexAndOpacityMaps";
 import useHeroImage from "../../../../common/hooks/useHeroImage";
 import { CharacterName, CharacterAlias, HeroStatus, Skin } from "../../../../common/types";
 
@@ -11,56 +12,47 @@ interface HeroImageProps {
 }
 
 export const HeroImage: React.FC<HeroImageProps> = ({ character, alias, skin, status }) => {
-  const { baseImage, costumeImage, isTint } = useHeroImage(character, skin);
+  const { heroImage } = useHeroImage(character, skin);
+  const isTint = skin?.includes("Tint") ?? false;
 
-  const tintHexMap = {
-    "Fire Tint": "#e25822",
-    "Earth Tint": "#8A360F",
-    "Water Tint": "#0f5e9c",
-    "Air Tint": "#16a0f5",
-    "Banshee Tint": "#000000",
-    "Poltergeist Tint": "#ffffff",
-    "Specter Tint": "#ffffff",
-    "Wraith Tint": "#000000",
-    "Phantom Tint": "#000000",
-    "Phantasm Tint": "#000000",
-    "Shade Tint": "#000000",
-    "Apparition Tint": "#ffffff",
-  };
-  const tintOpacityMap = {
-    "Banshee Tint": 0.7,
-    "Poltergeist Tint": 0.4,
-    "Specter Tint": 0.5,
-    "Wraith Tint": 0.9,
-    "Phantom Tint": 0.6,
-    "Phantasm Tint": 0.8,
-    "Shade Tint": 1,
-    "Apparition Tint": 0.3,
-  };
-
-  const darknessMap = {
-    "Banshee Tint": 0.5,
-    "Poltergeist Tint": 0.4,
-    "Specter Tint": 0.5,
-    "Wraith Tint": 0.3,
-    "Phantom Tint": 0.6,
-    "Phantasm Tint": 0.4,
-    "Shade Tint": 0.2,
-    "Apparition Tint": 0.3,
-  };
-  //"Rested" | "Recovering" | "Knocked Out" | "Infected";
-  if (isTint) {
+  // STATUS EFFECT = If Hero is under a status effect, return an image with the matching modified tint
+  function renderHeroUnderStatusEffect() {
     return (
       <Center flex={2}>
         <Box w={275} h={275}>
           {" "}
           {/* Base Color tint */}
-          <Image position="absolute" style={{ tintColor: tintHexMap[skin], opacity: tintOpacityMap[skin] || 1 }} source={costumeImage} size={275} alt={alias} />
+          <Image position="absolute" style={{ tintColor: tintHexMap[status], opacity: tintOpacityMap[status] || 1 }} source={heroImage} size={275} alt={alias} />
           {/* IMAGE - Shown on top of overlay */}
-          <Image position="absolute" style={{ opacity: darknessMap[skin] || 0.5 }} source={costumeImage} size={275} alt={alias} />
+          <Image position="absolute" style={{ opacity: darknessMap[status] || 0.5 }} source={heroImage} size={275} alt={alias} />
         </Box>
       </Center>
     );
   }
-  return <Center flex={2}>{<Image source={costumeImage} size={275} alt={alias} />}</Center>;
+
+  // TINT COSTUME = If Hero has a special tint costume, return an image with the matching modified tint
+  function renderHeroWithTintCostume() {
+    return (
+      <Center flex={2}>
+        <Box w={275} h={275}>
+          {" "}
+          {/* Base Color tint */}
+          <Image position="absolute" style={{ tintColor: tintHexMap[skin], opacity: tintOpacityMap[skin] || 1 }} source={heroImage} size={275} alt={alias} />
+          {/* IMAGE - Shown on top of overlay */}
+          <Image position="absolute" style={{ opacity: darknessMap[skin] || 0.5 }} source={heroImage} size={275} alt={alias} />
+        </Box>
+      </Center>
+    );
+  }
+
+  if (status !== "Rested") {
+    // Return status effect tint on unique image costume or base skin
+    return renderHeroUnderStatusEffect();
+  } else if (isTint) {
+    // Return tinted base skin.
+    return renderHeroWithTintCostume();
+  } else {
+    // Return unique image costumes or the base skin
+    return <Center flex={2}>{<Image source={heroImage} size={275} alt={alias} />}</Center>;
+  }
 };

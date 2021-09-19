@@ -1,0 +1,40 @@
+export const tintHexMap = {
+  "Fire Tint": "#e25822",
+  "Earth Tint": "#8A360F",
+  "Water Tint": "#0f5e9c",
+  "Air Tint": "#16a0f5",
+  "Banshee Tint": "#000000",
+  "Poltergeist Tint": "#ffffff",
+  "Specter Tint": "#ffffff",
+  "Wraith Tint": "#000000",
+  "Phantom Tint": "#000000",
+  "Phantasm Tint": "#000000",
+  "Shade Tint": "#000000",
+  "Apparition Tint": "#ffffff",
+  "Knocked Out": "#000000",
+  Recovering: "#000000",
+  Infected: "#8da728",
+};
+export const tintOpacityMap = {
+  "Banshee Tint": 0.7,
+  "Poltergeist Tint": 0.4,
+  "Specter Tint": 0.5,
+  "Wraith Tint": 0.9,
+  "Phantom Tint": 0.6,
+  "Phantasm Tint": 0.8,
+  "Shade Tint": 1,
+  "Apparition Tint": 0.3,
+};
+
+export const darknessMap = {
+  "Banshee Tint": 0.5,
+  "Poltergeist Tint": 0.4,
+  "Specter Tint": 0.5,
+  "Wraith Tint": 0.3,
+  "Phantom Tint": 0.6,
+  "Phantasm Tint": 0.4,
+  "Shade Tint": 0.2,
+  "Apparition Tint": 0.3,
+  "Knocked Out": 0.2,
+  Recovering: 0.4,
+};
