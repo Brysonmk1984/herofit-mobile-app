@@ -7,7 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 interface ScreenContainerProps {
   children: React.ReactNode;
   screenName?: string;
-  bg?: string;
+  bg?: string | React.ReactElement;
   hero?: string;
 }
 
@@ -75,11 +75,12 @@ export default function ScreenContainer({ children, screenName, bg, hero }: Scre
     <View style={[styles.wrapper, styles.absolute]}>
       <SafeAreaView style={styles.container}>
         <Flex flex={1} justify="space-between" zIndex={10} p={0} w={"100%"} mx="auto">
+          {typeof bg === "object" && bg}
           {children}
         </Flex>
       </SafeAreaView>
 
-      <ImageBackground source={image} style={[styles.image, { backgroundColor: bg }]} resizeMode="cover" />
+      <ImageBackground source={image} style={[styles.image, { backgroundColor: typeof bg !== "object" ? bg : undefined }]} resizeMode="cover" />
     </View>
   );
 }

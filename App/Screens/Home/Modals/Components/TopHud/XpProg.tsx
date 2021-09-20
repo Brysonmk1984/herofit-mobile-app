@@ -5,19 +5,18 @@ import XpText from "./XpText";
 import { useCountUp } from "use-count-up";
 
 interface XpProgProps {
+  windowWidth: number;
   xp: number;
   thisLevelStartXp: number;
   nextLevelStartXp: number;
 }
 
-const XpProg: React.FC<XpProgProps> = ({ xp, thisLevelStartXp, nextLevelStartXp }) => {
+const XpProg: React.FC<XpProgProps> = ({ windowWidth, xp, thisLevelStartXp, nextLevelStartXp }) => {
   const [xpGainedThisLevel, setXpGainedThisLevel] = useState(0);
   const [xpIndicator, setXpIndicator] = useState(0);
-  const { value, reset } = useCountUp({ isCounting: true, duration: 2, easing: "easeOutCubic", end: xpIndicator });
+  const { value, reset } = useCountUp({ isCounting: true, duration: 0.5, easing: "easeOutCubic", end: xpIndicator });
 
   const levelXpRequired = nextLevelStartXp - thisLevelStartXp;
-
-  const windowWidth = Dimensions.get("window").width;
 
   // XP accumulated within current level
   useEffect(() => {

@@ -162,6 +162,7 @@ interface DefaultHeroProperties {
   photonTokens: number;
   activityXP: number;
   battleXP: number;
+  level: number;
   thisLevelStartXp: number;
   nextLevelStartXp: number;
   battleDkos: number;

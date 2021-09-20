@@ -1,44 +1,29 @@
-import React, { useContext, useEffect, useState, createRef } from "react";
-import { Image, Pressable, FlatList, SectionList, Box, Center, View, Text, Heading, VStack, FormControl, Input, Link, Button, IconButton, HStack, Divider, ScrollView, Radio, Progress } from "native-base";
+import React, { useContext, useEffect } from "react";
+import { View } from "native-base";
 import ScreenContainer from "../../Components/ScreenContainer/ScreenContainer";
 import debugErrors from "../../common/debugErrors";
 import { GlobalStateContext } from "../../store";
-import { Item, SkinName, User } from "../../common/types";
 import { MainDrawerProps } from "../../common/types-navigator";
 import useModal from "../../common/hooks/useModal";
 import { getUser } from "../../api/user";
 import { updateAlerts } from "../../common/alerts";
-
-//import updateDataSrcId from "./AuthFinalSteps/AuthFlow";
-
-import { createManualDataSrcId } from "../../api/authentication";
 import { ChooseActivityEntry, SignupToSave, SignupFinished, ConfirmEmail, FeedbackChoice } from "./Modals/Modals";
-import { makeRedirectUri, useAuthRequest } from "expo-auth-session";
 import { DrawerIndicator } from "../../Components/DrawerIndicator";
 import Background from "./Modals/Components/Background";
 import BottomDrawer from "./Modals/Components/BottomDrawer";
-import { equippedSkin, getHeroImage } from "../../common/helperFunctions";
+import { equippedSkin } from "../../common/helperFunctions";
 import { HeroImage } from "./Modals/Components/HeroImage";
 import { TopHud } from "./Modals/Components/TopHud/TopHud";
+import { HeroDetails } from "./Modals/Components/HeroDetails/HeroDetails";
 
 const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { openModal } = useModal();
-  const H = state.hero;
-  const { name, status, health, maxHealth, activityXP, battleXP, thisLevelStartXp, nextLevelStartXp, photonTokens, goToBattle, equipped, qp } = state.hero;
+
+  const { health, maxHealth, thisLevelStartXp, nextLevelStartXp, equipped, qp } = state.hero;
+  const attributesForHeroDetails = (({ name, status, photonTokens, activityXP, battleXP, goToBattle, level }) => ({ name, status, photonTokens, activityXP, battleXP, goToBattle, level }))(state.hero);
   const attributesForBottomConsole = (({ power, recovery, armor, fire, earth, water, air, aether }) => ({ power, recovery, armor, fire, earth, water, air, aether }))(state.hero);
   console.log("SH", equipped);
-
-  function renderHeroDetails() {
-    return (
-      <View>
-        <Text>Hero Name: {name}</Text>
-        <Text>Status: {status}</Text>
-        <Text>PT: {photonTokens}</Text>
-        <Text>Awaiting Battle: {String(goToBattle)}</Text>
-      </View>
-    );
-  }
 
   function formActionHappens(data) {
     console.log("FORM ACTION FROM HOME!!!", data);
@@ -78,17 +63,22 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   }, [state.userStatus, state.user, state.user?.dataSrcId]);
 
   return (
-    <ScreenContainer screenName={route.name}>
-      <Background />
+    <ScreenContainer bg={<Background />} screenName={route.name}>
+      {/* TOP SECTION */}
       <View justifyContent="flex-start">
         <TopHud healthObj={{ health, maxHealth }} xpObj={{ xp: 28, thisLevelStartXp, nextLevelStartXp }} />
-        {renderHeroDetails()}
+        <HeroDetails {...attributesForHeroDetails} />
         <DrawerIndicator action={() => navigation.toggleDrawer()} />
       </View>
+
+      {/* ABSOLUTE POSITIONED ELEMENTS */}
       <View position="absolute" bottom={0}>
-        <HeroImage character={H.character} alias={H.alias} skin={equippedSkin(equipped)} status={H.status} />
+        <HeroImage character={state.hero.character} alias={state.hero.alias} skin={equippedSkin(equipped)} status={state.hero.status} />
       </View>
+
+      {/* BOTTOM CONSOLE */}
       <BottomDrawer attributes={attributesForBottomConsole} />
+
       {/* MODALS */}
       <SignupToSave id="SignupToSave" modalAction={() => navigation.push("Register")} />
       <ConfirmEmail id="ConfirmEmail" modalAction={handleEmailConfirmed} />

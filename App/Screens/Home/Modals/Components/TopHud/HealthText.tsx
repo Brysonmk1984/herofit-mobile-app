@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, View, Text } from "native-base";
 import { Icon } from "../../../../../Components/CustomComponents";
+import { CountUp } from "use-count-up";
 
 interface HealthTextProps {
   health: number;
@@ -14,7 +15,7 @@ const HealthText: React.FC<HealthTextProps> = ({ health, maxHealth }) => {
         <Icon iconName="health" size={25} color="base.white" />
       </Box>
       <Text color="base.highlight" fontSize="lg" fontFamily="heading">
-        {health}
+        <CountUp isCounting end={health} duration={3} />
       </Text>
       <Text mt={-2.5} color="base.white" fontSize="4xl" fontFamily="heading">
         /
