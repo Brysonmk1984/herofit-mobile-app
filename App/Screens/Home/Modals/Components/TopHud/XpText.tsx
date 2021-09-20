@@ -1,12 +1,13 @@
 import React from "react";
 import { Box, View, Text } from "native-base";
+import { CountUp } from "use-count-up";
 
-interface HealthTextProps {
+interface XpTextProps {
   levelXp: number;
-  nextLevelXp: number;
+  levelXpRequired: number;
 }
 
-const XpText: React.FC<HealthTextProps> = ({ levelXp, nextLevelXp }) => {
+const XpText: React.FC<XpTextProps> = ({ levelXp, levelXpRequired }) => {
   return (
     <View flexDirection="row" position="absolute" right={3} top={1.5}>
       <Box opacity={0.5} mr={2} mt={-2.5}>
@@ -15,13 +16,13 @@ const XpText: React.FC<HealthTextProps> = ({ levelXp, nextLevelXp }) => {
         </Text>
       </Box>
       <Text color="base.highlight" fontSize="sm" fontFamily="heading">
-        {levelXp}
+        <CountUp isCounting end={levelXp} duration={2} />
       </Text>
       <Text mt={-1.5} color="base.white" fontSize="2xl" fontFamily="heading">
         /
       </Text>
       <Text mt={-0.5} color="base.white" fontSize="md" fontFamily="heading">
-        {nextLevelXp}
+        {levelXpRequired}
       </Text>
     </View>
   );

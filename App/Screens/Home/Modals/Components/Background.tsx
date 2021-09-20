@@ -12,7 +12,8 @@ const Background: React.FC<BackgroundProps> = ({}) => {
   const backgroundElementalEvent = require("../../../../../assets/images/backgrounds/home/elemental-background.webp");
 
   const backgrounds = [backgroundDawn, backgroundDay, backgroundDusk, backgroundNight, backgroundElementalEvent];
-  const activeBackground = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+  //const activeBackground = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+  const activeBackground = backgrounds[4];
 
   if (typeof activeBackground === "number") {
     // Images imported with the required method are numbers, so render them here

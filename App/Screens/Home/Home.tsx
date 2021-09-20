@@ -28,26 +28,14 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { name, status, health, maxHealth, activityXP, battleXP, thisLevelStartXp, nextLevelStartXp, photonTokens, goToBattle, equipped, qp } = state.hero;
   const attributesForBottomConsole = (({ power, recovery, armor, fire, earth, water, air, aether }) => ({ power, recovery, armor, fire, earth, water, air, aether }))(state.hero);
   console.log("SH", equipped);
-  function renderItem({ item }: Item) {
-    return (
-      <View>
-        <Text>{item.name}</Text>
-      </View>
-    );
-  }
 
   function renderHeroDetails() {
     return (
       <View>
         <Text>Hero Name: {name}</Text>
         <Text>Status: {status}</Text>
-        <Text>
-          Health: {health} / {maxHealth}
-        </Text>
-        <Text>XP: {activityXP + battleXP}</Text>
         <Text>PT: {photonTokens}</Text>
         <Text>Awaiting Battle: {String(goToBattle)}</Text>
-        <FlatList data={equipped} renderItem={renderItem} keyExtractor={(item, i) => i.toString()} />
       </View>
     );
   }
@@ -92,14 +80,15 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   return (
     <ScreenContainer screenName={route.name}>
       <Background />
-      <TopHud healthObj={{ health, maxHealth }} xpObj={{ xp: activityXP + battleXP, thisLevelStartXp, nextLevelStartXp }} />
-      {renderHeroDetails()}
+      <View justifyContent="flex-start">
+        <TopHud healthObj={{ health, maxHealth }} xpObj={{ xp: 28, thisLevelStartXp, nextLevelStartXp }} />
+        {renderHeroDetails()}
+        <DrawerIndicator action={() => navigation.toggleDrawer()} />
+      </View>
       <View position="absolute" bottom={0}>
         <HeroImage character={H.character} alias={H.alias} skin={equippedSkin(equipped)} status={H.status} />
       </View>
-      <DrawerIndicator action={() => navigation.toggleDrawer()} />
       <BottomDrawer attributes={attributesForBottomConsole} />
-
       {/* MODALS */}
       <SignupToSave id="SignupToSave" modalAction={() => navigation.push("Register")} />
       <ConfirmEmail id="ConfirmEmail" modalAction={handleEmailConfirmed} />
