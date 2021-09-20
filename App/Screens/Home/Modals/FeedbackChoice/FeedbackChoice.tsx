@@ -5,7 +5,7 @@ import { GlobalStateContext } from "../../../../store";
 
 interface FeedbackChoiceProps {
   id: string;
-  modalAction: (formData: object) => void;
+  modalAction?: (formData: object) => void;
 }
 
 // FEEDBACK MODAL - MULTIPLE CHOICE + TEXTAREA

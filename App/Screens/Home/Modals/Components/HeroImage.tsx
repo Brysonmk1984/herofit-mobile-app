@@ -18,13 +18,13 @@ export const HeroImage: React.FC<HeroImageProps> = ({ character, alias, skin, st
   // STATUS EFFECT = If Hero is under a status effect, return an image with the matching modified tint
   function renderHeroUnderStatusEffect() {
     return (
-      <Center flex={2}>
-        <Box w={275} h={275}>
+      <Center flex={2} w={275} h={275}>
+        <Box>
           {" "}
           {/* Base Color tint */}
-          <Image position="absolute" style={{ tintColor: tintHexMap[status], opacity: tintOpacityMap[status] || 1 }} source={heroImage} size={275} alt={alias} />
+          <Image position="absolute" bottom={100} style={{ tintColor: tintHexMap[status], opacity: tintOpacityMap[status] || 1 }} source={heroImage} size={275} alt={alias} />
           {/* IMAGE - Shown on top of overlay */}
-          <Image position="absolute" style={{ opacity: darknessMap[status] || 0.5 }} source={heroImage} size={275} alt={alias} />
+          <Image position="absolute" bottom={100} style={{ opacity: darknessMap[status] || 0.5 }} source={heroImage} size={275} alt={alias} />
         </Box>
       </Center>
     );
@@ -33,13 +33,13 @@ export const HeroImage: React.FC<HeroImageProps> = ({ character, alias, skin, st
   // TINT COSTUME = If Hero has a special tint costume, return an image with the matching modified tint
   function renderHeroWithTintCostume() {
     return (
-      <Center flex={2}>
+      <Center>
         <Box w={275} h={275}>
           {" "}
           {/* Base Color tint */}
-          <Image position="absolute" style={{ tintColor: tintHexMap[skin], opacity: tintOpacityMap[skin] || 1 }} source={heroImage} size={275} alt={alias} />
+          <Image position="absolute" bottom={100} style={{ tintColor: tintHexMap[skin], opacity: tintOpacityMap[skin] || 1 }} source={heroImage} size={275} alt={alias} />
           {/* IMAGE - Shown on top of overlay */}
-          <Image position="absolute" style={{ opacity: darknessMap[skin] || 0.5 }} source={heroImage} size={275} alt={alias} />
+          <Image position="absolute" bottom={100} style={{ opacity: darknessMap[skin] || 0.5 }} source={heroImage} size={275} alt={alias} />
         </Box>
       </Center>
     );
@@ -54,6 +54,12 @@ export const HeroImage: React.FC<HeroImageProps> = ({ character, alias, skin, st
     return renderHeroWithTintCostume();
   } else {
     // Return unique image costumes or the base skin
-    return <Center flex={2}>{<Image source={heroImage} size={275} alt={alias} />}</Center>;
+    return (
+      <Center>
+        <Box w={275} h={275}>
+          {<Image position="absolute" bottom={100} source={heroImage} size={275} alt={alias} />}
+        </Box>
+      </Center>
+    );
   }
 };

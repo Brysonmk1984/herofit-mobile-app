@@ -294,16 +294,53 @@ function getHeroImage(characterName: string, skin?: SkinName): number {
   }
 }
 
+function getPetImage(petName: string): number {
+  // Figure out which pet to use
+  const lcName = lowercaseUnderscore(petName);
+  switch (lcName) {
+    case "alpha_dog":
+      return require("../../assets/images/items/pets/alpha_dog.webp");
+    case "arizona_rattlesnake":
+      return require("../../assets/images/items/pets/arizona_rattlesnake.webp");
+    case "betta_fish":
+      return require("../../assets/images/items/pets/betta_fish.webp");
+    case "black_cat":
+      return require("../../assets/images/items/pets/black_cat.webp");
+    case "covert_chameleon":
+      return require("../../assets/images/items/pets/covert_chameleon.webp");
+    case "dubious_decoy":
+      return require("../../assets/images/items/pets/dubious_decoy.webp");
+    case "feisty_coon":
+      return require("../../assets/images/items/pets/feisty_coon.webp");
+    case "fire_breathing_whelp":
+      return require("../../assets/images/items/pets/fire_breathing_whelp.webp");
+    case "hearty_llama_of_wellbeing":
+      return require("../../assets/images/items/pets/hearty_llama_of_wellbeing.webp");
+    case "mystical_unicorn":
+      return require("../../assets/images/items/pets/mystical_unicorn.webp");
+    case "octopus_of_cunning":
+      return require("../../assets/images/items/pets/octopus_of_cunning.webp");
+    case "orchid_mantis":
+      return require("../../assets/images/items/pets/orchid_mantis.webp");
+    case "plagueling":
+      return require("../../assets/images/items/pets/plagueling.webp");
+    case "raven_of_omens":
+      return require("../../assets/images/items/pets/raven_of_omens.webp");
+    case "spirit_hawk":
+      return require("../../assets/images/items/pets/spirit_hawk.webp");
+  }
+}
+
 function equippedSkin(equipped: Item[]): SkinName | undefined {
   return equipped.find(i => i.type === "skin")?.name as SkinName | undefined;
 }
 
-function equippedPet(equipped: Item[]): string | undefined {
-  return equipped.find(i => i.type === "pet")?.name;
+function equippedPet(equipped: Item[]): Item {
+  return equipped.find(i => i.type === "pet");
 }
 
 function equippedTitle(equipped: Item[]): string | undefined {
   return equipped.find(i => i.type === "title")?.name;
 }
 
-export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, convertAorAn, getHeroAlias, determineFoeClass, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems, capitalize, getHeroImage, equippedSkin, equippedPet, equippedTitle };
+export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, convertAorAn, getHeroAlias, determineFoeClass, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems, capitalize, getHeroImage, getPetImage, equippedSkin, equippedPet, equippedTitle };

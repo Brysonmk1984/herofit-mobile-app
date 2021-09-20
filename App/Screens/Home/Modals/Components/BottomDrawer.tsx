@@ -6,24 +6,21 @@ import Triangle from "./Triangle";
 import StatDisplay from "../../../../Components/StatDisplay";
 
 interface BottomDrawerProps {
-  attributes: {
-    power: number;
-    recovery: number;
-    armor: number;
-    fire: number;
-    earth: number;
-    water: number;
-    air: number;
-    aether: number;
-  };
+  power: number;
+  recovery: number;
+  armor: number;
+  fire: number;
+  earth: number;
+  water: number;
+  air: number;
+  aether: number;
 }
 
-const BottomDrawer: React.FC<BottomDrawerProps> = ({ attributes }) => {
+const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fire, earth, water, air, aether }) => {
   const windowHeight = useWindowDimensions().height;
   const bottomDrawerHeight = windowHeight / 2.75;
   const refRBSheet = useRef({ open: () => null });
   const { colors } = useTheme();
-  const { power, recovery, armor, fire, earth, water, air, aether } = attributes;
 
   return (
     <Box position="absolute" bottom={0}>

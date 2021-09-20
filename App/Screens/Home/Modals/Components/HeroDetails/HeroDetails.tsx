@@ -18,7 +18,7 @@ interface HeroDetailsProps {
 export const HeroDetails: React.FC<HeroDetailsProps> = ({ name, status, photonTokens, goToBattle, level, activityXP, battleXP, title }) => {
   return (
     <View>
-      {title && <Text>Title: {title}</Text>}
+      {title && <Text>{title}</Text>}
       <Text>{name}</Text>
       <Text>
         Level: {level}
