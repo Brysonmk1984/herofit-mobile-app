@@ -1,6 +1,8 @@
 import { Box, Center, Image } from "native-base";
-import React from "react";
+import React, { useEffect, useRef } from "react";
+import { Animated, Easing, Dimensions } from "react-native";
 import { tintHexMap, tintOpacityMap, darknessMap } from "../../../../common/hexAndOpacityMaps";
+import useFloating from "../../../../common/hooks/useFloating";
 import useHeroImage from "../../../../common/hooks/useHeroImage";
 import { CharacterName, CharacterAlias, HeroStatus, SkinName } from "../../../../common/types";
 
@@ -13,6 +15,7 @@ interface HeroImageProps {
 
 export const HeroImage: React.FC<HeroImageProps> = ({ character, alias, skin, status }) => {
   const { heroImage } = useHeroImage(character, skin);
+  const { floating, floatAnimation } = useFloating(status !== "Knocked Out");
   const isTint = skin?.includes("Tint") ?? false;
 
   // STATUS EFFECT = If Hero is under a status effect, return an image with the matching modified tint
@@ -57,7 +60,7 @@ export const HeroImage: React.FC<HeroImageProps> = ({ character, alias, skin, st
     return (
       <Center>
         <Box w={275} h={275}>
-          {<Image position="absolute" bottom={100} source={heroImage} size={275} alt={alias} />}
+          {floating ? <Animated.View style={{ translateY: floatAnimation }}>{<Image position="absolute" bottom={100} source={heroImage} size={275} alt={alias} />}</Animated.View> : <Image position="absolute" bottom={100} source={heroImage} size={275} alt={alias} />}
         </Box>
       </Center>
     );
