@@ -26,7 +26,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   //Props for HomeScreen components
   const propsForHeroDetails = (({ equipped, name, status, photonTokens, activityXP, battleXP, goToBattle, level }) => ({ title: equippedTitle(equipped), name, status, photonTokens, activityXP, battleXP, goToBattle, level }))(state.hero);
   const propsForHeroImage = (({ character, equipped, alias, status }) => ({ character, equipped, alias, skin: equippedSkin(equipped), status }))(state.hero);
-  const propsForBottomConsole = (({ power, recovery, armor, fire, earth, water, air, aether }) => ({ power, recovery, armor, fire, earth, water, air, aether }))(state.hero);
+  const propsForBottomConsole = (({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, goToBattle }) => ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, goToBattle }))(state.hero);
 
   async function handleEmailConfirmed() {
     try {
@@ -65,8 +65,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
     <ScreenContainer bg={<Background />} screenName={route.name}>
       {/* TOP SECTION */}
       <View justifyContent="flex-start">
-        <TopHud healthObj={{ health, maxHealth }} xpObj={{ xp: 28, thisLevelStartXp, nextLevelStartXp }} />
-        <HeroDetails {...propsForHeroDetails} />
+        <TopHud {...propsForHeroDetails} healthObj={{ health, maxHealth }} xpObj={{ xp: 28, thisLevelStartXp, nextLevelStartXp }} />
         <DrawerIndicator action={() => navigation.toggleDrawer()} />
       </View>
 

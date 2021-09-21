@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useRef, createRef } from "react";
-import { Progress, Box, Text } from "native-base";
+import { Progress, Box, Text, View } from "native-base";
 import { Dimensions } from "react-native";
 import XpText from "./XpText";
 import { useCountUp } from "use-count-up";
+import LevelText from "./LevelText";
 
 interface XpProgProps {
   windowWidth: number;
   xp: number;
+  level: number;
   thisLevelStartXp: number;
   nextLevelStartXp: number;
 }
 
-const XpProg: React.FC<XpProgProps> = ({ windowWidth, xp, thisLevelStartXp, nextLevelStartXp }) => {
+const XpProg: React.FC<XpProgProps> = ({ windowWidth, xp, level, thisLevelStartXp, nextLevelStartXp }) => {
   const [xpGainedThisLevel, setXpGainedThisLevel] = useState(0);
   const [xpIndicator, setXpIndicator] = useState(0);
   const { value, reset } = useCountUp({ isCounting: true, duration: 0.5, easing: "easeOutCubic", end: xpIndicator });
@@ -38,9 +40,12 @@ const XpProg: React.FC<XpProgProps> = ({ windowWidth, xp, thisLevelStartXp, next
   }, [xpIndicator]);
 
   return (
-    <Box width={windowWidth * 0.75}>
-      <Progress value={value as number} mt={-0.5} colorScheme="xp" height="30px" borderRadius={25} borderWidth={2} />
-      <XpText levelXp={xpGainedThisLevel} levelXpRequired={levelXpRequired} />
+    <Box ml={7} width={windowWidth * 0.65}>
+      <Progress value={value as number} mt={-0.5} height="30px" borderRadius={25} borderWidth={2} />
+      <View flexDirection="row" position="absolute" right={3} top={1.5}>
+        <LevelText ml={windowWidth * 0.07} level={level} />
+        <XpText levelXp={xpGainedThisLevel} levelXpRequired={levelXpRequired} />
+      </View>
     </Box>
   );
 };

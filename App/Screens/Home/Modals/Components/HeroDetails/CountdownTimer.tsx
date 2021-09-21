@@ -52,17 +52,36 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({ type }) => {
   return (
     <View>
       {type === "Battle" ? (
-        <Text>
-          Battle: <Text>{hours}:</Text>
-          <Text>{minutes}:</Text>
-          <Text>{seconds}</Text>
-        </Text>
+        <View flexDirection="row" mt={1}>
+          <Text mr={2} fontSize={20} fontFamily="heading" color="base.white" opacity={0.6}>
+            Battle:
+          </Text>
+          <Text fontSize={20} fontFamily="heading" color="base.warning">
+            {" "}
+            {hours}:
+          </Text>
+          <Text fontSize={20} fontFamily="heading" color="base.warning">
+            {minutes}:
+          </Text>
+          <Text fontSize={20} fontFamily="heading" color="base.warning">
+            {seconds}
+          </Text>
+        </View>
       ) : type === "Knocked Out" ? (
-        <Text>
-          KO: <Text>{hours}:</Text>
-          <Text>{minutes}:</Text>
-          <Text>{seconds}</Text>
-        </Text>
+        <View flexDirection="row" mt={2}>
+          <Text mr={2} fontFamily="heading" color="base.white" opacity={0.6}>
+            Knocked Out:
+          </Text>
+          <Text color="base.white" fontFamily="heading">
+            {hours}:
+          </Text>
+          <Text color="base.white" fontFamily="heading">
+            {minutes}:
+          </Text>
+          <Text color="base.white" fontFamily="heading">
+            {seconds}
+          </Text>
+        </View>
       ) : null}
     </View>
   );

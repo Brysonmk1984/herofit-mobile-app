@@ -9,19 +9,19 @@ interface XpTextProps {
 
 const XpText: React.FC<XpTextProps> = ({ levelXp, levelXpRequired }) => {
   return (
-    <View flexDirection="row" position="absolute" right={3} top={1.5}>
+    <View flexDirection="row">
       <Box opacity={0.5} mr={2} mt={-2.5}>
-        <Text color="base.white" fontSize="xl">
+        <Text color="base.primary" fontSize="xl">
           XP
         </Text>
       </Box>
       <Text color="base.highlight" fontSize="sm" fontFamily="heading">
         <CountUp isCounting end={levelXp} duration={2} />
       </Text>
-      <Text mt={-1.5} color="base.white" fontSize="2xl" fontFamily="heading">
+      <Text mt={-1.5} color="base.primary" fontSize="2xl" fontFamily="heading">
         /
       </Text>
-      <Text mt={-0.5} color="base.white" fontSize="md" fontFamily="heading">
+      <Text mt={-0.5} color="base.primary" fontSize="md" fontFamily="heading">
         {levelXpRequired}
       </Text>
     </View>

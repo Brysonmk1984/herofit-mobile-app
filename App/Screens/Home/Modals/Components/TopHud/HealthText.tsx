@@ -10,7 +10,7 @@ interface HealthTextProps {
 
 const HealthText: React.FC<HealthTextProps> = ({ health, maxHealth }) => {
   return (
-    <View flexDirection="row" position="absolute" right={4} top={4}>
+    <View justifyContent="flex-end" flexDirection="row" flex={1}>
       <Box opacity={0.5} mr={2} mt={-0.5}>
         <Icon iconName="health" size={25} color="base.white" />
       </Box>

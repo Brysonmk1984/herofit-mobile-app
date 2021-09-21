@@ -4,6 +4,8 @@ import { View, Text, Button, Box, useTheme } from "native-base";
 import RBSheet from "react-native-raw-bottom-sheet";
 import Triangle from "./Triangle";
 import StatDisplay from "../../../../Components/StatDisplay";
+import { thousandsFormat } from "../../../../common/helperFunctions";
+import { CountdownTimer } from "./HeroDetails/CountdownTimer";
 
 interface BottomDrawerProps {
   power: number;
@@ -28,6 +30,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fir
         <Box alignItems="center">
           <Triangle action={() => refRBSheet.current.open()} />
         </Box>
+
         <Box display="flex" flexDirection="row" backgroundColor="base.primary">
           <Box w="50%" p={2} borderRightWidth={1} borderRightColor="primary.800">
             <Button _text={{ fontFamily: "heading", fontSize: 30 }} borderRadius="0px">
