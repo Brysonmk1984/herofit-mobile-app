@@ -9,6 +9,7 @@ let axios = _axios.create();
 axiosRetry(axios, { retries: 3 });
 
 const getUser = async function (body?: { email?: string }): Promise<any> {
+  console.log("EP", endpoint);
   return axios
     .post(`${endpoint}user/user-details`, body, await axiosOptions())
     .then(({ data }) => {

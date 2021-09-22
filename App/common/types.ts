@@ -163,6 +163,7 @@ interface DefaultHeroProperties {
   activityXP: number;
   battleXP: number;
   level: number;
+  albedo: number;
   thisLevelStartXp: number;
   nextLevelStartXp: number;
   battleDkos: number;

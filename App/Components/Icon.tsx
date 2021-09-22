@@ -5,6 +5,12 @@ import { Icon, useTheme } from "native-base";
 
 // function to keep consistent color value passing in props for both native-base and icomoon icons
 function getMatchingThemeColor(color: string, themeColors: string): string {
+  // If the passed in color is just a hex or rgb, return it
+  if (color.includes("#") || color.includes("rgb")) {
+    return color;
+  }
+
+  // Otherwise, it's a color from the theme
   const colorParts = color.split(".");
   const colorPartsLength = colorParts.length;
 

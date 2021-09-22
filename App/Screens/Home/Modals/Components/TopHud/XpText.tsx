@@ -10,7 +10,7 @@ interface XpTextProps {
 const XpText: React.FC<XpTextProps> = ({ levelXp, levelXpRequired }) => {
   return (
     <View flexDirection="row">
-      <Box opacity={0.5} mr={2} mt={-2.5}>
+      <Box opacity={0.5} mr={1} mt={-2.5}>
         <Text color="base.primary" fontSize="xl">
           XP
         </Text>

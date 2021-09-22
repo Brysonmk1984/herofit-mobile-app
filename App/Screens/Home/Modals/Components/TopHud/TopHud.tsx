@@ -22,6 +22,7 @@ interface XpProperties {
 interface TopHudProps {
   name: string;
   level: number;
+  albedo: number;
   healthObj: HealthProperties;
   xpObj: XpProperties;
   status: string;
@@ -30,7 +31,7 @@ interface TopHudProps {
   title?: string;
 }
 
-export const TopHud: React.FC<TopHudProps> = ({ healthObj, xpObj, name, level, status, goToBattle, photonTokens, title }) => {
+export const TopHud: React.FC<TopHudProps> = ({ healthObj, xpObj, name, level, albedo, status, goToBattle, photonTokens, title }) => {
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
 
@@ -46,7 +47,7 @@ export const TopHud: React.FC<TopHudProps> = ({ healthObj, xpObj, name, level, s
       <View ml={6}>
         {title && <HeroTitle title={title} />}
         <HealthProg name={name} windowWidth={windowWidth} {...healthObj} />
-        <XpProg level={level} windowWidth={windowWidth} {...xpObj} />
+        <XpProg level={level} albedo={albedo} windowWidth={windowWidth} {...xpObj} />
       </View>
       <StatusBar windowWidth={windowWidth}>
         <Box justifyContent="center" flexDirection="row">

@@ -11,11 +11,10 @@ interface HeroTitleProps {
 const HeroTitle: React.FC<HeroTitleProps> = ({ title }) => {
   const { name, class: className } = title;
   const color = className ? getColorFromClassName(className) : getColorFromItemName(name);
-  console.log("C", color);
   return (
     <Box flexDirection="row" mt={-10} ml={12}>
       <Icon iconName="belt" size={25} color={color} />
-      <Text ml={3} color="base.white">
+      <Text ml={3} color={color}>
         {name}
       </Text>
     </Box>
