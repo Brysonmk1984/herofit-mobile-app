@@ -4,13 +4,14 @@ import { tintHexMap, tintOpacityMap } from "../../../../common/hexAndOpacityMaps
 import { getPetImage } from "../../../../common/helperFunctions";
 
 interface PetImageProps {
-  pet: object;
+  pet: Item;
 }
 
 export const PetImage: React.FC<PetImageProps> = ({ pet }) => {
+  const petName = pet?.name;
   return (
     <Box position="absolute" left={0} bottom={75}>
-      <Image source={getPetImage(pet.name)} size={125} alt={pet.name} />
+      <Image source={getPetImage(petName)} size={125} alt={petName} />
     </Box>
   );
 };

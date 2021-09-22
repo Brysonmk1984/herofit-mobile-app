@@ -331,16 +331,149 @@ function getPetImage(petName: string): number {
   }
 }
 
-function equippedSkin(equipped: Item[]): SkinName | undefined {
-  return equipped.find(i => i.type === "skin")?.name as SkinName | undefined;
+function equippedSkin(equipped: Item[]): Item {
+  return equipped.find(i => i.type === "skin");
 }
 
 function equippedPet(equipped: Item[]): Item {
   return equipped.find(i => i.type === "pet");
 }
 
-function equippedTitle(equipped: Item[]): string | undefined {
-  return equipped.find(i => i.type === "title")?.name;
+function equippedTitle(equipped: Item[]): Item {
+  return equipped.find(i => i.type === "title");
 }
 
-export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, convertAorAn, getHeroAlias, determineFoeClass, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems, capitalize, getHeroImage, getPetImage, equippedSkin, equippedPet, equippedTitle };
+function getColorFromClassName(className) {
+  switch (className) {
+    case "repete-theme":
+      return "#9B9B9B";
+    case "filtron-five-theme":
+      return "#EBEBEB";
+    case "timber-terror-theme":
+      return "#3D2A18";
+    case "chorno-guy-theme":
+      return "#4B4B4B";
+    case "solar-warrior-theme":
+      return "#EBDD49";
+    case "wildspeaker-theme":
+      return "#533B27";
+    case "natural-ninja-theme":
+      return "#0C2613";
+    case "empath-theme":
+      return "#B9AF73";
+    case "boulder-bro-theme":
+      return "#986634";
+    case "compost-creature-theme":
+      return "#796D20";
+    case "brand-highlight":
+      return "#d4af37";
+    case "air-tint":
+    case "air-highlight":
+      return "#16a0f5";
+    case "water-tint":
+    case "water-highlight":
+      return "#0f5e9c";
+    case "earth-tint":
+    case "earth-highlight":
+      return "#8A360F";
+    case "fire-tint":
+    case "fire-highlight":
+      return "#e25822";
+    case "aether-tint":
+    case "aether-highlight":
+      return "#FFFFC2";
+    case "skin-banshee":
+    case "skin-wraith":
+    case "skin-phantom":
+    case "skin-phantasm":
+      return "#0000000";
+    case "skin-specter":
+    case "skin-poltergeist":
+    case "skin-apparition":
+    case "skin-shade":
+      return "#FFFFFF";
+  }
+}
+
+function getColorFromItemName(name) {
+  const lcName = lowercaseUnderscore(name);
+  switch (lcName) {
+    case "white_belt":
+      return "#f8f8ff";
+    case "yellow_belt":
+      return "rgb(245, 245, 64)";
+    case "orange_belt":
+      return "rgb(245, 174, 42)";
+    case "blue_belt":
+      return "rgb(63, 63, 205)";
+    case "purple_belt":
+      return "#800080";
+    case "green_belt":
+      return "rgb(35, 153, 35)";
+    case "red_belt":
+      return "rgb(194, 25, 25)";
+    case "brown_belt":
+      return "rgb(129, 17, 17)";
+    case "black_belt":
+    case "black_belt_sensei":
+      return "#000000";
+    default:
+      return "#242423";
+  }
+}
+
+// function getIconFromIconName(){
+//   const components = {
+//     title: {
+//       "White Light Warrior": GiWingedEmblem,
+//       "The Renowned": streakThree,
+//       "The Acclaimed": streakFive,
+//       "The Untouchable": streakTen,
+//       "The Valorous": streakFifteen,
+//       "The Legendary": streakTwentyFive,
+//       "The Mythical" : streakFifty,
+//       "White Belt" : GiBlackBelt,
+//       "Yellow Belt" : GiBlackBelt,
+//       "Orange Belt" : GiBlackBelt,
+//       "Blue Belt" : GiBlackBelt,
+//       "Purple Belt" : GiBlackBelt,
+//       "Green Belt" : GiBlackBelt,
+//       "Red Belt" : GiBlackBelt,
+//       "Brown Belt" : GiBlackBelt,
+//       "Black Belt" : GiCrossMark,
+//       "Black Belt Sensei" : GiBeltBuckles,
+//       "Elemental Outrider" : GiCavalry,
+//       "Air Stalker" : GiArrowWings,
+//       "Water Predator" : GiZigArrow,
+//       "Earth Trapper" : GiSpineArrow,
+//       "Fire Hunter" : GiFlamingArrow,
+//       "Ascended" : GiAngelOutfit,
+//     },
+//     consumable : {
+//       "Retrocausal Capsule" : GiPillDrop,
+//       "Health Potion" : GiHealthPotion,
+//       "Antidote Potion" : GiStandingPotion,
+//       "Storm Crow Bone Chimes" : GiBrokenBone,
+//       "Smoldering Skull Torch" : GiBurningSkull,
+//       "Wave-Swept Battle Conch" : GiSpiralShell,
+//       "Petrified Power Totem" : GiTotemMask,
+//       "Birthday Cake" : GiCakeSlice,
+//       "Plague Token" : GiPlagueDoctorProfile,
+//       "Obsidian Mirror" : GiMirrorMirror,
+//     },
+//     codex : {
+//       "Timber Terror Origin" : GiSecretBook,
+//       "Filtron Five Origin" : GiSecretBook,
+//       "Repete Origin" : GiSecretBook,
+//       "Wildspeaker Origin" : GiSecretBook,
+//       "Solar Warrior Origin" : GiSecretBook,
+//       "Chrono Guy Origin" : GiSecretBook,
+//       "Compost Creature Origin" : GiSecretBook,
+//       "Empath Origin" : GiSecretBook,
+//       "Boulder Bro Origin" : GiSecretBook,
+//       "Natural Ninja Origin" : GiSecretBook
+//     }
+//   };
+// }
+
+export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, convertAorAn, getHeroAlias, determineFoeClass, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems, capitalize, getHeroImage, getPetImage, equippedSkin, equippedPet, equippedTitle, getColorFromClassName, getColorFromItemName };

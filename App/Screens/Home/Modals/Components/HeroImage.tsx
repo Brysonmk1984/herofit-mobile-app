@@ -4,19 +4,20 @@ import { Animated, Easing, Dimensions } from "react-native";
 import { tintHexMap, tintOpacityMap, darknessMap } from "../../../../common/hexAndOpacityMaps";
 import useFloating from "../../../../common/hooks/useFloating";
 import useHeroImage from "../../../../common/hooks/useHeroImage";
-import { CharacterName, CharacterAlias, HeroStatus, SkinName } from "../../../../common/types";
+import { CharacterName, CharacterAlias, HeroStatus, SkinName, Item } from "../../../../common/types";
 
 interface HeroImageProps {
   character: CharacterName;
   alias: CharacterAlias;
   status?: HeroStatus;
-  skin?: SkinName;
+  skin?: Item;
 }
 
 export const HeroImage: React.FC<HeroImageProps> = ({ character, alias, skin, status }) => {
-  const { heroImage } = useHeroImage(character, skin);
+  const skinName = skin?.name as SkinName;
+  const { heroImage } = useHeroImage(character, skinName);
   const { floating, floatAnimation } = useFloating(status !== "Knocked Out");
-  const isTint = skin?.includes("Tint") ?? false;
+  const isTint = skinName?.includes("Tint") ?? false;
 
   // STATUS EFFECT = If Hero is under a status effect, return an image with the matching modified tint
   function renderHeroUnderStatusEffect() {
@@ -40,9 +41,9 @@ export const HeroImage: React.FC<HeroImageProps> = ({ character, alias, skin, st
         <Box w={275} h={275}>
           {" "}
           {/* Base Color tint */}
-          <Image position="absolute" bottom={100} style={{ tintColor: tintHexMap[skin], opacity: tintOpacityMap[skin] || 1 }} source={heroImage} size={275} alt={alias} />
+          <Image position="absolute" bottom={100} style={{ tintColor: tintHexMap[skinName], opacity: tintOpacityMap[skin] || 1 }} source={heroImage} size={275} alt={alias} />
           {/* IMAGE - Shown on top of overlay */}
-          <Image position="absolute" bottom={100} style={{ opacity: darknessMap[skin] || 0.5 }} source={heroImage} size={275} alt={alias} />
+          <Image position="absolute" bottom={100} style={{ opacity: darknessMap[skinName] || 0.5 }} source={heroImage} size={275} alt={alias} />
         </Box>
       </Center>
     );
