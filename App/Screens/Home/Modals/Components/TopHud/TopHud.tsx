@@ -28,7 +28,7 @@ interface TopHudProps {
   status: string;
   goToBattle: boolean;
   photonTokens: number;
-  title?: string;
+  title?: Item;
 }
 
 export const TopHud: React.FC<TopHudProps> = ({ healthObj, xpObj, name, level, albedo, status, goToBattle, photonTokens, title }) => {
@@ -37,9 +37,6 @@ export const TopHud: React.FC<TopHudProps> = ({ healthObj, xpObj, name, level, a
 
   return (
     <Box mt={10}>
-      {/* <Box style={{ transform: [{ rotate: "80deg" }] }} w={windowWidth * 0.35} h={windowWidth * 0.5} position="absolute" left={-20} top={-20} bgColor="base.primary"></Box> */}
-      {/* <Box style={{ transform: [{ rotate: "45deg" }] }} w={windowWidth * 0.5} h={windowHeight * 0.5} position="absolute" left={-49} top={-140} bgColor="base.primary"></Box> */}
-
       {/* LOGO */}
       <Box position="absolute" left={-1} top={-36} zIndex={100} elevation={100}>
         <Image size={windowWidth * 0.28} source={require("../../../../../../assets/images/misc/HF-logo.webp")} alt="HeroFit Logo" />

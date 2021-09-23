@@ -2,6 +2,7 @@ import { Foundation, FontAwesome5, Feather, Ionicons, FontAwesome, AntDesign, Ma
 import React from "react";
 import { createIconSetFromIcoMoon } from "@expo/vector-icons";
 import { Icon, useTheme } from "native-base";
+import { checkForMultipleItem, lowercaseDash } from "../common/helperFunctions";
 
 // function to keep consistent color value passing in props for both native-base and icomoon icons
 function getMatchingThemeColor(color: string, themeColors: string): string {
@@ -40,8 +41,8 @@ const InGameIcons = ({ iconName, size, color }: IconProps) => {
     // Fire
     case "run":
       return <Icon as={MaterialCommunityIcons} name="run-fast" size={size} color={color} />;
-    case "crossfit":
-      return <Icon as={Feather} name="crosshair" size={size} color={color} />;
+    // case "crossfit":
+    //   return <Icon as={Feather} name="crosshair" size={size} color={color} />;
     case "stairs":
       return <Icon as={MaterialCommunityIcons} name="stairs" size={size} color={color} />;
     // Air
@@ -89,11 +90,16 @@ const InGameIcons = ({ iconName, size, color }: IconProps) => {
     case "info":
     case "Info":
       return <Icon as={FontAwesome5} name="info-circle" size={size} color={color} />;
+    case "air":
+      return <Icon as={FontAwesome5} name="wind" size={size} color={color} />;
     // DEFAULT: ICOMOON ICON OR NONE FOUND
     default:
       // If no icon is explicitly returned above, attempt to find icon from within icomoon custom icon set
       // If no icon is found within the custom icon set, return a question mark to show no icon was found.
-      return <IcoMoon name={iconName} size={size} color={getMatchingThemeColor(color, themeColors)} /> || <Icon as={FontAwesome} name="question-circle" size={size} color={color} />;
+      const lcDashName = lowercaseDash(iconName);
+      // Need to check if the item is a common item icon is common among multiple icons
+      const nameIncludingMultiples = checkForMultipleItem(lcDashName);
+      return <IcoMoon name={nameIncludingMultiples} size={size} color={getMatchingThemeColor(color, themeColors)} /> || <Icon as={FontAwesome} name="question-circle" size={size} color={color} />;
   }
 };
 

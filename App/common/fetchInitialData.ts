@@ -33,7 +33,6 @@ async function fetchInitialData(token: string, dispatch: AppDispatch, state: Ini
 
     dispatch({ type: "SET EXISTING USER INIT DATA", payload: { user, hero, items, latestBattle, isSignedIn: true, userStatus } });
   } catch (error) {
-    console.log("INNER ERR", error);
     let message, alertType;
 
     if (error.status === 401) {

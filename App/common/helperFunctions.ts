@@ -19,7 +19,7 @@ const lowercaseUnderscore = function <T = string>(val: T) {
 
 const lowercaseDash = function <T = string>(val: T) {
   if (typeof val === "string") {
-    val.replace(/\s+/g, "-").toLowerCase();
+    return val.replace(/\s+/g, "-").toLowerCase();
   }
   throw new Error(`${val} is not a String; can't transform`);
 };
@@ -422,58 +422,16 @@ function getColorFromItemName(name) {
   }
 }
 
-// function getIconFromIconName(){
-//   const components = {
-//     title: {
-//       "White Light Warrior": GiWingedEmblem,
-//       "The Renowned": streakThree,
-//       "The Acclaimed": streakFive,
-//       "The Untouchable": streakTen,
-//       "The Valorous": streakFifteen,
-//       "The Legendary": streakTwentyFive,
-//       "The Mythical" : streakFifty,
-//       "White Belt" : GiBlackBelt,
-//       "Yellow Belt" : GiBlackBelt,
-//       "Orange Belt" : GiBlackBelt,
-//       "Blue Belt" : GiBlackBelt,
-//       "Purple Belt" : GiBlackBelt,
-//       "Green Belt" : GiBlackBelt,
-//       "Red Belt" : GiBlackBelt,
-//       "Brown Belt" : GiBlackBelt,
-//       "Black Belt" : GiCrossMark,
-//       "Black Belt Sensei" : GiBeltBuckles,
-//       "Elemental Outrider" : GiCavalry,
-//       "Air Stalker" : GiArrowWings,
-//       "Water Predator" : GiZigArrow,
-//       "Earth Trapper" : GiSpineArrow,
-//       "Fire Hunter" : GiFlamingArrow,
-//       "Ascended" : GiAngelOutfit,
-//     },
-//     consumable : {
-//       "Retrocausal Capsule" : GiPillDrop,
-//       "Health Potion" : GiHealthPotion,
-//       "Antidote Potion" : GiStandingPotion,
-//       "Storm Crow Bone Chimes" : GiBrokenBone,
-//       "Smoldering Skull Torch" : GiBurningSkull,
-//       "Wave-Swept Battle Conch" : GiSpiralShell,
-//       "Petrified Power Totem" : GiTotemMask,
-//       "Birthday Cake" : GiCakeSlice,
-//       "Plague Token" : GiPlagueDoctorProfile,
-//       "Obsidian Mirror" : GiMirrorMirror,
-//     },
-//     codex : {
-//       "Timber Terror Origin" : GiSecretBook,
-//       "Filtron Five Origin" : GiSecretBook,
-//       "Repete Origin" : GiSecretBook,
-//       "Wildspeaker Origin" : GiSecretBook,
-//       "Solar Warrior Origin" : GiSecretBook,
-//       "Chrono Guy Origin" : GiSecretBook,
-//       "Compost Creature Origin" : GiSecretBook,
-//       "Empath Origin" : GiSecretBook,
-//       "Boulder Bro Origin" : GiSecretBook,
-//       "Natural Ninja Origin" : GiSecretBook
-//     }
-//   };
-// }
+function checkForMultipleItem(itemName) {
+  const belt = ["white-belt", "yellow-belt", "orange-belt", "blue-belt", "purple-belt", "green-belt", "red-belt", "brown-belt"];
+  const origin = ["timber-terror-origin", "filtron-five-origin", "repete-origin", "wildspeaker-origin", "solar-warrior-origin", "chrono-guy-origin", "compost-creature-origin", "empath-origin", "boulder-bro-origin", "natural-ninja-origin"];
 
-export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, convertAorAn, getHeroAlias, determineFoeClass, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems, capitalize, getHeroImage, getPetImage, equippedSkin, equippedPet, equippedTitle, getColorFromClassName, getColorFromItemName };
+  if (belt.includes(itemName)) {
+    return "belt";
+  } else if (origin.includes(itemName)) {
+    return "origin";
+  }
+  return itemName;
+}
+
+export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, convertAorAn, getHeroAlias, determineFoeClass, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems, capitalize, getHeroImage, getPetImage, equippedSkin, equippedPet, equippedTitle, getColorFromClassName, getColorFromItemName, checkForMultipleItem };

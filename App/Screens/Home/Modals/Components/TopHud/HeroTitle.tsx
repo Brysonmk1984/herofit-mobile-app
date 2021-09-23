@@ -13,7 +13,7 @@ const HeroTitle: React.FC<HeroTitleProps> = ({ title }) => {
   const color = className ? getColorFromClassName(className) : getColorFromItemName(name);
   return (
     <Box flexDirection="row" mt={-10} ml={12}>
-      <Icon iconName="belt" size={25} color={color} />
+      <Icon iconName={name} size={25} color={color} />
       <Text ml={3} color={color}>
         {name}
       </Text>
