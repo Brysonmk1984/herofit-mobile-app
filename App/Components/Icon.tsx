@@ -90,6 +90,8 @@ const InGameIcons = ({ iconName, size, color }: IconProps) => {
     case "info":
     case "Info":
       return <Icon as={FontAwesome5} name="info-circle" size={size} color={color} />;
+    case "air":
+      return <Icon as={FontAwesome5} name="wind" size={size} color={color} />;
     // DEFAULT: ICOMOON ICON OR NONE FOUND
     default:
       // If no icon is explicitly returned above, attempt to find icon from within icomoon custom icon set

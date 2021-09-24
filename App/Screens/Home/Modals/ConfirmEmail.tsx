@@ -19,7 +19,6 @@ const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const [disableButton, setDisableButton] = useState(true);
   const [showChecklist, setShowChecklist] = useState(true);
-  console.log(state.user.email);
 
   // const [request, response, promptAsync] = useAuthRequest(
   //   {

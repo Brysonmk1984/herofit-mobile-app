@@ -12,7 +12,7 @@ import fetchInitialData from "./common/fetchInitialData";
 import useJwt from "./common/hooks/useJwt";
 import { getHeroAlias } from "./common/helperFunctions";
 import { View } from "native-base";
-LogBox.ignoreLogs(["Reanimated 2", "Remote debugger", "VirtualizedLists should never be nested"]);
+LogBox.ignoreLogs(["Reanimated 2", "Remote debugger", "VirtualizedLists should never be nested", 'Expected style "lineHeight`: 30" to contain units']);
 
 const height = Dimensions.get("window").height;
 const App: React.FC = () => {

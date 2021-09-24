@@ -7,13 +7,13 @@ import { GlobalStateContext } from "../../store";
 import debugErrors from "../../common/debugErrors";
 import { updateAlerts } from "../../common/alerts";
 import ScreenContainer from "../../Components/ScreenContainer/ScreenContainer";
-import { Header, ScreenActionButton, Pane, HelperText } from "../../Components/CustomComponents";
+import { Header, ScreenActionButton, Pane, HelperText, LoadingInPane } from "../../Components/CustomComponents";
 import { useDebouncedCallback } from "use-debounce";
 import { AuthStackProps } from "../../common/types-navigator";
 import { User } from "../../common/types";
 
 // prettier-ignore
-interface FormState { email: string; firstName: string; username: string; password: string; emailMarketingOptIn: boolean; helperText: string; formIsValid: boolean; }
+interface FormState { email: string; firstName: string; username: string; password: string; emailMarketingOptIn: boolean; helperText: string; formIsValid: boolean; loading: boolean }
 interface EmailInputAction {
   type: "EMAIL INPUT";
   email: string;
@@ -34,7 +34,11 @@ interface EmailMarketingOptInToggleAction {
   type: "EMAIL MARKETING OPT IN TOGGLE";
   emailMarketingOptIn: boolean;
 }
-type FormAction = EmailInputAction | FirstNameInputAction | UsernameInputAction | PasswordInputAction | EmailMarketingOptInToggleAction;
+interface SetLoadingAction {
+  type: "SET LOADING";
+  loading: boolean;
+}
+type FormAction = EmailInputAction | FirstNameInputAction | UsernameInputAction | PasswordInputAction | EmailMarketingOptInToggleAction | SetLoadingAction;
 
 function formReducer(state: FormState, action: FormAction): FormState {
   function checkValidForm({ email, username, password }) {
@@ -76,6 +80,9 @@ function formReducer(state: FormState, action: FormAction): FormState {
       console.log("LOOK", action.emailMarketingOptIn);
       return { ...state, emailMarketingOptIn: action.emailMarketingOptIn };
     }
+    case "SET LOADING": {
+      return { ...state, loading: action.loading };
+    }
     default:
       throw new Error("No Matching Action");
   }
@@ -103,17 +110,18 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
       updateAlerts([{ type: "success", message: `Account creation successful!` }], state, dispatch);
       dispatch({ type: "SET HERO", payload: { hero: data.avatar } });
       dispatch({ type: "SET ISSIGNEDIN", payload: { isSignedIn: true } });
+      formDispatch({ type: "SET LOADING", loading: false });
     } catch (error) {
       // Error getting Avatar, should only happen if DB connection issues
       debugErrors(error, user);
       updateAlerts([{ type: "error", message: `${error.status}: ${error.message}` }], state, dispatch);
-      dispatch({ type: "TOGGLE LOADING", payload: { isLoading: false } });
+      formDispatch({ type: "SET LOADING", loading: false });
     }
   }
 
   async function handleSignUp() {
     const { email, firstName, username: username, password, emailMarketingOptIn } = formState;
-
+    formDispatch({ type: "SET LOADING", loading: true });
     try {
       const data = await register({ email, firstName, username, password, emailMarketingOptIn, isMobileApp: true });
       const { user } = data;
@@ -121,6 +129,7 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
       updateAlerts([{ type: "success", message: "Please check your email to verify account. Check your spam folder if the message is not in your inbox.", persist: true }], state, dispatch);
       handlePostRegister(user);
     } catch (error) {
+      formDispatch({ type: "SET LOADING", loading: false });
       updateAlerts([{ type: "error", message: error.message }], state, dispatch);
       debugErrors(error);
     }
@@ -144,7 +153,6 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
             <FormControl>
               <Input onChangeText={password => formDispatch({ type: "PASSWORD INPUT", password })} value={formState.password} secureTextEntry={true} autoCompleteType="password" textContentType="password" placeholder="Password" />
             </FormControl>
-            {formState.helperText ? <HelperText text={formState.helperText} type={formState.formIsValid ? "success" : "error"} /> : null}
             <FormControl>
               <HStack my={2} px={0}>
                 <Checkbox colorScheme="success" value={formState.emailMarketingOptIn.toString()} onChange={emailMarketingOptIn => formDispatch({ type: "EMAIL MARKETING OPT IN TOGGLE", emailMarketingOptIn })} accessibilityLabel="This is an email optin checkbox" defaultIsChecked />
@@ -153,6 +161,8 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
                 </Text>
               </HStack>
             </FormControl>
+            {/* Show Loading indicator or Helper Text */}
+            {formState.loading ? <LoadingInPane text="Creating Account..." /> : formState.helperText ? <HelperText text={formState.helperText} type={formState.formIsValid ? "success" : "error"} /> : null}
           </VStack>
         </Pane>
       </ScrollView>

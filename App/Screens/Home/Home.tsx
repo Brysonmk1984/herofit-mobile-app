@@ -8,7 +8,6 @@ import useModal from "../../common/hooks/useModal";
 import { getUser } from "../../api/user";
 import { updateAlerts } from "../../common/alerts";
 import { ChooseActivityEntry, SignupToSave, SignupFinished, ConfirmEmail, FeedbackChoice } from "./Modals/Modals";
-import { DrawerIndicator } from "../../Components/DrawerIndicator";
 import Background from "./Modals/Components/Background";
 import BottomDrawer from "./Modals/Components/BottomDrawer";
 import { equippedPet, equippedSkin, equippedTitle } from "../../common/helperFunctions";
@@ -16,6 +15,7 @@ import { HeroImage } from "./Modals/Components/HeroImage/HeroImage";
 import { TopHud } from "./Modals/Components/TopHud/TopHud";
 import { HeroDetails } from "./Modals/Components/HeroDetails/HeroDetails";
 import { PetImage } from "./Modals/Components/PetImage";
+import { DrawerIndicator } from "../../Components/CustomComponents";
 
 const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);

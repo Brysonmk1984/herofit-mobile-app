@@ -6,7 +6,7 @@ interface DrawerIndicatorProps {
   action: () => void;
 }
 
-export const DrawerIndicator: React.FC<DrawerIndicatorProps> = ({ action }) => {
+const DrawerIndicator: React.FC<DrawerIndicatorProps> = ({ action }) => {
   return (
     <Pressable onPress={action} position="absolute" right={0} top={20}>
       <Box borderLeftRadius={"8px"} bgColor="base.highlight" p={2}>
@@ -15,3 +15,4 @@ export const DrawerIndicator: React.FC<DrawerIndicatorProps> = ({ action }) => {
     </Pressable>
   );
 };
+export default DrawerIndicator;

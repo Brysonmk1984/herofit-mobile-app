@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, VStack, FormControl, Input, Link } from "native-base";
+import { View, Text, VStack, FormControl, Input, Link, Spinner, HStack } from "native-base";
 import { login } from "../../api/authentication";
 import { GlobalStateContext } from "../../store";
 import debugErrors from "../../common/debugErrors";
 import { updateAlerts } from "../../common/alerts";
 import fetchInitialData from "../../common/fetchInitialData";
-import { Header, ScreenContainer, ScreenActionButton, Pane, HelperText } from "../../Components/CustomComponents";
+import { Header, ScreenContainer, ScreenActionButton, Pane, HelperText, LoadingInPane } from "../../Components/CustomComponents";
 import { useDebouncedCallback } from "use-debounce";
 import { AuthStackProps } from "../../common/types-navigator";
 
@@ -26,7 +26,7 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
       if (!formIsValid) {
         throw new Error("Please complete the form.");
       }
-      dispatch({ type: "TOGGLE LOADING", payload: { isLoading: true } });
+
       const { user, tokenObject } = await login({ email, password });
       setSuccess(true);
 
@@ -88,12 +88,18 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
             <FormControl isRequired isInvalid={helperText === "Password must be at least 8 characters" ? true : false}>
               <Input onChangeText={text => handleInputChange(text, setPassword)} value={password} secureTextEntry={true} autoCompleteType="password" textContentType="password" placeholder="Password" onSubmitEditing={handleSignIn} />
             </FormControl>
-            {helperText && <HelperText type={formIsValid ? "success" : "error"} text={helperText} />}
-            <View alignItems="center">
-              <Link onPress={() => navigation.push("ForgotPassword")} mt={1}>
-                Forgot Password?
-              </Link>
-            </View>
+            {loading ? (
+              <LoadingInPane text="Signing In..." />
+            ) : (
+              <>
+                {helperText && <HelperText type={formIsValid ? "success" : "error"} text={helperText} />}
+                <View alignItems="center">
+                  <Link onPress={() => navigation.push("ForgotPassword")} mt={1}>
+                    Forgot Password?
+                  </Link>
+                </View>
+              </>
+            )}
           </VStack>
         </Pane>
       </View>

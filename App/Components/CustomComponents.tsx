@@ -7,5 +7,7 @@ import HelperText from "./HelperText";
 import LoreText from "./LoreText";
 import StatDisplay from "./StatDisplay";
 import Icon from "./Icon";
+import LoadingInPane from "./LoadingInPane";
+import DrawerIndicator from "./DrawerIndicator";
 
-export { ScreenContainer, Header, Subheader, ScreenActionButton, LoreText, Pane, HelperText, StatDisplay, Icon };
+export { ScreenContainer, Header, Subheader, ScreenActionButton, LoreText, Pane, HelperText, StatDisplay, Icon, LoadingInPane, DrawerIndicator };
