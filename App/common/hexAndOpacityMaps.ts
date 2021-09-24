@@ -36,5 +36,5 @@ export const darknessMap = {
   "Shade Tint": 0.2,
   "Apparition Tint": 0.3,
   "Knocked Out": 0.2,
-  Recovering: 0.4,
+  Recovering: 0.7,
 };

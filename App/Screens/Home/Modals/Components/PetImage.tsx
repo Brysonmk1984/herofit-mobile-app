@@ -11,7 +11,7 @@ export const PetImage: React.FC<PetImageProps> = ({ pet }) => {
   const petName = pet?.name;
   return (
     <Box position="absolute" left={0} bottom={75}>
-      <Image source={getPetImage(petName)} size={125} alt={petName} />
+      <Image resizeMode="contain" source={getPetImage(petName)} size={125} alt={petName} />
     </Box>
   );
 };

@@ -8,7 +8,7 @@ interface NameTextProps {
 }
 
 const NameText: React.FC<NameTextProps> = ({ name, ml }) => {
-  const longName = name.length > 13;
+  const longName = name.length >= 13;
 
   return (
     <Box ml={ml} mt={longName ? 0 : -1.5} flex={2}>

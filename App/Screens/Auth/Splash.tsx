@@ -1,5 +1,5 @@
-import { StyleSheet, View as RNView } from "react-native";
-import { View, Text, Heading, Button, Link, Center } from "native-base";
+import { Dimensions, StyleSheet, View as RNView } from "react-native";
+import { View, Text, Box, Button, Link, Center, Image } from "native-base";
 import React, { useContext } from "react";
 import { AuthStackProps } from "../../common/types-navigator";
 import { Header, ScreenContainer } from "../../Components/CustomComponents";
@@ -8,6 +8,7 @@ import { GlobalStateContext } from "../../store";
 
 const Splash = ({ navigation, route }: AuthStackProps<"Splash">) => {
   const { state, dispatch } = useContext(GlobalStateContext);
+  const deviceWidth = Dimensions.get("window").width;
 
   function handleGetStarted() {
     dispatch({ type: "SET USER STATUS", payload: { userStatus: "new" } });
@@ -15,15 +16,14 @@ const Splash = ({ navigation, route }: AuthStackProps<"Splash">) => {
   }
 
   return (
-    <ScreenContainer screenName={route.name} fullWidth={true}>
+    <ScreenContainer screenName={route.name}>
       <View justifyContent="center" alignItems="center" h="100%">
-        <Heading>
-          <Text color="base.brand" style={Styles.textShadow} fontFamily="heading" fontSize={130}>
-            HEROFIT
-          </Text>
-        </Heading>
+        <Box>
+          <Image resizeMode="contain" w={deviceWidth} h={190} source={require("../../../assets/images/misc/herofit-logo.webp")} alt="HeroFit" />
+        </Box>
+
         <View>
-          <Text color="base.white" fontFamily="heading" fontSize={25}>
+          <Text color="base.primary" fontFamily="heading" fontSize={22}>
             The Fitness Tracking Game
           </Text>
         </View>

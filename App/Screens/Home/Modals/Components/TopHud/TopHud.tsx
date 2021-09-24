@@ -39,7 +39,7 @@ export const TopHud: React.FC<TopHudProps> = ({ healthObj, xpObj, name, level, a
     <Box mt={10}>
       {/* LOGO */}
       <Box position="absolute" left={-1} top={-36} zIndex={100} elevation={100}>
-        <Image size={windowWidth * 0.28} source={require("../../../../../../assets/images/misc/HF-logo.webp")} alt="HeroFit Logo" />
+        <Image size={windowWidth * 0.28} source={require("../../../../../../assets/images/misc/hf-logo.webp")} alt="HeroFit Logo" />
       </Box>
       <View ml={6}>
         {title && <HeroTitle title={title} />}

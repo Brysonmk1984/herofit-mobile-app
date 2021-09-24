@@ -5,7 +5,6 @@ const useFloating = (float: boolean) => {
   const [floating, setFloating] = useState(float);
   const deviceHeight = Dimensions.get("window").height;
   let floatAnimation = useRef(new Animated.Value(deviceHeight)).current;
-
   function floatDown() {
     if (floating) {
       Animated.timing(floatAnimation, {

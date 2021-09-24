@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { View } from "native-base";
+import { View, Image } from "native-base";
 import ScreenContainer from "../../Components/ScreenContainer/ScreenContainer";
 import debugErrors from "../../common/debugErrors";
 import { GlobalStateContext } from "../../store";
@@ -12,7 +12,7 @@ import { DrawerIndicator } from "../../Components/DrawerIndicator";
 import Background from "./Modals/Components/Background";
 import BottomDrawer from "./Modals/Components/BottomDrawer";
 import { equippedPet, equippedSkin, equippedTitle } from "../../common/helperFunctions";
-import { HeroImage } from "./Modals/Components/HeroImage";
+import { HeroImage } from "./Modals/Components/HeroImage/HeroImage";
 import { TopHud } from "./Modals/Components/TopHud/TopHud";
 import { HeroDetails } from "./Modals/Components/HeroDetails/HeroDetails";
 import { PetImage } from "./Modals/Components/PetImage";
@@ -68,7 +68,6 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
         <TopHud {...propsForTopHud} healthObj={{ health, maxHealth }} xpObj={{ xp: 28, thisLevelStartXp, nextLevelStartXp }} />
         <DrawerIndicator action={() => navigation.toggleDrawer()} />
       </View>
-
       {/* HERO & PET */}
       <View>
         <HeroImage {...propsForHeroImage} />
