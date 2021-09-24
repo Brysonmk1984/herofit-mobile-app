@@ -23,7 +23,8 @@ const XpProg: React.FC<XpProgProps> = ({ windowWidth, xp, level, albedo, thisLev
 
   // XP accumulated within current level
   useEffect(() => {
-    const xpThisLevel = xp - thisLevelStartXp;
+    console.log("XP, lsxp", xp, thisLevelStartXp, levelXpRequired);
+    const xpThisLevel = xp - thisLevelStartXp < 0 ? 0 : xp - thisLevelStartXp;
     setXpGainedThisLevel(xpThisLevel);
   }, []);
 
@@ -39,7 +40,7 @@ const XpProg: React.FC<XpProgProps> = ({ windowWidth, xp, level, albedo, thisLev
       reset();
     }
   }, [xpIndicator]);
-
+  console.log("LOOOOK", xpGainedThisLevel);
   return (
     <Box ml={7} width={windowWidth * 0.65}>
       <Progress value={value as number} mt={-0.5} height="30px" borderRadius={25} borderWidth={2} />

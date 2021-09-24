@@ -21,10 +21,13 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { openModal } = useModal();
 
-  const { health, maxHealth, thisLevelStartXp, nextLevelStartXp, equipped, qp } = state.hero;
+  const { health, maxHealth, thisLevelStartXp, nextLevelStartXp, equipped, qp, activityXP, battleXP } = state.hero;
 
   //Props for HomeScreen components
-  const propsForTopHud = (({ equipped, name, status, photonTokens, activityXP, battleXP, goToBattle, level, albedo }) => ({ title: equippedTitle(equipped), name, status, photonTokens, activityXP, battleXP, goToBattle, level, albedo }))(state.hero);
+  const propsForTopHud: any = (({ equipped, name, status, photonTokens, activityXP, battleXP, goToBattle, level, albedo }) => ({ title: equippedTitle(equipped), name, status, photonTokens, activityXP, battleXP, goToBattle, level, albedo }))(state.hero);
+  propsForTopHud.healthObj = { health, maxHealth };
+  propsForTopHud.xpObj = { xp: activityXP + battleXP, thisLevelStartXp, nextLevelStartXp };
+  console.log("!!!", propsForTopHud.xpObj);
   const propsForHeroImage = (({ character, equipped, alias, status }) => ({ character, equipped, alias, skin: equippedSkin(equipped), status }))(state.hero);
   const propsForBottomConsole = (({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, goToBattle }) => ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, goToBattle }))(state.hero);
 
@@ -65,7 +68,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
     <ScreenContainer bg={<Background />} screenName={route.name}>
       {/* TOP SECTION */}
       <View justifyContent="flex-start">
-        <TopHud {...propsForTopHud} healthObj={{ health, maxHealth }} xpObj={{ xp: 28, thisLevelStartXp, nextLevelStartXp }} />
+        <TopHud {...propsForTopHud} />
         <DrawerIndicator action={() => navigation.toggleDrawer()} />
       </View>
       {/* HERO & PET */}
