@@ -35,7 +35,7 @@ const HeroDetails = ({ route, navigation }: AuthStackProps<"HeroDetails">) => {
             </VStack>
           </Pane>
 
-          <Image alignSelf={"flex-end"} source={getHeroImage(character)} size={220} alt={alias} />
+          <Image alignSelf={"flex-end"} source={getHeroImage(character)} size={220} alt={character} />
         </HStack>
         <Pane lore={true}>
           <LoreText lore={history} />

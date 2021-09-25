@@ -12,7 +12,7 @@ import fetchInitialData from "./common/fetchInitialData";
 import useJwt from "./common/hooks/useJwt";
 import { getHeroAlias } from "./common/helperFunctions";
 import { View } from "native-base";
-LogBox.ignoreLogs(["Reanimated 2", "Remote debugger", "VirtualizedLists should never be nested", 'Expected style "lineHeight`: 30" to contain units']);
+LogBox.ignoreLogs(["Reanimated 2", "Remote debugger", "VirtualizedLists should never be nested", 'Expected style "lineHeight": 30" to contain units', 'Expected style "lineHeight: 50" to contain units', 'Expected style "lineHeight: 85" to contain units', 'Expected style "lineHeight: 120" to contain units', "Please pass alt prop to Image component"]);
 
 const height = Dimensions.get("window").height;
 const App: React.FC = () => {

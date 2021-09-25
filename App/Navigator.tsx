@@ -1,6 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { createDrawerNavigator } from "@react-navigation/drawer";
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer";
 import herofitTheme from "./styles/herofitTheme";
 import * as Screens from "./Screens";
 import { AuthStackParamList, MainDrawerParamList, RootStackParamList } from "./common/types-navigator";
@@ -34,11 +34,34 @@ const AuthStackScreen = () => {
   );
 };
 
+function filterDrawerContent(props) {
+  const filteredProps = {
+    ...props,
+    state: {
+      ...props.state,
+      routeNames: props.state.routeNames.filter(
+        // To hide single option
+        // (routeName) => routeName !== 'HiddenPage1',
+        // To hide multiple options you can add & condition
+        routeName => {
+          routeName !== "SpendQP" && routeName !== "HiddenPage2";
+        },
+      ),
+      routes: props.state.routes.filter(route => route.name !== "SpendQP" && route.name !== "HiddenPage2"),
+    },
+  };
+  return (
+    <DrawerContentScrollView {...filteredProps}>
+      <DrawerItemList {...filteredProps} />
+    </DrawerContentScrollView>
+  );
+}
+
 // IN APP Second level Navigator, used for directing users who are already authorized
 const MainDrawer = createDrawerNavigator<MainDrawerParamList>();
 const DrawerScreen = () => {
   return (
-    <MainDrawer.Navigator drawerPosition="right" screenOptions={{ headerShown: false, ...baseScreenStyle }}>
+    <MainDrawer.Navigator drawerContent={props => filterDrawerContent(props)} drawerPosition="right" screenOptions={{ headerShown: false, ...baseScreenStyle }}>
       <MainDrawer.Screen options={{ drawerIcon: ({ focused, size }) => <Icon as={AntDesign} name="home" size={10} color="base.link" /> }} name="Home" component={Screens.Home} />
       <MainDrawer.Screen name="Profile" component={Screens.Profile} />
       <MainDrawer.Screen name="Ranking" component={Screens.Ranking} />

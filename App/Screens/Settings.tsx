@@ -3,16 +3,17 @@ import { Alert } from "react-native";
 import { Image, Pressable, FlatList, SectionList, Box, Center, View, Text, Heading, VStack, FormControl, Input, Link, Button, IconButton, HStack, Divider } from "native-base";
 import ScreenContainer from "../Components/ScreenContainer/ScreenContainer";
 import { clearJwtInLocalStorage } from "../common/jwtModule";
-import debugErrors from "../common/debugErrors";
-import { User } from "../common/types";
+import debugErrors, { createAppError } from "../common/debugErrors";
+import { Hero, User } from "../common/types";
 import { updateAlerts } from "../common/alerts";
 import { deleteAccount } from "../api/account";
 import { GlobalStateContext } from "../store";
 import { MainDrawerProps } from "../common/types-navigator";
+import { isExistingHero } from "../common/typeGuards";
 
 const Settings: React.FC<MainDrawerProps<"Settings">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
-  const { hero } = state;
+  const hero = state.hero;
 
   const createDeleteAlert = () => {
     return Alert.alert(
@@ -33,20 +34,26 @@ const Settings: React.FC<MainDrawerProps<"Settings">> = ({ navigation, route }) 
   function handleDeleteAccount() {
     // TODO: Delete immediately after account creation doesnt work, hero doesn't have ID
     const user: User = state.user;
-    console.log("HHH", hero);
-    deleteAccount({ username: user.username, avatarID: hero.id, email: user.email })
-      .then(async data => {
-        updateAlerts([{ type: "success", message: "Account has been deleted. We hope to see you again sometime." }], state, dispatch);
-        dispatch({ type: "RESET DEFAULTS" });
+    if (isExistingHero(hero)) {
+      deleteAccount({ username: user.username, avatarID: hero.id, email: user.email })
+        .then(async data => {
+          updateAlerts([{ type: "success", message: "Account has been deleted. We hope to see you again sometime." }], state, dispatch);
+          dispatch({ type: "RESET DEFAULTS" });
 
-        setTimeout(() => {
-          return navigation.navigate("Auth", { screen: "SignIn" });
-        }, 3000);
-      })
-      .catch(error => {
-        debugErrors(error, user, dispatch);
-        updateAlerts([{ type: "error", message: `Unable to delete account- ${error.message}` }], state, dispatch);
-      });
+          setTimeout(() => {
+            return navigation.navigate("Auth", { screen: "SignIn" });
+          }, 3000);
+        })
+        .catch(error => {
+          debugErrors(error, user, dispatch);
+          updateAlerts([{ type: "error", message: `Unable to delete account- ${error.message}` }], state, dispatch);
+        });
+    } else {
+      const error = createAppError("No ID associated with Hero", "Probably hasn't saved account yet", state.user);
+
+      debugErrors(error, user, dispatch);
+      updateAlerts([{ type: "error", message: "Problem Deleting Hero, please try again later" }], state, dispatch);
+    }
   }
 
   function signOut(): void {

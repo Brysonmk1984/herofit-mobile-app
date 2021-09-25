@@ -1,9 +1,12 @@
 // Takes in an object along with an array of property values
-// Returns a new object that has all property keys from the array assigned with 
+// Returns a new object that has all property keys from the array assigned with
+
+import { Hero } from "./types";
+
 // corresponding property values from the objectInQuestion
-function _subsetObject<T,K>(objectInQuestion: (T | object), propertyNames: K): (T | object){
+function _subsetObject<T, K>(objectInQuestion: T | object, propertyNames: K): T | object {
   if (!Array.isArray(propertyNames)) {
-    throw new Error('propertyNames must be an array!');
+    throw new Error("propertyNames must be an array!");
   }
 
   const filteredObject = {};
@@ -16,9 +19,9 @@ function _subsetObject<T,K>(objectInQuestion: (T | object), propertyNames: K): (
 // Takes in an object along with an array of property values
 // Returns a boolean determining whether or not an object is of the passed in type
 // Also tells the typescript compiler that objectInQuestion is in fact the passed in T variable
-function objectIsOfType<T, K>(objectInQuestion : (T | object), propertyNames : K) : objectInQuestion is T{
-  if(typeof objectInQuestion !== 'object'){
-    throw new Error('objectInQuestion must be an object!');
+function objectIsOfType<T, K>(objectInQuestion: T | object, propertyNames: K): objectInQuestion is T {
+  if (typeof objectInQuestion !== "object") {
+    throw new Error("objectInQuestion must be an object!");
   }
   const filteredObject = _subsetObject<T, K>(objectInQuestion, propertyNames) as object;
 
@@ -29,7 +32,10 @@ function objectIsOfType<T, K>(objectInQuestion : (T | object), propertyNames : K
     }
   }
   return allPropertiesExist;
-
 }
 
-export { objectIsOfType }
+function isExistingHero(hero): hero is Hero {
+  return hero.hasOwnProperty("id");
+}
+
+export { objectIsOfType, isExistingHero };

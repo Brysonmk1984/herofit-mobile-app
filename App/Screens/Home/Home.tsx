@@ -20,14 +20,13 @@ import { DrawerIndicator } from "../../Components/CustomComponents";
 const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { openModal } = useModal();
-
-  const { health, maxHealth, thisLevelStartXp, nextLevelStartXp, equipped, qp, activityXP, battleXP } = state.hero;
+  const hero = state.hero;
 
   //Props for HomeScreen components
   const propsForTopHud: any = (({ equipped, name, status, photonTokens, activityXP, battleXP, goToBattle, level, albedo }) => ({ title: equippedTitle(equipped), name, status, photonTokens, activityXP, battleXP, goToBattle, level, albedo }))(state.hero);
-  propsForTopHud.healthObj = { health, maxHealth };
-  propsForTopHud.xpObj = { xp: activityXP + battleXP, thisLevelStartXp, nextLevelStartXp };
-  console.log("!!!", propsForTopHud.xpObj);
+  propsForTopHud.healthObj = { health: hero.health, maxHealth: hero.maxHealth };
+  propsForTopHud.xpObj = { xp: hero.activityXP + hero.battleXP, thisLevelStartXp: hero.thisLevelStartXp, nextLevelStartXp: hero.nextLevelStartXp };
+  console.log("XP OBJ", propsForTopHud.xpObj);
   const propsForHeroImage = (({ character, equipped, alias, status }) => ({ character, equipped, alias, skin: equippedSkin(equipped), status }))(state.hero);
   const propsForBottomConsole = (({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, goToBattle }) => ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, goToBattle }))(state.hero);
 
@@ -39,7 +38,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
 
       if (user.active) {
         dispatch({ type: "SET USER", payload: { user, isSignedIn: true } });
-        dispatch({ type: "SET HERO", payload: { hero: { ...state.hero, qp: qp + 5 } } });
+        dispatch({ type: "SET HERO", payload: { hero: { ...state.hero } } });
         dispatch({ type: "SET USER STATUS", payload: { userStatus: user.active ? "active" : "unconfirmed" } });
         setTimeout(() => {
           openModal("ChooseActivityEntry");

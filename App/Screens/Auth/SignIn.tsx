@@ -32,7 +32,7 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
 
       // User hasn't confirmed email yet
       if (!user.active) {
-        updateAlerts([{ type: "error", message: "Please Confirm your Email by Clicking the link in the message sent after registration." }], state, dispatch);
+        updateAlerts([{ type: "warning", message: "Please Confirm your Email by Clicking the link in the message sent after registration." }], state, dispatch);
         dispatch({ type: "SET USER", payload: { user, isSignedIn: false } });
         dispatch({ type: "TOGGLE LOADING", payload: { isLoading: false } });
         return setLoading(false);

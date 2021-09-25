@@ -1,27 +1,33 @@
-import { capitalize } from '../common/helperFunctions';
-import { Stats } from './types';
+import { capitalize } from "../common/helperFunctions";
+import { Stats } from "./types";
 
-interface IPayload { newUserDefaults?: Stats, stat : string }
-interface Action { type : string, payload : IPayload }
+interface IPayload {
+  newUserDefaults?: Stats;
+  stat: string;
+}
+interface Action {
+  type: string;
+  payload: IPayload;
+}
 
-function spendQPReducer(state : Stats, action : Action) : Stats{
+function spendQPReducer(state: Stats, action: Action): Stats {
   const { type, payload } = action;
 
-  switch(type){
-    case "SET NEW USER DEFAULTS":{
+  switch (type) {
+    case "SET NEW USER DEFAULTS": {
       return { ...state, ...payload.newUserDefaults };
     }
-    case "INCREMENT VALUE":{
+    case "INCREMENT VALUE": {
       const stat = payload.stat;
       const qpCapitalized = `qp${capitalize(stat)}`;
-      return { ...state, [stat] : state[stat] + 1, qp : state.qp - 1, [qpCapitalized] : state[qpCapitalized] + 1  };
+      return { ...state, [stat]: state[stat] + 1, qp: state.qp - 1, [qpCapitalized]: state[qpCapitalized] + 1 };
     }
-    case "ASTRO INCREMENT BY 5":{
+    case "ASTRO INCREMENT BY 5": {
       const stat = payload.stat;
-      return { ...state, [stat] : state[stat] + 5 };
+      return { ...state, [stat]: state[stat] + 5 };
     }
-    default:{
-      console.log('No Matching Action in spendQPReducer!');
+    default: {
+      console.log("No Matching Action in spendQPReducer!");
       return { ...state };
     }
   }

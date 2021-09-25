@@ -10,7 +10,7 @@ import { ScreenContainer, Header, Subheader, ScreenActionButton, LoreText, Pane,
 import defaultStats from "../../common/defaultStats.json";
 import { AuthStackProps } from "../../common/types-navigator";
 import { DEFAULT_HERO_PROPERTIES, EXISTING_HERO_PROPERTIES } from "../../common/CONSTANTS";
-import { objectIsOfType } from "../../common/typeGuards";
+import { isExistingHero, objectIsOfType } from "../../common/typeGuards";
 
 /*
   FOR TESTING SPENDQP PAGE
@@ -36,7 +36,7 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
   const { state, dispatch } = useContext(GlobalStateContext);
 
   // Hero is passed as a route param if it's a new user, otherwise grab the hero from state
-  const hero = route.params.hero ?? state.hero;
+  const hero = route.params?.hero ?? state.hero;
   const userStatus = state.userStatus;
   /*
   FOR TESTING SPENDQP PAGE
@@ -44,7 +44,7 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
   //const hero = mockHero;
   //const userStatus = "new";
 
-  const initialState: Stats = { qp: userStatus === "new" ? 10 : hero.qp, power: 100, health: 100, armor: 0, recovery: 5, fire: 0, earth: 0, water: 0, air: 0, aether: 0, qpPower: 0, qpHealth: 0, qpArmor: 0, qpRecovery: 0, qpFire: 0, qpEarth: 0, qpAir: 0, qpWater: 0, qpAether: 0 };
+  const initialState: Stats = { qp: isExistingHero(hero) ? hero.qp : 5, power: 100, health: 100, armor: 0, recovery: 5, fire: 0, earth: 0, water: 0, air: 0, aether: 0, qpPower: 0, qpHealth: 0, qpArmor: 0, qpRecovery: 0, qpFire: 0, qpEarth: 0, qpAir: 0, qpWater: 0, qpAether: 0 };
   const [qpState, qpDispatch] = useReducer(spendQPReducer, initialState);
 
   const attributes = ["Power", "Health", "Armor", "Recovery", "Fire", "Earth", "Water", "Air", "Aether"];
@@ -77,14 +77,14 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
       //console.log("DONE SETTINGS STATS ON HERO", updatedHero);
       dispatch({ type: "SET HERO", payload: { hero: updatedHero } });
       //go back to previous (home) screen
-      navigation.pop();
+      navigation.navigate("Home");
     } else {
       // Otherwise, if hero is not an existing hero, assign all the correct properties for new heroes
       const updatedHeroWithDefaults: HeroWithStats & DefaultHeroProperties = Object.assign(DEFAULT_HERO_PROPERTIES, updatedHero, { maxHealth: updatedHero.health, status: "Rested" });
       //console.log("DONE SETTINGS STATS ON HERO", updatedHeroWithDefaults);
       dispatch({ type: "SET HERO", payload: { hero: updatedHeroWithDefaults } });
       //navigation.push("Register");
-      navigation.push("Home");
+      navigation.pop();
     }
   }
 
@@ -93,9 +93,11 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
     if (qpState.qp > 0) {
       return qpDispatch({ type: "INCREMENT VALUE", payload: { stat } });
     } else if (userStatus === "new" && qpState.qp === 0) {
+      // New user, spent all points
       _handleFinishSpendingQP();
     } else {
-      // TODO: write code for spending all QP when NOT new user
+      // Not a new user, user spent all points so redirect to Home screen
+      navigation.navigate("Home");
     }
   };
 
@@ -135,6 +137,7 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
           keyExtractor={(item, i) => i.toString()}
           renderItem={({ item }) => {
             const lcStatName = item.stat.toLowerCase();
+            const disabled = qpState.qp === 0;
             return (
               <Box borderRadius={10} bg={`base.${lcStatName}`} my={2} borderBottomWidth={1} borderBottomColor="primary.300" shadow={5}>
                 <HStack alignItems="center" space={0}>
@@ -142,8 +145,8 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
                     <StatDisplay iconWatermark reversedText={true} stat={item.stat} value={item.value} description={item.description} />
                   </View>
 
-                  <Pressable ml={2} alignItems="center" justifyContent="center" h={100} borderTopRightRadius={10} borderBottomRightRadius={10} flex={1} bg="base.white" opacity={1} onPress={() => incrementAttribute(lcStatName)}>
-                    <Text textAlign="center" color={`base.${lcStatName}`} fontSize={65}>
+                  <Pressable disabled={disabled} ml={2} alignItems="center" justifyContent="center" h={100} borderTopRightRadius={10} borderBottomRightRadius={10} flex={1} bg="base.white" opacity={1} onPress={() => incrementAttribute(lcStatName)}>
+                    <Text textAlign="center" color={disabled ? "muted.200" : `base.${lcStatName}`} fontSize={65}>
                       +
                     </Text>
                   </Pressable>

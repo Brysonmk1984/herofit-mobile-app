@@ -4,8 +4,7 @@ import { View, Text, Button, Box, useTheme } from "native-base";
 import RBSheet from "react-native-raw-bottom-sheet";
 import Triangle from "./Triangle";
 import StatDisplay from "../../../../Components/StatDisplay";
-import { thousandsFormat } from "../../../../common/helperFunctions";
-import { CountdownTimer } from "./HeroDetails/CountdownTimer";
+import { useNavigation } from "@react-navigation/native";
 
 interface BottomDrawerProps {
   power: number;
@@ -23,7 +22,8 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fir
   const bottomDrawerHeight = windowHeight / 2.75;
   const refRBSheet = useRef({ open: () => null });
   const { colors } = useTheme();
-
+  const navigation = useNavigation();
+  console.log(navigation);
   return (
     <Box position="absolute" bottom={0}>
       <Box>
@@ -33,7 +33,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fir
 
         <Box display="flex" flexDirection="row" backgroundColor="base.primary">
           <Box w="50%" p={2} borderRightWidth={1} borderRightColor="primary.800">
-            <Button _text={{ fontFamily: "heading", fontSize: 30 }} borderRadius="0px">
+            <Button onPress={() => navigation.push("App", { screen: "SpendQP" })} _text={{ fontFamily: "heading", fontSize: 30 }} borderRadius="0px">
               Quantum
             </Button>
           </Box>

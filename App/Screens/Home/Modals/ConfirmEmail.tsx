@@ -56,7 +56,7 @@ const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
 
   return (
     <BasicModal id={id} modalOpen={state.modalQueue[0] === id} modalAction={() => modalAction()} disabled={disableButton} title="Please Confirm Your Email!" buttonText="Ok, I did it!" preventClose={state.userStatus === "unconfirmed" ? true : false}>
-      <ActionHeader type="warning" text="Confirm Email & Receive +5 QP" />
+      <ActionHeader type="warning" text="Must click the link in your email" />
       <BodyContent>
         {showChecklist ? (
           <ScrollView>
