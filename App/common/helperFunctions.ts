@@ -332,14 +332,23 @@ function getPetImage(petName: string): number {
 }
 
 function equippedSkin(equipped: Item[]): Item {
+  if (!equipped) {
+    throw new Error("Equipped array doesn't exist... is this intended?");
+  }
   return equipped.find(i => i.type === "skin");
 }
 
 function equippedPet(equipped: Item[]): Item {
+  if (!equipped) {
+    throw new Error("Equipped array doesn't exist... is this intended?");
+  }
   return equipped.find(i => i.type === "pet");
 }
 
 function equippedTitle(equipped: Item[]): Item {
+  if (!equipped) {
+    throw new Error("Equipped array doesn't exist... is this intended?");
+  }
   return equipped.find(i => i.type === "title");
 }
 

@@ -33,12 +33,13 @@ const App: React.FC = () => {
   // GET INITIAL APP DATA if JWT exists
   useEffect(() => {
     if (jwt) {
-      // local JWT check happened, JWT is definitely still present. Use it to fetch user data,
+      // local JWT check happened, JWT is still present. Use it to fetch user data,
       // Then after data returns, hide loading indicator / allow the app homepage to be presented
       async function initialData() {
         try {
           await fetchInitialData(jwt as string, dispatch, state);
         } catch (error) {
+          console.log("JWT EXISTS, but ERROR FETCHING DATA");
           debugErrors(error);
         } finally {
           setTimeout(() => {

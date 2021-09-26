@@ -9,16 +9,21 @@ import { resendEmailConfirmation } from "../../../api/authentication";
 import { updateAlerts } from "../../../common/alerts";
 import debugErrors from "../../../common/debugErrors";
 import { makeRedirectUri } from "expo-auth-session";
+import { LoadingInPane } from "../../../Components/CustomComponents";
+import { getUser } from "../../../api/user";
+import useModal from "../../../common/hooks/useModal";
 
 interface ConfirmEmailProps {
   id: string;
-  modalAction: () => void;
+  modalAction?: () => void;
 }
 
 const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
+  const { openModal, closeModal } = useModal();
+  const [loading, setLoading] = useState(false);
   const [disableButton, setDisableButton] = useState(true);
-  const [showChecklist, setShowChecklist] = useState(true);
+  const [showChecklist, setShowChecklist] = useState(false);
 
   // const [request, response, promptAsync] = useAuthRequest(
   //   {
@@ -44,10 +49,32 @@ const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
     }
   }
 
+  async function handleEmailConfirmed() {
+    setLoading(true);
+
+    try {
+      // * First time the user is assigned
+      const { user } = await getUser({ email: state.user.email });
+
+      if (user.active) {
+        dispatch({ type: "SET USER", payload: { user, isSignedIn: true } });
+        dispatch({ type: "SET HERO", payload: { hero: { ...state.hero } } });
+        dispatch({ type: "SET USER STATUS", payload: { userStatus: user.active ? "active" : "unconfirmed" } });
+        closeModal("ChooseActivityEntry");
+      } else {
+        updateAlerts([{ type: "error", message: "Email Has not been confirmed; please click the link in your inbox." }], state, dispatch);
+      }
+      setLoading(false);
+    } catch (error) {
+      debugErrors(error, state.user);
+      setLoading(false);
+    }
+  }
+
   useEffect(() => {
-    setTimeout(() => {
-      setShowChecklist(false);
-    }, 4000);
+    // setTimeout(() => {
+    //   setShowChecklist(false);
+    // }, 4000);
     // Timeout is only to prevent the user from clicking the action button right away without checking email
     setTimeout(() => {
       setDisableButton(false);
@@ -55,7 +82,7 @@ const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
   }, []);
 
   return (
-    <BasicModal id={id} modalOpen={state.modalQueue[0] === id} modalAction={() => modalAction()} disabled={disableButton} title="Please Confirm Your Email!" buttonText="Ok, I did it!" preventClose={state.userStatus === "unconfirmed" ? true : false}>
+    <BasicModal id={id} modalOpen={state.modalQueue[0] === id} modalAction={() => handleEmailConfirmed()} disabled={disableButton} title="Please Confirm Your Email!" buttonText="Ok, I did it!" preventClose={state.userStatus === "unconfirmed" ? true : false}>
       <ActionHeader type="warning" text="Must click the link in your email" />
       <BodyContent>
         {showChecklist ? (
@@ -72,6 +99,8 @@ const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
             </Link>
           </View>
         )}
+
+        {loading && <LoadingInPane text="Confirming Email..." />}
       </BodyContent>
     </BasicModal>
   );

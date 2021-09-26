@@ -30,8 +30,8 @@ const HealthProg: React.FC<HealthProgProps> = ({ name, windowWidth, health, maxH
   }, [healthIndicator]);
 
   return (
-    <Box width={windowWidth * 0.85}>
-      <Progress value={value as number} colorScheme="health" height="50px" borderRadius={25} borderWidth={3} />
+    <Box width={windowWidth * 0.8}>
+      <Progress /*value={value as number}*/ value={health} colorScheme="health" height="50px" borderRadius={25} borderWidth={3} />
       <View flexDirection="row" position="absolute" right={4} top={4}>
         <NameText ml={windowWidth * 0.23} name={name} />
         <HealthText health={health} maxHealth={maxHealth} />

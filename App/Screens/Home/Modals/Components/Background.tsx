@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { StyleSheet, ImageBackground } from "react-native";
 
@@ -12,14 +12,14 @@ const Background: React.FC<BackgroundProps> = ({}) => {
   const backgroundElementalEvent = require("../../../../../assets/images/backgrounds/home/elemental-background.webp");
 
   const backgrounds = [backgroundDawn, backgroundDay, backgroundDusk, backgroundNight, backgroundElementalEvent];
-  const activeBackground = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+  const activeBackground = useRef(backgrounds[Math.floor(Math.random() * backgrounds.length)]);
 
-  if (typeof activeBackground === "number") {
+  if (typeof activeBackground.current === "number") {
     // Images imported with the required method are numbers, so render them here
-    return <ImageBackground source={activeBackground} style={styles.image} resizeMode="cover" />;
+    return <ImageBackground source={activeBackground.current} style={styles.image} resizeMode="cover" />;
   } else {
     // Otherwise, render the gradient
-    return <LinearGradient colors={activeBackground} style={styles.background} />;
+    return <LinearGradient colors={activeBackground.current} style={styles.background} />;
   }
 };
 

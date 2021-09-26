@@ -47,7 +47,7 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
       const existingHeroStats = (({ qp, power, health, armor, recovery, fire, earth, water, air, aether, qpPower, qpHealth, qpArmor, qpRecovery, qpFire, qpEarth, qpAir, qpWater, qpAether }) => ({ qp, power, health, armor, recovery, fire, earth, water, air, aether, qpPower, qpHealth, qpArmor, qpRecovery, qpFire, qpEarth, qpAir, qpWater, qpAether }))(hero);
       return existingHeroStats;
     } else {
-      return { qp: 5, power: 100, health: 100, armor: 0, recovery: 5, fire: 0, earth: 0, water: 0, air: 0, aether: 0, qpPower: 0, qpHealth: 0, qpArmor: 0, qpRecovery: 0, qpFire: 0, qpEarth: 0, qpAir: 0, qpWater: 0, qpAether: 0 };
+      return { qp: 10, power: 100, health: 100, armor: 0, recovery: 5, fire: 0, earth: 0, water: 0, air: 0, aether: 0, qpPower: 0, qpHealth: 0, qpArmor: 0, qpRecovery: 0, qpFire: 0, qpEarth: 0, qpAir: 0, qpWater: 0, qpAether: 0 };
     }
   })();
 
@@ -66,6 +66,7 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
   async function _handleStatSave() {
     try {
       const data = await updateAvatarStats({ avatar: hero, email: state.user.email, id: state.user.id });
+      console.log("THE HERO, Does it have alias?", hero);
       // Only used for epic elemental skins at the moment
       let awardAlerts = [];
       if (data.length) {
@@ -83,10 +84,12 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
   }
 
   function _handleNewUserStatFinish() {
+    console.log("FINISHING SETTIN NEW HERO");
     // prettier-ignore
     interface QpDefaults { aether: number; air: number; armor: number; earth: number; fire: number; health: number; power: number; qp: number; qpAether: number; qpAir: number; qpArmor: number; qpEarth: number; qpFire: number; qpHealth: number; qpPower: number; qpRecovery: number; qpWater: number; recovery: number; water: number; }
     const updatedHero: SelectedHero & QpDefaults & { name: string } = Object.assign({}, hero, { ...qpState });
-    const updatedHeroWithDefaults: HeroWithStats & DefaultHeroProperties = Object.assign(DEFAULT_HERO_PROPERTIES, updatedHero, { maxHealth: updatedHero.health, status: "Rested" });
+    const updatedHeroWithDefaults: HeroWithStats & DefaultHeroProperties = Object.assign(DEFAULT_HERO_PROPERTIES, updatedHero);
+
     dispatch({ type: "SET HERO", payload: { hero: updatedHeroWithDefaults } });
     navigation.push("Home");
   }

@@ -103,14 +103,16 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
 
   // first time sign up, need to insert avinsertAvatarIntoDb
   async function handlePostRegister(user: User) {
-    dispatch({ type: "SET USER", payload: { user, isSignedIn: true } });
+    dispatch({ type: "SET USER", payload: { user } });
 
     try {
       const data = await insertAvatar({ avatar: state.hero, email: user.email, userId: user.id });
-      updateAlerts([{ type: "success", message: `Account creation successful!` }], state, dispatch);
-      dispatch({ type: "SET HERO", payload: { hero: data.avatar } });
-      dispatch({ type: "SET ISSIGNEDIN", payload: { isSignedIn: true } });
+
+      dispatch({ type: "SET HERO", payload: { hero: Object.assign(state.hero, data.avatar) } });
       formDispatch({ type: "SET LOADING", loading: false });
+
+      // changing isSignedIn will unmount the component; must be last
+      dispatch({ type: "SET ISSIGNEDIN", payload: { isSignedIn: true } });
     } catch (error) {
       // Error getting Avatar, should only happen if DB connection issues
       debugErrors(error, user);
@@ -126,10 +128,14 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
       const data = await register({ email, firstName, username, password, emailMarketingOptIn, isMobileApp: true });
       const { user } = data;
       dispatch({ type: "SET USER STATUS", payload: { userStatus: "unconfirmed" } });
-      updateAlerts([{ type: "success", message: "Please check your email to verify account. Check your spam folder if the message is not in your inbox.", persist: true }], state, dispatch);
+
       handlePostRegister(user);
     } catch (error) {
       formDispatch({ type: "SET LOADING", loading: false });
+      const backendErrorMessage = error.debug[0].msg;
+      if (backendErrorMessage === "That email is already in use. Have you already registered? Try logging in instead.") {
+        error.message = backendErrorMessage;
+      }
       updateAlerts([{ type: "error", message: error.message }], state, dispatch);
       debugErrors(error);
     }

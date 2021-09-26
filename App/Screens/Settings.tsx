@@ -10,6 +10,7 @@ import { deleteAccount } from "../api/account";
 import { GlobalStateContext } from "../store";
 import { MainDrawerProps } from "../common/types-navigator";
 import { isExistingHero } from "../common/typeGuards";
+import { DrawerIndicator } from "../Components/CustomComponents";
 
 const Settings: React.FC<MainDrawerProps<"Settings">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -37,12 +38,14 @@ const Settings: React.FC<MainDrawerProps<"Settings">> = ({ navigation, route }) 
     if (isExistingHero(hero)) {
       deleteAccount({ username: user.username, avatarID: hero.id, email: user.email })
         .then(async data => {
-          updateAlerts([{ type: "success", message: "Account has been deleted. We hope to see you again sometime." }], state, dispatch);
-          dispatch({ type: "RESET DEFAULTS" });
+          updateAlerts([{ type: "success", message: "Account has been deleted. We hope to see you again!" }], state, dispatch);
+
+          dispatch({ type: "SET ISSIGNEDIN", payload: { isSignedIn: false } });
+          console.log("NOWW resetting defaults");
 
           setTimeout(() => {
-            return navigation.navigate("Auth", { screen: "SignIn" });
-          }, 3000);
+            dispatch({ type: "RESET DEFAULTS" });
+          }, 2000);
         })
         .catch(error => {
           debugErrors(error, user, dispatch);
@@ -88,6 +91,7 @@ const Settings: React.FC<MainDrawerProps<"Settings">> = ({ navigation, route }) 
       <Button variant="secondary" title="Add Alert" onPress={addAlert}>
         Add Alert
       </Button>
+      <DrawerIndicator />
     </ScreenContainer>
   );
 };

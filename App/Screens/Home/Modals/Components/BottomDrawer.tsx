@@ -23,7 +23,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fir
   const refRBSheet = useRef({ open: () => null });
   const { colors } = useTheme();
   const navigation = useNavigation();
-  console.log(navigation);
+
   return (
     <Box position="absolute" bottom={0}>
       <Box>

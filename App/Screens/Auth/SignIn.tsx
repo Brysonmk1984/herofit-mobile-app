@@ -42,9 +42,13 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
       return dispatch({ type: "TOGGLE LOADING", payload: { isLoading: false } });
     } catch (error) {
       let message = debugErrors(error);
-      if (Array.isArray(error.debug) && error.debug[0].msg === "Couldn't find a user with that email.") {
-        message = error.debug[0].msg;
+      if (Array.isArray(error.debug)) {
+        if (error.debug[0].msg === "Couldn't find a user with that email." || error.debug[0].msg === "Incorrect password, please try again.") {
+          message = error.debug[0].msg;
+        }
       }
+
+      setLoading(false);
       updateAlerts([{ type: "error", message }], state, dispatch);
       return dispatch({ type: "TOGGLE LOADING", payload: { isLoading: false } });
     }
@@ -104,7 +108,7 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
         </Pane>
       </View>
 
-      <ScreenActionButton text="Let's Go!" disabled={formIsValid ? false : true} action={handleSignIn} />
+      <ScreenActionButton text="Let's Go!" disabled={formIsValid && !loading ? false : true} action={handleSignIn} />
     </ScreenContainer>
   );
 };

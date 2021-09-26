@@ -19,47 +19,26 @@ import { DrawerIndicator } from "../../Components/CustomComponents";
 
 const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
-  const { openModal } = useModal();
+  const { openModal, closeModal } = useModal();
   const hero = state.hero;
 
   //Props for HomeScreen components
   const propsForTopHud: any = (({ equipped, name, status, photonTokens, activityXP, battleXP, goToBattle, level, albedo }) => ({ title: equippedTitle(equipped), name, status, photonTokens, activityXP, battleXP, goToBattle, level, albedo }))(state.hero);
   propsForTopHud.healthObj = { health: hero.health, maxHealth: hero.maxHealth };
   propsForTopHud.xpObj = { xp: hero.activityXP + hero.battleXP, thisLevelStartXp: hero.thisLevelStartXp, nextLevelStartXp: hero.nextLevelStartXp };
-  console.log("XP OBJ", propsForTopHud.xpObj);
+
   const propsForHeroImage = (({ character, equipped, alias, status }) => ({ character, equipped, alias, skin: equippedSkin(equipped), status }))(state.hero);
   const propsForBottomConsole = (({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, goToBattle }) => ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, goToBattle }))(state.hero);
-
-  async function handleEmailConfirmed() {
-    try {
-      // * First time the user is assigned
-      const { user } = await getUser({ email: state.user.email });
-      console.log("UPDATED USER!", user);
-
-      if (user.active) {
-        dispatch({ type: "SET USER", payload: { user, isSignedIn: true } });
-        dispatch({ type: "SET HERO", payload: { hero: { ...state.hero } } });
-        dispatch({ type: "SET USER STATUS", payload: { userStatus: user.active ? "active" : "unconfirmed" } });
-        setTimeout(() => {
-          openModal("ChooseActivityEntry");
-        }, 2000);
-        // Open next modal
-      } else {
-        updateAlerts([{ type: "error", message: "Email Has not been confirmed; please click the link in your inbox." }], state, dispatch);
-      }
-    } catch (error) {
-      debugErrors(error, state.user);
-    }
-  }
 
   useEffect(() => {
     //console.log("SU", state.userStatus, state.user);
     if (state.userStatus === "new") {
-      openModal("SignupToSave", 2000);
+      openModal("SignupToSave", 3000);
     } else if (state.userStatus === "unconfirmed") {
-      openModal("ConfirmEmail", 2000);
+      console.log("ABOUT TO OPEN ConfirmEmail");
+      openModal("ConfirmEmail", 6000);
     } else if (state.user === null || !state.user?.dataSrcId) {
-      openModal("ChooseActivityEntry", 2000);
+      openModal("ChooseActivityEntry", 3000);
     }
   }, [state.userStatus, state.user, state.user?.dataSrcId]);
 
@@ -68,12 +47,12 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
       {/* TOP SECTION */}
       <View justifyContent="flex-start">
         <TopHud {...propsForTopHud} />
-        <DrawerIndicator action={() => navigation.toggleDrawer()} />
+        {state.isSignedIn && <DrawerIndicator />}
       </View>
       {/* HERO & PET */}
       <View>
         <HeroImage {...propsForHeroImage} />
-        <PetImage pet={equippedPet(state.hero.equipped)} />
+        <PetImage pet={equippedPet(state.hero?.equipped)} />
       </View>
 
       {/* BOTTOM CONSOLE */}
@@ -81,7 +60,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
 
       {/* MODALS */}
       <SignupToSave id="SignupToSave" modalAction={() => navigation.push("Register")} />
-      <ConfirmEmail id="ConfirmEmail" modalAction={handleEmailConfirmed} />
+      <ConfirmEmail id="ConfirmEmail" />
       <ChooseActivityEntry id="ChooseActivityEntry" />
       <FeedbackChoice id="FeedbackChoice" />
       <SignupFinished id="SignupFinished" />
