@@ -11,6 +11,8 @@ import defaultStats from "../../common/defaultStats.json";
 import { AuthStackProps } from "../../common/types-navigator";
 import { DEFAULT_HERO_PROPERTIES, EXISTING_HERO_PROPERTIES } from "../../common/CONSTANTS";
 import { isExistingHero, objectIsOfType } from "../../common/typeGuards";
+import useDidMount from "../../common/hooks/useDidMount";
+import { updateAvatarStats } from "../../api/avatar";
 
 /*
   FOR TESTING SPENDQP PAGE
@@ -34,17 +36,21 @@ import { isExistingHero, objectIsOfType } from "../../common/typeGuards";
 const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
   // Global State
   const { state, dispatch } = useContext(GlobalStateContext);
-
+  const { mounted } = useDidMount();
   // Hero is passed as a route param if it's a new user, otherwise grab the hero from state
   const hero = route.params?.hero ?? state.hero;
   const userStatus = state.userStatus;
-  /*
-  FOR TESTING SPENDQP PAGE
-*/
-  //const hero = mockHero;
-  //const userStatus = "new";
+  const existingHero = isExistingHero(hero);
 
-  const initialState: Stats = { qp: isExistingHero(hero) ? hero.qp : 5, power: 100, health: 100, armor: 0, recovery: 5, fire: 0, earth: 0, water: 0, air: 0, aether: 0, qpPower: 0, qpHealth: 0, qpArmor: 0, qpRecovery: 0, qpFire: 0, qpEarth: 0, qpAir: 0, qpWater: 0, qpAether: 0 };
+  let initialState: Stats = (() => {
+    if (existingHero) {
+      const existingHeroStats = (({ qp, power, health, armor, recovery, fire, earth, water, air, aether, qpPower, qpHealth, qpArmor, qpRecovery, qpFire, qpEarth, qpAir, qpWater, qpAether }) => ({ qp, power, health, armor, recovery, fire, earth, water, air, aether, qpPower, qpHealth, qpArmor, qpRecovery, qpFire, qpEarth, qpAir, qpWater, qpAether }))(hero);
+      return existingHeroStats;
+    } else {
+      return { qp: 5, power: 100, health: 100, armor: 0, recovery: 5, fire: 0, earth: 0, water: 0, air: 0, aether: 0, qpPower: 0, qpHealth: 0, qpArmor: 0, qpRecovery: 0, qpFire: 0, qpEarth: 0, qpAir: 0, qpWater: 0, qpAether: 0 };
+    }
+  })();
+
   const [qpState, qpDispatch] = useReducer(spendQPReducer, initialState);
 
   const attributes = ["Power", "Health", "Armor", "Recovery", "Fire", "Earth", "Water", "Air", "Aether"];
@@ -57,49 +63,33 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
     };
   });
 
-  function _handleFinishSpendingQP() {
-    // prettier-ignore
-    interface QpDefaults { aether: number; air: number; armor: number; earth: number; fire: number; health: number; power: number; qp: number; qpAether: number; qpAir: number; qpArmor: number; qpEarth: number; qpFire: number; qpHealth: number; qpPower: number; qpRecovery: number; qpWater: number; recovery: number; water: number; }
-
-    // Hero After QP spent
-    const updatedHero: SelectedHero & QpDefaults & { name: string } = Object.assign({}, hero, { ...qpState });
-
-    // Need to perform a check using a "User-Defined Type Guard" to see if it's an existing user or new user based on Hero properties
-    const existingHeroProperties = EXISTING_HERO_PROPERTIES;
-
-    // PropertySubsetArray = Pick<Hero, EachHeroProperty> is saying type Hero, but only with properties contianed in EachHeroProperty. Then get the keys only so it's as a union type rather than an interface
-    type PropertySubsetArray = keyof Pick<Hero, ExistingHeroPropertiesAsUnion>;
-    // PropertySubsetArray[] is an array of Hero properties that are JUST the properties that are present on existing Heroes
-    if (objectIsOfType<Hero, PropertySubsetArray[]>(updatedHero, existingHeroProperties)) {
-      // If hero is an existing Hero, check against existing Hero type and pop navigation stack
-      // Not sure why I need to add the assertion at the end... the conditional affirms it's an existing user
+  async function _handleStatSave() {
+    try {
+      const data = await updateAvatarStats({ avatar: hero, email: state.user.email, id: state.user.id });
+      // Only used for epic elemental skins at the moment
+      let awardAlerts = [];
+      if (data.length) {
+        awardAlerts = data.map(reward => {
+          return { type: "success", message: `EARNED ITEM: ${reward.name} ${reward.type}, ${reward.description}` };
+        });
+        updateAlerts(awardAlerts, state, dispatch);
+      }
       const updatedHero: Hero = Object.assign({}, hero, { ...qpState }) as unknown as Hero;
-      //console.log("DONE SETTINGS STATS ON HERO", updatedHero);
       dispatch({ type: "SET HERO", payload: { hero: updatedHero } });
-      //go back to previous (home) screen
-      navigation.navigate("Home");
-    } else {
-      // Otherwise, if hero is not an existing hero, assign all the correct properties for new heroes
-      const updatedHeroWithDefaults: HeroWithStats & DefaultHeroProperties = Object.assign(DEFAULT_HERO_PROPERTIES, updatedHero, { maxHealth: updatedHero.health, status: "Rested" });
-      //console.log("DONE SETTINGS STATS ON HERO", updatedHeroWithDefaults);
-      dispatch({ type: "SET HERO", payload: { hero: updatedHeroWithDefaults } });
-      //navigation.push("Register");
-      navigation.pop();
+    } catch (error) {
+      debugErrors(error, state.user);
+      return updateAlerts([{ type: "error", message: error.message }], state, dispatch);
     }
   }
 
-  // As long as hero has QP, let them increment stats
-  const incrementAttribute = function (stat: string): void {
-    if (qpState.qp > 0) {
-      return qpDispatch({ type: "INCREMENT VALUE", payload: { stat } });
-    } else if (userStatus === "new" && qpState.qp === 0) {
-      // New user, spent all points
-      _handleFinishSpendingQP();
-    } else {
-      // Not a new user, user spent all points so redirect to Home screen
-      navigation.navigate("Home");
-    }
-  };
+  function _handleNewUserStatFinish() {
+    // prettier-ignore
+    interface QpDefaults { aether: number; air: number; armor: number; earth: number; fire: number; health: number; power: number; qp: number; qpAether: number; qpAir: number; qpArmor: number; qpEarth: number; qpFire: number; qpHealth: number; qpPower: number; qpRecovery: number; qpWater: number; recovery: number; water: number; }
+    const updatedHero: SelectedHero & QpDefaults & { name: string } = Object.assign({}, hero, { ...qpState });
+    const updatedHeroWithDefaults: HeroWithStats & DefaultHeroProperties = Object.assign(DEFAULT_HERO_PROPERTIES, updatedHero, { maxHealth: updatedHero.health, status: "Rested" });
+    dispatch({ type: "SET HERO", payload: { hero: updatedHeroWithDefaults } });
+    navigation.push("Home");
+  }
 
   useEffect(() => {
     if (userStatus === "new") {
@@ -118,6 +108,24 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
       })();
     }
   }, [userStatus]);
+
+  useEffect(() => {
+    if (mounted) {
+      if (existingHero) {
+        // After a stat is incremented on screen and in the spendQpReducer, save adjusted hero changes to DB
+        _handleStatSave();
+        // If no more QP to spend, do redirect
+        if (qpState.qp === 0) {
+          navigation.pop();
+        }
+      } else {
+        // For new users, only save values to DB after all completed
+        if (qpState.qp === 0) {
+          _handleNewUserStatFinish();
+        }
+      }
+    }
+  }, [mounted, qpState.qp]);
 
   return (
     <ScreenContainer screenName={route.name}>
@@ -145,7 +153,7 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
                     <StatDisplay iconWatermark reversedText={true} stat={item.stat} value={item.value} description={item.description} />
                   </View>
 
-                  <Pressable disabled={disabled} ml={2} alignItems="center" justifyContent="center" h={100} borderTopRightRadius={10} borderBottomRightRadius={10} flex={1} bg="base.white" opacity={1} onPress={() => incrementAttribute(lcStatName)}>
+                  <Pressable disabled={disabled} ml={2} alignItems="center" justifyContent="center" h={100} borderTopRightRadius={10} borderBottomRightRadius={10} flex={1} bg="base.white" opacity={1} onPress={() => qpDispatch({ type: "INCREMENT VALUE", payload: { stat: lcStatName } })}>
                     <Text textAlign="center" color={disabled ? "muted.200" : `base.${lcStatName}`} fontSize={65}>
                       +
                     </Text>
@@ -157,7 +165,7 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
         />
       </ScrollView>
 
-      <ScreenActionButton text="Let's Go!" action={_handleFinishSpendingQP} />
+      <ScreenActionButton text="Done" action={() => (existingHero ? navigation.pop() : _handleNewUserStatFinish())} />
     </ScreenContainer>
   );
 };

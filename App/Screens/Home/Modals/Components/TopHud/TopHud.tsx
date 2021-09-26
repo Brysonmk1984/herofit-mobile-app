@@ -36,9 +36,9 @@ export const TopHud: React.FC<TopHudProps> = ({ healthObj, xpObj, name, level, a
   const windowHeight = Dimensions.get("window").height;
 
   return (
-    <Box mt={5}>
+    <Box mt={41}>
       {/* LOGO */}
-      <Box position="absolute" left={-10} top={-26} zIndex={100} elevation={100}>
+      <Box position="absolute" left={-10} top={-41} zIndex={100} elevation={100}>
         <Image size={windowWidth * 0.32} source={require("../../../../../../assets/images/misc/hf-logo.webp")} alt="HeroFit Logo" />
       </Box>
       <View ml={6}>
