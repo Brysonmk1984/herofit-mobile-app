@@ -20,9 +20,10 @@ import Inventory from "./Screens/Inventory";
 import Items from "./Screens/Items";
 import Feedback from "./Screens/Feedback/Feedback";
 import Settings from "./Screens/Settings";
+import ManualActivity from "./Screens/ManualActivity";
 
 // MULTI-USE SCREENS
 import Loading from "./Screens/Loading/Loading";
 import SpendQP from "./Screens/Common/SpendQP";
 
-export { Splash, SignIn, Register, ForgotPassword, AboutGame, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection, Home, Profile, Ranking, Campaign, Inventory, Items, Feedback, Settings, Loading, SpendQP };
+export { Splash, SignIn, Register, ForgotPassword, AboutGame, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection, Home, Profile, Ranking, Campaign, Inventory, Items, Feedback, Settings, ManualActivity, Loading, SpendQP };

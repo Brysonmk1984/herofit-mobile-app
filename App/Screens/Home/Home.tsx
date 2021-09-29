@@ -10,16 +10,19 @@ import { updateAlerts } from "../../common/alerts";
 import { ChooseActivityEntry, SignupToSave, SignupFinished, ConfirmEmail, FeedbackChoice } from "./Modals/Modals";
 import Background from "./Modals/Components/Background";
 import BottomDrawer from "./Modals/Components/BottomDrawer/BottomDrawer";
-import { equippedPet, equippedSkin, equippedTitle } from "../../common/helperFunctions";
+import { equippedPet, equippedSkin, equippedTitle, getLsWithExpiry } from "../../common/helperFunctions";
 import { HeroImage } from "./Modals/Components/HeroImage/HeroImage";
 import { TopHud } from "./Modals/Components/TopHud/TopHud";
 import { HeroDetails } from "./Modals/Components/HeroDetails/HeroDetails";
 import { PetImage } from "./Modals/Components/PetImage";
 import { DrawerIndicator } from "../../Components/CustomComponents";
+import useStravaDataProcess from "./useStravaDataProcess";
+import { Activity } from "../../common/types";
 
 const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { openModal, closeModal } = useModal();
+  useStravaDataProcess();
   const hero = state.hero;
 
   //Props for HomeScreen components
@@ -30,6 +33,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const propsForHeroImage = (({ character, equipped, alias, status }) => ({ character, equipped, alias, skin: equippedSkin(equipped), status }))(state.hero);
   const propsForBottomConsole = (({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, goToBattle, qp }) => ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, goToBattle, qp }))(state.hero);
 
+  // Determine which modal should pop up
   useEffect(() => {
     //console.log("SU", state.userStatus, state.user);
     if (state.userStatus === "new") {

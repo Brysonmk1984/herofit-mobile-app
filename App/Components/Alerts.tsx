@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { StyleSheet, Linking } from "react-native";
-import { Text, View, Pressable } from "native-base";
+import { Text, View, Pressable, useToast } from "native-base";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { AlertThemes } from "../styles";
 import { alertRemover } from "../common/alerts";
@@ -12,6 +12,7 @@ interface Alerts {
 }
 
 const Alerts: React.FC<Alerts> = ({ alerts, dispatch }) => {
+  const toast = useToast();
   function renderIcon(aType, aStyle) {
     switch (aType) {
       case "success":

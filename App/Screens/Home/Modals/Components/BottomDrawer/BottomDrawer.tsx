@@ -40,7 +40,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fir
 
         <Box borderTopColor="primary.800" borderTopWidth={1} display="flex" flexDirection="row" backgroundColor="base.primary">
           <Box w="50%" p={2} borderRightWidth={1} borderRightColor="primary.800">
-            <Button _text={{ fontFamily: "heading", fontSize: 30 }} borderRadius="0px">
+            <Button onPress={() => navigation.push("App", { screen: "ManualActivity" })} _text={{ fontFamily: "heading", fontSize: 30 }} borderRadius="0px">
               Activity
             </Button>
           </Box>

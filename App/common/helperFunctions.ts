@@ -59,7 +59,7 @@ const shuffleArray = function (array: any[]) {
   return array;
 };
 
-function setLsWithExpiry(key: string, value: string, ttl: number) {
+function setLsWithExpiry(key: string, value: any, ttl: number) {
   const now = new Date();
   // `item` is an object which contains the original value
   // as well as the time when it's supposed to expire
@@ -70,7 +70,7 @@ function setLsWithExpiry(key: string, value: string, ttl: number) {
   return AsyncStorage.setItem(key, JSON.stringify(item));
 }
 
-async function getLsWithExpiry(key: string): Promise<string | false> {
+async function getLsWithExpiry(key: string): Promise<any | false> {
   try {
     const itemStr = await AsyncStorage.getItem(key);
     if (!itemStr) {

@@ -34,12 +34,11 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
       if (!user.active) {
         updateAlerts([{ type: "warning", message: "Please Confirm your Email by Clicking the link in the message sent after registration." }], state, dispatch);
         dispatch({ type: "SET USER", payload: { user, isSignedIn: false } });
-        dispatch({ type: "TOGGLE LOADING", payload: { isLoading: false } });
         return setLoading(false);
       }
 
       await fetchInitialData(null, dispatch, state, user.email);
-      return dispatch({ type: "TOGGLE LOADING", payload: { isLoading: false } });
+      setLoading(false);
     } catch (error) {
       let message = debugErrors(error);
       if (Array.isArray(error.debug)) {
@@ -50,7 +49,6 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
 
       setLoading(false);
       updateAlerts([{ type: "error", message }], state, dispatch);
-      return dispatch({ type: "TOGGLE LOADING", payload: { isLoading: false } });
     }
   }
 

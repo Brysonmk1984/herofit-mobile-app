@@ -71,6 +71,7 @@ const DrawerScreen = () => {
       <MainDrawer.Screen name="Feedback" component={Screens.Feedback} />
       <MainDrawer.Screen name="Settings" component={Screens.Settings} />
       <MainDrawer.Screen name="SpendQP" component={Screens.SpendQP} options={{ title: "Quantum Points" }} />
+      <MainDrawer.Screen name="ManualActivity" component={Screens.ManualActivity} />
     </MainDrawer.Navigator>
   );
 };

@@ -23,6 +23,7 @@ type MainDrawerParamList = {
   Settings: undefined;
   Loading: undefined;
   SpendQP: undefined;
+  ManualActivity: undefined;
 };
 
 type AuthStackParamList = {

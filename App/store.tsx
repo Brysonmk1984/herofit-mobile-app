@@ -1,7 +1,7 @@
 import React, { createContext, useReducer, Context, FC, ReactElement } from "react";
 import { InitialAppState, AppAction } from "./common/types";
 
-const initialState: InitialAppState = { isLoading: true, isSignedIn: false, userStatus: "new", hero: null, alerts: [], jwt: null, user: null, modalQueue: [] };
+const initialState: InitialAppState = { isLoading: true, isSignedIn: false, userStatus: "new", user: null, hero: null, latestSavedActivities: [], latestSavedActivityDate: null, alerts: [], jwt: null, modalQueue: [] };
 
 type AppState = typeof initialState;
 
@@ -42,7 +42,7 @@ function appStateReducer(state: AppState, action: AppAction): AppState {
       return { ...state, alerts: [...alerts] };
     }
     case "RESET DEFAULTS": {
-      return { ...state, isLoading: false, isSignedIn: false, hero: null, user: null };
+      return { ...state, isLoading: false, hero: null, user: null };
     }
     case "REMOVE ALERTS": {
       const { indiciesForRemoval } = action.payload;

@@ -1,5 +1,5 @@
 import jwt_decode from "jwt-decode";
-import { getUser } from "../api/user";
+import { getSavedActivities, getUser } from "../api/user";
 import { getAvatar } from "../api/avatar";
 import { fetchAllGameItems } from "../api/inventory";
 import { convertItemIdsToFullItems } from "./helperFunctions";
@@ -19,19 +19,20 @@ async function fetchInitialData(token: string, dispatch: AppDispatch, state: Ini
     }
 
     // Fetch the user, avatar, and all game items
-    const [p1, p2, p3, p4] = await Promise.all([getUser(), getAvatar({ email }), fetchAllGameItems(), fetchBattleReport({ owner: email })]);
+    const [p1, p2, p3, p4, p5] = await Promise.all([getUser(), getAvatar({ email }), fetchAllGameItems(), fetchBattleReport({ owner: email }), getSavedActivities({ email, count: 10 })]);
     const user: User = p1.user;
     const hero: Hero = p2.hero;
     const items: Item[] = p3.items;
     const latestBattle = p4.latestBattle;
-
+    const { activities: latestSavedActivities, latestActivityDate: latestSavedActivityDate } = p5;
+    console.log("ACTS=", latestSavedActivities, "LAD", latestSavedActivityDate);
     // Takes item instance IDs and assigns full items to the hero under 'equipped' property
     const equipped = convertItemIdsToFullItems(hero.equipped, items);
     hero.equipped = equipped;
 
     const userStatus = user.active ? "active" : "unconfirmed";
 
-    dispatch({ type: "SET EXISTING USER INIT DATA", payload: { user, hero, items, latestBattle, isSignedIn: true, userStatus } });
+    dispatch({ type: "SET EXISTING USER INIT DATA", payload: { user, hero, items, latestBattle, isSignedIn: true, userStatus, latestSavedActivities, latestSavedActivityDate } });
   } catch (error) {
     let message, alertType;
 
