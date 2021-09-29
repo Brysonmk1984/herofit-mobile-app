@@ -10,8 +10,8 @@ interface PetImageProps {
 export const PetImage: React.FC<PetImageProps> = ({ pet }) => {
   const petName = pet?.name;
   return petName ? (
-    <Box position="absolute" left={0} bottom={75}>
-      <Image resizeMode="contain" source={getPetImage(petName)} size={125} alt={petName} />
+    <Box position="absolute" left={2} bottom={95}>
+      <Image resizeMode="contain" source={getPetImage(petName)} size={105} alt={petName} />
     </Box>
   ) : null;
 };

@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Progress, Box, Image, View, Text } from "native-base";
+import React from "react";
+import { Box, Image, View, Text } from "native-base";
 import XpProg from "./XpProg";
 import HealthProg from "./HealthProg";
 import { Dimensions } from "react-native";
 import HeroTitle from "./HeroTitle";
 import { CountdownTimer } from "../HeroDetails/CountdownTimer";
 import StatusBar from "./StatusBar";
-import { PtContainer } from "./PtContainer";
 
 interface HealthProperties {
   health: number;
@@ -41,7 +40,7 @@ export const TopHud: React.FC<TopHudProps> = ({ healthObj, xpObj, name, level, a
       <Box position="absolute" left={-10} top={-41} zIndex={100} elevation={100}>
         <Image size={windowWidth * 0.32} source={require("../../../../../../assets/images/misc/hf-logo.webp")} alt="HeroFit Logo" />
       </Box>
-      <View ml={8} mt={-6}>
+      <View ml={8} mt={0}>
         {title && <HeroTitle title={title} />}
         <HealthProg name={name} windowWidth={windowWidth} {...healthObj} />
         <XpProg level={level} albedo={albedo} windowWidth={windowWidth} {...xpObj} />
@@ -64,7 +63,6 @@ export const TopHud: React.FC<TopHudProps> = ({ healthObj, xpObj, name, level, a
           )}
         </Box>
       </StatusBar>
-      <PtContainer photonTokens={photonTokens} />
     </Box>
   );
 };

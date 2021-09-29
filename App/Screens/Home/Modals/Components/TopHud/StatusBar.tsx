@@ -9,7 +9,7 @@ interface StatusBarProps {
 
 const StatusBar: React.FC<StatusBarProps> = ({ children, windowWidth }) => {
   return (
-    <View ml={-12} alignSelf="center" style={[styles.trapezoid, { width: windowWidth * 0.5 }]}>
+    <View alignSelf="center" style={[styles.trapezoid, { width: windowWidth * 0.5 }]}>
       <Box mt={-8}>{children}</Box>
     </View>
   );

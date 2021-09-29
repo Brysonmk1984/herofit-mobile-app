@@ -1,10 +1,11 @@
 import React, { useRef } from "react";
-import { useWindowDimensions, StyleSheet } from "react-native";
-import { View, Text, Button, Box, useTheme } from "native-base";
+import { useWindowDimensions } from "react-native";
+import { View, Button, Box, useTheme } from "native-base";
 import RBSheet from "react-native-raw-bottom-sheet";
-import Triangle from "./Triangle";
-import StatDisplay from "../../../../Components/StatDisplay";
+import Triangle from "../Triangle";
+import StatDisplay from "../../../../../Components/StatDisplay";
 import { useNavigation } from "@react-navigation/native";
+import { PtAndQpMenu } from "./PtAndQpMenu";
 
 interface BottomDrawerProps {
   power: number;
@@ -15,9 +16,12 @@ interface BottomDrawerProps {
   water: number;
   air: number;
   aether: number;
+  photonTokens: number;
+  qp: number;
 }
 
-const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fire, earth, water, air, aether }) => {
+const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, qp }) => {
+  const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
   const bottomDrawerHeight = windowHeight / 2.75;
   const refRBSheet = useRef({ open: () => null });
@@ -26,15 +30,18 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fir
 
   return (
     <Box position="absolute" bottom={0}>
+      {/* PT & QP */}
+      <PtAndQpMenu photonTokens={photonTokens} qp={qp} windowWidth={windowWidth} />
+      {/* ACTIVITY & BATTLE */}
       <Box>
         <Box alignItems="center">
           <Triangle action={() => refRBSheet.current.open()} />
         </Box>
 
-        <Box display="flex" flexDirection="row" backgroundColor="base.primary">
+        <Box borderTopColor="primary.800" borderTopWidth={1} display="flex" flexDirection="row" backgroundColor="base.primary">
           <Box w="50%" p={2} borderRightWidth={1} borderRightColor="primary.800">
-            <Button onPress={() => navigation.push("App", { screen: "SpendQP" })} _text={{ fontFamily: "heading", fontSize: 30 }} borderRadius="0px">
-              Quantum
+            <Button _text={{ fontFamily: "heading", fontSize: 30 }} borderRadius="0px">
+              Activity
             </Button>
           </Box>
           <Box w="50%" p={2}>
@@ -44,7 +51,8 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fir
           </Box>
         </Box>
       </Box>
-      <View style={styles.bottomDrawer}>
+      {/* HIDDEN MENU */}
+      <View flex={1} justifyContent="center" alignItems="center" backgroundColor="#000">
         <RBSheet
           ref={refRBSheet}
           closeOnDragDown={true}
@@ -93,12 +101,3 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fir
 };
 
 export default BottomDrawer;
-
-const styles = StyleSheet.create({
-  bottomDrawer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#000",
-  },
-});

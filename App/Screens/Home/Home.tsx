@@ -9,7 +9,7 @@ import { getUser } from "../../api/user";
 import { updateAlerts } from "../../common/alerts";
 import { ChooseActivityEntry, SignupToSave, SignupFinished, ConfirmEmail, FeedbackChoice } from "./Modals/Modals";
 import Background from "./Modals/Components/Background";
-import BottomDrawer from "./Modals/Components/BottomDrawer";
+import BottomDrawer from "./Modals/Components/BottomDrawer/BottomDrawer";
 import { equippedPet, equippedSkin, equippedTitle } from "../../common/helperFunctions";
 import { HeroImage } from "./Modals/Components/HeroImage/HeroImage";
 import { TopHud } from "./Modals/Components/TopHud/TopHud";
@@ -23,12 +23,12 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const hero = state.hero;
 
   //Props for HomeScreen components
-  const propsForTopHud: any = (({ equipped, name, status, photonTokens, activityXP, battleXP, goToBattle, level, albedo }) => ({ title: equippedTitle(equipped), name, status, photonTokens, activityXP, battleXP, goToBattle, level, albedo }))(state.hero);
+  const propsForTopHud: any = (({ equipped, name, status, activityXP, battleXP, goToBattle, level, albedo }) => ({ title: equippedTitle(equipped), name, status, activityXP, battleXP, goToBattle, level, albedo }))(state.hero);
   propsForTopHud.healthObj = { health: hero.health, maxHealth: hero.maxHealth };
   propsForTopHud.xpObj = { xp: hero.activityXP + hero.battleXP, thisLevelStartXp: hero.thisLevelStartXp, nextLevelStartXp: hero.nextLevelStartXp };
 
   const propsForHeroImage = (({ character, equipped, alias, status }) => ({ character, equipped, alias, skin: equippedSkin(equipped), status }))(state.hero);
-  const propsForBottomConsole = (({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, goToBattle }) => ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, goToBattle }))(state.hero);
+  const propsForBottomConsole = (({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, goToBattle, qp }) => ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, goToBattle, qp }))(state.hero);
 
   useEffect(() => {
     //console.log("SU", state.userStatus, state.user);
@@ -45,7 +45,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   return (
     <ScreenContainer bg={<Background />} screenName={route.name}>
       {/* TOP SECTION */}
-      <View justifyContent="flex-start">
+      <View>
         <TopHud {...propsForTopHud} />
         {state.isSignedIn && <DrawerIndicator />}
       </View>

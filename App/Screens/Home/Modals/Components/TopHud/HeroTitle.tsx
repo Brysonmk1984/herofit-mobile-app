@@ -12,11 +12,13 @@ const HeroTitle: React.FC<HeroTitleProps> = ({ title }) => {
   const { name, class: className } = title;
   const color = className ? getColorFromClassName(className) : getColorFromItemName(name);
   return (
-    <Box flexDirection="row" mt={-10} ml={12}>
-      <Icon iconName={name} size={25} color={color} />
-      <Text ml={3} color={color}>
-        {name}
-      </Text>
+    <Box mt={-10} ml={12}>
+      <Box flexDirection="row" ml={2}>
+        <Icon iconName={name} size={25} color={color} />
+        <Text ml={3} color={color}>
+          {name}
+        </Text>
+      </Box>
     </Box>
   );
 };
