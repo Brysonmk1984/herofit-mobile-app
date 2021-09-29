@@ -5,20 +5,25 @@ import { Item } from "../../../../../common/types";
 import { getColorFromClassName, getColorFromItemName } from "../../../../../common/helperFunctions";
 
 interface HeroTitleProps {
-  title: Item;
+  title?: Item;
 }
 
 const HeroTitle: React.FC<HeroTitleProps> = ({ title }) => {
-  const { name, class: className } = title;
-  const color = className ? getColorFromClassName(className) : getColorFromItemName(name);
+  let color;
+  if (title) {
+    color = title.class ? getColorFromClassName(title.class) : getColorFromItemName(title.name);
+  }
+
   return (
-    <Box mt={-10} ml={12}>
-      <Box flexDirection="row" ml={2}>
-        <Icon iconName={name} size={25} color={color} />
-        <Text ml={3} color={color}>
-          {name}
-        </Text>
-      </Box>
+    <Box mt={-10} ml={12} minHeight={25}>
+      {title && (
+        <Box flexDirection="row" ml={2}>
+          <Icon iconName={title.name} size={25} color={color} />
+          <Text ml={3} color={color}>
+            {title.name}
+          </Text>
+        </Box>
+      )}
     </Box>
   );
 };

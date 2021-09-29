@@ -41,7 +41,7 @@ export const TopHud: React.FC<TopHudProps> = ({ healthObj, xpObj, name, level, a
         <Image size={windowWidth * 0.32} source={require("../../../../../../assets/images/misc/hf-logo.webp")} alt="HeroFit Logo" />
       </Box>
       <View ml={8} mt={0}>
-        {title && <HeroTitle title={title} />}
+        <HeroTitle title={title} />
         <HealthProg name={name} windowWidth={windowWidth} {...healthObj} />
         <XpProg level={level} albedo={albedo} windowWidth={windowWidth} {...xpObj} />
       </View>

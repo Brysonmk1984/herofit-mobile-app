@@ -408,6 +408,7 @@ function getColorFromItemName(name) {
   const lcName = lowercaseUnderscore(name);
   switch (lcName) {
     case "white_belt":
+    case "white_light_warrior":
       return "#f8f8ff";
     case "yellow_belt":
       return "rgb(245, 245, 64)";

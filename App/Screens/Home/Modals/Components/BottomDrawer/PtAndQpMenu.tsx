@@ -25,26 +25,25 @@ export const PtAndQpMenu: React.FC<PtAndQpMenuProps> = ({ photonTokens, qp, wind
         </Box>
       </View>
       {/* Right: QP Menu */}
-      <Pressable bgColor="base.highlight" onPress={() => navigation.push("App", { screen: "SpendQP" })}>
-        <View alignSelf="center" style={[styles.trapezoid, styles.trapezoidRight, { width: windowWidth * 0.31 }]}>
-          <View alignItems="center">
-            {qp ? (
-              <Text>
-                <Text lineHeight={40} fontFamily="heading" color="primary.800" fontSize={20}>
-                  QP:
-                </Text>
-                <Text fontFamily="heading" color="base.highlight" fontSize={25}>
-                  {qp}
-                </Text>
-              </Text>
-            ) : (
+
+      <View alignSelf="center" style={[styles.trapezoid, styles.trapezoidRight, { width: windowWidth * 0.31 }]}>
+        <Pressable h={40} w={windowWidth * 0.31} alignItems="center" onPress={() => navigation.push("App", { screen: "SpendQP" })}>
+          {qp ? (
+            <View flexDirection="row">
               <Text lineHeight={40} fontFamily="heading" color="primary.800" fontSize={20}>
-                Quantum
+                QP:
               </Text>
-            )}
-          </View>
-        </View>
-      </Pressable>
+              <Text ml={2} lineHeight={40} fontFamily="heading" color="base.highlight" fontSize={25}>
+                {qp}
+              </Text>
+            </View>
+          ) : (
+            <Text lineHeight={40} fontFamily="heading" color="primary.800" fontSize={20}>
+              Quantum
+            </Text>
+          )}
+        </Pressable>
+      </View>
     </View>
   );
 };
