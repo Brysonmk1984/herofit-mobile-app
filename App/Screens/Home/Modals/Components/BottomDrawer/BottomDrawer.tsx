@@ -7,6 +7,8 @@ import StatDisplay from "../../../../../Components/StatDisplay";
 import { useNavigation } from "@react-navigation/native";
 import { PtAndQpMenu } from "./PtAndQpMenu";
 import { Activity } from "../../../../../common/types";
+import { StravaActivityUpgrade } from "../../StravaActivityUpgrade";
+import useModal from "../../../../../common/hooks/useModal";
 
 interface BottomDrawerProps {
   power: number;
@@ -29,6 +31,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fir
   const refRBSheet = useRef({ open: () => null });
   const { colors } = useTheme();
   const navigation = useNavigation();
+  const { openModal } = useModal();
 
   return (
     <Box position="absolute" bottom={0}>
@@ -42,7 +45,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fir
 
         <Box borderTopColor="primary.800" borderTopWidth={1} display="flex" flexDirection="row" backgroundColor="base.primary">
           <Box w="50%" p={2} borderRightWidth={1} borderRightColor="primary.800">
-            <Button bgColor={newActivities.length ? "base.highlight" : null} onPress={() => navigation.push("App", { screen: "ManualActivity" })} _text={{ fontFamily: "heading", fontSize: 30 }} borderRadius="0px">
+            <Button bgColor={newActivities.length ? "base.highlight" : null} onPress={() => (newActivities.length ? openModal("StravaActivityUpgrade") : navigation.push("App", { screen: "ManualActivity" }))} _text={{ fontFamily: "heading", fontSize: 30 }} borderRadius="0px">
               Activity
             </Button>
           </Box>
@@ -98,6 +101,8 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fir
           </Box>
         </RBSheet>
       </View>
+      {/* Modals */}
+      <StravaActivityUpgrade id="StravaActivityUpgrade" activities={newActivities} />
     </Box>
   );
 };

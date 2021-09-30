@@ -70,6 +70,7 @@ interface Activity {
   activityDate: string;
   averageSpeed: number;
   duration: number;
+  distance: number;
   elevationGain: number;
   id: number;
   maxSpeed: number;

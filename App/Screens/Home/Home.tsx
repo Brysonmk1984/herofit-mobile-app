@@ -19,6 +19,7 @@ import { DrawerIndicator } from "../../Components/CustomComponents";
 import useStravaDataProcess from "./useStravaDataProcess";
 import { Activity } from "../../common/types";
 import { isExistingHero } from "../../common/typeGuards";
+import { StravaActivityUpgrade } from "./Modals/StravaActivityUpgrade";
 
 const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
