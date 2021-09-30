@@ -6,6 +6,7 @@ import Triangle from "../Triangle";
 import StatDisplay from "../../../../../Components/StatDisplay";
 import { useNavigation } from "@react-navigation/native";
 import { PtAndQpMenu } from "./PtAndQpMenu";
+import { Activity } from "../../../../../common/types";
 
 interface BottomDrawerProps {
   power: number;
@@ -18,9 +19,10 @@ interface BottomDrawerProps {
   aether: number;
   photonTokens: number;
   qp: number;
+  newActivities: Activity[];
 }
 
-const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, qp }) => {
+const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, qp, newActivities }) => {
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
   const bottomDrawerHeight = windowHeight / 2.75;
@@ -40,7 +42,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fir
 
         <Box borderTopColor="primary.800" borderTopWidth={1} display="flex" flexDirection="row" backgroundColor="base.primary">
           <Box w="50%" p={2} borderRightWidth={1} borderRightColor="primary.800">
-            <Button onPress={() => navigation.push("App", { screen: "ManualActivity" })} _text={{ fontFamily: "heading", fontSize: 30 }} borderRadius="0px">
+            <Button bgColor={newActivities.length ? "base.highlight" : null} onPress={() => navigation.push("App", { screen: "ManualActivity" })} _text={{ fontFamily: "heading", fontSize: 30 }} borderRadius="0px">
               Activity
             </Button>
           </Box>

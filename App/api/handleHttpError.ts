@@ -75,8 +75,13 @@ function handleHttpError(request: AxiosRequestConfig, response: AxiosResponse | 
       ];
       meta = errorArray[0].msg;
     } else {
-      errorArray = [error];
-      meta = errorArray[0].meta;
+      if (error) {
+        errorArray = [error];
+        meta = errorArray[0]?.meta;
+      } else {
+        errorArray = [data.debug];
+        meta = errorArray[0].meta;
+      }
     }
 
     return {

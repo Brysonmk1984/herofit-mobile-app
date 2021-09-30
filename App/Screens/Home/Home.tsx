@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Image } from "native-base";
 import ScreenContainer from "../../Components/ScreenContainer/ScreenContainer";
 import debugErrors from "../../common/debugErrors";
@@ -10,7 +10,7 @@ import { updateAlerts } from "../../common/alerts";
 import { ChooseActivityEntry, SignupToSave, SignupFinished, ConfirmEmail, FeedbackChoice } from "./Modals/Modals";
 import Background from "./Modals/Components/Background";
 import BottomDrawer from "./Modals/Components/BottomDrawer/BottomDrawer";
-import { equippedPet, equippedSkin, equippedTitle, getLsWithExpiry } from "../../common/helperFunctions";
+import { determineDataSrcType, equippedPet, equippedSkin, equippedTitle, getLsWithExpiry } from "../../common/helperFunctions";
 import { HeroImage } from "./Modals/Components/HeroImage/HeroImage";
 import { TopHud } from "./Modals/Components/TopHud/TopHud";
 import { HeroDetails } from "./Modals/Components/HeroDetails/HeroDetails";
@@ -18,11 +18,13 @@ import { PetImage } from "./Modals/Components/PetImage";
 import { DrawerIndicator } from "../../Components/CustomComponents";
 import useStravaDataProcess from "./useStravaDataProcess";
 import { Activity } from "../../common/types";
+import { isExistingHero } from "../../common/typeGuards";
 
 const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { openModal, closeModal } = useModal();
-  useStravaDataProcess();
+  const [newActivities, setNewActivities] = useState<Activity[]>([]);
+  const { newStravaActivities } = useStravaDataProcess();
   const hero = state.hero;
 
   //Props for HomeScreen components
@@ -46,6 +48,14 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
     }
   }, [state.userStatus, state.user, state.user?.dataSrcId]);
 
+  // Automatic Activity Data fetching
+  useEffect(() => {
+    if (newStravaActivities.length) {
+      console.log("!!!!", newStravaActivities);
+      setNewActivities(newStravaActivities);
+    }
+  }, [newStravaActivities]);
+
   return (
     <ScreenContainer bg={<Background />} screenName={route.name}>
       {/* TOP SECTION */}
@@ -60,7 +70,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
       </View>
 
       {/* BOTTOM CONSOLE */}
-      <BottomDrawer {...propsForBottomConsole} />
+      <BottomDrawer newActivities={newActivities} {...propsForBottomConsole} />
 
       {/* MODALS */}
       <SignupToSave id="SignupToSave" modalAction={() => navigation.push("Register")} />

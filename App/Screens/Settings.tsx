@@ -11,6 +11,7 @@ import { GlobalStateContext } from "../store";
 import { MainDrawerProps } from "../common/types-navigator";
 import { isExistingHero } from "../common/typeGuards";
 import { DrawerIndicator } from "../Components/CustomComponents";
+import { clearLs } from "../common/helperFunctions";
 
 const Settings: React.FC<MainDrawerProps<"Settings">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -76,6 +77,7 @@ const Settings: React.FC<MainDrawerProps<"Settings">> = ({ navigation, route }) 
   return (
     <ScreenContainer screenName={route.name}>
       <Button onPress={signOut}>Delete JWT</Button>
+      <Button onPress={() => clearLs("herofit-stravaActivities")}>Delete LS Activities</Button>
       <Button variant="warning" onPress={() => createDeleteAlert()}>
         Delete ACCOUNT
       </Button>

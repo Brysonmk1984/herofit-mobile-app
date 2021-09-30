@@ -12,6 +12,7 @@ import useAxios from "../../../../../common/hooks/useAxios";
 import stravaEndpoints, { STRAVA_REDIRECT_URI } from "./stravaEndpoints";
 import { insertStravaCredentials, getStravaClientCredentials } from "../../../../../api/authentication";
 import { getStravaUserId } from "../../../../../api/strava";
+import { updateAlerts } from "../../../../../common/alerts";
 
 // For Web Only
 //WebBrowser.maybeCompleteAuthSession();
@@ -27,17 +28,22 @@ async function _insertUpdatedStravaCredentials(credentialsForDB: StravaCredentia
     const { user } = await insertStravaCredentials({ ...credentialsForDB, dataSrcId, email });
     dispatch({ type: "SET USER", payload: { user, isSignedIn: true } });
   } catch (error) {
-    debugErrors(error);
+    if (error.debug[0].msg === "SequelizeUniqueConstraintError: Validation error") {
+      error.message = "Strava Account already in use. Sharing Strava accounts among heroes is not permitted within HeroFit";
+    }
+    throw error;
   }
 }
 
 function useStravaConnect() {
   const { state, dispatch } = useContext(GlobalStateContext);
   const [redirectData, setRedirectData] = useState(null);
+  const [hasFetchedStravaDetails, setHasFetchedStravaDetails] = useState(false);
   const [clientId, setClientId] = useState();
   const [redirectUri, setRedirectUri] = useState(null);
   const [clientSecret, setClientSecret] = useState(null);
   const [stravaSuccess, setStravaSuccess] = useState(false);
+  const [helperText, setHelperText] = useState<string | null>(null);
   const [data, loading, error] = useAxios(null, null, false, null);
 
   // One-Time Strava Auth Request
@@ -53,7 +59,6 @@ function useStravaConnect() {
   // When receiving an incoming user back from Strava redirect
   // save data to state
   function handleStravaRedirect(event) {
-    console.log("EVENT", typeof event, event);
     if (Constants.platform.ios) {
       WebBrowser.dismissBrowser();
     } else {
@@ -73,7 +78,8 @@ function useStravaConnect() {
 
   // When the data is saved to state from Strava, get new Access token
   useEffect(() => {
-    if (redirectData) {
+    // Only attempt fetch if there is redirect data AND detaisl have not been fetched yet
+    if (redirectData && !hasFetchedStravaDetails) {
       (async () => {
         const { accessToken, refreshToken, expiresIn } = await AuthSession.exchangeCodeAsync(
           {
@@ -88,16 +94,27 @@ function useStravaConnect() {
           },
           { tokenEndpoint: stravaEndpoints.tokenEndpoint },
         );
+        if (accessToken && refreshToken && expiresIn) {
+          setHasFetchedStravaDetails(true);
+        }
 
         const credentialsForDB = {
           stravaAccessToken: accessToken,
           stravaAccessTokenExpiration: calcAccessTokenExp(expiresIn),
           stravaRefreshToken: refreshToken,
         };
-        const { id: dataSrcId } = await getStravaUserId(credentialsForDB.stravaAccessToken);
-        // After an updated Strava auth token, refresh token and expiration are fetched, save it to our DB
-        _insertUpdatedStravaCredentials(credentialsForDB, state.user.email, dataSrcId, dispatch);
-        setStravaSuccess(true);
+        try {
+          setHelperText("Trying to Connect Strava...");
+          const { id: dataSrcId } = await getStravaUserId(credentialsForDB.stravaAccessToken);
+          // After an updated Strava auth token, refresh token and expiration are fetched, save it to our DB
+          await _insertUpdatedStravaCredentials(credentialsForDB, state.user.email, dataSrcId, dispatch);
+          setStravaSuccess(true);
+          setHelperText(null);
+        } catch (error) {
+          debugErrors(error);
+
+          setHelperText(error.message);
+        }
       })();
     }
   }, [redirectData]);
@@ -108,6 +125,8 @@ function useStravaConnect() {
     request,
     promptAsync,
     stravaSuccess,
+    helperText,
+    setHasFetchedStravaDetails,
   };
 }
 
