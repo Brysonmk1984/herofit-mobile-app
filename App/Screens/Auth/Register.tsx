@@ -11,6 +11,7 @@ import { Header, ScreenActionButton, Pane, HelperText, LoadingInPane } from "../
 import { useDebouncedCallback } from "use-debounce";
 import { AuthStackProps } from "../../common/types-navigator";
 import { User } from "../../common/types";
+import { instantiateUserTotals } from "../../api/user";
 
 // prettier-ignore
 interface FormState { email: string; firstName: string; username: string; password: string; emailMarketingOptIn: boolean; helperText: string; formIsValid: boolean; loading: boolean }
@@ -107,7 +108,7 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
 
     try {
       const data = await insertAvatar({ avatar: state.hero, email: user.email, userId: user.id });
-
+      await instantiateUserTotals({ email: user.email, avatarId: data.avatarId });
       dispatch({ type: "SET HERO", payload: { hero: Object.assign(state.hero, data.avatar) } });
       formDispatch({ type: "SET LOADING", loading: false });
 

@@ -24,8 +24,6 @@ import { StravaActivityUpgrade } from "./Modals/StravaActivityUpgrade";
 const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { openModal, closeModal } = useModal();
-  const [newActivities, setNewActivities] = useState<Activity[]>([]);
-  const { newStravaActivities } = useStravaDataProcess();
   const hero = state.hero;
 
   //Props for HomeScreen components
@@ -49,14 +47,6 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
     }
   }, [state.userStatus, state.user, state.user?.dataSrcId]);
 
-  // Automatic Activity Data fetching
-  useEffect(() => {
-    if (newStravaActivities.length) {
-      console.log("!!!!", newStravaActivities);
-      setNewActivities(newStravaActivities);
-    }
-  }, [newStravaActivities]);
-
   return (
     <ScreenContainer bg={<Background />} screenName={route.name}>
       {/* TOP SECTION */}
@@ -71,7 +61,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
       </View>
 
       {/* BOTTOM CONSOLE */}
-      <BottomDrawer newActivities={newActivities} {...propsForBottomConsole} />
+      <BottomDrawer {...propsForBottomConsole} />
 
       {/* MODALS */}
       <SignupToSave id="SignupToSave" modalAction={() => navigation.push("Register")} />

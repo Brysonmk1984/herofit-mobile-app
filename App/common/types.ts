@@ -1,4 +1,4 @@
-type ActionType = "TOGGLE LOADING" | "SET EXISTING USER INIT DATA" | "SET ISSIGNEDIN" | "SET NEW USER" | "SET HERO" | "SET USER" | "SET ALERTS" | "RESET DEFAULTS" | "REMOVE ALERTS";
+type ActionType = "TOGGLE LOADING" | "SET EXISTING USER INIT DATA" | "SET ISSIGNEDIN" | "SET NEW USER" | "SET HERO" | "SET USER" | "SET ALERTS" | "RESET DEFAULTS" | "REMOVE ALERTS" | "POST UPGRADE";
 
 interface ToggleLoadingAction {
   type: "TOGGLE LOADING";
@@ -43,9 +43,13 @@ interface RemoveModalAction {
   type: "REMOVE MODAL";
   payload: { id: string };
 }
+interface PostUpgradeAction {
+  type: "POST UPGRADE";
+  payload: { hero: Hero; latestSavedActivities: Activity[]; latestSavedActivityDate: moment.Moment };
+}
 
 // Same as ShoppingListAction in example
-type AppAction = ToggleLoadingAction | SetExistingUserInitDataAction | SetIsSignedInAction | SetUserStatusAction | SetHeroAction | SetUserAction | SetAlertsAction | ResetDefaultsAction | RemoveAlertsAction | AddModalAction | RemoveModalAction;
+type AppAction = ToggleLoadingAction | SetExistingUserInitDataAction | SetIsSignedInAction | SetUserStatusAction | SetHeroAction | SetUserAction | SetAlertsAction | ResetDefaultsAction | RemoveAlertsAction | AddModalAction | RemoveModalAction | PostUpgradeAction;
 type AppDispatch = (action: AppAction) => void;
 
 type Payload = {

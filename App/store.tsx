@@ -75,6 +75,10 @@ function appStateReducer(state: AppState, action: AppAction): AppState {
         modalQueue,
       };
     }
+    case "POST UPGRADE":{
+      const { hero, latestSavedActivities } = action.payload;
+      return { ...state, hero, latestSavedActivities};
+    }
     default:
       throw new Error("In Store default, should not happen.");
   }

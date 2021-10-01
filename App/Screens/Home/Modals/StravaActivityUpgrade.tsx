@@ -1,26 +1,30 @@
 import React, { useContext } from "react";
-import { FlatList } from "react-native";
-import { Heading, Text, Box } from "native-base";
+import { AppState, FlatList, useWindowDimensions } from "react-native";
+import { Heading, Text, Box, ScrollView } from "native-base";
 import { CharacterModal } from "../../../Components/ModalTemplates/ModalTemplates";
 import { ActionHeader, BodyContent } from "../../../Components/ModalTemplates/BasicModal/Content";
 import { convertSecondsToReadableTime } from "../../../common/activityCalculations";
-import { GlobalStateContext } from "../../../store";
+
 import moment from "moment";
 import { Activity } from "../../../common/types";
 
 interface StravaActivityUpgradeProps {
   id: string;
   activities: Activity[];
+  modalAction: () => void;
+  state: AppState;
 }
 
-export const StravaActivityUpgrade: React.FC<StravaActivityUpgradeProps> = ({ id, activities }) => {
-  const { state, dispatch } = useContext(GlobalStateContext);
-  console.log("ACTS=", activities);
+export const StravaActivityUpgrade: React.FC<StravaActivityUpgradeProps> = ({ id, activities, modalAction, state }) => {
+  const windowHeight = useWindowDimensions().height;
   function renderListItem({ activityDate, type, duration }) {
     return (
-      <Box flexDirection="row">
+      <Box justifyContent="center" flexDirection="row">
         <Text fontFamily="heading" color="primary.500">
-          {`\u2022 ${moment(activityDate).format("MM/DD : hh:mm a")} ${type}`}:
+          {`\u2022 ${moment(activityDate).format("MM/DD - hh:mm a")}`}:
+        </Text>
+        <Text px={3} fontFamily="heading" color="base.highlight">
+          {type}
         </Text>
         <Text fontFamily="heading">{convertSecondsToReadableTime(duration)}</Text>
       </Box>
@@ -28,10 +32,15 @@ export const StravaActivityUpgrade: React.FC<StravaActivityUpgradeProps> = ({ id
   }
 
   return (
-    <CharacterModal id={id} modalOpen={state.modalQueue[0] === id} speech={`Masterful form, young ${state.hero.name}! I see you've been working out. Keep it up and the Dark Forces will be no match for you`} buttonText="Upgrade">
+    <CharacterModal id={id} modalOpen={state.modalQueue[0] === id} speech={`Masterful form, young ${state.hero.name}! I see you've been working out. Keep it up and the Dark Forces will be no match for you`} buttonText="Upgrade" modalAction={modalAction}>
       <ActionHeader type="info" text="You've been working out!" />
       <BodyContent>
-        <FlatList data={activities} renderItem={({ item }) => renderListItem(item)} keyExtractor={item => item.id} />
+        <ScrollView maxHeight={windowHeight * 0.3}>
+          <Text mb={3} textAlign="center">
+            Apply these activities to {state.hero.name}?
+          </Text>
+          <FlatList data={activities} renderItem={({ item }) => renderListItem(item)} keyExtractor={item => item.id.toString()} />
+        </ScrollView>
       </BodyContent>
     </CharacterModal>
   );

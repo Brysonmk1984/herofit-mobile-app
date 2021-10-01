@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useWindowDimensions } from "react-native";
 import { View, Button, Box, useTheme } from "native-base";
 import RBSheet from "react-native-raw-bottom-sheet";
@@ -6,9 +6,16 @@ import Triangle from "../Triangle";
 import StatDisplay from "../../../../../Components/StatDisplay";
 import { useNavigation } from "@react-navigation/native";
 import { PtAndQpMenu } from "./PtAndQpMenu";
-import { Activity } from "../../../../../common/types";
+import { Activity, Item } from "../../../../../common/types";
 import { StravaActivityUpgrade } from "../../StravaActivityUpgrade";
 import useModal from "../../../../../common/hooks/useModal";
+import { GlobalStateContext } from "../../../../../store";
+import { upgradeSequence } from "../../../../../api/avatar";
+import { updateAlerts } from "../../../../../common/alerts";
+import debugErrors from "../../../../../common/debugErrors";
+import { buildGainsMessages, displayGainsMessages } from "./gainsMessages";
+import useStravaDataProcess from "../../../useStravaDataProcess";
+import moment from "moment";
 
 interface BottomDrawerProps {
   power: number;
@@ -24,7 +31,8 @@ interface BottomDrawerProps {
   newActivities: Activity[];
 }
 
-const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, qp, newActivities }) => {
+const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, qp }) => {
+  const { state, dispatch } = useContext(GlobalStateContext);
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
   const bottomDrawerHeight = windowHeight / 2.75;
@@ -32,6 +40,46 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fir
   const { colors } = useTheme();
   const navigation = useNavigation();
   const { openModal } = useModal();
+  const { newStravaActivities } = useStravaDataProcess();
+  const [newActivities, setNewActivities] = useState<Activity[]>([]);
+
+  async function handleHeroUpgrade(activities: Activity[]) {
+    console.log("HERE", activities);
+    const user = state.user;
+    try {
+      // INSERT ACTIVITIES, UPDATE USER TOTALS, BUF AVATAR
+      const upgradeResults = await upgradeSequence({ email: user.email, activities, accountDate: user.createdAt, hasBeenUpgraded: state.hero.hasBeenUpgraded });
+
+      // combine returned avatar with existing equipped items... backend not fetching equipment here
+      const heroEquipped = Object.assign({}, state.hero, upgradeResults.hero, { equipped: state.hero.equipped });
+
+      const maxDate = moment.max(activities.map(act => moment(act.activityDate)));
+      console.log("THE MAX DATE", maxDate);
+      dispatch({ type: "POST UPGRADE", payload: { hero: heroEquipped, latestSavedActivities: [...state.latestSavedActivities, ...upgradeResults.activities], latestSavedActivityDate: maxDate } });
+      setNewActivities([]);
+      // Builds the Correct message based on returned data from upgrade
+      const messageArray = buildGainsMessages(upgradeResults);
+      console.log("THE MESSAGESSS", messageArray);
+      // Displays messages to user via in-app alerts
+      displayGainsMessages(messageArray, alert => updateAlerts(alert, state, dispatch));
+
+      //return { data: { leveledUp: upgradeResults.reachedLevel ? true : false } };
+    } catch (error) {
+      error.message = "Couldn't upgrade hero, please try again later.";
+
+      updateAlerts([{ type: "error", message: error.message }], dispatch, state);
+      debugErrors(error, user);
+    }
+  }
+
+  // Automatic Activity Data fetching
+  useEffect(() => {
+    // For new users, newStravaActivities is undefined, otherwise it's an array
+    if (newStravaActivities && newStravaActivities.length) {
+      console.log("!!!!", newStravaActivities);
+      setNewActivities(newStravaActivities);
+    }
+  }, [newStravaActivities]);
 
   return (
     <Box position="absolute" bottom={0}>
@@ -102,7 +150,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fir
         </RBSheet>
       </View>
       {/* Modals */}
-      <StravaActivityUpgrade id="StravaActivityUpgrade" activities={newActivities} />
+      <StravaActivityUpgrade id="StravaActivityUpgrade" activities={newActivities} modalAction={() => handleHeroUpgrade(newActivities)} state={state} />
     </Box>
   );
 };

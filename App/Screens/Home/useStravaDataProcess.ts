@@ -123,20 +123,23 @@ function useStravaDataProcess(): { newStravaActivities: Activity[] } {
   const [lsStravaCheckHappened, setLsStravaCheckHappened] = useState(false);
   const [newStravaActivities, setNewStravaActivities] = useState<Activity[]>([]);
   const hero = state.hero as Hero;
+
   // Check if Strava User && get lsSaved Strava activities
   useEffect(() => {
-    (async () => {
-      const lsSavedStravaActivities: any[] = await getLsWithExpiry("herofit-stravaActivities");
-      setLsStrava(lsSavedStravaActivities);
-      setLsStravaCheckHappened(true);
-    })();
-  }, [state.user.dataSrcId]);
+    if (state.user?.dataSrcId) {
+      (async () => {
+        const lsSavedStravaActivities: any[] = await getLsWithExpiry("herofit-stravaActivities");
+        setLsStrava(lsSavedStravaActivities);
+        setLsStravaCheckHappened(true);
+      })();
+    }
+  }, [state.user?.dataSrcId]);
 
   // Either Use LS Strava Data OR
   // Initialize Strava Data Fetch Sequence
   useEffect(() => {
     // Only run Strava code if user is an existing user who already set up Strava with their HF account
-    if (isExistingHero(state.hero) && determineDataSrcType(state.user.dataSrcId) === "Strava") {
+    if (isExistingHero(state.hero) && determineDataSrcType(state.user?.dataSrcId) === "Strava") {
       (async () => {
         // Only run this after LS check happened
         if (lsStravaCheckHappened) {
@@ -152,11 +155,12 @@ function useStravaDataProcess(): { newStravaActivities: Activity[] } {
             try {
               const accessToken = await _checkStravaToken(state.user, state, dispatch);
               const activities = await getStravaActivityData(accessToken);
-              // Setting LS to prevent repeated calls to strava server - Expires in 30 minutes
-              setLsWithExpiry("herofit-stravaActivities", activities, 1800000);
 
               const formattedNewActivities = _handleStravaActivities(hero, activities, state.latestSavedActivityDate, state.user);
+
               setNewStravaActivities(formattedNewActivities);
+              // Setting LS to prevent repeated calls to strava server - Expires in 30 minutes
+              setLsWithExpiry("herofit-stravaActivities", formattedNewActivities, 1800000);
             } catch (error) {
               debugErrors(error, state.user);
               updateAlerts([{ type: "error", message: `${error.status}: ${error.message}` }], state, dispatch);

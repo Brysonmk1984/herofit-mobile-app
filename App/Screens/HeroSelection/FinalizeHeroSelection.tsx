@@ -74,6 +74,7 @@ const FinalizeHeroSelection = ({ route, navigation }: AuthStackProps<"FinalizeHe
           <FormControl.Label>Choose an epic hero name</FormControl.Label>
           <Input value={heroName} onChangeText={name => setHeroName(name)} placeholder="Hero Name" shadow={1} />
         </FormControl>
+
         {helperText && <HelperText type={helperText === "Checking Availability..." ? "caution" : heroNameIsLegit ? "success" : "error"} text={helperText} />}
       </Pane>
 

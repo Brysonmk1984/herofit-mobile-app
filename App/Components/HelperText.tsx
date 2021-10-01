@@ -27,9 +27,9 @@ const HelperText: React.FC<HelperTextProps> = ({ text, type, fontSize = "md" }) 
   const { colors } = useTheme();
 
   return (
-    <Center flexDirection="row">
+    <Center flexDirection="row" mt={2}>
       {renderIcon(type, colors)}
-      <Text flex={1} flexWrap="wrap" fontSize={fontSize} ml={5} color={colors.base[type]}>
+      <Text flexWrap="wrap" fontSize={fontSize} ml={5} color={colors.base[type]}>
         {text}
       </Text>
     </Center>
