@@ -258,7 +258,9 @@ interface Effect {
 }
 
 type Stat = "Power" | "Health" | "Armor" | "Recovery" | "Fire" | "Earth" | "Air" | "Water" | "Aether";
-
+type Extends<T, U extends T> = U;
+type PrimaryElements = Extends<Stat, "Fire" | "Earth" | "Air" | "Water">;
+type AllElements = Extends<Stat, "Fire" | "Earth" | "Air" | "Water" | "Aether">;
 interface StartingElementalPower {
   fire: number;
   earth: number;
@@ -303,4 +305,4 @@ type UniqueImageSkin = "shadow_self" | "ascended_self" | "gale_force" | "fire_br
 type Skin = UniqueImageSkin | Tint;
 type SkinName = "Fire Tint" | "Earth Tint" | "Water Tint" | "Air Tint" | "Banshee Tint" | "Poltergeist Tint" | "Specter Tint" | "Wraith Tint" | "Phantom Tint" | "Phantasm Tint" | "Shade Tint" | "Apparition Tint" | "Shadow Self" | "Ascended Self" | "Gale Force" | "Fire Brand" | "Earth Shaker" | "Tide Caller";
 
-export { Action, AppDispatch, InitialAppState, AppAction, Store, SnackBarAlert, SnackBarAlertWithIndex, User, UserStatus, Activity, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, HeroTemplate, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, Stat, HeroChoice, CharacterName, CharacterAlias, FoeTypes, FoeClasses, Skin, SkinName, UniqueImageSkin, Tint };
+export { Action, AppDispatch, InitialAppState, AppAction, Store, SnackBarAlert, SnackBarAlertWithIndex, User, UserStatus, Activity, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, HeroTemplate, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, Stat, PrimaryElements, AllElements, HeroChoice, CharacterName, CharacterAlias, FoeTypes, FoeClasses, Skin, SkinName, UniqueImageSkin, Tint };

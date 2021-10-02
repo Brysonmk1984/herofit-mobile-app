@@ -40,42 +40,63 @@ const InGameIcons = ({ iconName, size, color }: IconProps) => {
     // ACTIVITIES
     // Fire
     case "run":
+    case "Run":
+    case "VirtualRun":
       return <Icon as={MaterialCommunityIcons} name="run-fast" size={size} color={color} />;
     // case "crossfit":
     //   return <Icon as={Feather} name="crosshair" size={size} color={color} />;
     case "stairs":
+    case "StairStepper":
       return <Icon as={MaterialCommunityIcons} name="stairs" size={size} color={color} />;
     // Air
     case "yoga":
+    case "Yoga":
       return <Icon as={MaterialCommunityIcons} name="yoga" size={size} color={color} />;
     case "walk":
+    case "Walk":
       return <Icon as={MaterialCommunityIcons} name="walk" size={size} color={color} />;
     case "elliptical":
+    case "Elliptical":
       return <Icon as={FontAwesome5} name="running" size={size} color={color} />;
     // Water
     case "rowing":
+    case "Rowing":
       return <Icon as={MaterialCommunityIcons} name="rowing" size={size} color={color} />;
     case "swimming":
+    case "Swim":
       return <Icon as={FontAwesome5} name="swimmer" size={size} color={color} />;
     case "kayaking":
+    case "Kayaking":
       return <Icon as={FontAwesome5} name="water" size={size} color={color} />;
     case "stand-up-paddling":
+    case "StandUpPaddling":
       return <Icon as={MaterialCommunityIcons} name="ski-water" size={size} color={color} />;
     case "skiing":
+    case "NordicSki":
+    case "AlpineSki":
+    case "BackcountrySki":
       return <Icon as={FontAwesome5} name="skiing-nordic" size={size} color={color} />;
     case "snowboarding":
+    case "Snowboard":
       return <Icon as={FontAwesome5} name="snowboarding" size={size} color={color} />;
     case "snowshoeing":
+    case "Snowshoe":
       return <Icon as={FontAwesome5} name="snowflake" size={size} color={color} />;
     // earth
     case "ride":
+    case "Ride":
+    case "VirtualRide":
       return <Icon as={MaterialCommunityIcons} name="bike-fast" size={size} color={color} />;
     case "weight-lifting":
+    case "WeightTraining":
       return <Icon as={MaterialCommunityIcons} name="weight-lifter" size={size} color={color} />;
     case "hiking":
+    case "Hiking":
+    case "Hike":
       return <Icon as={Foundation} name="mountains" size={size} color={color} />;
     // general workout
     case "workout":
+    case "Workout":
     case "other":
       return <Icon as={MaterialCommunityIcons} name="arm-flex" size={size} color={color} />;
     case "success":

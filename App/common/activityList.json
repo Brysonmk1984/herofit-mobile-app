@@ -1,0 +1,128 @@
+[
+  {
+    "type" : "Run",
+    "alias": "Run",
+    "element" : "fire",
+    "minutesPerPoint" : 20
+  },
+  {
+    "type" : "Ride",
+    "alias": "Ride",
+    "element" : "earth",
+    "minutesPerPoint" : 30
+  },
+  {
+    "type" : "Crossfit",
+    "alias": "Crossfit",
+    "element" : "fire",
+    "minutesPerPoint" : 20
+  },
+  {
+    "type" : "Elliptical",
+    "alias": "Elliptical",
+    "element" : "air",
+    "minutesPerPoint" : 20
+  },
+  {
+    "type" : "Hike",
+    "alias": "Hike",
+    "element" : "earth",
+    "minutesPerPoint" : 30
+  },
+  {
+    "type" : "Kayaking",
+    "alias": "Kayaking",
+    "element" : "water",
+    "minutesPerPoint" : 30
+  },
+  {
+    "type" : "Rowing",
+    "alias": "Rowing",
+    "element" : "water",
+    "minutesPerPoint" : 30
+  },
+  {
+    "type" : "NordicSki",
+    "alias": "Skiing-Nordic/Crosscountry",
+    "element" : "water",
+    "minutesPerPoint" : 30
+  },
+  {
+    "type" : "AlpineSki",
+    "alias": "Skiing-Alpine/Downhill",
+    "element" : "water",
+    "minutesPerPoint" : 30
+  },
+  {
+    "type" : "BackcountrySki",
+    "alias": "Skiing-Backcountry",
+    "element" : "water",
+    "minutesPerPoint" : 30
+  },
+  {
+    "type" : "Snowboard",
+    "alias": "Snowboard",
+    "element" : "water",
+    "minutesPerPoint" : 30
+  },
+  {
+    "type" : "Snowshoe",
+    "alias": "Snowshoe",
+    "element" : "water",
+    "minutesPerPoint" : 30
+  },
+  {
+    "type" : "StairStepper",
+    "alias": "Stair Stepper",
+    "element" : "fire",
+    "minutesPerPoint" : 20
+  },
+  {
+    "type" : "StandUpPaddling",
+    "alias": "Stand Up Paddling",
+    "element" : "water",
+    "minutesPerPoint" : 30
+  },
+  {
+    "type" : "Swim",
+    "alias": "Swim",
+    "element" : "water",
+    "minutesPerPoint" : 20
+  }, 
+  {
+    "type" : "VirtualRide",
+    "alias": "Virtual Ride",
+    "element" : "earth",
+    "minutesPerPoint" : 30
+  },
+  {
+    "type" : "VirtualRun",
+    "alias": "Virtual Run",
+    "element" : "fire",
+    "minutesPerPoint" : 20
+  },
+  {
+    "type" : "Walk",
+    "alias": "Walk",
+    "element" : "air",
+    "minutesPerPoint" : 30
+  },
+  {
+    "type" : "WeightTraining",
+    "alias": "Weight Training",
+    "element" : "earth",
+    "minutesPerPoint" : 30
+  },
+  {
+    "type" : "Yoga",
+    "alias": "Yoga",
+    "element" : "air",
+    "minutesPerPoint" : 30
+  },
+  {
+    "type" : "Workout",
+    "alias": "Any Other Workout",
+    "element" : "all",
+    "minutesPerPoint" : 30
+  }
+]
