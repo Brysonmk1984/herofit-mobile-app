@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Image } from "native-base";
+import { View, Image, Text } from "native-base";
 import ScreenContainer from "../../Components/ScreenContainer/ScreenContainer";
 import debugErrors from "../../common/debugErrors";
 import { GlobalStateContext } from "../../store";
@@ -26,11 +26,6 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { openModal, closeModal } = useModal();
   const hero = state.hero;
 
-  //Props for HomeScreen components
-  const propsForTopHud: any = (({ equipped, name, status, activityXP, battleXP, goToBattle, level, albedo }) => ({ title: equippedTitle(equipped), name, status, activityXP, battleXP, goToBattle, level, albedo }))(state.hero);
-  propsForTopHud.healthObj = { health: hero.health, maxHealth: hero.maxHealth };
-  propsForTopHud.xpObj = { xp: hero.activityXP + hero.battleXP, thisLevelStartXp: hero.thisLevelStartXp, nextLevelStartXp: hero.nextLevelStartXp };
-
   const propsForHeroImage = (({ character, equipped, alias, status }) => ({ character, equipped, alias, skin: equippedSkin(equipped), status }))(state.hero);
   const propsForBottomConsole = (({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, goToBattle, qp }) => ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, goToBattle, qp }))(state.hero);
 
@@ -51,7 +46,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
     <ScreenContainer bg={<Background />} screenName={route.name}>
       {/* TOP SECTION */}
       <View>
-        <TopHud {...propsForTopHud} />
+        <TopHud />
         {state.isSignedIn && <DrawerIndicator />}
       </View>
       {/* HERO & PET */}

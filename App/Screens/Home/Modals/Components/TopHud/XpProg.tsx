@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef, createRef } from "react";
-import { Progress, Box, Text, View } from "native-base";
-import { Dimensions } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Progress, Box, View } from "native-base";
 import XpText from "./XpText";
 import { useCountUp } from "use-count-up";
 import LevelText from "./LevelText";
+import usePrevious from "../../../../../common/hooks/usePrevious";
 
 interface XpProgProps {
   windowWidth: number;
@@ -17,18 +17,19 @@ interface XpProgProps {
 const XpProg: React.FC<XpProgProps> = ({ windowWidth, xp, level, albedo, thisLevelStartXp, nextLevelStartXp }) => {
   const [xpGainedThisLevel, setXpGainedThisLevel] = useState(0);
   const [xpIndicator, setXpIndicator] = useState(0);
-  const { value, reset } = useCountUp({ isCounting: true, duration: 0.5, easing: "easeOutCubic", end: xpIndicator });
+  const prevXpIndicator = usePrevious(xpIndicator);
+  const { value, reset } = useCountUp({ start: prevXpIndicator, isCounting: true, duration: 0.5, easing: "easeOutCubic", end: xpIndicator });
 
   const levelXpRequired = nextLevelStartXp - thisLevelStartXp;
   // XP accumulated within current level
   useEffect(() => {
     const xpThisLevel = xp - thisLevelStartXp < 0 ? 0 : xp - thisLevelStartXp;
     setXpGainedThisLevel(xpThisLevel);
-  }, []);
+  }, [xp]);
 
   // Visual percentage appearance within the gauge
   useEffect(() => {
-    const xpLevelProg = (xpGainedThisLevel / nextLevelStartXp) * 100;
+    const xpLevelProg = (xpGainedThisLevel / (nextLevelStartXp - thisLevelStartXp)) * 100;
     setXpIndicator(xpLevelProg);
   }, [xpGainedThisLevel]);
 

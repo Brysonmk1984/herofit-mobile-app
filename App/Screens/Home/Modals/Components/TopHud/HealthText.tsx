@@ -14,7 +14,7 @@ const HealthText: React.FC<HealthTextProps> = ({ health, maxHealth }) => {
       <Box opacity={0.5} mr={2} mt={-0.5}>
         <Icon iconName="health" size={25} color="base.white" />
       </Box>
-      <Text color="base.highlight" fontSize="lg" fontFamily="heading">
+      <Text color={health < maxHealth ? "base.highlight" : "base.white"} fontSize="lg" fontFamily="heading">
         <CountUp isCounting end={health} duration={3} />
       </Text>
       <Text mt={-2.5} color="base.white" fontSize="4xl" fontFamily="heading">

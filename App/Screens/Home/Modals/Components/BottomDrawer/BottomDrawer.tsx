@@ -28,7 +28,6 @@ interface BottomDrawerProps {
   aether: number;
   photonTokens: number;
   qp: number;
-  newActivities: Activity[];
 }
 
 const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, qp }) => {
@@ -51,7 +50,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fir
       const upgradeResults = await upgradeSequence({ email: user.email, activities, accountDate: user.createdAt, hasBeenUpgraded: state.hero.hasBeenUpgraded });
 
       // combine returned avatar with existing equipped items... backend not fetching equipment here
-      const heroEquipped = Object.assign({}, state.hero, upgradeResults.hero, { equipped: state.hero.equipped });
+      const heroEquipped = Object.assign({}, state.hero, upgradeResults.avatar, { equipped: state.hero.equipped });
 
       const maxDate = moment.max(activities.map(act => moment(act.activityDate)));
       console.log("THE MAX DATE", maxDate);

@@ -25,7 +25,7 @@ const LevelText: React.FC<LevelTextProps> = ({ level, albedo, ml }) => {
           <Text opacity={0.5} color="base.primary" numberOfLines={1} fontSize={16}>
             LEVEL:
           </Text>
-          <Text ml={1} opacity={1} color="base.highlight" fontFamily="heading" fontSize={24}>
+          <Text ml={1} mt={0.5} opacity={1} color="base.primary" fontFamily="heading" fontSize={22}>
             {level}
           </Text>
         </>

@@ -4,6 +4,7 @@ import { Dimensions } from "react-native";
 import HealthText from "./HealthText";
 import { useCountUp } from "use-count-up";
 import NameText from "./NameText";
+import usePrevious from "../../../../../common/hooks/usePrevious";
 
 interface HealthProgProps {
   windowWidth: number;
@@ -14,7 +15,8 @@ interface HealthProgProps {
 
 const HealthProg: React.FC<HealthProgProps> = ({ name, windowWidth, health, maxHealth }) => {
   const [healthIndicator, setHealthIndicator] = useState(0);
-  const { value, reset } = useCountUp({ isCounting: true, duration: 1, easing: "easeOutCubic", end: healthIndicator });
+  const prevHealthIndicator = usePrevious(healthIndicator);
+  const { value, reset } = useCountUp({ start: prevHealthIndicator, isCounting: true, duration: 1, easing: "easeOutCubic", end: healthIndicator });
 
   // Visual percentage appearance within the gauge
   useEffect(() => {
@@ -31,7 +33,7 @@ const HealthProg: React.FC<HealthProgProps> = ({ name, windowWidth, health, maxH
 
   return (
     <Box width={windowWidth * 0.8}>
-      <Progress /*value={value as number}*/ value={health} colorScheme="health" height="50px" borderRadius={25} borderWidth={3} />
+      <Progress value={value as number} colorScheme="health" height="50px" borderRadius={25} borderWidth={3} />
       <View flexDirection="row" position="absolute" right={4} top={4}>
         <NameText ml={windowWidth * 0.23} name={name} />
         <HealthText health={health} maxHealth={maxHealth} />
