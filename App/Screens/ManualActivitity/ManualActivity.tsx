@@ -1,7 +1,7 @@
 import React, { useContext, useRef, useState } from "react";
 import { Button, Platform, useWindowDimensions } from "react-native";
 import { Center, Heading, Box, HStack, VStack, Text, ScrollView, FlatList, View, useTheme, Input, Pressable } from "native-base";
-import { ScreenContainer, ScreenActionButton, Header, Icon, Pane } from "../../Components/CustomComponents";
+import { ScreenContainer, ScreenActionButton, Header, Icon, Pane, Subheader } from "../../Components/CustomComponents";
 import useModal from "../../common/hooks/useModal";
 import { AuthStackProps } from "../../common/types-navigator";
 import { GlobalStateContext } from "../../store";
@@ -81,35 +81,34 @@ const ManualActivity = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
 
   return (
     <ScreenContainer screenName={route.name}>
-      <Center>
-        <Header text="Manual Activity" />
-        <Heading>
-          <Text color="primary.800" fontFamily="heading" fontSize="xl">
-            Manually record an activity you've completed
-          </Text>
-        </Heading>
-      </Center>
-      <Pane>
-        {/* ALL INPUTS */}
-        <VStack space={2}>
-          {/* Activity Type Input */}
-          <PressableInput ml={2} mr={2} value={activityList.find(act => act.type === activity)?.alias} placeholder="Select Activity" action={() => refRBSheet.current.open()} />
+      <View justifyContent="flex-start">
+        <Center>
+          <Header text="Activity" />
+        </Center>
+        <Pane>
+          <Subheader fontSize="lg" text="Manually record a workout you've completed" />
+          {/* ALL INPUTS */}
+          <VStack space={2}>
+            {/* Activity Type Input */}
+            <PressableInput ml={2} mr={2} value={activityList.find(act => act.type === activity)?.alias} placeholder="Select Activity" action={() => refRBSheet.current.open()} />
 
-          {/* Date - Time - Duration Input */}
-          <DateTimeDuration
-            setParentDate={setDate}
-            render={() => {
-              return <PressableInput flex={1} ml={2} mr={2} action={() => openModal("DurationModal")} value={duration} />;
-            }}
-          />
-          <HStack>
-            {/* Distance Input */}
-            <PressableInput flex={1} ml={2} mr={2} action={() => openModal("DistanceModal")} value={`${distance} mi`} />
-            {/* Speed Input */}
-            <PressableInput flex={1} ml={2} mr={2} action={() => openModal("SpeedModal")} value={`${speed} mph`} />
-          </HStack>
-        </VStack>
-      </Pane>
+            {/* Date - Time - Duration Input */}
+            <DateTimeDuration
+              setParentDate={setDate}
+              render={() => {
+                return <PressableInput flex={1} ml={2} mr={2} action={() => openModal("DurationModal")} value={duration} />;
+              }}
+            />
+            <HStack>
+              {/* Distance Input */}
+              <PressableInput flex={1} ml={2} mr={2} action={() => openModal("DistanceModal")} value={`${distance} mi`} />
+              {/* Speed Input */}
+              <PressableInput flex={1} ml={2} mr={2} action={() => openModal("SpeedModal")} value={`${speed} mph`} />
+            </HStack>
+          </VStack>
+        </Pane>
+      </View>
+
       {/* HIDDEN MENU */}
       <Box position="absolute" bottom={0}>
         <View flex={1} justifyContent="center" alignItems="center" backgroundColor="#000">
