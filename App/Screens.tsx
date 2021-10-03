@@ -20,7 +20,7 @@ import Inventory from "./Screens/Inventory";
 import Items from "./Screens/Items";
 import Feedback from "./Screens/Feedback/Feedback";
 import Settings from "./Screens/Settings";
-import ManualActivity from "./Screens/ManualActivity";
+import ManualActivity from "./Screens/ManualActivitity/ManualActivity";
 
 // MULTI-USE SCREENS
 import Loading from "./Screens/Loading/Loading";

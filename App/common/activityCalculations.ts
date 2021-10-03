@@ -2,6 +2,37 @@ import moment from "moment";
 import { thousandsFormat } from "./helperFunctions";
 import { Activity } from "./types";
 
+// FOR SAVING TO DB
+function convertMilesToMeters(miles: number) {
+  return miles * 1609.34;
+}
+function convertMilesHoursToMetersSeconds(mph: number) {
+  return mph * 0.44704;
+}
+
+function convertDurationStringToSeconds(duration: string) {
+  console.log("THE DUR", duration);
+  let hours = 0;
+  let minutes = 0;
+  if (duration.includes("hrs")) {
+    if (duration.includes("min")) {
+      // HRS & MIN
+      const parts = duration.split(",");
+      hours = parseInt(parts[0]);
+      minutes = parseInt(parts[1]);
+    } else {
+      // JUST HRS
+      hours = parseInt(duration.split("hrs")[0]);
+    }
+  } else {
+    // JUST MIN
+    minutes = parseInt(duration.split("min")[0]);
+  }
+  // prettier-ignore
+  return ((hours * 60 * 60) + (minutes * 60));
+}
+
+// FOR DISPLAYING
 function convertMetersToFeet(meters: number) {
   return meters ? `${thousandsFormat((meters * 3.28084).toFixed(0))} ft` : null;
 }
@@ -167,4 +198,4 @@ function calculateElementBonus(sec: number, allElements: boolean, isTimeAndHalfA
   return (Math.floor(10 * num) / 10).toString();
 }
 
-export { convertMetersToFeet, convertMetersToMiles, convertMetersSecondsToMilesHours, convertSecondsToReadableTime, checkForDistanceColumns, calculateXPBonus, calculatePowerBonus, calculateElementBonus };
+export { convertMilesToMeters, convertMilesHoursToMetersSeconds, convertDurationStringToSeconds, convertMetersToFeet, convertMetersToMiles, convertMetersSecondsToMilesHours, convertSecondsToReadableTime, checkForDistanceColumns, calculateXPBonus, calculatePowerBonus, calculateElementBonus };
