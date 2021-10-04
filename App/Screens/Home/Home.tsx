@@ -8,18 +8,16 @@ import useModal from "../../common/hooks/useModal";
 import { getUser } from "../../api/user";
 import { updateAlerts } from "../../common/alerts";
 import { ChooseActivityEntry, SignupToSave, SignupFinished, ConfirmEmail, FeedbackChoice } from "./Modals/Modals";
-import Background from "./Modals/Components/Background";
-import BottomDrawer from "./Modals/Components/BottomDrawer/BottomDrawer";
+import Background from "./Components/Background";
+import BottomDrawer from "./Components/BottomDrawer/BottomDrawer";
 import { determineDataSrcType, equippedPet, equippedSkin, equippedTitle, getLsWithExpiry } from "../../common/helperFunctions";
-import { HeroImage } from "./Modals/Components/HeroImage/HeroImage";
-import { TopHud } from "./Modals/Components/TopHud/TopHud";
-import { HeroDetails } from "./Modals/Components/HeroDetails/HeroDetails";
-import { PetImage } from "./Modals/Components/PetImage";
+import { HeroImage } from "./Components/HeroImage/HeroImage";
+import { TopHud } from "./Components/TopHud/TopHud";
+import { PetImage } from "./Components/PetImage";
 import { DrawerIndicator } from "../../Components/CustomComponents";
 import useStravaDataProcess from "./useStravaDataProcess";
 import { Activity } from "../../common/types";
 import { isExistingHero } from "../../common/typeGuards";
-import { StravaActivityUpgrade } from "./Modals/StravaActivityUpgrade";
 
 const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);

@@ -9,7 +9,7 @@ const Background: React.FC<BackgroundProps> = ({}) => {
   const backgroundDay: [string, string] = ["#47b9e6", "#e8f8ff"];
   const backgroundDusk: [string, string] = ["#4e5481", "#fd5e53"];
   const backgroundNight: [string, string] = ["#061928", "#164d78"];
-  const backgroundElementalEvent = require("../../../../../assets/images/backgrounds/home/elemental-background.webp");
+  const backgroundElementalEvent = require("../../../../assets/images/backgrounds/home/elemental-background.webp");
 
   const backgrounds = [backgroundDawn, backgroundDay, backgroundDusk, backgroundNight, backgroundElementalEvent];
   const activeBackground = useRef(backgrounds[Math.floor(Math.random() * backgrounds.length)]);

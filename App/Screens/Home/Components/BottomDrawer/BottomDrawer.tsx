@@ -2,19 +2,19 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { useWindowDimensions } from "react-native";
 import { View, Button, Box, useTheme } from "native-base";
 import RBSheet from "react-native-raw-bottom-sheet";
-import Triangle from "../Triangle";
-import StatDisplay from "../../../../../Components/StatDisplay";
+import Triangle from "./Triangle";
+import StatDisplay from "../../../../Components/StatDisplay";
 import { useNavigation } from "@react-navigation/native";
 import { PtAndQpMenu } from "./PtAndQpMenu";
-import { Activity, Item } from "../../../../../common/types";
-import { StravaActivityUpgrade } from "../../StravaActivityUpgrade";
-import useModal from "../../../../../common/hooks/useModal";
-import { GlobalStateContext } from "../../../../../store";
-import { upgradeSequence } from "../../../../../api/avatar";
-import { updateAlerts } from "../../../../../common/alerts";
-import debugErrors from "../../../../../common/debugErrors";
+import { Activity, Item } from "../../../../common/types";
+import { ActivityUpgrade } from "../../Modals/ActivityUpgrade";
+import useModal from "../../../../common/hooks/useModal";
+import { GlobalStateContext } from "../../../../store";
+import { upgradeSequence } from "../../../../api/avatar";
+import { updateAlerts } from "../../../../common/alerts";
+import debugErrors from "../../../../common/debugErrors";
 import { buildGainsMessages, displayGainsMessages } from "./gainsMessages";
-import useStravaDataProcess from "../../../useStravaDataProcess";
+import useStravaDataProcess from "../../useStravaDataProcess";
 import moment from "moment";
 
 interface BottomDrawerProps {
@@ -149,7 +149,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fir
         </RBSheet>
       </View>
       {/* Modals */}
-      <StravaActivityUpgrade id="StravaActivityUpgrade" activities={newActivities} modalAction={() => handleHeroUpgrade(newActivities)} state={state} />
+      <ActivityUpgrade id="ActivityUpgrade" activities={newActivities} modalAction={() => handleHeroUpgrade(newActivities)} state={state} />
     </Box>
   );
 };

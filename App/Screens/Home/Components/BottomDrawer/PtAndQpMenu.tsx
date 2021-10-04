@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import { View, Box, Text, Image, Pressable } from "native-base";
-import { thousandsFormat } from "../../../../../common/helperFunctions";
+import { thousandsFormat } from "../../../../common/helperFunctions";
 import { useNavigation } from "@react-navigation/native";
 
 interface PtAndQpMenuProps {
@@ -18,7 +18,7 @@ export const PtAndQpMenu: React.FC<PtAndQpMenuProps> = ({ photonTokens, qp, wind
       {/* Left: PT Menu */}
       <View alignSelf="center" style={[styles.trapezoid, styles.trapezoidLeft, { width: windowWidth * 0.31 }]}>
         <Box flexDirection="row" alignItems="center" position={"absolute"} ml={1}>
-          <Image size={35} source={require("../../../../../../assets/images/misc/photon_stack.webp")} alt="Photon Tokens" />
+          <Image size={35} source={require("../../../../../assets/images/misc/photon_stack.webp")} alt="Photon Tokens" />
           <Text ml={3} mb={-2} fontSize={20} color="base.highlight">
             {thousandsFormat(photonTokens)}
           </Text>

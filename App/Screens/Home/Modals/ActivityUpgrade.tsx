@@ -8,14 +8,14 @@ import { convertSecondsToReadableTime } from "../../../common/activityCalculatio
 import moment from "moment";
 import { Activity } from "../../../common/types";
 
-interface StravaActivityUpgradeProps {
+interface ActivityUpgradeProps {
   id: string;
   activities: Activity[];
   modalAction: () => void;
   state: AppState;
 }
 
-export const StravaActivityUpgrade: React.FC<StravaActivityUpgradeProps> = ({ id, activities, modalAction, state }) => {
+export const ActivityUpgrade: React.FC<ActivityUpgradeProps> = ({ id, activities, modalAction, state }) => {
   const windowHeight = useWindowDimensions().height;
   function renderListItem({ activityDate, type, duration }) {
     return (

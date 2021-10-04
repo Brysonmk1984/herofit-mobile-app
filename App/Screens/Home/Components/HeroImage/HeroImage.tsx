@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Center, Image } from "native-base";
-import useHeroImage from "../../../../../common/hooks/useHeroImage";
-import { CharacterName, CharacterAlias, HeroStatus, SkinName, Item } from "../../../../../common/types";
+import useHeroImage from "../../../../common/hooks/useHeroImage";
+import { CharacterName, CharacterAlias, HeroStatus, SkinName, Item } from "../../../../common/types";
 import FloatingHeroImage from "./FloatingHeroImage";
 import TintImage from "./TintedHeroImage";
 

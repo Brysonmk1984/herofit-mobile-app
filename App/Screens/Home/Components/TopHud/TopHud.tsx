@@ -4,35 +4,11 @@ import XpProg from "./XpProg";
 import HealthProg from "./HealthProg";
 import { Dimensions } from "react-native";
 import HeroTitle from "./HeroTitle";
-import { CountdownTimer } from "../HeroDetails/CountdownTimer";
+import { CountdownTimer } from "./CountdownTimer";
 import StatusBar from "./StatusBar";
-import { DefaultHeroProperties, Hero, HeroWithStats, Item } from "../../../../../common/types";
-import { equippedTitle } from "../../../../../common/helperFunctions";
-import { GlobalStateContext } from "../../../../../store";
-import { isExistingHero } from "../../../../../common/typeGuards";
+import { GlobalStateContext } from "../../../../store";
 
-// interface HealthProperties {
-//   health: number;
-//   maxHealth: number;
-// }
-
-// interface XpProperties {
-//   xp: number;
-//   thisLevelStartXp: number;
-//   nextLevelStartXp: number;
-// }
-
-// interface TopHudProps {
-//   name: string;
-//   level: number;
-//   albedo: number;
-//   healthObj: HealthProperties;
-//   xpObj: XpProperties;
-//   status: string;
-//   goToBattle: boolean;
-//   photonTokens: number;
-//   title?: Item;
-// }
+interface TopHudProps {}
 
 export const TopHud: React.FC<TopHudProps> = () => {
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -43,7 +19,7 @@ export const TopHud: React.FC<TopHudProps> = () => {
     <Box mt={41}>
       {/* LOGO */}
       <Box position="absolute" left={-10} top={-41} zIndex={100} elevation={100}>
-        <Image size={windowWidth * 0.32} source={require("../../../../../../assets/images/misc/hf-logo.webp")} alt="HeroFit Logo" />
+        <Image size={windowWidth * 0.32} source={require("../../../../../assets/images/misc/hf-logo.webp")} alt="HeroFit Logo" />
       </Box>
       <View ml={8} mt={0}>
         <HeroTitle title={hero.equipped.find(i => i.type === "title")} />

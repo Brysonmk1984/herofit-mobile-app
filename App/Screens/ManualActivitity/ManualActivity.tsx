@@ -1,6 +1,6 @@
 import React, { useContext, useRef, useState } from "react";
 import { Button, Platform, useWindowDimensions } from "react-native";
-import { Center, Heading, Box, HStack, VStack, Text, ScrollView, FlatList, View, useTheme, Input, Pressable } from "native-base";
+import { Center, Heading, Box, HStack, VStack, Text, ScrollView, FlatList, View, useTheme, Input, Pressable, Modal } from "native-base";
 import { ScreenContainer, ScreenActionButton, Header, Icon, Pane, Subheader } from "../../Components/CustomComponents";
 import useModal from "../../common/hooks/useModal";
 import { AuthStackProps } from "../../common/types-navigator";
@@ -77,6 +77,9 @@ const ManualActivity = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
     //console.log(distance, typeof distance, totalMeters, speed, typeof speed, averageMetersPerSecond);
 
     console.log(duration, totalSeconds);
+
+    navigation.pop();
+    openModal("ActivityUpgrade");
   }
 
   return (

@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, View, Text } from "native-base";
-import { Icon } from "../../../../../Components/CustomComponents";
+import { Icon } from "../../../../Components/CustomComponents";
 import { CountUp } from "use-count-up";
 
 interface HealthTextProps {

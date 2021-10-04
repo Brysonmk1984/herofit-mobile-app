@@ -1,7 +1,8 @@
 import React from "react";
 import { Center, Box, Image } from "native-base";
-import { tintHexMap, tintOpacityMap } from "../../../../common/hexAndOpacityMaps";
-import { getPetImage } from "../../../../common/helperFunctions";
+import { tintHexMap, tintOpacityMap } from "../../../common/hexAndOpacityMaps";
+import { getPetImage } from "../../../common/helperFunctions";
+import { Item } from "../../../common/types";
 
 interface PetImageProps {
   pet: Item;

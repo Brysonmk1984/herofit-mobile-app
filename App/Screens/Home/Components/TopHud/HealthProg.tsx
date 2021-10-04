@@ -4,7 +4,7 @@ import { Dimensions } from "react-native";
 import HealthText from "./HealthText";
 import { useCountUp } from "use-count-up";
 import NameText from "./NameText";
-import usePrevious from "../../../../../common/hooks/usePrevious";
+import usePrevious from "../../../../common/hooks/usePrevious";
 
 interface HealthProgProps {
   windowWidth: number;

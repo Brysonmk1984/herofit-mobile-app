@@ -1,8 +1,8 @@
 import React from "react";
 import { Box, Text } from "native-base";
-import { Icon } from "../../../../../Components/CustomComponents";
-import { Item } from "../../../../../common/types";
-import { getColorFromClassName, getColorFromItemName } from "../../../../../common/helperFunctions";
+import { Icon } from "../../../../Components/CustomComponents";
+import { Item } from "../../../../common/types";
+import { getColorFromClassName, getColorFromItemName } from "../../../../common/helperFunctions";
 
 interface HeroTitleProps {
   title?: Item;

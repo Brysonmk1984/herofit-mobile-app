@@ -1,6 +1,6 @@
 import React from "react";
 import { Image } from "native-base";
-import { tintHexMap, darknessMap } from "../../../../../common/hexAndOpacityMaps";
+import { tintHexMap, darknessMap } from "../../../../common/hexAndOpacityMaps";
 
 interface TintedHeroImageProps {
   heroImage: number;

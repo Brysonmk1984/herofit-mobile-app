@@ -3,7 +3,7 @@ import { Progress, Box, View } from "native-base";
 import XpText from "./XpText";
 import { useCountUp } from "use-count-up";
 import LevelText from "./LevelText";
-import usePrevious from "../../../../../common/hooks/usePrevious";
+import usePrevious from "../../../../common/hooks/usePrevious";
 
 interface XpProgProps {
   windowWidth: number;
