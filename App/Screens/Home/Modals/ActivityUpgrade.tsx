@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import React from "react";
 import { AppState, FlatList, useWindowDimensions } from "react-native";
-import { Heading, Text, Box, ScrollView } from "native-base";
+import { Text, Box, ScrollView } from "native-base";
 import { CharacterModal } from "../../../Components/ModalTemplates/ModalTemplates";
 import { ActionHeader, BodyContent } from "../../../Components/ModalTemplates/BasicModal/Content";
 import { convertSecondsToReadableTime } from "../../../common/activityCalculations";
@@ -15,7 +15,7 @@ interface ActivityUpgradeProps {
   state: AppState;
 }
 
-export const ActivityUpgrade: React.FC<ActivityUpgradeProps> = ({ id, activities, modalAction, state }) => {
+const ActivityUpgrade: React.FC<ActivityUpgradeProps> = ({ id, activities, modalAction, state }) => {
   const windowHeight = useWindowDimensions().height;
   function renderListItem({ activityDate, type, duration }) {
     return (
@@ -39,9 +39,11 @@ export const ActivityUpgrade: React.FC<ActivityUpgradeProps> = ({ id, activities
           <Text mb={3} textAlign="center">
             Apply these activities to {state.hero.name}?
           </Text>
-          <FlatList data={activities} renderItem={({ item }) => renderListItem(item)} keyExtractor={item => item.id.toString()} />
+          <FlatList data={activities} renderItem={({ item }) => renderListItem(item)} keyExtractor={(item, index) => item.id?.toString() || index.toString()} />
         </ScrollView>
       </BodyContent>
     </CharacterModal>
   );
 };
+
+export default ActivityUpgrade;

@@ -55,6 +55,11 @@ function convertSecondsToReadableTime(sec: number) {
   return readableTime;
 }
 
+function calculateOffSet(date: Date) {
+  const offsetInMin = moment(date).utcOffset();
+  return moment().utcOffset(offsetInMin, true);
+}
+
 interface IncludedColumns {
   hasDistance: boolean;
   hasAverageSpeed: boolean;
@@ -198,4 +203,4 @@ function calculateElementBonus(sec: number, allElements: boolean, isTimeAndHalfA
   return (Math.floor(10 * num) / 10).toString();
 }
 
-export { convertMilesToMeters, convertMilesHoursToMetersSeconds, convertDurationStringToSeconds, convertMetersToFeet, convertMetersToMiles, convertMetersSecondsToMilesHours, convertSecondsToReadableTime, checkForDistanceColumns, calculateXPBonus, calculatePowerBonus, calculateElementBonus };
+export { convertMilesToMeters, convertMilesHoursToMetersSeconds, convertDurationStringToSeconds, convertMetersToFeet, convertMetersToMiles, convertMetersSecondsToMilesHours, convertSecondsToReadableTime, calculateOffSet, checkForDistanceColumns, calculateXPBonus, calculatePowerBonus, calculateElementBonus };

@@ -1,6 +1,6 @@
 import { NavigatorScreenParams, RouteProp, CompositeScreenProps } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { HeroChoice, Hero, CharacterName, StartingElementalPower, CharacterAlias, SelectedHero, HeroWithStats, DefaultHeroProperties, UserStatus } from "./types";
+import { HeroChoice, Hero, CharacterName, StartingElementalPower, CharacterAlias, SelectedHero, HeroWithStats, DefaultHeroProperties, UserStatus, Activity } from "./types";
 
 /*
 REACT NAVIGATOR TYPES
@@ -49,6 +49,7 @@ type AuthStackParamList = {
   };
   Home: {
     userStatus?: UserStatus;
+    newManualActivity?: Activity;
   };
 };
 

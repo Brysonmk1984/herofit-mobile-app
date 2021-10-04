@@ -1,7 +1,7 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, Platform, useWindowDimensions } from "react-native";
 import { Center, Heading, Box, HStack, VStack, Text, ScrollView, FlatList, View, useTheme, Input, Pressable, Modal } from "native-base";
-import { ScreenContainer, ScreenActionButton, Header, Icon, Pane, Subheader } from "../../Components/CustomComponents";
+import { ScreenContainer, ScreenActionButton, Header, Icon, Pane, Subheader, HelperText } from "../../Components/CustomComponents";
 import useModal from "../../common/hooks/useModal";
 import { AuthStackProps } from "../../common/types-navigator";
 import { GlobalStateContext } from "../../store";
@@ -13,21 +13,52 @@ import PressableInput from "../../Components/PressableInput";
 import SpeedModal from "./SpeedModal";
 import DistanceModal from "./DistanceModal";
 import DurationModal from "./DurationModal";
-import { convertMilesToMeters, convertMilesHoursToMetersSeconds, convertDurationStringToSeconds } from "../../common/activityCalculations";
+import { convertMilesToMeters, convertMilesHoursToMetersSeconds, convertDurationStringToSeconds, calculateOffSet } from "../../common/activityCalculations";
+import { roundNumberToTenthReturnNumber, roundNumberToThousandthReturnNumber } from "../../common/helperFunctions";
+import moment from "moment";
 
 const ManualActivity = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
-  // Global State
-  const { state, dispatch } = useContext(GlobalStateContext);
   const windowHeight = useWindowDimensions().height;
   const refRBSheet = useRef({ open: () => null, close: () => null });
   const bottomDrawerHeight = windowHeight / 2;
   const { colors } = useTheme();
+  const [formIsValid, setFormIsValid] = useState(false);
+  const [helperText, setHelperText] = useState(null);
   const [activity, setActivity] = useState(null);
-  const [date, setDate] = useState();
+  const [date, setDate] = useState<Date>(new Date());
   const [duration, setDuration] = useState("0 min");
   const [distance, setDistance] = useState(0);
   const [speed, setSpeed] = useState(0);
   const { openModal } = useModal();
+
+  function resetForm() {
+    setActivity(null);
+    setDate(new Date());
+    setDuration("0 min");
+    setDistance(0);
+    setSpeed(0);
+    setFormIsValid(false);
+  }
+
+  function checkIfFormIsValid() {
+    if (activity !== null) {
+      if (duration !== "0 min") {
+        setFormIsValid(true);
+        setHelperText(null);
+      } else {
+        setFormIsValid(false);
+        setHelperText("Activity must be longer than 0 min");
+      }
+    } else {
+      if (duration === "0 min") {
+        setFormIsValid(false);
+        setHelperText(null);
+      } else {
+        setFormIsValid(false);
+        setHelperText("Select an Activity Type");
+      }
+    }
+  }
 
   interface ActivityType {
     type: string;
@@ -74,13 +105,37 @@ const ManualActivity = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
     const totalMeters = convertMilesToMeters(distance);
     const averageMetersPerSecond = convertMilesHoursToMetersSeconds(speed);
     const totalSeconds = convertDurationStringToSeconds(duration);
-    //console.log(distance, typeof distance, totalMeters, speed, typeof speed, averageMetersPerSecond);
+    //console.log(distance, typeof distance, totalMeters, speed, typeof speed, averageMetersPerSecond, duration, totalSeconds);
 
-    console.log(duration, totalSeconds);
+    const dateWithOffset = calculateOffSet(date);
 
-    navigation.pop();
+    const newManualActivity = {
+      source: "herofit",
+      type: activity,
+      activityDate: dateWithOffset,
+      averageSpeed: roundNumberToThousandthReturnNumber(averageMetersPerSecond),
+      maxSpeed: roundNumberToTenthReturnNumber(averageMetersPerSecond),
+      distance: roundNumberToTenthReturnNumber(totalMeters),
+      duration: totalSeconds,
+      elevationGain: 0,
+    };
+
+    resetForm();
+    navigation.reset({
+      index: 0,
+      routes: [
+        {
+          name: "Home",
+          params: { newManualActivity },
+        },
+      ],
+    });
     openModal("ActivityUpgrade");
   }
+
+  useEffect(() => {
+    checkIfFormIsValid();
+  }, [activity, duration]);
 
   return (
     <ScreenContainer screenName={route.name}>
@@ -108,6 +163,7 @@ const ManualActivity = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
               {/* Speed Input */}
               <PressableInput flex={1} ml={2} mr={2} action={() => openModal("SpeedModal")} value={`${speed} mph`} />
             </HStack>
+            {helperText && <HelperText type="error" text={helperText} />}
           </VStack>
         </Pane>
       </View>
@@ -147,7 +203,7 @@ const ManualActivity = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
       {/* Speed Wheel Selector */}
       <SpeedModal id="SpeedModal" title="Speed" modalAction={setSpeed} speed={speed} />
 
-      <ScreenActionButton text="Apply Activity to Hero" action={() => handleSubmit(activity, date, duration, distance, speed)} />
+      <ScreenActionButton disabled={!formIsValid} text="Apply Activity to Hero" action={() => handleSubmit(activity, date, duration, distance, speed)} />
     </ScreenContainer>
   );
 };

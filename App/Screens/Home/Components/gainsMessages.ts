@@ -1,4 +1,4 @@
-import { Activity, Hero, Item } from "../../../../../common/types";
+import { Activity, Hero, Item } from "../../../common/types";
 
 interface StatImprovement {
   fire?: number;

@@ -94,7 +94,7 @@ function _handleStravaActivities(hero: Hero, stravaActivities: any[], dateOfLate
     });
     newStravaActivities = [...afterArray, ...beforeArray.slice(0, 5)];
   }
-
+  console.log("NAL!!!", newStravaActivities.length);
   // If there are any new activities, present user option to upgrade
   if (newStravaActivities.length) {
     const newFormatActivities = newStravaActivities.map(act => {
@@ -157,7 +157,7 @@ function useStravaDataProcess(): { newStravaActivities: Activity[] } {
               const activities = await getStravaActivityData(accessToken);
 
               const formattedNewActivities = _handleStravaActivities(hero, activities, state.latestSavedActivityDate, state.user);
-
+              console.log(accessToken, activities, formattedNewActivities);
               setNewStravaActivities(formattedNewActivities);
               // Setting LS to prevent repeated calls to strava server - Expires in 30 minutes
               setLsWithExpiry("herofit-stravaActivities", formattedNewActivities, 1800000);

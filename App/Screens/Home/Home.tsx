@@ -1,31 +1,71 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Image, Text } from "native-base";
+import { View } from "native-base";
 import ScreenContainer from "../../Components/ScreenContainer/ScreenContainer";
 import debugErrors from "../../common/debugErrors";
 import { GlobalStateContext } from "../../store";
 import { MainDrawerProps } from "../../common/types-navigator";
 import useModal from "../../common/hooks/useModal";
-import { getUser } from "../../api/user";
 import { updateAlerts } from "../../common/alerts";
-import { ChooseActivityEntry, SignupToSave, SignupFinished, ConfirmEmail, FeedbackChoice } from "./Modals/Modals";
+import { ChooseActivityEntry, SignupToSave, SignupFinished, ConfirmEmail, FeedbackChoice, ActivityUpgrade } from "./Modals/Modals";
 import Background from "./Components/Background";
 import BottomDrawer from "./Components/BottomDrawer/BottomDrawer";
-import { determineDataSrcType, equippedPet, equippedSkin, equippedTitle, getLsWithExpiry } from "../../common/helperFunctions";
+import { equippedPet, equippedSkin } from "../../common/helperFunctions";
 import { HeroImage } from "./Components/HeroImage/HeroImage";
 import { TopHud } from "./Components/TopHud/TopHud";
 import { PetImage } from "./Components/PetImage";
 import { DrawerIndicator } from "../../Components/CustomComponents";
-import useStravaDataProcess from "./useStravaDataProcess";
 import { Activity } from "../../common/types";
-import { isExistingHero } from "../../common/typeGuards";
+
+import { upgradeSequence } from "../../api/avatar";
+import { buildGainsMessages, displayGainsMessages } from "./Components/gainsMessages";
+import useStravaDataProcess from "./useStravaDataProcess";
+import moment from "moment";
 
 const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { openModal, closeModal } = useModal();
-  const hero = state.hero;
+  const { newStravaActivities } = useStravaDataProcess();
+  const [newActivities, setNewActivities] = useState<Activity[]>([]);
 
   const propsForHeroImage = (({ character, equipped, alias, status }) => ({ character, equipped, alias, skin: equippedSkin(equipped), status }))(state.hero);
-  const propsForBottomConsole = (({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, goToBattle, qp }) => ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, goToBattle, qp }))(state.hero);
+  const propsForBottomConsole = (({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, goToBattle, qp }) => ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, goToBattle, qp, newActivitiesAvailable: newActivities.length > 0 ? true : false }))(state.hero);
+
+  async function handleHeroUpgrade(activities: Activity[]) {
+    console.log("HERE", activities);
+    const user = state.user;
+    try {
+      // INSERT ACTIVITIES, UPDATE USER TOTALS, BUF AVATAR
+      const upgradeResults = await upgradeSequence({ email: user.email, activities, accountDate: user.createdAt, hasBeenUpgraded: state.hero.hasBeenUpgraded });
+
+      // combine returned avatar with existing equipped items... backend not fetching equipment here
+      const heroEquipped = Object.assign({}, state.hero, upgradeResults.avatar, { equipped: state.hero.equipped });
+
+      const maxDate = moment.max(activities.map(act => moment(act.activityDate)));
+      console.log("THE MAX DATE", maxDate);
+      dispatch({ type: "POST UPGRADE", payload: { hero: heroEquipped, latestSavedActivities: [...state.latestSavedActivities, ...upgradeResults.activities], latestSavedActivityDate: maxDate } });
+      setNewActivities([]);
+      // Builds the Correct message based on returned data from upgrade
+      const messageArray = buildGainsMessages(upgradeResults);
+      console.log("THE MESSAGESSS", messageArray);
+      // Displays messages to user via in-app alerts
+      displayGainsMessages(messageArray, alert => updateAlerts(alert, state, dispatch));
+
+      //return { data: { leveledUp: upgradeResults.reachedLevel ? true : false } };
+    } catch (error) {
+      error.message = "Couldn't upgrade hero, please try again later.";
+
+      updateAlerts([{ type: "error", message: error.message }], state, dispatch);
+      debugErrors(error, user);
+    }
+  }
+
+  // Automatic Activity Data fetching
+  useEffect(() => {
+    // For new users, newStravaActivities is undefined, otherwise it's an array
+    if (newStravaActivities && newStravaActivities.length) {
+      setNewActivities(newStravaActivities);
+    }
+  }, [newStravaActivities]);
 
   // Determine which modal should pop up
   useEffect(() => {
@@ -33,12 +73,17 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
     if (state.userStatus === "new") {
       openModal("SignupToSave", 3000);
     } else if (state.userStatus === "unconfirmed") {
-      console.log("ABOUT TO OPEN ConfirmEmail");
       openModal("ConfirmEmail", 6000);
     } else if (state.user === null || !state.user?.dataSrcId) {
       openModal("ChooseActivityEntry", 3000);
     }
   }, [state.userStatus, state.user, state.user?.dataSrcId]);
+
+  useEffect(() => {
+    if (route.params?.newManualActivity) {
+      setNewActivities([...newActivities, route.params.newManualActivity]);
+    }
+  }, [route.params?.newManualActivity]);
 
   return (
     <ScreenContainer bg={<Background />} screenName={route.name}>
@@ -62,6 +107,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
       <ChooseActivityEntry id="ChooseActivityEntry" />
       <FeedbackChoice id="FeedbackChoice" />
       <SignupFinished id="SignupFinished" />
+      <ActivityUpgrade id="ActivityUpgrade" activities={newActivities} modalAction={() => handleHeroUpgrade(newActivities)} state={state} />
     </ScreenContainer>
   );
 };
