@@ -157,7 +157,7 @@ function useStravaDataProcess(): { newStravaActivities: Activity[] } {
               const activities = await getStravaActivityData(accessToken);
 
               const formattedNewActivities = _handleStravaActivities(hero, activities, state.latestSavedActivityDate, state.user);
-              console.log(accessToken, activities, formattedNewActivities);
+
               setNewStravaActivities(formattedNewActivities);
               // Setting LS to prevent repeated calls to strava server - Expires in 30 minutes
               setLsWithExpiry("herofit-stravaActivities", formattedNewActivities, 1800000);

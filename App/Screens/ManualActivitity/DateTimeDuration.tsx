@@ -9,11 +9,12 @@ import moment from "moment";
 interface DateTimeDurationProps {
   render: () => React.ReactChild;
   setParentDate: (date: Date) => void;
+  initialDate: Date;
 }
 
-const DateTimeDuration: React.FC<DateTimeDurationProps> = ({ render, setParentDate }) => {
+const DateTimeDuration: React.FC<DateTimeDurationProps> = ({ render, setParentDate, initialDate }) => {
   //For both date & time
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(initialDate);
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
 
@@ -37,6 +38,7 @@ const DateTimeDuration: React.FC<DateTimeDurationProps> = ({ render, setParentDa
   };
 
   useEffect(() => {
+    console.log("!!UPDATING PARENT DATE", date);
     setParentDate(date);
   }, [date]);
 

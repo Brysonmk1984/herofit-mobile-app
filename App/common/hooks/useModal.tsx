@@ -10,10 +10,12 @@ export default function useModal(): ModalToggle {
   const { state, dispatch } = useContext(GlobalStateContext);
 
   function openModal(id: string, delay?: number): Promise<string> {
-    setTimeout(() => {
-      dispatch({ type: "ADD MODAL", payload: { id } });
-      return id;
-    }, delay);
+    if (!state.modalQueue.includes(id)) {
+      setTimeout(() => {
+        dispatch({ type: "ADD MODAL", payload: { id } });
+        return id;
+      }, delay);
+    }
   }
 
   function closeModal(id: string, delay?: number): Promise<string> {

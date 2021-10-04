@@ -31,7 +31,6 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const propsForBottomConsole = (({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, goToBattle, qp }) => ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, goToBattle, qp, newActivitiesAvailable: newActivities.length > 0 ? true : false }))(state.hero);
 
   async function handleHeroUpgrade(activities: Activity[]) {
-    console.log("HERE", activities);
     const user = state.user;
     try {
       // INSERT ACTIVITIES, UPDATE USER TOTALS, BUF AVATAR
@@ -41,12 +40,11 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
       const heroEquipped = Object.assign({}, state.hero, upgradeResults.avatar, { equipped: state.hero.equipped });
 
       const maxDate = moment.max(activities.map(act => moment(act.activityDate)));
-      console.log("THE MAX DATE", maxDate);
+
       dispatch({ type: "POST UPGRADE", payload: { hero: heroEquipped, latestSavedActivities: [...state.latestSavedActivities, ...upgradeResults.activities], latestSavedActivityDate: maxDate } });
       setNewActivities([]);
       // Builds the Correct message based on returned data from upgrade
       const messageArray = buildGainsMessages(upgradeResults);
-      console.log("THE MESSAGESSS", messageArray);
       // Displays messages to user via in-app alerts
       displayGainsMessages(messageArray, alert => updateAlerts(alert, state, dispatch));
 
@@ -82,6 +80,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   useEffect(() => {
     if (route.params?.newManualActivity) {
       setNewActivities([...newActivities, route.params.newManualActivity]);
+      openModal("ActivityUpgrade");
     }
   }, [route.params?.newManualActivity]);
 
@@ -107,7 +106,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
       <ChooseActivityEntry id="ChooseActivityEntry" />
       <FeedbackChoice id="FeedbackChoice" />
       <SignupFinished id="SignupFinished" />
-      <ActivityUpgrade id="ActivityUpgrade" activities={newActivities} modalAction={() => handleHeroUpgrade(newActivities)} state={state} />
+      {newActivities.length ? <ActivityUpgrade id="ActivityUpgrade" activities={newActivities} modalAction={() => handleHeroUpgrade(newActivities)} goBack={navigation.push} state={state} closeModal={closeModal} setNewActivities={setNewActivities} /> : null}
     </ScreenContainer>
   );
 };

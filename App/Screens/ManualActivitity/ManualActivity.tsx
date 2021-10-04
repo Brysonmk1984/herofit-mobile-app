@@ -25,7 +25,10 @@ const ManualActivity = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
   const [formIsValid, setFormIsValid] = useState(false);
   const [helperText, setHelperText] = useState(null);
   const [activity, setActivity] = useState(null);
-  const [date, setDate] = useState<Date>(new Date());
+  const initialDate = new Date();
+  initialDate.setHours(initialDate.getHours() - 1);
+
+  const [date, setDate] = useState<Date>(initialDate);
   const [duration, setDuration] = useState("0 min");
   const [distance, setDistance] = useState(0);
   const [speed, setSpeed] = useState(0);
@@ -108,7 +111,7 @@ const ManualActivity = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
     //console.log(distance, typeof distance, totalMeters, speed, typeof speed, averageMetersPerSecond, duration, totalSeconds);
 
     const dateWithOffset = calculateOffSet(date);
-
+    console.log(date, dateWithOffset);
     const newManualActivity = {
       source: "herofit",
       type: activity,
@@ -130,7 +133,6 @@ const ManualActivity = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
         },
       ],
     });
-    openModal("ActivityUpgrade");
   }
 
   useEffect(() => {
@@ -153,6 +155,7 @@ const ManualActivity = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
             {/* Date - Time - Duration Input */}
             <DateTimeDuration
               setParentDate={setDate}
+              initialDate={initialDate}
               render={() => {
                 return <PressableInput flex={1} ml={2} mr={2} action={() => openModal("DurationModal")} value={duration} />;
               }}
@@ -194,13 +197,13 @@ const ManualActivity = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
         </View>
       </Box>
 
-      {/* Duration Wheel Selector */}
+      {/* Duration Wheel Selector Modal */}
       <DurationModal id="DurationModal" title="Duration" modalAction={setDuration} duration={duration} />
 
-      {/* Distance Wheel Selector */}
+      {/* Distance Wheel Selector Modal */}
       <DistanceModal id="DistanceModal" title="Distance" modalAction={setDistance} distance={distance} />
 
-      {/* Speed Wheel Selector */}
+      {/* Speed Wheel Selector Modal */}
       <SpeedModal id="SpeedModal" title="Speed" modalAction={setSpeed} speed={speed} />
 
       <ScreenActionButton disabled={!formIsValid} text="Apply Activity to Hero" action={() => handleSubmit(activity, date, duration, distance, speed)} />
