@@ -4,7 +4,6 @@ import { NativeBaseProvider, extendTheme } from "native-base";
 import { StateProvider } from "./store";
 import App from "./App";
 import herofitTheme from "./styles/herofitTheme";
-import { ToastTest } from "./Screens/ToastTest";
 
 const Root = () => {
   const theme = extendTheme(herofitTheme);
@@ -12,7 +11,6 @@ const Root = () => {
   return (
     <NativeBaseProvider theme={theme}>
       <StateProvider>
-        {/* <ToastTest /> */}
         <App />
       </StateProvider>
     </NativeBaseProvider>

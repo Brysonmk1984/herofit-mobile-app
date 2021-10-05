@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Toast, View, useToast } from "native-base";
+import { Button, View } from "native-base";
 import ScreenContainer from "../../Components/ScreenContainer/ScreenContainer";
 import debugErrors from "../../common/debugErrors";
 import { GlobalStateContext } from "../../store";
@@ -16,7 +16,7 @@ import { DrawerIndicator } from "../../Components/CustomComponents";
 import { Activity } from "../../common/types";
 
 import { upgradeSequence } from "../../api/avatar";
-import { buildGainsMessages, displayGainsMessages } from "./Components/gainsMessages";
+import buildGainsMessages from "./Components/gainsMessages";
 import useStravaDataProcess from "./useStravaDataProcess";
 import moment from "moment";
 import useGlobalToast from "../../common/hooks/useGlobalToast";
@@ -45,8 +45,13 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
       setNewActivities([]);
       // Builds the Correct message based on returned data from upgrade
       const messageArray = buildGainsMessages(upgradeResults);
-      // Displays messages to user via custom useGlobalToast hook
-      displayGainsMessages(messageArray, (message: string) => addToast("success", message));
+
+      // Show messages via toast
+      messageArray.forEach((message: string, i: number) => {
+        setTimeout(() => {
+          addToast("success", message);
+        }, 1500 * i);
+      });
     } catch (error) {
       error.message = "Couldn't upgrade hero, please try again later.";
       addToast("error", error.message);
@@ -88,7 +93,6 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
         <TopHud />
         {state.isSignedIn && <DrawerIndicator />}
       </View>
-      <Button onPress={() => addToast("info", "you did good son. But loooooooooooong long cat message work?")}> SHOW TOAST </Button>
       {/* HERO & PET */}
       <View>
         <HeroImage {...propsForHeroImage} />

@@ -33,16 +33,17 @@ const useGlobalToast = () => {
 
   function renderToast(type: AlertType, message: string) {
     const aStyle = toastTheme[type];
-
     return (
       // Single Alert
       <View opacity={0.9} style={aStyle}>
         {/* Alert Header */}
-        <HStack>
-          {_renderIcon(type, aStyle)}
-          <Text marginLeft={10} flex={1} fontSize={20} lineHeight={24} color={aStyle.color}>
-            {type === "info" ? "FYI" : type.toUpperCase()}
-          </Text>
+        <HStack justifyContent="space-between">
+          <Box flexDirection="row">
+            {_renderIcon(type, aStyle)}
+            <Text ml={2} mr={10} fontSize={20} lineHeight={24} color={aStyle.color}>
+              {type === "info" ? "FYI" : type.toUpperCase()}
+            </Text>
+          </Box>
           <Pressable onPress={close}>
             <Ionicons name="md-close" size={24} color={`${aStyle.color}`} />
           </Pressable>

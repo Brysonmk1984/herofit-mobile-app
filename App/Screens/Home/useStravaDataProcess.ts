@@ -95,7 +95,7 @@ function _handleStravaActivities(hero: Hero, stravaActivities: any[], dateOfLate
     });
     newStravaActivities = [...afterArray, ...beforeArray.slice(0, 5)];
   }
-  console.log("NAL!!!", newStravaActivities.length);
+  // console.log("NAL!!!", newStravaActivities.length);
   // If there are any new activities, present user option to upgrade
   if (newStravaActivities.length) {
     const newFormatActivities = newStravaActivities.map(act => {

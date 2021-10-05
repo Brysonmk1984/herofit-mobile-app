@@ -85,8 +85,7 @@ const Settings: React.FC<MainDrawerProps<"Settings">> = ({ navigation, route }) 
       >
         Select Hero
       </Button>
-      <Button onPress={() => Toast.show({ title: "Hello worldsadasd sadasd asdasdas sasdas" })}> SHOW TOAST </Button>
-
+      <Button onPress={() => addToast("success", "message")}>BUTTON</Button>
       <DrawerIndicator />
     </ScreenContainer>
   );

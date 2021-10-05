@@ -58,14 +58,4 @@ function buildGainsMessages(upgradeResults: UpgradeReturnObject) {
   return messageArray;
 }
 
-function displayGainsMessages(messageArray: string[], addToastReference: (message: string) => void) {
-  setTimeout(() => {
-    messageArray.forEach((message: string, i: number) => {
-      setTimeout(() => {
-        addToastReference(message);
-      }, 1500 * i);
-    });
-  }, 2000);
-}
-
-export { buildGainsMessages, displayGainsMessages };
+export default buildGainsMessages;

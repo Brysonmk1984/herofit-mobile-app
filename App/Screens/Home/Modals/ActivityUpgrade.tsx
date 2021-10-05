@@ -39,7 +39,6 @@ const ActivityUpgrade: React.FC<ActivityUpgradeProps> = ({ id, activities, modal
     goBack("App", { screen: "ManualActivity" });
     closeModal(id);
   }
-  console.log("IM OPENED2!", activities.length, state.modalQueue[0] === id);
 
   return (
     <CharacterModal id={id} modalOpen={state.modalQueue[0] === id} speech={`Masterful form, young ${state.hero.name}! I see you've been working out. Keep it up and the Dark Forces will be no match for you`} buttonText="Upgrade" modalAction={modalAction}>

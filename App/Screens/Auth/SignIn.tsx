@@ -88,7 +88,19 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
               <Input onChangeText={text => handleInputChange(text, setEmail)} value={email} placeholder="Email" shadow={1} />
             </FormControl>
             <FormControl isRequired isInvalid={helperText === "Password must be at least 8 characters" ? true : false}>
-              <Input onChangeText={text => handleInputChange(text, setPassword)} value={password} secureTextEntry={true} autoCompleteType="password" textContentType="password" placeholder="Password" onSubmitEditing={handleSignIn} />
+              <Input
+                onChangeText={text => handleInputChange(text, setPassword)}
+                value={password}
+                secureTextEntry={true}
+                autoCompleteType="password"
+                textContentType="password"
+                placeholder="Password"
+                onSubmitEditing={() =>
+                  setTimeout(() => {
+                    handleSignIn(), 1000;
+                  })
+                }
+              />
             </FormControl>
             {loading ? (
               <LoadingInPane text="Signing In..." />
