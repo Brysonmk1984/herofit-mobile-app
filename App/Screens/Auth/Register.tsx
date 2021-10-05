@@ -5,13 +5,12 @@ import { register } from "../../api/authentication";
 import { insertAvatar } from "../../api/avatar";
 import { GlobalStateContext } from "../../store";
 import debugErrors from "../../common/debugErrors";
-import { updateAlerts } from "../../common/alerts";
 import ScreenContainer from "../../Components/ScreenContainer/ScreenContainer";
 import { Header, ScreenActionButton, Pane, HelperText, LoadingInPane } from "../../Components/CustomComponents";
-import { useDebouncedCallback } from "use-debounce";
 import { AuthStackProps } from "../../common/types-navigator";
 import { User } from "../../common/types";
 import { instantiateUserTotals } from "../../api/user";
+import useGlobalToast from "../../common/hooks/useGlobalToast";
 
 // prettier-ignore
 interface FormState { email: string; firstName: string; username: string; password: string; emailMarketingOptIn: boolean; helperText: string; formIsValid: boolean; loading: boolean }
@@ -91,6 +90,7 @@ function formReducer(state: FormState, action: FormAction): FormState {
 
 const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
   const { state, dispatch } = useContext(GlobalStateContext);
+  const { addToast } = useGlobalToast();
   const initialFormState: FormState = {
     email: "",
     firstName: "",
@@ -117,7 +117,7 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
     } catch (error) {
       // Error getting Avatar, should only happen if DB connection issues
       debugErrors(error, user);
-      updateAlerts([{ type: "error", message: `${error.status}: ${error.message}` }], state, dispatch);
+      addToast("error", `${error.status}: ${error.message}`);
       formDispatch({ type: "SET LOADING", loading: false });
     }
   }
@@ -137,7 +137,7 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
       if (backendErrorMessage === "That email is already in use. Have you already registered? Try logging in instead.") {
         error.message = backendErrorMessage;
       }
-      updateAlerts([{ type: "error", message: error.message }], state, dispatch);
+      addToast("error", error.message);
       debugErrors(error);
     }
   }

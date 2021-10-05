@@ -6,12 +6,12 @@ import { ActionHeader, BodyContent } from "../../../Components/ModalTemplates/Ba
 import { GlobalStateContext } from "../../../store";
 import HeroInitiationChecklist from "./Components/HeroInitiationChecklist";
 import { resendEmailConfirmation } from "../../../api/authentication";
-import { updateAlerts } from "../../../common/alerts";
 import debugErrors from "../../../common/debugErrors";
 import { makeRedirectUri } from "expo-auth-session";
 import { LoadingInPane } from "../../../Components/CustomComponents";
 import { getUser } from "../../../api/user";
 import useModal from "../../../common/hooks/useModal";
+import useGlobalToast from "../../../common/hooks/useGlobalToast";
 
 interface ConfirmEmailProps {
   id: string;
@@ -24,7 +24,7 @@ const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
   const [loading, setLoading] = useState(false);
   const [disableButton, setDisableButton] = useState(true);
   const [showChecklist, setShowChecklist] = useState(false);
-
+  const { addToast } = useGlobalToast();
   // const [request, response, promptAsync] = useAuthRequest(
   //   {
   //     redirectUri: makeRedirectUri({
@@ -41,10 +41,10 @@ const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
   function resendEmailLink() {
     try {
       resendEmailConfirmation({ email: state.user.email, isMobileApp: true }).then(data => {
-        updateAlerts([{ type: "success", message: "Please check your email to verify account. Check your spam folder if the message is not in your inbox. Sometimes the email takes a few minutes to arrive." }], state, dispatch);
+        addToast("success", "Please check your email to verify account. Check your spam folder if the message is not in your inbox. Sometimes the email takes a few minutes to arrive.");
       });
     } catch (error) {
-      updateAlerts([{ type: "error", message: error.message }], state, dispatch);
+      addToast("error", error.message);
       return debugErrors(error);
     }
   }
@@ -62,7 +62,7 @@ const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
         dispatch({ type: "SET USER STATUS", payload: { userStatus: user.active ? "active" : "unconfirmed" } });
         closeModal("ChooseActivityEntry");
       } else {
-        updateAlerts([{ type: "error", message: "Email Has not been confirmed; please click the link in your inbox." }], state, dispatch);
+        addToast("error", "Email Has not been confirmed; please click the link in your inbox.");
       }
       setLoading(false);
     } catch (error) {

@@ -6,6 +6,7 @@ export default {
       baseStyle: {
         rounded: "md",
         bg: "base.water",
+        // Doesn't work!
         // _text: {
         //   color: 'base.primary',
         // },
@@ -18,6 +19,21 @@ export default {
           // _text: {
           //   color : 'fire.500'
           // }
+        },
+      },
+      Toast: {
+        baseStyle: {
+          width: "100%",
+          flex: 1,
+          margin: 0,
+        },
+        variants: {
+          test: {
+            backgroundColor: "black",
+            _text: {
+              color: "base.white",
+            },
+          },
         },
       },
       // defaultProps works

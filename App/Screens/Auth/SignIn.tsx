@@ -3,11 +3,11 @@ import { View, Text, VStack, FormControl, Input, Link, Spinner, HStack } from "n
 import { login } from "../../api/authentication";
 import { GlobalStateContext } from "../../store";
 import debugErrors from "../../common/debugErrors";
-import { updateAlerts } from "../../common/alerts";
 import fetchInitialData from "../../common/fetchInitialData";
 import { Header, ScreenContainer, ScreenActionButton, Pane, HelperText, LoadingInPane } from "../../Components/CustomComponents";
 import { useDebouncedCallback } from "use-debounce";
 import { AuthStackProps } from "../../common/types-navigator";
+import useGlobalToast from "../../common/hooks/useGlobalToast";
 
 const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -17,7 +17,7 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
   const [formIsValid, setFormIsValid] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-
+  const { addToast } = useGlobalToast();
   async function handleSignIn() {
     setLoading(true);
     setHelperText(null);
@@ -32,7 +32,7 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
 
       // User hasn't confirmed email yet
       if (!user.active) {
-        updateAlerts([{ type: "warning", message: "Please Confirm your Email by Clicking the link in the message sent after registration." }], state, dispatch);
+        addToast("warning", "Please Confirm your Email by Clicking the link in the message sent after registration.");
         dispatch({ type: "SET USER", payload: { user, isSignedIn: false } });
         return setLoading(false);
       }
@@ -48,7 +48,7 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
       }
 
       setLoading(false);
-      updateAlerts([{ type: "error", message }], state, dispatch);
+      addToast("error", message);
     }
   }
 

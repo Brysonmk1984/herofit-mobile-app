@@ -1,7 +1,7 @@
 import React, { createContext, useReducer, Context, FC, ReactElement } from "react";
 import { InitialAppState, AppAction } from "./common/types";
 
-const initialState: InitialAppState = { isLoading: true, isSignedIn: false, userStatus: "new", user: null, hero: null, latestSavedActivities: [], latestSavedActivityDate: null, alerts: [], jwt: null, modalQueue: [] };
+const initialState: InitialAppState = { isLoading: true, isSignedIn: false, userStatus: "new", user: null, hero: null, latestSavedActivities: [], latestSavedActivityDate: null, jwt: null, modalQueue: [] };
 
 type AppState = typeof initialState;
 
@@ -37,21 +37,8 @@ function appStateReducer(state: AppState, action: AppAction): AppState {
       const { user, isSignedIn } = action.payload;
       return { ...state, user, isSignedIn };
     }
-    case "SET ALERTS": {
-      const { alerts } = action.payload;
-      return { ...state, alerts: [...alerts] };
-    }
     case "RESET DEFAULTS": {
       return { ...state, isLoading: false, hero: null, user: null };
-    }
-    case "REMOVE ALERTS": {
-      const { indiciesForRemoval } = action.payload;
-      return {
-        ...state,
-        alerts: state.alerts.filter(alert => {
-          return !indiciesForRemoval.includes(alert.index);
-        }),
-      };
     }
     case "ADD MODAL": {
       const { id } = action.payload;
@@ -75,9 +62,9 @@ function appStateReducer(state: AppState, action: AppAction): AppState {
         modalQueue,
       };
     }
-    case "POST UPGRADE":{
+    case "POST UPGRADE": {
       const { hero, latestSavedActivities } = action.payload;
-      return { ...state, hero, latestSavedActivities};
+      return { ...state, hero, latestSavedActivities };
     }
     default:
       throw new Error("In Store default, should not happen.");

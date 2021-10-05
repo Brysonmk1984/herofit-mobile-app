@@ -1,0 +1,65 @@
+import React, { useRef } from "react";
+
+import { Pressable, Button, View, useToast, Text, Toast, Box, HStack } from "native-base";
+import Ionicons from "@expo/vector-icons/build/Ionicons";
+import MaterialIcons from "@expo/vector-icons/build/MaterialIcons";
+import toastTheme from "../../styles/toastTheme";
+type AlertType = "error" | "warning" | "success" | "info";
+
+const useGlobalToast = () => {
+  const toast = useToast();
+  const toastIdRef = useRef();
+
+  function close() {
+    if (toastIdRef.current) {
+      toast.close(toastIdRef.current);
+    }
+  }
+
+  function _renderIcon(type: AlertType, style: { color: string }) {
+    switch (type) {
+      case "success":
+        return <Ionicons name="md-checkmark-circle" size={24} color={style.color} />;
+      case "warning":
+        return <Ionicons name="md-warning-sharp" size={24} color={style.color} />;
+      case "error":
+        return <MaterialIcons name="error" size={24} color={style.color} />;
+      case "info":
+        return <MaterialIcons name="info" size={24} color={style.color} />;
+      default:
+        return null;
+    }
+  }
+
+  function renderToast(type: AlertType, message: string) {
+    const aStyle = toastTheme[type];
+
+    return (
+      // Single Alert
+      <View opacity={0.9} style={aStyle}>
+        {/* Alert Header */}
+        <HStack>
+          {_renderIcon(type, aStyle)}
+          <Text marginLeft={10} flex={1} fontSize={20} lineHeight={24} color={aStyle.color}>
+            {type === "info" ? "FYI" : type.toUpperCase()}
+          </Text>
+          <Pressable onPress={close}>
+            <Ionicons name="md-close" size={24} color={`${aStyle.color}`} />
+          </Pressable>
+        </HStack>
+
+        {/* Alert Body Text / Link / Button */}
+        <Text style={{ color: aStyle.color }}>{message} </Text>
+      </View>
+    );
+  }
+
+  return {
+    addToast: (type: AlertType, message: string) =>
+      (toastIdRef.current = toast.show({
+        render: () => renderToast(type, message),
+      })),
+  };
+};
+
+export default useGlobalToast;

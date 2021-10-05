@@ -2,10 +2,11 @@ import moment from "moment";
 import { useContext, useEffect, useState } from "react";
 import { getStravaClientCredentials, insertStravaCredentials } from "../../api/authentication";
 import { getNewAccessToken, getStravaActivityData, getStravaUserId } from "../../api/strava";
-import { updateAlerts } from "../../common/alerts";
+
 import debugErrors from "../../common/debugErrors";
 import { determineDataSrcType, getLsWithExpiry, setLsWithExpiry } from "../../common/helperFunctions";
 import useDidMount from "../../common/hooks/useDidMount";
+import useGlobalToast from "../../common/hooks/useGlobalToast";
 import { isExistingHero } from "../../common/typeGuards";
 import { Activity, Hero, User } from "../../common/types";
 import { GlobalStateContext } from "../../store";
@@ -65,7 +66,7 @@ async function _checkStravaToken(user: User, state, dispatch): Promise<string> {
   } catch (error) {
     // Couldn't retrieve strava credentials
     debugErrors(error, user);
-    updateAlerts([{ type: "error", message: `${error.status}: ${error.message}` }], state, dispatch);
+    throw new Error(`${error.status}: ${error.message}`);
   }
 }
 
@@ -123,7 +124,7 @@ function useStravaDataProcess(): { newStravaActivities: Activity[] } {
   const [lsStravaCheckHappened, setLsStravaCheckHappened] = useState(false);
   const [newStravaActivities, setNewStravaActivities] = useState<Activity[]>([]);
   const hero = state.hero as Hero;
-
+  const { addToast } = useGlobalToast();
   // Check if Strava User && get lsSaved Strava activities
   useEffect(() => {
     if (state.user?.dataSrcId) {
@@ -163,7 +164,7 @@ function useStravaDataProcess(): { newStravaActivities: Activity[] } {
               setLsWithExpiry("herofit-stravaActivities", formattedNewActivities, 1800000);
             } catch (error) {
               debugErrors(error, state.user);
-              updateAlerts([{ type: "error", message: `${error.status}: ${error.message}` }], state, dispatch);
+              addToast("error", `${error.status}: ${error.message}`);
             }
           }
         }

@@ -6,13 +6,14 @@ import { Header, ScreenContainer, ScreenActionButton, Pane, HelperText } from ".
 import { useDebouncedCallback } from "use-debounce";
 import { AuthStackProps } from "../../common/types-navigator";
 import { resetPassword, sendPasswordResetEmailVerification } from "../../api/authentication";
-import { updateAlerts } from "../../common/alerts";
 import * as Linking from "expo-linking";
 import * as WebBrowser from "expo-web-browser";
 import Constants from "expo-constants";
+import useGlobalToast from "../../common/hooks/useGlobalToast";
 
 const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">) => {
   const { state, dispatch } = useContext(GlobalStateContext);
+  const { addToast } = useGlobalToast();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -28,24 +29,24 @@ const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">)
     try {
       await resetPassword({ email, token, password });
       setLoading(false);
-      updateAlerts([{ type: "success", message: "Password has been updated!" }], state, dispatch);
+      addToast("success", "Password has been updated!");
       setTimeout(() => {
         navigation.navigate("SignIn");
       }, 2500);
     } catch (error) {
       debugErrors(error);
       setLoading(false);
-      updateAlerts([{ type: "error", message: `${error.status}: ${error.message}` }], state, dispatch);
+      addToast("error", `${error.status}: ${error.message}`);
     }
   }
 
   async function handleSendEmailConfirmation() {
     try {
       await sendPasswordResetEmailVerification({ email, isApp: true });
-      updateAlerts([{ type: "success", message: "Please check your email to verify account. Check your spam folder if the message is not in your inbox." }], state, dispatch);
+      addToast("success", "Please check your email to verify account. Check your spam folder if the message is not in your inbox.");
     } catch (error) {
       debugErrors(error);
-      updateAlerts([{ type: "error", message: `${error.status}: ${error.message}` }], state, dispatch);
+      addToast("error", `${error.status}: ${error.message}`);
     }
   }
 

@@ -9,7 +9,6 @@ export const store: AppState = {
   isSignedIn: false,
   userStatus: "new",
   hero: null,
-  alerts: [],
   jwt: null,
   user: null,
   modalQueue: [],

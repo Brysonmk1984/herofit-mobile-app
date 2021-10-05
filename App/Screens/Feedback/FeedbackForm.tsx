@@ -3,10 +3,10 @@ import { View, VStack, FormControl, Input, TextArea, Button, Dropdown, Select, C
 import HelperText from "../../Components/HelperText";
 import Pane from "../../Components/Pane";
 import { useDebouncedCallback } from "use-debounce/lib";
-import { updateAlerts } from "../../common/alerts";
 import debugErrors from "../../common/debugErrors";
 import { emailContactForm } from "../../api/email";
 import { GlobalStateContext } from "../../store";
+import useGlobalToast from "../../common/hooks/useGlobalToast";
 
 interface FeedbackFormProps {
   postSubmitAction?: (data?: any) => void;
@@ -19,6 +19,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ postSubmitAction }) => {
   const [message, setMessage] = useState(null);
   const [helperText, setHelperText] = useState<string | null>(null);
   const [formIsValid, setFormIsValid] = useState(false);
+  const { addToast } = useGlobalToast();
 
   const debounced = useDebouncedCallback(() => {
     if (email?.includes("@")) {
@@ -59,11 +60,11 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ postSubmitAction }) => {
 
     try {
       await emailContactForm({ email, feedbackType, message, accountInfo });
-      updateAlerts([{ type: "success", message: "Message sent! We will get back to you shortly!" }], state, dispatch);
+      addToast("success", "Message sent! We will get back to you shortly!");
     } catch (error) {
       // Error sending Form Message
       const errorMessage = debugErrors(error, state.user);
-      updateAlerts([{ type: "error", message: `${errorMessage}` }], state, dispatch);
+      addToast("error", errorMessage);
     }
   }
 

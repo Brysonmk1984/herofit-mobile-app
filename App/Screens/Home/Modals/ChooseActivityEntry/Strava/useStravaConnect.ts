@@ -12,7 +12,7 @@ import useAxios from "../../../../../common/hooks/useAxios";
 import stravaEndpoints, { STRAVA_REDIRECT_URI } from "./stravaEndpoints";
 import { insertStravaCredentials, getStravaClientCredentials } from "../../../../../api/authentication";
 import { getStravaUserId } from "../../../../../api/strava";
-import { updateAlerts } from "../../../../../common/alerts";
+import useGlobalToast from "../../../../../common/hooks/useGlobalToast";
 
 // For Web Only
 //WebBrowser.maybeCompleteAuthSession();
@@ -45,7 +45,7 @@ function useStravaConnect() {
   const [stravaSuccess, setStravaSuccess] = useState(false);
   const [helperText, setHelperText] = useState<string | null>(null);
   const [data, loading, error] = useAxios(null, null, false, null);
-
+  const { addToast } = useGlobalToast();
   // One-Time Strava Auth Request
   const [request, response, promptAsync] = AuthSession.useAuthRequest({ clientId, scopes: ["activity:read_all"], redirectUri: redirectUri || `${STRAVA_REDIRECT_URI}` }, stravaEndpoints);
 

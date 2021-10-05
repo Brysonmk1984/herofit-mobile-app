@@ -58,11 +58,11 @@ function buildGainsMessages(upgradeResults: UpgradeReturnObject) {
   return messageArray;
 }
 
-function displayGainsMessages(messageArray, alertUpdateFunc) {
+function displayGainsMessages(messageArray: string[], addToastReference: (message: string) => void) {
   setTimeout(() => {
-    messageArray.forEach((message, i) => {
+    messageArray.forEach((message: string, i: number) => {
       setTimeout(() => {
-        alertUpdateFunc([{ type: "success", message }]);
+        addToastReference(message);
       }, 1500 * i);
     });
   }, 2000);

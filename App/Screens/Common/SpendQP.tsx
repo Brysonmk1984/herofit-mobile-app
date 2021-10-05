@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext, useReducer } from "react";
 import { Image, Pressable, FlatList, SectionList, Box, Center, ScrollView, View, Text, Heading, VStack, FormControl, Input, Link, Button, IconButton, HStack, Divider } from "native-base";
 import { GlobalStateContext } from "../../store";
 import spendQPReducer from "../../common/SpendQPReducer";
-import { updateAlerts } from "../../common/alerts";
 import { fetchAstrologySeason } from "../../api/calculate";
 import debugErrors from "../../common/debugErrors";
 import { Stats, HeroTemplate, Hero, HeroWithStats, SelectedHero, DefaultHeroProperties, ExistingHeroProperties, EachHeroProperty, ExistingHeroPropertiesAsUnion } from "../../common/types";
@@ -13,6 +12,7 @@ import { DEFAULT_HERO_PROPERTIES, EXISTING_HERO_PROPERTIES } from "../../common/
 import { isExistingHero, objectIsOfType } from "../../common/typeGuards";
 import useDidMount from "../../common/hooks/useDidMount";
 import { updateAvatarStats } from "../../api/avatar";
+import useGlobalToast from "../../common/hooks/useGlobalToast";
 
 /*
   FOR TESTING SPENDQP PAGE
@@ -41,7 +41,7 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
   const hero = route.params?.hero ?? state.hero;
   const userStatus = state.userStatus;
   const existingHero = isExistingHero(hero);
-
+  const { addToast } = useGlobalToast();
   let initialState: Stats = (() => {
     if (existingHero) {
       const existingHeroStats = (({ qp, power, health, armor, recovery, fire, earth, water, air, aether, qpPower, qpHealth, qpArmor, qpRecovery, qpFire, qpEarth, qpAir, qpWater, qpAether }) => ({ qp, power, health, armor, recovery, fire, earth, water, air, aether, qpPower, qpHealth, qpArmor, qpRecovery, qpFire, qpEarth, qpAir, qpWater, qpAether }))(hero);
@@ -68,18 +68,16 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
       const data = await updateAvatarStats({ avatar: hero, email: state.user.email, id: state.user.id });
       console.log("THE HERO, Does it have alias?", hero);
       // Only used for epic elemental skins at the moment
-      let awardAlerts = [];
       if (data.length) {
-        awardAlerts = data.map(reward => {
-          return { type: "success", message: `EARNED ITEM: ${reward.name} ${reward.type}, ${reward.description}` };
+        data.forEach(reward => {
+          addToast("success", `EARNED ITEM: ${reward.name} ${reward.type}, ${reward.description}`);
         });
-        updateAlerts(awardAlerts, state, dispatch);
       }
       const updatedHero: Hero = Object.assign({}, hero, { ...qpState }) as unknown as Hero;
       dispatch({ type: "SET HERO", payload: { hero: updatedHero } });
     } catch (error) {
       debugErrors(error, state.user);
-      return updateAlerts([{ type: "error", message: error.message }], state, dispatch);
+      return addToast("error", error.message);
     }
   }
 
@@ -104,7 +102,7 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
           const element = elmPackage.element.toLowerCase();
 
           qpDispatch({ type: "ASTRO INCREMENT BY 5", payload: { stat: element } });
-          updateAlerts([{ type: "info", message: `+5 ${element} bonus for ${sign} season!` }], state, dispatch);
+          addToast("info", `+5 ${element} bonus for ${sign} season!`);
         } catch (error) {
           debugErrors(error);
         }

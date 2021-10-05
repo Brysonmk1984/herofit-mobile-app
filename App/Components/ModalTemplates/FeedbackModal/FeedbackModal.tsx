@@ -4,9 +4,10 @@ import ModalCloseButton from "../ModalCloseButton";
 import useModal from "../../../common/hooks/useModal";
 import { ActionButton } from "../BasicModal/ActionButton";
 import { emailFeedbackData, FeedbackChoiceBody } from "../../../api/email";
-import { updateAlerts } from "../../../common/alerts";
+
 import debugErrors from "../../../common/debugErrors";
 import { GlobalStateContext } from "../../../store";
+import useGlobalToast from "../../../common/hooks/useGlobalToast";
 
 interface IFeedbackModal {
   modalOpen: boolean;
@@ -20,6 +21,7 @@ interface IFeedbackModal {
 
 function FeedbackModal({ children, id, modalOpen, title, modalAction, closeable = false, preventClose }: IFeedbackModal) {
   const { closeModal } = useModal();
+  const { addToast } = useGlobalToast();
   const { state, dispatch } = useContext(GlobalStateContext);
   const [radioValue, setRadioValue] = useState(null);
   const [openResponse, setOpenResponse] = useState("");
@@ -47,14 +49,14 @@ function FeedbackModal({ children, id, modalOpen, title, modalAction, closeable 
   async function _handleSubmit(body: FeedbackChoiceBody, modalAction: () => void) {
     try {
       const data = await emailFeedbackData(body);
-      updateAlerts([{ type: "success", message: "Feedback Submitted!" }], state, dispatch);
+      addToast("success", "Feedback Submitted!");
       modalAction(data);
       if (!preventClose) {
         closeModal(id);
       }
     } catch (error) {
       const errorMessage = debugErrors(error, state.user);
-      updateAlerts([{ type: "error", message: errorMessage }], state, dispatch);
+      addToast("error", errorMessage);
       closeModal(id);
     }
   }

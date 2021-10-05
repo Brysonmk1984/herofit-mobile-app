@@ -4,14 +4,15 @@ import { getAvatar } from "../api/avatar";
 import { fetchAllGameItems } from "../api/inventory";
 import { convertItemIdsToFullItems } from "./helperFunctions";
 import { fetchBattleReport } from "../api/battle";
-import { updateAlerts } from "./alerts";
 import debugErrors from "./debugErrors";
 import { User, Hero, Item, AppDispatch, InitialAppState } from "./types";
+import useGlobalToast from "./hooks/useGlobalToast";
 
 // FETCH ALL THE NEEDED DATA FOR INITIALIZING THE HOME SCREEN
 // Either accepts the jwt token and gets email from it in the case of already-valid jwt, or accepts email as a parameter in the case of signing in
 // user, hero, items, latestBattle
 async function fetchInitialData(token: string, dispatch: AppDispatch, state: InitialAppState, email: string | null = null) {
+  const { addToast } = useGlobalToast();
   try {
     // Decode the JWT to get email, needed for fetching avatar
     if (token) {
@@ -44,15 +45,10 @@ async function fetchInitialData(token: string, dispatch: AppDispatch, state: Ini
     } else {
       // Error unrelated to JWT, display error message
       message = error.message;
-      alertType = "error";
       debugErrors(error);
-      updateAlerts([{ type: alertType, message }], state, dispatch);
+      addToast(alertType, message);
       dispatch({ type: "RESET DEFAULTS" });
     }
-
-    // debugErrors(error);
-    // updateAlerts([{ type: alertType, message }], state, dispatch);
-    // dispatch({ type: "RESET DEFAULTS" });
   }
 }
 

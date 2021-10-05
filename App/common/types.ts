@@ -1,4 +1,4 @@
-type ActionType = "TOGGLE LOADING" | "SET EXISTING USER INIT DATA" | "SET ISSIGNEDIN" | "SET NEW USER" | "SET HERO" | "SET USER" | "SET ALERTS" | "RESET DEFAULTS" | "REMOVE ALERTS" | "POST UPGRADE";
+type ActionType = "TOGGLE LOADING" | "SET EXISTING USER INIT DATA" | "SET ISSIGNEDIN" | "SET NEW USER" | "SET HERO" | "SET USER" | "RESET DEFAULTS" | "POST UPGRADE";
 
 interface ToggleLoadingAction {
   type: "TOGGLE LOADING";
@@ -24,16 +24,8 @@ interface SetUserAction {
   type: "SET USER";
   payload: { user: User; isSignedIn?: boolean };
 }
-interface SetAlertsAction {
-  type: "SET ALERTS";
-  payload: { alerts: SnackBarAlertWithIndex[] };
-}
 interface ResetDefaultsAction {
   type: "RESET DEFAULTS";
-}
-interface RemoveAlertsAction {
-  type: "REMOVE ALERTS";
-  payload: { indiciesForRemoval: string[] };
 }
 interface AddModalAction {
   type: "ADD MODAL";
@@ -49,7 +41,7 @@ interface PostUpgradeAction {
 }
 
 // Same as ShoppingListAction in example
-type AppAction = ToggleLoadingAction | SetExistingUserInitDataAction | SetIsSignedInAction | SetUserStatusAction | SetHeroAction | SetUserAction | SetAlertsAction | ResetDefaultsAction | RemoveAlertsAction | AddModalAction | RemoveModalAction | PostUpgradeAction;
+type AppAction = ToggleLoadingAction | SetExistingUserInitDataAction | SetIsSignedInAction | SetUserStatusAction | SetHeroAction | SetUserAction | ResetDefaultsAction | AddModalAction | RemoveModalAction | PostUpgradeAction;
 type AppDispatch = (action: AppAction) => void;
 
 type Payload = {
@@ -60,7 +52,6 @@ type Payload = {
   isSignedIn: boolean;
   isLoading: boolean;
   userStatus: UserStatus;
-  alerts: SnackBarAlert[];
   indiciesForRemoval: string[];
 };
 
@@ -91,7 +82,6 @@ interface InitialAppState {
   hero: Hero | (HeroWithStats & DefaultHeroProperties) | null;
   latestSavedActivities: Activity[];
   latestSavedActivityDate: string | null;
-  alerts: SnackBarAlertWithIndex[];
   modalQueue: string[];
 }
 
@@ -99,20 +89,6 @@ interface Store {
   state: InitialAppState;
   dispatch: <Payload = {}>(action: Action<Payload>) => void;
 }
-
-type linkOrConfirm = string | { text: string; cb: { (): void } };
-interface SnackBarAlert {
-  type: string;
-  message: string;
-  persist?: boolean;
-  config?: linkOrConfirm;
-  link?: string;
-  confirm?: {
-    cb: () => void;
-    text: string;
-  };
-}
-type SnackBarAlertWithIndex = SnackBarAlert & { index: string };
 
 interface User {
   id: number;

@@ -1,20 +1,21 @@
 import React, { useContext } from "react";
 import { Alert } from "react-native";
-import { Image, Pressable, FlatList, SectionList, Box, Center, View, Text, Heading, VStack, FormControl, Input, Link, Button, IconButton, HStack, Divider } from "native-base";
+import { Image, Pressable, FlatList, SectionList, Box, Center, View, Text, Heading, VStack, FormControl, Input, Link, Button, IconButton, HStack, Divider, Toast } from "native-base";
 import ScreenContainer from "../Components/ScreenContainer/ScreenContainer";
 import { clearJwtInLocalStorage } from "../common/jwtModule";
 import debugErrors, { createAppError } from "../common/debugErrors";
 import { Hero, User } from "../common/types";
-import { updateAlerts } from "../common/alerts";
 import { deleteAccount } from "../api/account";
 import { GlobalStateContext } from "../store";
 import { MainDrawerProps } from "../common/types-navigator";
 import { isExistingHero } from "../common/typeGuards";
 import { DrawerIndicator } from "../Components/CustomComponents";
 import { clearLs } from "../common/helperFunctions";
+import useGlobalToast from "../common/hooks/useGlobalToast";
 
 const Settings: React.FC<MainDrawerProps<"Settings">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
+  const { addToast } = useGlobalToast();
   const hero = state.hero;
 
   const createDeleteAlert = () => {
@@ -39,8 +40,7 @@ const Settings: React.FC<MainDrawerProps<"Settings">> = ({ navigation, route }) 
     if (isExistingHero(hero)) {
       deleteAccount({ username: user.username, avatarID: hero.id, email: user.email })
         .then(async data => {
-          updateAlerts([{ type: "success", message: "Account has been deleted. We hope to see you again!" }], state, dispatch);
-
+          addToast("success", "Account has been deleted. We hope to see you again!");
           dispatch({ type: "SET ISSIGNEDIN", payload: { isSignedIn: false } });
           console.log("NOWW resetting defaults");
 
@@ -50,13 +50,13 @@ const Settings: React.FC<MainDrawerProps<"Settings">> = ({ navigation, route }) 
         })
         .catch(error => {
           debugErrors(error, user, dispatch);
-          updateAlerts([{ type: "error", message: `Unable to delete account- ${error.message}` }], state, dispatch);
+          addToast("error", `Unable to delete account- ${error.message}`);
         });
     } else {
       const error = createAppError("No ID associated with Hero", "Probably hasn't saved account yet", state.user);
 
       debugErrors(error, user, dispatch);
-      updateAlerts([{ type: "error", message: "Problem Deleting Hero, please try again later" }], state, dispatch);
+      addToast("error", "Problem Deleting Hero, please try again later");
     }
   }
 
@@ -67,11 +67,6 @@ const Settings: React.FC<MainDrawerProps<"Settings">> = ({ navigation, route }) 
 
   function myCB() {
     console.log("works");
-  }
-
-  function addAlert() {
-    const message = Math.random();
-    updateAlerts([{ type: "success", message, confirm: { text: "cake", cb: myCB } }], state, dispatch);
   }
 
   return (
@@ -90,9 +85,8 @@ const Settings: React.FC<MainDrawerProps<"Settings">> = ({ navigation, route }) 
       >
         Select Hero
       </Button>
-      <Button variant="secondary" title="Add Alert" onPress={addAlert}>
-        Add Alert
-      </Button>
+      <Button onPress={() => Toast.show({ title: "Hello worldsadasd sadasd asdasdas sasdas" })}> SHOW TOAST </Button>
+
       <DrawerIndicator />
     </ScreenContainer>
   );

@@ -1,11 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View } from "native-base";
+import { Button, Toast, View, useToast } from "native-base";
 import ScreenContainer from "../../Components/ScreenContainer/ScreenContainer";
 import debugErrors from "../../common/debugErrors";
 import { GlobalStateContext } from "../../store";
 import { MainDrawerProps } from "../../common/types-navigator";
 import useModal from "../../common/hooks/useModal";
-import { updateAlerts } from "../../common/alerts";
 import { ChooseActivityEntry, SignupToSave, SignupFinished, ConfirmEmail, FeedbackChoice, ActivityUpgrade } from "./Modals/Modals";
 import Background from "./Components/Background";
 import BottomDrawer from "./Components/BottomDrawer/BottomDrawer";
@@ -20,13 +19,14 @@ import { upgradeSequence } from "../../api/avatar";
 import { buildGainsMessages, displayGainsMessages } from "./Components/gainsMessages";
 import useStravaDataProcess from "./useStravaDataProcess";
 import moment from "moment";
+import useGlobalToast from "../../common/hooks/useGlobalToast";
 
 const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { openModal, closeModal } = useModal();
   const { newStravaActivities } = useStravaDataProcess();
   const [newActivities, setNewActivities] = useState<Activity[]>([]);
-
+  const { addToast } = useGlobalToast();
   const propsForHeroImage = (({ character, equipped, alias, status }) => ({ character, equipped, alias, skin: equippedSkin(equipped), status }))(state.hero);
   const propsForBottomConsole = (({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, goToBattle, qp }) => ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, goToBattle, qp, newActivitiesAvailable: newActivities.length > 0 ? true : false }))(state.hero);
 
@@ -45,14 +45,11 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
       setNewActivities([]);
       // Builds the Correct message based on returned data from upgrade
       const messageArray = buildGainsMessages(upgradeResults);
-      // Displays messages to user via in-app alerts
-      displayGainsMessages(messageArray, alert => updateAlerts(alert, state, dispatch));
-
-      //return { data: { leveledUp: upgradeResults.reachedLevel ? true : false } };
+      // Displays messages to user via custom useGlobalToast hook
+      displayGainsMessages(messageArray, (message: string) => addToast("success", message));
     } catch (error) {
       error.message = "Couldn't upgrade hero, please try again later.";
-
-      updateAlerts([{ type: "error", message: error.message }], state, dispatch);
+      addToast("error", error.message);
       debugErrors(error, user);
     }
   }
@@ -91,6 +88,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
         <TopHud />
         {state.isSignedIn && <DrawerIndicator />}
       </View>
+      <Button onPress={() => addToast("info", "you did good son. But loooooooooooong long cat message work?")}> SHOW TOAST </Button>
       {/* HERO & PET */}
       <View>
         <HeroImage {...propsForHeroImage} />

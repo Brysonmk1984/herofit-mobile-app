@@ -7,7 +7,7 @@ const base = {
   fontWeight: 400,
   lineHeight: 1.43,
   borderRadius: 4,
-  marginBottom: 8,
+  marginBottom: 0,
   marginLeft: 8,
   marginRight: 8,
 };
@@ -37,4 +37,4 @@ const success = { ...base, ...successStyle };
 const warning = { ...base, ...warningStyle };
 const error = { ...base, ...errorStyle };
 
-export { info, success, warning, error };
+export default { info, success, warning, error };
