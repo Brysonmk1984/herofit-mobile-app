@@ -1,4 +1,5 @@
 import React from "react";
+import { StyleSheet } from "react-native";
 import { Modal, Text, Image, View } from "native-base";
 import CharacterModalActionButton from "./CharacterModalActionButton";
 import ModalCloseButton from "../ModalCloseButton";
@@ -6,6 +7,7 @@ import { CharacterHeader } from "./CharacterHeader";
 import { CharacterDialog } from "./CharacterDialog";
 import { IActionHeader } from "../BasicModal/Content";
 import useModal from "../../../common/hooks/useModal";
+import Triangle from "../../../Screens/Home/Components/BottomDrawer/Triangle";
 
 interface ICharacterModal {
   id: string;
@@ -43,9 +45,10 @@ function CharacterModal({ children, id, modalOpen, modalAction, character = "Mas
     <Modal isOpen={modalOpen} onClose={() => closeModal(id)} _backdrop={{ backgroundColor: "layout.modalBackdrop" }}>
       <Modal.Content p={0}>
         <CharacterHeader>
-          <Image w={105} position="absolute" left={-12} top={-20} alignSelf={"flex-end"} source={getCharacterImage(character)} size={100} alt={character} />
+          <Image zIndex="10" elevation={10} w={105} position="absolute" left={-12} top={-20} alignSelf={"flex-end"} source={getCharacterImage(character)} size={100} alt={character} />
           <CharacterDialog>
-            <Text pr={3} lineHeight="20px" fontSize={15} fontFamily="handwriting">
+            <View style={styles.triangle}></View>
+            <Text textAlign="justify" color="primary.700" flexWrap="wrap" lineHeight="18px" fontSize={15}>
               {speech}
             </Text>
           </CharacterDialog>
@@ -59,3 +62,21 @@ function CharacterModal({ children, id, modalOpen, modalAction, character = "Mas
 }
 
 export default CharacterModal;
+
+const styles = StyleSheet.create({
+  triangle: {
+    position: "absolute",
+    left: -20,
+    top: 25,
+    width: 0,
+    height: 0,
+    backgroundColor: "transparent",
+    borderStyle: "solid",
+    borderTopWidth: 20,
+    borderRightWidth: 20,
+    borderBottomWidth: 20,
+    borderTopColor: "transparent",
+    borderBottomColor: "transparent",
+    borderRightColor: "#fff",
+  },
+});

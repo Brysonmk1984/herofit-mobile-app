@@ -7,7 +7,7 @@ interface CharacterDialogProps {
 
 export const CharacterDialog: React.FC<CharacterDialogProps> = ({ children }) => {
   return (
-    <View ml={100} py={5} pr={1}>
+    <View shadow="5" borderRadius={8} backgroundColor="base.white" ml={95} my={2} mr={8} p={2}>
       {children}
     </View>
   );
