@@ -18,13 +18,15 @@ const DateTimeDuration: React.FC<DateTimeDurationProps> = ({ render, setParentDa
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
 
-  const onDateTimeChange = (event, selectedDate) => {
+  const platform = Platform.OS;
+
+  const onDateTimeChange = (event, selectedDate: Date) => {
     const currentDate = selectedDate || date;
-    setShow(Platform.OS === "ios");
+    setShow(platform === "ios");
     setDate(currentDate);
   };
 
-  const showMode = currentMode => {
+  const showMode = (currentMode: "date" | "time") => {
     setShow(true);
     setMode(currentMode);
   };
@@ -38,7 +40,6 @@ const DateTimeDuration: React.FC<DateTimeDurationProps> = ({ render, setParentDa
   };
 
   useEffect(() => {
-    console.log("!!UPDATING PARENT DATE", date);
     setParentDate(date);
   }, [date]);
 

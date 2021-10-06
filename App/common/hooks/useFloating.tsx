@@ -4,11 +4,14 @@ import { Dimensions, Animated } from "react-native";
 const useFloating = (float: boolean) => {
   const [floating, setFloating] = useState(float);
   const deviceHeight = Dimensions.get("window").height;
+  const downHeight = deviceHeight * 0.6;
+  const upHeight = deviceHeight * 0.7;
   let floatAnimation = useRef(new Animated.Value(deviceHeight)).current;
+
   function floatDown() {
     if (floating) {
       Animated.timing(floatAnimation, {
-        toValue: deviceHeight - 300,
+        toValue: deviceHeight - downHeight,
         duration: 2500,
         useNativeDriver: true,
       }).start(floatUp);
@@ -18,7 +21,7 @@ const useFloating = (float: boolean) => {
   function floatUp() {
     if (floating) {
       Animated.timing(floatAnimation, {
-        toValue: deviceHeight - 350,
+        toValue: deviceHeight - upHeight,
         duration: 2500,
         useNativeDriver: true,
       }).start(floatDown);
@@ -28,7 +31,7 @@ const useFloating = (float: boolean) => {
   useEffect(() => {
     if (floating) {
       Animated.timing(floatAnimation, {
-        toValue: deviceHeight - 400,
+        toValue: deviceHeight - (downHeight + 50),
         duration: 1500,
         useNativeDriver: true,
       }).start(floatDown);

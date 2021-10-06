@@ -11,7 +11,7 @@ interface FloatingHeroImageProps {
 
 const FloatingHeroImage = ({ children, status }: FloatingHeroImageProps): ReactElement => {
   const { floating, floatAnimation } = useFloating(status !== "Knocked Out");
-  return floating ? <Animated.View style={{ translateY: floatAnimation }}>{children}</Animated.View> : (children as ReactElement);
+  return floating ? <Animated.View style={{ transform: [{ translateY: floatAnimation }] }}>{children}</Animated.View> : (children as ReactElement);
 };
 
 export default FloatingHeroImage;
