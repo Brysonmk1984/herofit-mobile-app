@@ -5,7 +5,7 @@ import debugErrors from "../../common/debugErrors";
 import { GlobalStateContext } from "../../store";
 import { MainDrawerProps } from "../../common/types-navigator";
 import useModal from "../../common/hooks/useModal";
-import { ChooseActivityEntry, SignupToSave, SignupFinished, ConfirmEmail, FeedbackChoice, ActivityUpgrade } from "./Modals/Modals";
+import { ChooseActivityEntry, SignupToSave, SignupFinished, ConfirmEmail, FeedbackChoice, ActivityUpgrade, GoToBattle } from "./Modals/Modals";
 import Background from "./Components/Background";
 import BottomDrawer from "./Components/BottomDrawer/BottomDrawer";
 import { equippedPet, equippedSkin } from "../../common/helperFunctions";
@@ -108,6 +108,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
       <ChooseActivityEntry id="ChooseActivityEntry" />
       <FeedbackChoice id="FeedbackChoice" />
       <SignupFinished id="SignupFinished" />
+      <GoToBattle id="GoToBattle" userStatus={state.userStatus} modalQueue={state.modalQueue} hero={state.hero} />
       {newActivities.length ? <ActivityUpgrade id="ActivityUpgrade" activities={newActivities} modalAction={() => handleHeroUpgrade(newActivities)} goBack={navigation.push} state={state} closeModal={closeModal} setNewActivities={setNewActivities} /> : null}
     </ScreenContainer>
   );

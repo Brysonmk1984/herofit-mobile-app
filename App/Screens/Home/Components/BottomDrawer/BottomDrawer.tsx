@@ -48,7 +48,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fir
             </Button>
           </Box>
           <Box w="50%" p={2}>
-            <Button _text={{ fontFamily: "heading", fontSize: 30 }} borderRadius={0}>
+            <Button _text={{ fontFamily: "heading", fontSize: 30 }} borderRadius={0} onPress={() => openModal("GoToBattle")}>
               Battle
             </Button>
           </Box>
