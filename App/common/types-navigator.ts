@@ -13,7 +13,9 @@ type RootStackParamList = {
 };
 
 type MainDrawerParamList = {
-  Home: undefined;
+  Home: {
+    newManualActivity?: Activity;
+  };
   Profile: undefined;
   Ranking: undefined;
   Campaign: undefined;
@@ -24,6 +26,9 @@ type MainDrawerParamList = {
   Loading: undefined;
   SpendQP: undefined;
   ManualActivity: undefined;
+  AwaitingBattle: undefined;
+  BattleReport: undefined;
+  BattleReportDetail: undefined;
 };
 
 type AuthStackParamList = {

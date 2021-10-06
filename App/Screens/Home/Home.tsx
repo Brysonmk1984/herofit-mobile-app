@@ -13,7 +13,7 @@ import { HeroImage } from "./Components/HeroImage/HeroImage";
 import { TopHud } from "./Components/TopHud/TopHud";
 import { PetImage } from "./Components/PetImage";
 import { DrawerIndicator } from "../../Components/CustomComponents";
-import { Activity } from "../../common/types";
+import { Activity, Hero } from "../../common/types";
 
 import { upgradeSequence } from "../../api/avatar";
 import buildGainsMessages from "./Components/gainsMessages";
@@ -27,8 +27,8 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { newStravaActivities } = useStravaDataProcess();
   const [newActivities, setNewActivities] = useState<Activity[]>([]);
   const { addToast } = useGlobalToast();
-  const propsForHeroImage = (({ character, equipped, alias, status }) => ({ character, equipped, alias, skin: equippedSkin(equipped), status }))(state.hero);
-  const propsForBottomConsole = (({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, goToBattle, qp }) => ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, goToBattle, qp, newActivitiesAvailable: newActivities.length > 0 ? true : false }))(state.hero);
+  const propsForHeroImage = (({ character, equipped, alias, status }) => ({ character, equipped, alias, skin: equippedSkin(equipped), status, floating: true }))(state.hero);
+  const propsForBottomConsole = (({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, qp, goToBattle }) => ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, goToBattle, qp, newActivitiesAvailable: newActivities.length > 0 ? true : false, goToBattle }))(state.hero);
 
   async function handleHeroUpgrade(activities: Activity[]) {
     const user = state.user;
@@ -108,7 +108,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
       <ChooseActivityEntry id="ChooseActivityEntry" />
       <FeedbackChoice id="FeedbackChoice" />
       <SignupFinished id="SignupFinished" />
-      <GoToBattle id="GoToBattle" userStatus={state.userStatus} modalQueue={state.modalQueue} hero={state.hero} />
+      <GoToBattle id="GoToBattle" goTo={navigation.push} heroId={state.hero.id as Hero} />
       {newActivities.length ? <ActivityUpgrade id="ActivityUpgrade" activities={newActivities} modalAction={() => handleHeroUpgrade(newActivities)} goBack={navigation.push} state={state} closeModal={closeModal} setNewActivities={setNewActivities} /> : null}
     </ScreenContainer>
   );

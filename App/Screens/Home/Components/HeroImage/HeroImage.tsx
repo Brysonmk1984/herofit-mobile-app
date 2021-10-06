@@ -10,9 +10,10 @@ interface HeroImageProps {
   alias: CharacterAlias;
   status?: HeroStatus;
   skin?: Item;
+  floating?: boolean;
 }
 
-export const HeroImage: React.FC<HeroImageProps> = ({ character, alias, skin, status }) => {
+export const HeroImage: React.FC<HeroImageProps> = ({ character, alias, skin, status, floating = false }) => {
   const skinName = skin?.name as SkinName;
   const { heroImage } = useHeroImage(character, skinName);
   const isTint = skinName?.includes("Tint") ?? false;
@@ -21,7 +22,7 @@ export const HeroImage: React.FC<HeroImageProps> = ({ character, alias, skin, st
     return (
       <Center>
         <Box w={275} h={275}>
-          <FloatingHeroImage status={status}>{imageMod ? <TintImage heroImage={heroImage} skinName={skinName} imageMod={imageMod} /> : <Image position="absolute" bottom={100} source={heroImage} size={275} alt={skinName} />}</FloatingHeroImage>
+          {floating ? <FloatingHeroImage status={status}>{imageMod ? <TintImage heroImage={heroImage} skinName={skinName} imageMod={imageMod} /> : <Image position="absolute" bottom={100} source={heroImage} size={275} alt={skinName} />}</FloatingHeroImage> : imageMod ? <TintImage heroImage={heroImage} skinName={skinName} imageMod={imageMod} /> : <Image position="absolute" bottom={100} source={heroImage} size={275} alt={skinName} />}
         </Box>
       </Center>
     );

@@ -1,22 +1,31 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Heading, Text, Box, View, Pressable } from "native-base";
 import { CharacterModal } from "../../../Components/ModalTemplates/ModalTemplates";
 import { ActionHeader, BodyContent } from "../../../Components/ModalTemplates/BasicModal/Content";
 import { GlobalStateContext } from "../../../store";
-import { Hero, UserStatus } from "../../../common/types";
+import { Foe, Hero, Item, UserStatus } from "../../../common/types";
 import useModal from "../../../common/hooks/useModal";
+import LoadingInPane from "../../../Components/LoadingInPane";
+import useGlobalToast from "../../../common/hooks/useGlobalToast";
+import debugErrors from "../../../common/debugErrors";
+import { sendHeroToBattle } from "../../../api/battle";
 
+interface GoToParams {
+  foe: Foe;
+  rewards: Item[] | null;
+}
 interface GoToBattleProps {
   id: string;
-  userStatus: UserStatus;
-  modalQueue: string[];
-  hero: Hero;
-  modalAction: () => void;
+  goTo: (navigator: string, options: { screen: string; params: GoToParams }) => void;
 }
 
-export const GoToBattle: React.FC<GoToBattleProps> = ({ id, userStatus, modalQueue, hero, modalAction }) => {
-  //const { state } = useContext(GlobalStateContext);
+export const GoToBattle: React.FC<GoToBattleProps> = ({ id, goTo }) => {
+  const { state, dispatch } = useContext(GlobalStateContext);
   const { openModal, closeModal } = useModal();
+  const [loading, setLoading] = useState(false);
+  const { addToast } = useGlobalToast();
+  const { user, userStatus } = state;
+  const hero = state.hero as Hero;
 
   let goToBattleOwlAdvice,
     goToBattleActionHeader,
@@ -49,13 +58,38 @@ export const GoToBattle: React.FC<GoToBattleProps> = ({ id, userStatus, modalQue
     openModal("ConfirmEmail");
   }
 
+  async function handleGoToBattle() {
+    // CREATE BATTLE AND UPDATE STATUS OF AVATAR
+    if (hero.goToBattle === false) {
+      setLoading(true);
+      try {
+        const { foe, rewards, goToBattle } = await sendHeroToBattle({ email: user.email, avatar: hero });
+
+        dispatch({ type: "SET HERO", payload: { hero: { ...hero, goToBattle } } });
+
+        setLoading(false);
+        setTimeout(() => {
+          closeModal("GoToBattle");
+          goTo("App", { screen: "AwaitingBattle", params: { foe, rewards } });
+        }, 500);
+      } catch (error) {
+        error.message = "Unable to go to Battle, please try again later.";
+        setLoading(false);
+        closeModal("GoToBattle");
+        addToast("error", error.message);
+        return debugErrors(error, user);
+      }
+    }
+  }
+
   return (
-    <CharacterModal id={id} modalOpen={modalQueue[0] === id} speech={goToBattleOwlAdvice} buttonText="Go To Battle" disabled={disabledButton} modalAction={modalAction}>
+    <CharacterModal id={id} modalOpen={state.modalQueue[0] === id} speech={goToBattleOwlAdvice} buttonText="Go To Battle" disabled={disabledButton} modalAction={() => handleGoToBattle()}>
       <ActionHeader type={goToBattleActionHeader} text={goToBattleActionText} />
       <BodyContent>
         <View px={5}>
           <Text fontSize="md">{goToBattleText}</Text>
-          {userStatus === "unconfirmed" && (
+          {loading && <LoadingInPane text="Preparing for battle..." />}
+          {state.userStatus === "unconfirmed" && (
             <Pressable onPress={switchToConfirmEmail}>
               <Text textAlign="center" textDecoration="underline" fontSize="2xl" color="base.link">
                 Verify

@@ -7,6 +7,9 @@ import StatDisplay from "../../../../Components/StatDisplay";
 import { useNavigation } from "@react-navigation/native";
 import { PtAndQpMenu } from "./PtAndQpMenu";
 import useModal from "../../../../common/hooks/useModal";
+import { fetchUpcomingFoeAndRewards } from "../../../../api/battle";
+import useGlobalToast from "../../../../common/hooks/useGlobalToast";
+import debugErrors from "../../../../common/debugErrors";
 
 interface BottomDrawerProps {
   power: number;
@@ -20,9 +23,10 @@ interface BottomDrawerProps {
   photonTokens: number;
   qp: number;
   newActivitiesAvailable: boolean;
+  goToBattle: boolean;
 }
 
-const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, qp, newActivitiesAvailable }) => {
+const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, qp, newActivitiesAvailable, goToBattle, heroId }) => {
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
   const bottomDrawerHeight = windowHeight / 2.75;
@@ -30,6 +34,17 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fir
   const { colors } = useTheme();
   const navigation = useNavigation();
   const { openModal } = useModal();
+  const { addToast } = useGlobalToast();
+
+  async function handleFetchUpcomingBattle() {
+    try {
+      const { foe, rewards } = await fetchUpcomingFoeAndRewards({ avatarID: heroId });
+      navigation.push("App", { screen: "AwaitingBattle", params: { foe, rewards } });
+    } catch (error) {
+      addToast("error", `${error.status}: ${error.message}`);
+      return debugErrors(error, user);
+    }
+  }
 
   return (
     <Box position="absolute" bottom={0}>
@@ -48,7 +63,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fir
             </Button>
           </Box>
           <Box w="50%" p={2}>
-            <Button _text={{ fontFamily: "heading", fontSize: 30 }} borderRadius={0} onPress={() => openModal("GoToBattle")}>
+            <Button _text={{ fontFamily: "heading", fontSize: 30 }} borderRadius={0} onPress={goToBattle ? handleFetchUpcomingBattle : () => openModal("GoToBattle")}>
               Battle
             </Button>
           </Box>

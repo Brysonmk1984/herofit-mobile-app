@@ -21,9 +21,12 @@ import Items from "./Screens/Items";
 import Feedback from "./Screens/Feedback/Feedback";
 import Settings from "./Screens/Settings";
 import ManualActivity from "./Screens/ManualActivitity/ManualActivity";
+import AwaitingBattle from "./Screens/Battle/AwaitingBattle";
+import BattleReport from "./Screens/Battle/BattleReport";
+import BattleReportDetail from "./Screens/Battle/BattleReportDetail";
 
 // MULTI-USE SCREENS
 import Loading from "./Screens/Loading/Loading";
 import SpendQP from "./Screens/Common/SpendQP";
 
-export { Splash, SignIn, Register, ForgotPassword, AboutGame, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection, Home, Profile, Ranking, Campaign, Inventory, Items, Feedback, Settings, ManualActivity, Loading, SpendQP };
+export { Splash, SignIn, Register, ForgotPassword, AboutGame, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection, Home, Profile, Ranking, Campaign, Inventory, Items, Feedback, Settings, ManualActivity, AwaitingBattle, BattleReport, BattleReportDetail, Loading, SpendQP };

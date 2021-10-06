@@ -72,6 +72,9 @@ const DrawerScreen = () => {
       <MainDrawer.Screen name="Settings" component={Screens.Settings} />
       <MainDrawer.Screen name="SpendQP" component={Screens.SpendQP} options={{ title: "Quantum Points" }} />
       <MainDrawer.Screen name="ManualActivity" component={Screens.ManualActivity} />
+      <MainDrawer.Screen name="AwaitingBattle" component={Screens.AwaitingBattle} />
+      <MainDrawer.Screen name="BattleReport" component={Screens.BattleReport} />
+      <MainDrawer.Screen name="BattleReportDetail" component={Screens.BattleReportDetail} />
     </MainDrawer.Navigator>
   );
 };

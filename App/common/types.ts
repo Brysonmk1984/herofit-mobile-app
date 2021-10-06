@@ -276,9 +276,32 @@ interface FoeClasses {
   titans: TitanFoes[];
 }
 
+interface FoeAbility {
+  effect: string;
+  name: string;
+  type: string;
+}
+
+interface Foe {
+  ability: FoeAbility;
+  air: number;
+  armor: number;
+  class: "Elementals" | "Spirits" | "Titans";
+  difficulty: number;
+  earth: number;
+  fire: number;
+  health: number;
+  name: string;
+  power: number;
+  ptBounty: number;
+  type: string;
+  water: number;
+  xpBounty: number;
+}
+
 type Tint = "fire_tint" | "earth_tint" | "water_tint" | "air_tint" | "banshee_tint" | "poltergeist_tint" | "specter_tint" | "wraith_tint" | "phantom_tint" | "phantasm_tint" | "shade_tint" | "apparition_tint";
 type UniqueImageSkin = "shadow_self" | "ascended_self" | "gale_force" | "fire_brand" | "earth_shaker" | "tide_caller";
 type Skin = UniqueImageSkin | Tint;
 type SkinName = "Fire Tint" | "Earth Tint" | "Water Tint" | "Air Tint" | "Banshee Tint" | "Poltergeist Tint" | "Specter Tint" | "Wraith Tint" | "Phantom Tint" | "Phantasm Tint" | "Shade Tint" | "Apparition Tint" | "Shadow Self" | "Ascended Self" | "Gale Force" | "Fire Brand" | "Earth Shaker" | "Tide Caller";
 
-export { Action, AppDispatch, InitialAppState, AppAction, Store, SnackBarAlert, SnackBarAlertWithIndex, User, UserStatus, Activity, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, HeroTemplate, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, Stat, PrimaryElements, AllElements, HeroChoice, CharacterName, CharacterAlias, FoeTypes, FoeClasses, Skin, SkinName, UniqueImageSkin, Tint };
+export { Action, AppDispatch, InitialAppState, AppAction, Store, User, UserStatus, Activity, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, HeroTemplate, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, Stat, PrimaryElements, AllElements, HeroChoice, CharacterName, CharacterAlias, FoeTypes, FoeClasses, Skin, SkinName, UniqueImageSkin, Tint, Foe };

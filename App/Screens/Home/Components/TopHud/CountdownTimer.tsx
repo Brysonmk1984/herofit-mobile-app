@@ -4,9 +4,10 @@ import { View, Text } from "native-base";
 
 interface CountdownTimerProps {
   type: "Knocked Out" | "Battle";
+  hideType?: boolean;
 }
 
-export const CountdownTimer: React.FC<CountdownTimerProps> = ({ type }) => {
+export const CountdownTimer: React.FC<CountdownTimerProps> = ({ type, hideType = false }) => {
   const [hours, setHours] = useState<string | number>(0);
   const [minutes, setMinutes] = useState<string | number>(0);
   const [seconds, setSeconds] = useState<string | number>(0);
@@ -53,9 +54,11 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({ type }) => {
     <View>
       {type === "Battle" ? (
         <View flexDirection="row" mt={1}>
-          <Text mr={2} fontSize={20} fontFamily="heading" color="base.white" opacity={0.6}>
-            Battle:
-          </Text>
+          {!hideType && (
+            <Text mr={2} fontSize={20} fontFamily="heading" color="base.white" opacity={0.6}>
+              Battle:
+            </Text>
+          )}
           <Text fontSize={20} fontFamily="heading" color="base.warning">
             {" "}
             {hours}:
@@ -69,9 +72,11 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({ type }) => {
         </View>
       ) : type === "Knocked Out" ? (
         <View flexDirection="row" mt={2}>
-          <Text mr={2} fontFamily="heading" color="base.white" opacity={0.6}>
-            Knocked Out:
-          </Text>
+          {!hideType && (
+            <Text mr={2} fontFamily="heading" color="base.white" opacity={0.6}>
+              Knocked Out:
+            </Text>
+          )}
           <Text color="base.white" fontFamily="heading">
             {hours}:
           </Text>
