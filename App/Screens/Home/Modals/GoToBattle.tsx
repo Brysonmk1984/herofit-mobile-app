@@ -1,9 +1,10 @@
 import React, { useContext } from "react";
-import { Heading, Text, Box, View } from "native-base";
+import { Heading, Text, Box, View, Pressable } from "native-base";
 import { CharacterModal } from "../../../Components/ModalTemplates/ModalTemplates";
 import { ActionHeader, BodyContent } from "../../../Components/ModalTemplates/BasicModal/Content";
 import { GlobalStateContext } from "../../../store";
 import { Hero, UserStatus } from "../../../common/types";
+import useModal from "../../../common/hooks/useModal";
 
 interface GoToBattleProps {
   id: string;
@@ -13,8 +14,9 @@ interface GoToBattleProps {
   modalAction: () => void;
 }
 
-export const GoToBattle: React.FC<GoToBattleProps> = ({ id, userStatus, modalQueue, hero, modalAction = { modalAction } }) => {
+export const GoToBattle: React.FC<GoToBattleProps> = ({ id, userStatus, modalQueue, hero, modalAction }) => {
   //const { state } = useContext(GlobalStateContext);
+  const { openModal, closeModal } = useModal();
 
   let goToBattleOwlAdvice,
     goToBattleActionHeader,
@@ -42,12 +44,24 @@ export const GoToBattle: React.FC<GoToBattleProps> = ({ id, userStatus, modalQue
     disabledButton = true;
   }
 
+  function switchToConfirmEmail() {
+    closeModal(id);
+    openModal("ConfirmEmail");
+  }
+
   return (
     <CharacterModal id={id} modalOpen={modalQueue[0] === id} speech={goToBattleOwlAdvice} buttonText="Go To Battle" disabled={disabledButton} modalAction={modalAction}>
       <ActionHeader type={goToBattleActionHeader} text={goToBattleActionText} />
       <BodyContent>
         <View px={5}>
           <Text fontSize="md">{goToBattleText}</Text>
+          {userStatus === "unconfirmed" && (
+            <Pressable onPress={switchToConfirmEmail}>
+              <Text textAlign="center" textDecoration="underline" fontSize="2xl" color="base.link">
+                Verify
+              </Text>
+            </Pressable>
+          )}
         </View>
       </BodyContent>
     </CharacterModal>
