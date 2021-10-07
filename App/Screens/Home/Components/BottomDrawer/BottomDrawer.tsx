@@ -10,6 +10,7 @@ import useModal from "../../../../common/hooks/useModal";
 import { fetchUpcomingFoeAndRewards } from "../../../../api/battle";
 import useGlobalToast from "../../../../common/hooks/useGlobalToast";
 import debugErrors from "../../../../common/debugErrors";
+import { User } from "../../../../common/types";
 
 interface BottomDrawerProps {
   power: number;
@@ -24,9 +25,11 @@ interface BottomDrawerProps {
   qp: number;
   newActivitiesAvailable: boolean;
   goToBattle: boolean;
+  heroId: number;
+  user: User;
 }
 
-const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, qp, newActivitiesAvailable, goToBattle, heroId }) => {
+const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, qp, newActivitiesAvailable, goToBattle, heroId, user }) => {
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
   const bottomDrawerHeight = windowHeight / 2.75;

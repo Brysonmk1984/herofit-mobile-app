@@ -28,7 +28,8 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const [newActivities, setNewActivities] = useState<Activity[]>([]);
   const { addToast } = useGlobalToast();
   const propsForHeroImage = (({ character, equipped, alias, status }) => ({ character, equipped, alias, skin: equippedSkin(equipped), status, floating: true }))(state.hero);
-  const propsForBottomConsole = (({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, qp, goToBattle }) => ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, goToBattle, qp, newActivitiesAvailable: newActivities.length > 0 ? true : false, goToBattle }))(state.hero);
+  const propsForBottomConsole = (({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, qp, goToBattle, id }) => ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, qp, newActivitiesAvailable: newActivities.length > 0 ? true : false, goToBattle, heroId: id, user: state.user }))(state.hero);
+  const hero = state.hero as Hero;
 
   async function handleHeroUpgrade(activities: Activity[]) {
     const user = state.user;
@@ -108,7 +109,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
       <ChooseActivityEntry id="ChooseActivityEntry" />
       <FeedbackChoice id="FeedbackChoice" />
       <SignupFinished id="SignupFinished" />
-      <GoToBattle id="GoToBattle" goTo={navigation.push} heroId={state.hero.id as Hero} />
+      <GoToBattle id="GoToBattle" goTo={navigation.push} heroId={hero.id} />
       {newActivities.length ? <ActivityUpgrade id="ActivityUpgrade" activities={newActivities} modalAction={() => handleHeroUpgrade(newActivities)} goBack={navigation.push} state={state} closeModal={closeModal} setNewActivities={setNewActivities} /> : null}
     </ScreenContainer>
   );
