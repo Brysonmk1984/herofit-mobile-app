@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 import { VStack, Text, Box, FlatList } from "native-base";
 import { LinearGradient } from "expo-linear-gradient";
 import { HeroImage } from "../../../Components/HeroImage/HeroImage";
-import { equippedSkin, getColorFromClassName, getColorFromItemName } from "../../../common/helperFunctions";
+import { capitalize, equippedSkin, getColorFromClassName, getColorFromItemName } from "../../../common/helperFunctions";
 import { GlobalStateContext } from "../../../store";
 import { Item } from "../../../common/types";
 
@@ -21,7 +21,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ height, rewards }) => {
     const color = item.class ? getColorFromClassName(item.class) : getColorFromItemName(item.name);
     return (
       <Text textAlign="right">
-        <Text>{item.type.toUpperCase()}</Text> - <Text color={color}>{item.name}</Text>
+        <Text>New {capitalize(item.type)}</Text> - <Text color={color}>{item.name}</Text>
       </Text>
     );
   }
