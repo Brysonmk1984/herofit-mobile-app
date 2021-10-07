@@ -4,7 +4,7 @@ import { GlobalStateContext } from "../../store";
 import spendQPReducer from "../../common/SpendQPReducer";
 import { fetchAstrologySeason } from "../../api/calculate";
 import debugErrors from "../../common/debugErrors";
-import { Stats, HeroTemplate, Hero, HeroWithStats, SelectedHero, DefaultHeroProperties, ExistingHeroProperties, EachHeroProperty, ExistingHeroPropertiesAsUnion } from "../../common/types";
+import { Stats, Hero, HeroWithStats, SelectedHero, DefaultHeroProperties, ExistingHeroProperties, EachHeroProperty, ExistingHeroPropertiesAsUnion } from "../../common/types";
 import { ScreenContainer, Header, Subheader, ScreenActionButton, LoreText, Pane, StatDisplay, Icon, HelperText } from "../../Components/CustomComponents";
 import defaultStats from "../../common/defaultStats.json";
 import { AuthStackProps } from "../../common/types-navigator";

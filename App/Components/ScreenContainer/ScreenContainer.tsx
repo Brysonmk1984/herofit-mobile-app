@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
     height: "100%",
     elevation: 100,
     zIndex: 100,
+    overflow: "hidden",
   },
   absolute: {
     position: "absolute",

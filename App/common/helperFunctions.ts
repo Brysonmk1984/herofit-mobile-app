@@ -1,6 +1,6 @@
 import heroList from "./heroList.json";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ItemInstance, Item, FoeType, FoeClasses, HeroChoice, CharacterName, CharacterAlias, Skin, SkinName } from "./types";
+import { ItemInstance, Item, FoeType, FoeClasses, HeroChoice, CharacterName, CharacterAlias, SkinLcUnderscoreName, SkinName } from "./types";
 import { getBoulderBroImage, getChronoGuyImage, getCompostCreatureImage, getEmpathAureliaImage, getFiltronFiveImage, getNaturalNinjaImage, getRepeteImage, getSolarCelesteImage, getTimberTerrorImage, getWilhelmTheWildImage } from "./heroImageVariants";
 
 function capitalize<T = string>(val: T) {
@@ -275,7 +275,7 @@ function getHeroImage(characterName: CharacterName, skin?: SkinName): number {
 
   // Figure out which Skin / Costume to use
   const lcName = lowercaseUnderscore(characterName);
-  const lcSkin = lowercaseUnderscore<Skin>(skin);
+  const lcSkin = lowercaseUnderscore<SkinName>(skin) as SkinLcUnderscoreName;
   switch (lcName) {
     case "timber_terror":
       return getTimberTerrorImage(lcSkin);
@@ -520,4 +520,44 @@ function determineDataSrcType(dataSrcId: string) {
   return "Manual";
 }
 
-export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, convertAorAn, getHeroAlias, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems, capitalize, getHeroImage, getFoeImage, getPetImage, equippedSkin, equippedPet, equippedTitle, getColorFromClassName, getColorFromItemName, checkForMultipleItem, determineDataSrcType, roundNumberToTenthReturnNumber, roundNumberToThousandthReturnNumber };
+function getFoeColor(foeType: FoeType) {
+  const lcType = lowercaseUnderscore(foeType);
+  switch (lcType) {
+    // Spirits
+    case "wraith":
+    case "specter":
+    case "apparition":
+    case "banshee":
+    case "poltergeist":
+    case "phantasm":
+    case "shade":
+    case "phantom":
+    case "shadow_self":
+      return "#000";
+    // Elementals
+    case "rock_skipper":
+    case "granite_golem":
+    case "hulking_aggro_crag":
+      return "#8A360F";
+    case "splash_artist":
+    case "cyclonic_siren":
+    case "high_priestess_of_the_tides":
+      return "#0f5e9c";
+    case "gusty_rascal":
+    case "wheezing_jinn":
+    case "storming_oni":
+      return "#16a0f5";
+    case "flame_fiend":
+    case "burning_jinn":
+    case "scorching_archfiend":
+      return "#e25822";
+    // Titans
+    case "plaguebringer":
+      return "#8da728";
+
+    default:
+      throw new Error("No image by that foe type");
+  }
+}
+
+export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, convertAorAn, getHeroAlias, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems, capitalize, getHeroImage, getFoeImage, getPetImage, equippedSkin, equippedPet, equippedTitle, getColorFromClassName, getColorFromItemName, checkForMultipleItem, determineDataSrcType, roundNumberToTenthReturnNumber, roundNumberToThousandthReturnNumber, getFoeColor };

@@ -6,13 +6,17 @@ import { Item } from "../../../common/types";
 
 interface PetImageProps {
   pet: Item;
+  width?: number;
+  height?: number;
 }
 
-export const PetImage: React.FC<PetImageProps> = ({ pet }) => {
+export const PetImage: React.FC<PetImageProps> = ({ pet, width = 120, height = 120 }) => {
   const petName = pet?.name;
   return petName ? (
-    <Box position="absolute" right={0} bottom={95}>
-      <Image resizeMode="contain" source={getPetImage(petName)} size={120} alt={petName} />
-    </Box>
+    <Center>
+      <Box>
+        <Image resizeMode="contain" source={getPetImage(petName)} size={height} alt={petName} />
+      </Box>
+    </Center>
   ) : null;
 };

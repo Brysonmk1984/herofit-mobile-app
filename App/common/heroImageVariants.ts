@@ -1,9 +1,9 @@
-import { UniqueImageSkin } from "./types";
+import { SkinLcUnderscoreName } from "./types";
 
 /*
   TIMBER TERROR
 */
-export function getTimberTerrorImage(skin: UniqueImageSkin | null) {
+export function getTimberTerrorImage(skin: SkinLcUnderscoreName | null) {
   switch (skin) {
     case `shadow_self`:
       return require("../../assets/images/heroes/timber_terror/shadow_timber_terror.webp");
@@ -25,7 +25,7 @@ export function getTimberTerrorImage(skin: UniqueImageSkin | null) {
 /*
   REPETE
 */
-export function getRepeteImage(skin: UniqueImageSkin | null) {
+export function getRepeteImage(skin: SkinLcUnderscoreName | null) {
   switch (skin) {
     case `shadow_self`:
       return require("../../assets/images/heroes/repete/shadow_repete.webp");
@@ -47,7 +47,7 @@ export function getRepeteImage(skin: UniqueImageSkin | null) {
 /*
   FILTRON FIVE
 */
-export function getFiltronFiveImage(skin: UniqueImageSkin | null) {
+export function getFiltronFiveImage(skin: SkinLcUnderscoreName | null) {
   switch (skin) {
     case `shadow_self`:
       return require("../../assets/images/heroes/filtron_five/shadow_filtron_five.webp");
@@ -69,7 +69,7 @@ export function getFiltronFiveImage(skin: UniqueImageSkin | null) {
 /*
   CHRONO GUY
 */
-export function getChronoGuyImage(skin: UniqueImageSkin | null) {
+export function getChronoGuyImage(skin: SkinLcUnderscoreName | null) {
   switch (skin) {
     case `shadow_self`:
       return require("../../assets/images/heroes/chrono_guy/shadow_chrono_guy.webp");
@@ -91,7 +91,7 @@ export function getChronoGuyImage(skin: UniqueImageSkin | null) {
 /*
   SOLAR CELESTE
 */
-export function getSolarCelesteImage(skin: UniqueImageSkin | null) {
+export function getSolarCelesteImage(skin: SkinLcUnderscoreName | null) {
   switch (skin) {
     case `shadow_self`:
       return require("../../assets/images/heroes/solar_celeste/shadow_solar_celeste.webp");
@@ -113,7 +113,7 @@ export function getSolarCelesteImage(skin: UniqueImageSkin | null) {
 /*
   WILHELM THE WILD
 */
-export function getWilhelmTheWildImage(skin: UniqueImageSkin | null) {
+export function getWilhelmTheWildImage(skin: SkinLcUnderscoreName | null) {
   switch (skin) {
     case `shadow_self`:
       return require("../../assets/images/heroes/wilhelm_the_wild/shadow_wilhelm_the_wild.webp");
@@ -135,7 +135,7 @@ export function getWilhelmTheWildImage(skin: UniqueImageSkin | null) {
 /*
   NATURAL NINJA
 */
-export function getNaturalNinjaImage(skin: UniqueImageSkin | null) {
+export function getNaturalNinjaImage(skin: SkinLcUnderscoreName | null) {
   switch (skin) {
     case `shadow_self`:
       return require("../../assets/images/heroes/natural_ninja/shadow_natural_ninja.webp");
@@ -157,7 +157,7 @@ export function getNaturalNinjaImage(skin: UniqueImageSkin | null) {
 /*
   EMPATH AURELIA
 */
-export function getEmpathAureliaImage(skin: UniqueImageSkin | null) {
+export function getEmpathAureliaImage(skin: SkinLcUnderscoreName | null) {
   switch (skin) {
     case `shadow_self`:
       return require("../../assets/images/heroes/empath_aurelia/shadow_empath_aurelia.webp");
@@ -179,7 +179,7 @@ export function getEmpathAureliaImage(skin: UniqueImageSkin | null) {
 /*
   BOULDER BRO
 */
-export function getBoulderBroImage(skin: UniqueImageSkin | null) {
+export function getBoulderBroImage(skin: SkinLcUnderscoreName | null) {
   switch (skin) {
     case `shadow_self`:
       return require("../../assets/images/heroes/boulder_bro/shadow_boulder_bro.webp");
@@ -201,7 +201,7 @@ export function getBoulderBroImage(skin: UniqueImageSkin | null) {
 /*
   COMPOST CREATURE
 */
-export function getCompostCreatureImage(skin: UniqueImageSkin | null) {
+export function getCompostCreatureImage(skin: SkinLcUnderscoreName | null) {
   switch (skin) {
     case `shadow_self`:
       return require("../../assets/images/heroes/compost_creature/shadow_compost_creature.webp");

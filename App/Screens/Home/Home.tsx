@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Button, View } from "native-base";
+import { Box, Button, View } from "native-base";
 import ScreenContainer from "../../Components/ScreenContainer/ScreenContainer";
 import debugErrors from "../../common/debugErrors";
 import { GlobalStateContext } from "../../store";
@@ -9,7 +9,7 @@ import { ChooseActivityEntry, SignupToSave, SignupFinished, ConfirmEmail, Feedba
 import Background from "./Components/Background";
 import BottomDrawer from "./Components/BottomDrawer/BottomDrawer";
 import { equippedPet, equippedSkin } from "../../common/helperFunctions";
-import { HeroImage } from "./Components/HeroImage/HeroImage";
+import { HeroImage } from "../../Components/HeroImage/HeroImage";
 import { TopHud } from "./Components/TopHud/TopHud";
 import { PetImage } from "./Components/PetImage";
 import { DrawerIndicator } from "../../Components/CustomComponents";
@@ -96,8 +96,12 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
       </View>
       {/* HERO & PET */}
       <View>
-        <HeroImage {...propsForHeroImage} />
-        <PetImage pet={equippedPet(state.hero?.equipped)} />
+        <Box position="absolute" bottom={100}>
+          <HeroImage {...propsForHeroImage} />
+        </Box>
+        <Box position="absolute" right={0} bottom={95}>
+          <PetImage pet={equippedPet(state.hero?.equipped)} />
+        </Box>
       </View>
 
       {/* BOTTOM CONSOLE */}

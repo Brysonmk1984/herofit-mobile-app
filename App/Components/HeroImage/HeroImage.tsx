@@ -1,19 +1,20 @@
 import React from "react";
 import { Box, Center, Image } from "native-base";
-import useHeroImage from "../../../../common/hooks/useHeroImage";
-import { CharacterName, CharacterAlias, HeroStatus, SkinName, Item } from "../../../../common/types";
+import useHeroImage from "../../common/hooks/useHeroImage";
+import { CharacterName, CharacterAlias, HeroStatus, SkinName, Item } from "../../common/types";
 import FloatingHeroImage from "./FloatingHeroImage";
 import TintImage from "./TintedHeroImage";
 
 interface HeroImageProps {
   character: CharacterName;
-  alias: CharacterAlias;
+  width?: number;
+  height?: number;
   status?: HeroStatus;
   skin?: Item;
   floating?: boolean;
 }
 
-export const HeroImage: React.FC<HeroImageProps> = ({ character, alias, skin, status, floating = false }) => {
+export const HeroImage: React.FC<HeroImageProps> = ({ character, width = 275, height = 275, skin, status, floating = false }) => {
   const skinName = skin?.name as SkinName;
   const { heroImage } = useHeroImage(character, skinName);
   const isTint = skinName?.includes("Tint") ?? false;
@@ -21,8 +22,8 @@ export const HeroImage: React.FC<HeroImageProps> = ({ character, alias, skin, st
   function _renderImage(heroImage: number, skinName: string, imageMod?: string | undefined) {
     return (
       <Center>
-        <Box w={275} h={275}>
-          {floating ? <FloatingHeroImage status={status}>{imageMod ? <TintImage heroImage={heroImage} skinName={skinName} imageMod={imageMod} /> : <Image position="absolute" bottom={100} source={heroImage} size={275} alt={skinName} />}</FloatingHeroImage> : imageMod ? <TintImage heroImage={heroImage} skinName={skinName} imageMod={imageMod} /> : <Image position="absolute" bottom={100} source={heroImage} size={275} alt={skinName} />}
+        <Box w={width} h={height}>
+          {floating ? <FloatingHeroImage status={status}>{imageMod ? <TintImage heroImage={heroImage} skinName={skinName} imageMod={imageMod} size={height} /> : <Image source={heroImage} size={height} alt={skinName} />}</FloatingHeroImage> : imageMod ? <TintImage heroImage={heroImage} skinName={skinName} imageMod={imageMod} size={height} /> : <Image source={heroImage} size={height} alt={skinName} />}
         </Box>
       </Center>
     );

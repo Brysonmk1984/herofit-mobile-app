@@ -1,8 +1,7 @@
 import React, { ReactChild, ReactElement } from "react";
 import { Animated } from "react-native";
-import { View } from "native-base";
-import useFloating from "../../../../common/hooks/useFloating";
-import { HeroStatus } from "../../../../common/types";
+import useFloating from "../../common/hooks/useFloating";
+import { HeroStatus } from "../../common/types";
 
 interface FloatingHeroImageProps {
   children: React.ReactChild;
