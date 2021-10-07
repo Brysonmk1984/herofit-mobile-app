@@ -264,16 +264,16 @@ interface HeroChoice {
 // Hero object received going into FinalizeHeroSelection from HeroDetails
 type SelectedHero = StartingElementalPower & { character: CharacterName };
 
-type SpiritFoes = "wraith" | "specter" | "apparition" | "banshee" | "poltergeist" | "phantasm" | "shade" | "phantom" | "shadow-self";
-type ElementalFoes = "gusty rascal" | "rock skipper" | "flame fiend" | "splash artist" | "wheezing jinn" | "granite golem" | "burning jinn" | "cyclonic siren" | "storming oni" | "hulking aggro crag" | "scorching archfiend" | "high priestess of the tides";
-type TitanFoes = "plaguebringer";
+type SpiritFoe = "Wraith" | "Specter" | "Apparition" | "Banshee" | "Poltergeist" | "Phantasm" | "Shade" | "Phantom" | "Shadow-Self";
+type ElementalFoe = "Gusty Rascal" | "Rock Skipper" | "Flame Fiend" | "Splash Artist" | "Wheezing Jinn" | "Granite Golem" | "Burning Jinn" | "Cyclonic Siren" | "Storming Oni" | "Hulking Aggro Crag" | "Scorching Archfiend" | "High Priestess of the Tides";
+type TitanFoe = "Plaguebringer";
 
-type FoeTypes = SpiritFoes | ElementalFoes | TitanFoes;
+type FoeType = SpiritFoe | ElementalFoe | TitanFoe;
 
 interface FoeClasses {
-  spirits: SpiritFoes[];
-  elementals: ElementalFoes[];
-  titans: TitanFoes[];
+  spirits: SpiritFoe[];
+  elementals: ElementalFoe[];
+  titans: TitanFoe[];
 }
 
 interface FoeAbility {
@@ -304,4 +304,4 @@ type UniqueImageSkin = "shadow_self" | "ascended_self" | "gale_force" | "fire_br
 type Skin = UniqueImageSkin | Tint;
 type SkinName = "Fire Tint" | "Earth Tint" | "Water Tint" | "Air Tint" | "Banshee Tint" | "Poltergeist Tint" | "Specter Tint" | "Wraith Tint" | "Phantom Tint" | "Phantasm Tint" | "Shade Tint" | "Apparition Tint" | "Shadow Self" | "Ascended Self" | "Gale Force" | "Fire Brand" | "Earth Shaker" | "Tide Caller";
 
-export { Action, AppDispatch, InitialAppState, AppAction, Store, User, UserStatus, Activity, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, HeroTemplate, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, Stat, PrimaryElements, AllElements, HeroChoice, CharacterName, CharacterAlias, FoeTypes, FoeClasses, Skin, SkinName, UniqueImageSkin, Tint, Foe };
+export { Action, AppDispatch, InitialAppState, AppAction, Store, User, UserStatus, Activity, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, HeroTemplate, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, Stat, PrimaryElements, AllElements, HeroChoice, CharacterName, CharacterAlias, FoeType, FoeClasses, Skin, SkinName, UniqueImageSkin, Tint, Foe };

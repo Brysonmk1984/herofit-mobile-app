@@ -7,6 +7,7 @@ import { ScreenContainer } from "../../Components/CustomComponents";
 import { HeroImage } from "../Home/Components/HeroImage/HeroImage";
 import { PetImage } from "../Home/Components/PetImage";
 import { equippedPet, equippedSkin } from "../../common/helperFunctions";
+import FoeImage from "../../Components/FoeImage";
 
 const AwaitingBattle: React.FC<MainDrawerProps<"AwaitingBattle">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -19,7 +20,7 @@ const AwaitingBattle: React.FC<MainDrawerProps<"AwaitingBattle">> = ({ navigatio
   // runBattleNow={runBattleNow}
 
   console.log("PARAMS!", route.params);
-
+  const { foe } = route.params;
   return (
     <ScreenContainer screenName={route.name}>
       <Box flex={1}>
@@ -27,7 +28,7 @@ const AwaitingBattle: React.FC<MainDrawerProps<"AwaitingBattle">> = ({ navigatio
         <PetImage pet={equippedPet(state.hero?.equipped)} />
       </Box>
       <Box flex={1}>
-        <Text>The Foe</Text>
+        <FoeImage foeType={foe.type} heroCharacterName={foe.type === "Shadow Self" ? state.hero.character : null} />
       </Box>
       <VStack w="100%" justifyContent="center" alignItems="center" position="absolute" top="50%">
         <Text fontSize={100} fontFamily="heading">

@@ -1,6 +1,6 @@
 import heroList from "./heroList.json";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ItemInstance, Item, FoeTypes, FoeClasses, HeroChoice, CharacterName, CharacterAlias, Skin, SkinName } from "./types";
+import { ItemInstance, Item, FoeType, FoeClasses, HeroChoice, CharacterName, CharacterAlias, Skin, SkinName } from "./types";
 import { getBoulderBroImage, getChronoGuyImage, getCompostCreatureImage, getEmpathAureliaImage, getFiltronFiveImage, getNaturalNinjaImage, getRepeteImage, getSolarCelesteImage, getTimberTerrorImage, getWilhelmTheWildImage } from "./heroImageVariants";
 
 function capitalize<T = string>(val: T) {
@@ -165,22 +165,22 @@ function getHeroAlias(character: CharacterName): CharacterAlias {
   return heroes.find(h => h.character === character)?.alias;
 }
 
-function determineFoeClass(type: FoeTypes) {
-  const foeClasses: FoeClasses = {
-    spirits: ["wraith", "specter", "apparition", "banshee", "poltergeist", "phantasm", "shade", "phantom", "shadow-self"],
-    elementals: ["gusty rascal", "rock skipper", "flame fiend", "splash artist", "wheezing jinn", "granite golem", "burning jinn", "cyclonic siren", "storming oni", "hulking aggro crag", "scorching archfiend", "high priestess of the tides"],
-    titans: ["plaguebringer"],
-  };
-  let parentClass = null;
-  for (let targetClass in foeClasses) {
-    const containedInClass = foeClasses[targetClass].includes(type);
-    if (containedInClass) {
-      parentClass = targetClass;
-      break;
-    }
-  }
-  return parentClass;
-}
+// function determineFoeClass(type: FoeType) {
+//   const foeClasses = {
+//     spirits: ["wraith", "specter", "apparition", "banshee", "poltergeist", "phantasm", "shade", "phantom", "shadow-self"],
+//     elementals: ["gusty rascal", "rock skipper", "flame fiend", "splash artist", "wheezing jinn", "granite golem", "burning jinn", "cyclonic siren", "storming oni", "hulking aggro crag", "scorching archfiend", "high priestess of the tides"],
+//     titans: ["plaguebringer"],
+//   };
+//   let parentClass = null;
+//   for (let targetClass in foeClasses) {
+//     const containedInClass = foeClasses[targetClass].includes(type);
+//     if (containedInClass) {
+//       parentClass = targetClass;
+//       break;
+//     }
+//   }
+//   return parentClass;
+// }
 
 function rankingSuffix(num: number) {
   const numStr = num.toString();
@@ -267,7 +267,7 @@ function _getBaseHeroImage(characterName: string): number {
   }
 }
 
-function getHeroImage(characterName: string, skin?: SkinName): number {
+function getHeroImage(characterName: CharacterName, skin?: SkinName): number {
   // No skin / costume; just return base character image
   if (!skin) {
     return _getBaseHeroImage(characterName);
@@ -299,6 +299,66 @@ function getHeroImage(characterName: string, skin?: SkinName): number {
       return getCompostCreatureImage(lcSkin);
     default:
       throw new Error("No matching image");
+  }
+}
+
+function getFoeImage(foeType: FoeType, heroCharacterName?: CharacterName): number {
+  const lcType = lowercaseUnderscore(foeType);
+
+  // If a Character Name is passed, it means the foe is the Shadow-Self
+  // "Shadow Self" is the name of the "Shadow-Self" skin
+  if (heroCharacterName) {
+    return getHeroImage(heroCharacterName, "Shadow Self");
+  }
+
+  switch (lcType) {
+    // Spirits
+    case "wraith":
+      return require("../../assets/images/foes/spirits/wraith.webp");
+    case "specter":
+      return require("../../assets/images/foes/spirits/specter.webp");
+    case "apparition":
+      return require("../../assets/images/foes/spirits/apparition.webp");
+    case "banshee":
+      return require("../../assets/images/foes/spirits/banshee.webp");
+    case "poltergeist":
+      return require("../../assets/images/foes/spirits/poltergeist.webp");
+    case "phantasm":
+      return require("../../assets/images/foes/spirits/phantasm.webp");
+    case "shade":
+      return require("../../assets/images/foes/spirits/shade.webp");
+    case "phantom":
+      return require("../../assets/images/foes/spirits/phantom.webp");
+    // Elementals
+    case "gusty_rascal":
+      return require("../../assets/images/foes/elementals/gusty_rascal.webp");
+    case "rock_skipper":
+      return require("../../assets/images/foes/elementals/rock_skipper.webp");
+    case "flame_fiend":
+      return require("../../assets/images/foes/elementals/flame_fiend.webp");
+    case "splash_artist":
+      return require("../../assets/images/foes/elementals/splash_artist.webp");
+    case "wheezing_jinn":
+      return require("../../assets/images/foes/elementals/wheezing_jinn.webp");
+    case "granite_golem":
+      return require("../../assets/images/foes/elementals/granite_golem.webp");
+    case "burning_jinn":
+      return require("../../assets/images/foes/elementals/burning_jinn.webp");
+    case "cyclonic_siren":
+      return require("../../assets/images/foes/elementals/cyclonic_siren.webp");
+    case "storming_oni":
+      return require("../../assets/images/foes/elementals/storming_oni.webp");
+    case "hulking_aggro_crag":
+      return require("../../assets/images/foes/elementals/hulking_aggro_crag.webp");
+    case "scorching_archfiend":
+      return require("../../assets/images/foes/elementals/scorching_archfiend.webp");
+    case "high_priestess_of_the_tides":
+      return require("../../assets/images/foes/elementals/high_priestess_of_the_tides.webp");
+    // Titans
+    case "plaguebringer":
+      return require("../../assets/images/foes/titans/plaguebringer.webp");
+    default:
+      throw new Error("No image by that foe type");
   }
 }
 
@@ -460,4 +520,4 @@ function determineDataSrcType(dataSrcId: string) {
   return "Manual";
 }
 
-export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, convertAorAn, getHeroAlias, determineFoeClass, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems, capitalize, getHeroImage, getPetImage, equippedSkin, equippedPet, equippedTitle, getColorFromClassName, getColorFromItemName, checkForMultipleItem, determineDataSrcType, roundNumberToTenthReturnNumber, roundNumberToThousandthReturnNumber };
+export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, convertAorAn, getHeroAlias, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems, capitalize, getHeroImage, getFoeImage, getPetImage, equippedSkin, equippedPet, equippedTitle, getColorFromClassName, getColorFromItemName, checkForMultipleItem, determineDataSrcType, roundNumberToTenthReturnNumber, roundNumberToThousandthReturnNumber };
