@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useWindowDimensions } from "react-native";
 import { View, Button, Box, useTheme } from "native-base";
 import RBSheet from "react-native-raw-bottom-sheet";
@@ -10,7 +10,8 @@ import useModal from "../../../../common/hooks/useModal";
 import { fetchUpcomingFoeAndRewards } from "../../../../api/battle";
 import useGlobalToast from "../../../../common/hooks/useGlobalToast";
 import debugErrors from "../../../../common/debugErrors";
-import { CharacterName, User } from "../../../../common/types";
+import { CharacterName, HeroStatus, User } from "../../../../common/types";
+import { Battle } from "../../../../common/types-battle";
 
 interface BottomDrawerProps {
   power: number;
@@ -28,9 +29,11 @@ interface BottomDrawerProps {
   heroId: number;
   heroCharacter: CharacterName;
   user: User;
+  latestBattle: Battle | null;
+  status: HeroStatus;
 }
 
-const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, qp, newActivitiesAvailable, goToBattle, heroId, heroCharacter, user }) => {
+const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, qp, newActivitiesAvailable, goToBattle, heroId, heroCharacter, user, latestBattle, status }) => {
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
   const bottomDrawerHeight = windowHeight / 2.75;
@@ -39,6 +42,8 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fir
   const navigation = useNavigation();
   const { openModal } = useModal();
   const { addToast } = useGlobalToast();
+  const [battleReportAvailable, setBattleReportAvailable] = useState(false);
+  const [battleButtonDisabled, setBattleButtonDisabled] = useState(false);
 
   async function handleFetchUpcomingBattle() {
     try {
@@ -49,6 +54,24 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fir
       return debugErrors(error, user);
     }
   }
+
+  function handleBattleReport() {
+    navigation.push("App", { screen: "BattleReport", params: { battleReport: latestBattle } });
+  }
+
+  useEffect(() => {
+    if (latestBattle && !latestBattle.seenReport) {
+      setBattleReportAvailable(true);
+      setBattleButtonDisabled(false);
+    } else {
+      setBattleReportAvailable(false);
+      if (status === "Knocked Out") {
+        setBattleButtonDisabled(true);
+      } else {
+        setBattleButtonDisabled(false);
+      }
+    }
+  }, [latestBattle]);
 
   return (
     <Box position="absolute" bottom={0}>
@@ -67,7 +90,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fir
             </Button>
           </Box>
           <Box w="50%" p={2}>
-            <Button _text={{ fontFamily: "heading", fontSize: 30 }} borderRadius={0} onPress={goToBattle ? handleFetchUpcomingBattle : () => openModal("GoToBattle")}>
+            <Button bgColor={battleReportAvailable ? "base.highlight" : "base.success"} disabled={battleButtonDisabled} _text={{ fontFamily: "heading", fontSize: 30, color: battleButtonDisabled ? "base.disabledText" : "base.white" }} borderRadius={0} onPress={latestBattle && !latestBattle.seenReport ? handleBattleReport : goToBattle ? handleFetchUpcomingBattle : () => openModal("GoToBattle")}>
               Battle
             </Button>
           </Box>

@@ -1,4 +1,6 @@
-type ActionType = "TOGGLE LOADING" | "SET EXISTING USER INIT DATA" | "SET ISSIGNEDIN" | "SET NEW USER" | "SET HERO" | "SET USER" | "RESET DEFAULTS" | "POST UPGRADE";
+import { Battle } from "./types-battle";
+
+type ActionType = "TOGGLE LOADING" | "SET EXISTING USER INIT DATA" | "SET ISSIGNEDIN" | "SET NEW USER" | "SET HERO" | "SET USER" | "RESET DEFAULTS" | "POST UPGRADE" | "SEEN BATTLE REPORT";
 
 interface ToggleLoadingAction {
   type: "TOGGLE LOADING";
@@ -39,9 +41,13 @@ interface PostUpgradeAction {
   type: "POST UPGRADE";
   payload: { hero: Hero; latestSavedActivities: Activity[]; latestSavedActivityDate: moment.Moment };
 }
+interface SeenBattleReportAction {
+  type: "SEEN BATTLE REPORT";
+  payload: { latestBattle: Battle };
+}
 
 // Same as ShoppingListAction in example
-type AppAction = ToggleLoadingAction | SetExistingUserInitDataAction | SetIsSignedInAction | SetUserStatusAction | SetHeroAction | SetUserAction | ResetDefaultsAction | AddModalAction | RemoveModalAction | PostUpgradeAction;
+type AppAction = ToggleLoadingAction | SetExistingUserInitDataAction | SetIsSignedInAction | SetUserStatusAction | SetHeroAction | SetUserAction | ResetDefaultsAction | AddModalAction | RemoveModalAction | PostUpgradeAction | SeenBattleReportAction;
 type AppDispatch = (action: AppAction) => void;
 
 type Payload = {
@@ -82,6 +88,7 @@ interface InitialAppState {
   hero: Hero | (HeroWithStats & DefaultHeroProperties) | null;
   latestSavedActivities: Activity[];
   latestSavedActivityDate: string | null;
+  latestBattle: Battle | null;
   modalQueue: string[];
 }
 
@@ -236,8 +243,8 @@ interface Effect {
 
 type Stat = "Power" | "Health" | "Armor" | "Recovery" | "Fire" | "Earth" | "Air" | "Water" | "Aether";
 type Extends<T, U extends T> = U;
-type PrimaryElements = Extends<Stat, "Fire" | "Earth" | "Air" | "Water">;
-type AllElements = Extends<Stat, "Fire" | "Earth" | "Air" | "Water" | "Aether">;
+type PrimaryElement = Extends<Stat, "Fire" | "Earth" | "Air" | "Water">;
+type EveryElement = Extends<Stat, "Fire" | "Earth" | "Air" | "Water" | "Aether">;
 interface StartingElementalPower {
   fire: number;
   earth: number;
@@ -304,5 +311,6 @@ type Tint = "fire_tint" | "earth_tint" | "water_tint" | "air_tint" | "banshee_ti
 type UniqueImageSkin = "shadow_self" | "ascended_self" | "gale_force" | "fire_brand" | "earth_shaker" | "tide_caller";
 type SkinLcUnderscoreName = UniqueImageSkin | Tint;
 type SkinName = "Fire Tint" | "Earth Tint" | "Water Tint" | "Air Tint" | "Banshee Tint" | "Poltergeist Tint" | "Specter Tint" | "Wraith Tint" | "Phantom Tint" | "Phantasm Tint" | "Shade Tint" | "Apparition Tint" | "Shadow Self" | "Ascended Self" | "Gale Force" | "Fire Brand" | "Earth Shaker" | "Tide Caller";
+type ZodiacSign = "Capricorn" | "Aquarius" | "Pisces" | "Aries" | "Taurus" | "Gemini" | "Cancer" | "Leo" | "Virgo" | "Libra" | "Scorpio" | "Sagittarius";
 
-export { Action, AppDispatch, InitialAppState, AppAction, Store, User, UserStatus, Activity, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, Stat, PrimaryElements, AllElements, HeroChoice, CharacterName, CharacterAlias, FoeType, FoeClasses, SkinLcUnderscoreName, SkinName, Tint, Foe };
+export { Action, AppDispatch, InitialAppState, AppAction, Store, User, UserStatus, Activity, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, Stat, PrimaryElement, EveryElement, HeroChoice, CharacterName, CharacterAlias, FoeType, FoeClasses, SkinLcUnderscoreName, SkinName, Tint, Foe, ZodiacSign };

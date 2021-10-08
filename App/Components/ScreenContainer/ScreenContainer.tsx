@@ -35,8 +35,11 @@ function determineImageBackground({ type, name }: { type: string; name: string }
         return require("../../../assets/images/backgrounds/splash-background-day.webp");
       case "Loading":
         return require("../../../assets/images/backgrounds/splash-background-night.webp");
+      case "BattleReport":
+      case "BattleReportDetail":
+        return require("../../../assets/images/backgrounds/battle-report-background.webp");
       default:
-        return require("../../../assets/images/backgrounds/repete-background.webp");
+        return require("../../../assets/images/backgrounds/hero-selection-background.webp");
     }
   } else if ((type = "hero")) {
     switch (name) {

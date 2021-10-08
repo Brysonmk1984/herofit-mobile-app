@@ -7,7 +7,7 @@ import { AuthStackProps } from "../../common/types-navigator";
 import { GlobalStateContext } from "../../store";
 import RBSheet from "react-native-raw-bottom-sheet";
 import activityList from "../../common/activityList.json";
-import { PrimaryElements, Stat } from "../../common/types";
+import { PrimaryElement, Stat } from "../../common/types";
 import DateTimeDuration from "./DateTimeDuration";
 import PressableInput from "../../Components/PressableInput";
 import SpeedModal from "./SpeedModal";
@@ -66,7 +66,7 @@ const ManualActivity = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
   interface ActivityType {
     type: string;
     alias: string;
-    element: PrimaryElements;
+    element: PrimaryElement;
     minutesPerPoint: number;
   }
 
