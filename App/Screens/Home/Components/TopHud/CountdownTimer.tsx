@@ -5,9 +5,10 @@ import { View, Text } from "native-base";
 interface CountdownTimerProps {
   type: "Knocked Out" | "Battle";
   hideType?: boolean;
+  fontSize?: number;
 }
 
-export const CountdownTimer: React.FC<CountdownTimerProps> = ({ type, hideType = false }) => {
+export const CountdownTimer: React.FC<CountdownTimerProps> = ({ type, hideType = false, fontSize = 20 }) => {
   const [hours, setHours] = useState<string | number>(0);
   const [minutes, setMinutes] = useState<string | number>(0);
   const [seconds, setSeconds] = useState<string | number>(0);
@@ -55,35 +56,35 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({ type, hideType =
       {type === "Battle" ? (
         <View flexDirection="row" mt={1}>
           {!hideType && (
-            <Text mr={2} fontSize={20} fontFamily="heading" color="base.white" opacity={0.6}>
+            <Text mr={2} fontSize={fontSize} fontFamily="heading" color="base.white" opacity={0.6}>
               Battle:
             </Text>
           )}
-          <Text fontSize={20} fontFamily="heading" color="base.warning">
+          <Text fontSize={fontSize} fontFamily="heading" color="base.warning">
             {" "}
             {hours}:
           </Text>
-          <Text fontSize={20} fontFamily="heading" color="base.warning">
+          <Text fontSize={fontSize} fontFamily="heading" color="base.warning">
             {minutes}:
           </Text>
-          <Text fontSize={20} fontFamily="heading" color="base.warning">
+          <Text fontSize={fontSize} fontFamily="heading" color="base.warning">
             {seconds}
           </Text>
         </View>
       ) : type === "Knocked Out" ? (
         <View flexDirection="row" mt={2}>
           {!hideType && (
-            <Text mr={2} fontFamily="heading" color="base.white" opacity={0.6}>
+            <Text fontSize={fontSize} mr={2} fontFamily="heading" color="base.white" opacity={0.6}>
               Knocked Out:
             </Text>
           )}
-          <Text color="base.white" fontFamily="heading">
+          <Text fontSize={fontSize} color="base.white" fontFamily="heading">
             {hours}:
           </Text>
-          <Text color="base.white" fontFamily="heading">
+          <Text fontSize={fontSize} color="base.white" fontFamily="heading">
             {minutes}:
           </Text>
-          <Text color="base.white" fontFamily="heading">
+          <Text fontSize={fontSize} color="base.white" fontFamily="heading">
             {seconds}
           </Text>
         </View>

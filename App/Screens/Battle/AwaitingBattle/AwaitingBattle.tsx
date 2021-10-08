@@ -7,8 +7,8 @@ import HeroSection from "./HeroSection";
 import FoeSection from "./FoeSection";
 
 const AwaitingBattle: React.FC<MainDrawerProps<"AwaitingBattle">> = ({ navigation, route }) => {
-  const { height } = useWindowDimensions();
-  const { foe, rewards } = route.params;
+  const { height, width } = useWindowDimensions();
+  const { foe, rewards, character } = route.params;
 
   // TODO:
   // On item click, open Item modal
@@ -16,9 +16,9 @@ const AwaitingBattle: React.FC<MainDrawerProps<"AwaitingBattle">> = ({ navigatio
 
   return (
     <ScreenContainer screenName={route.name}>
-      <HeroSection rewards={rewards} height={height} />
-      <FoeSection foe={foe} height={height} />
-      <VsSection height={height} />
+      <HeroSection rewards={rewards} height={height} width={width} />
+      <FoeSection foe={foe} height={height} width={width} character={character} />
+      <VsSection height={height} navigation={navigation} />
     </ScreenContainer>
   );
 };

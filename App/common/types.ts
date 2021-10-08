@@ -295,7 +295,7 @@ interface Foe {
   name: string;
   power: number;
   ptBounty: number;
-  type: string;
+  type: FoeType;
   water: number;
   xpBounty: number;
 }

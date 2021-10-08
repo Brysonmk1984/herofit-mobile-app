@@ -29,6 +29,7 @@ type MainDrawerParamList = {
   AwaitingBattle: {
     foe: Foe;
     rewards: Item[] | null;
+    character: CharacterName;
   };
   BattleReport: undefined;
   BattleReportDetail: undefined;

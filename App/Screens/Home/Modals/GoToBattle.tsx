@@ -3,7 +3,7 @@ import { Heading, Text, Box, View, Pressable } from "native-base";
 import { CharacterModal } from "../../../Components/ModalTemplates/ModalTemplates";
 import { ActionHeader, BodyContent } from "../../../Components/ModalTemplates/BasicModal/Content";
 import { GlobalStateContext } from "../../../store";
-import { Foe, Hero, Item, UserStatus } from "../../../common/types";
+import { CharacterName, Foe, Hero, Item, UserStatus } from "../../../common/types";
 import useModal from "../../../common/hooks/useModal";
 import LoadingInPane from "../../../Components/LoadingInPane";
 import useGlobalToast from "../../../common/hooks/useGlobalToast";
@@ -13,6 +13,7 @@ import { sendHeroToBattle } from "../../../api/battle";
 interface GoToParams {
   foe: Foe;
   rewards: Item[] | null;
+  character: CharacterName;
 }
 interface GoToBattleProps {
   id: string;
@@ -70,7 +71,7 @@ export const GoToBattle: React.FC<GoToBattleProps> = ({ id, goTo }) => {
         setLoading(false);
         setTimeout(() => {
           closeModal("GoToBattle");
-          goTo("App", { screen: "AwaitingBattle", params: { foe, rewards } });
+          goTo("App", { screen: "AwaitingBattle", params: { foe, rewards, character: hero.character } });
         }, 500);
       } catch (error) {
         error.message = "Unable to go to Battle, please try again later.";

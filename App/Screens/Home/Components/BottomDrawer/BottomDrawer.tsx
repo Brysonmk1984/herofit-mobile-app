@@ -10,7 +10,7 @@ import useModal from "../../../../common/hooks/useModal";
 import { fetchUpcomingFoeAndRewards } from "../../../../api/battle";
 import useGlobalToast from "../../../../common/hooks/useGlobalToast";
 import debugErrors from "../../../../common/debugErrors";
-import { User } from "../../../../common/types";
+import { CharacterName, User } from "../../../../common/types";
 
 interface BottomDrawerProps {
   power: number;
@@ -26,10 +26,11 @@ interface BottomDrawerProps {
   newActivitiesAvailable: boolean;
   goToBattle: boolean;
   heroId: number;
+  heroCharacter: CharacterName;
   user: User;
 }
 
-const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, qp, newActivitiesAvailable, goToBattle, heroId, user }) => {
+const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, qp, newActivitiesAvailable, goToBattle, heroId, heroCharacter, user }) => {
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
   const bottomDrawerHeight = windowHeight / 2.75;
@@ -42,7 +43,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fir
   async function handleFetchUpcomingBattle() {
     try {
       const { foe, rewards } = await fetchUpcomingFoeAndRewards({ avatarID: heroId });
-      navigation.push("App", { screen: "AwaitingBattle", params: { foe, rewards } });
+      navigation.push("App", { screen: "AwaitingBattle", params: { foe, rewards, character: heroCharacter } });
     } catch (error) {
       addToast("error", `${error.status}: ${error.message}`);
       return debugErrors(error, user);

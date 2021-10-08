@@ -4,8 +4,8 @@ import { Dimensions, Animated } from "react-native";
 const useFloating = (float: boolean) => {
   const [floating, setFloating] = useState(float);
   const deviceHeight = Dimensions.get("window").height;
-  const downHeight = deviceHeight * 0.6;
-  const upHeight = deviceHeight * 0.7;
+  const downHeight = deviceHeight * 1;
+  const upHeight = deviceHeight * 1.1;
   let floatAnimation = useRef(new Animated.Value(deviceHeight)).current;
 
   function floatDown() {

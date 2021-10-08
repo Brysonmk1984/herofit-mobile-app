@@ -12,21 +12,21 @@ function capitalize<T = string>(val: T) {
 
 const lowercaseUnderscore = function <T = string>(val: T) {
   if (typeof val === "string") {
-    return val.replace(/\s+/g, "_").toLowerCase();
+    return val.replace(/(\s|-)+/g, "_").toLowerCase();
   }
   throw new Error(`${val} is not a String; can't transform`);
 };
 
 const lowercaseDash = function <T = string>(val: T) {
   if (typeof val === "string") {
-    return val.replace(/\s+/g, "-").toLowerCase();
+    return val.replace(/(\s|_)+/g, "-").toLowerCase();
   }
   throw new Error(`${val} is not a String; can't transform`);
 };
 
 const lowercaseSpace = function <T = string>(val: T) {
   if (typeof val === "string") {
-    return val.replace(/\s+/g, "-").toLowerCase();
+    return val.replace(/(\s|_|-)+/g, " ").toLowerCase();
   }
   throw new Error(`${val} is not a String; can't transform`);
 };
@@ -34,7 +34,7 @@ const lowercaseSpace = function <T = string>(val: T) {
 const titlecaseUnderscore = function <T = string>(val: T) {
   if (typeof val === "string") {
     const uppercaseVal = val[0].toUpperCase() + val.substring(1);
-    return uppercaseVal.replace(/\s+/g, "_");
+    return uppercaseVal.replace(/(\s|-)+/g, "_");
   }
   throw new Error(`${val} is not a String; can't transform`);
 };
