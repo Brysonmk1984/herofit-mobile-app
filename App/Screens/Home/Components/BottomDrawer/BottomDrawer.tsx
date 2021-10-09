@@ -12,6 +12,7 @@ import useGlobalToast from "../../../../common/hooks/useGlobalToast";
 import debugErrors from "../../../../common/debugErrors";
 import { CharacterName, HeroStatus, User } from "../../../../common/types";
 import { Battle } from "../../../../common/types-battle";
+import { LinearGradient } from "expo-linear-gradient";
 
 interface BottomDrawerProps {
   power: number;
@@ -59,22 +60,28 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fir
     navigation.push("App", { screen: "BattleReport", params: { battleReport: latestBattle } });
   }
 
+  // useEffect(() => {
+  //   if (latestBattle && !latestBattle.seenReport) {
+  //     setBattleReportAvailable(true);
+  //     setBattleButtonDisabled(false);
+  //   } else {
+  //     setBattleReportAvailable(false);
+  //     if (status === "Knocked Out") {
+  //       setBattleButtonDisabled(true);
+  //     } else {
+  //       setBattleButtonDisabled(false);
+  //     }
+  //   }
+  // }, [latestBattle]);
+
+  // TESTING
   useEffect(() => {
-    if (latestBattle && !latestBattle.seenReport) {
-      setBattleReportAvailable(true);
-      setBattleButtonDisabled(false);
-    } else {
-      setBattleReportAvailable(false);
-      if (status === "Knocked Out") {
-        setBattleButtonDisabled(true);
-      } else {
-        setBattleButtonDisabled(false);
-      }
-    }
-  }, [latestBattle]);
+    setBattleReportAvailable(true);
+  }, []);
 
   return (
     <Box position="absolute" bottom={0}>
+      <LinearGradient colors={["transparent", "#FFFFF0"]} style={{ height: windowHeight * 0.22, width: "100%", position: "absolute", bottom: 0 }} />
       {/* PT & QP */}
       <PtAndQpMenu photonTokens={photonTokens} qp={qp} windowWidth={windowWidth} />
       {/* ACTIVITY & BATTLE */}
@@ -90,12 +97,17 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fir
             </Button>
           </Box>
           <Box w="50%" p={2}>
-            <Button bgColor={battleReportAvailable ? "base.highlight" : "base.success"} disabled={battleButtonDisabled} _text={{ fontFamily: "heading", fontSize: 30, color: battleButtonDisabled ? "base.disabledText" : "base.white" }} borderRadius={0} onPress={latestBattle && !latestBattle.seenReport ? handleBattleReport : goToBattle ? handleFetchUpcomingBattle : () => openModal("GoToBattle")}>
-              Battle
+            {/* <Button bgColor={battleReportAvailable ? "base.highlight" : "base.success"} disabled={battleButtonDisabled} _text={{ fontFamily: "heading", fontSize: 30, color: battleButtonDisabled ? "base.disabledText" : "base.white" }} borderRadius={0} onPress={latestBattle && !latestBattle.seenReport ? handleBattleReport : goToBattle ? handleFetchUpcomingBattle : () => openModal("GoToBattle")}>
+              {battleReportAvailable ? "Report" : "Battle"}
+            </Button> */}
+
+            <Button borderRadius={0} onPress={handleBattleReport}>
+              {battleReportAvailable ? "Report" : "Battle"}
             </Button>
           </Box>
         </Box>
       </Box>
+
       {/* HIDDEN MENU */}
       <View flex={1} justifyContent="center" alignItems="center" backgroundColor="#000">
         <RBSheet

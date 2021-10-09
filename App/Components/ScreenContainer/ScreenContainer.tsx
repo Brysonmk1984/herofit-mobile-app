@@ -8,6 +8,7 @@ interface ScreenContainerProps {
   children: React.ReactNode;
   screenName?: string;
   bg?: string | React.ReactElement;
+  bgColor?: string;
   hero?: string;
 }
 
@@ -37,7 +38,7 @@ function determineImageBackground({ type, name }: { type: string; name: string }
         return require("../../../assets/images/backgrounds/splash-background-night.webp");
       case "BattleReport":
       case "BattleReportDetail":
-        return require("../../../assets/images/backgrounds/battle-report-background.webp");
+        return;
       default:
         return require("../../../assets/images/backgrounds/hero-selection-background.webp");
     }
@@ -69,7 +70,7 @@ function determineImageBackground({ type, name }: { type: string; name: string }
   }
 }
 
-export default function ScreenContainer({ children, screenName, bg, hero }: ScreenContainerProps) {
+export default function ScreenContainer({ children, screenName, bg, bgColor, hero }: ScreenContainerProps) {
   let image = determineImageBackground({ type: "art", name: screenName });
 
   if (hero) {
@@ -77,7 +78,7 @@ export default function ScreenContainer({ children, screenName, bg, hero }: Scre
   }
 
   return (
-    <View style={[styles.wrapper, styles.absolute]}>
+    <View style={[styles.wrapper, styles.absolute, bgColor ? { backgroundColor: bgColor } : null]}>
       <SafeAreaView style={styles.container}>
         <Flex flex={1} justify="space-between" zIndex={10} p={0} w={"100%"} mx="auto">
           {typeof bg === "object" && bg}

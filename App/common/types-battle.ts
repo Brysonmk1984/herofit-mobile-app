@@ -37,6 +37,28 @@ interface BattleRound {
   physicalReduction: number;
   turn: number;
 }
+
+interface BattleFoe {
+  ability: {
+    effect: string;
+    name: string;
+    type: "prebattle" | "postbattle";
+  };
+  air: number;
+  armor: number;
+  class: "Elementals" | "Spirits" | "Titans";
+  difficulty: number;
+  earth: number;
+  fire: number;
+  health: number;
+  name: string;
+  power: number;
+  ptBounty: number;
+  type: FoeType;
+  water: number;
+  xpBounty: number;
+}
+
 interface BattleBRA {
   activityXP: number;
   aether: number;
@@ -63,46 +85,6 @@ interface BattleBRA {
   statusFade: number;
   water: number;
 }
-interface BattleBRF {
-  ability: {
-    effect: string;
-    name: string;
-    type: "prebattle" | "postbattle";
-  };
-  air: number;
-  armor: number;
-  class: "Elementals" | "Spirits" | "Titans";
-  difficulty: number;
-  earth: number;
-  fire: number;
-  health: number;
-  name: string;
-  power: number;
-  ptBounty: number;
-  type: FoeType;
-  water: number;
-  xpBounty: number;
-}
-interface BattleFoe {
-  ability: {
-    effect: string;
-    name: string;
-    type: "prebattle" | "postbattle";
-  };
-  air: number;
-  armor: number;
-  class: "Elementals" | "Spirits" | "Titans";
-  difficulty: number;
-  earth: number;
-  fire: number;
-  health: number;
-  name: string;
-  power: number;
-  ptBounty: number;
-  type: FoeType;
-  water: number;
-  xpBounty: number;
-}
 
 interface Battle {
   aElmDamage: BattleElementStats;
@@ -115,7 +97,7 @@ interface Battle {
   avatarID: number;
   avatarName: string;
   bra: BattleBRA;
-  brf: BattleBRF;
+  brf: BattleFoe;
   createdAt: Date;
   effects: string[] | null;
   fElmDamage: BattleElementStats;
@@ -125,6 +107,7 @@ interface Battle {
   fPhyReduction: number;
   foe: BattleFoe;
   foeType: FoeType;
+  itemsAcquired: Item[] | undefined;
   id: number;
   outcome: BattleOutcome;
   owner: string;
@@ -141,4 +124,4 @@ interface Battle {
   xpGain: number;
 }
 
-export { Battle, BattleFoe, BattleBRF, BattleBRA, BattleRound, BattleElementalProcs, BattleElementStats, BattleOutcome };
+export { Battle, BattleFoe, BattleBRA, BattleRound, BattleElementalProcs, BattleElementStats, BattleOutcome };

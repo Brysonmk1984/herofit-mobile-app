@@ -8,7 +8,7 @@ interface ToggleLoadingAction {
 }
 interface SetExistingUserInitDataAction {
   type: "SET EXISTING USER INIT DATA";
-  payload: { user: User; hero: Hero; latestSavedActivities: Activity[]; latestSavedActivityDate: string | null; gameItems: Item; latestBattle: any; isSignedIn: boolean };
+  payload: { user: User; hero: Hero; latestSavedActivities: Activity[]; latestSavedActivityDate: string | null; gameItems: Item; latestBattle: any; isSignedIn: boolean; allGameItems: Item[] };
 }
 interface SetIsSignedInAction {
   type: "SET ISSIGNEDIN";
@@ -90,6 +90,7 @@ interface InitialAppState {
   latestSavedActivityDate: string | null;
   latestBattle: Battle | null;
   modalQueue: string[];
+  allGameItems: Item[];
 }
 
 interface Store {

@@ -22,8 +22,8 @@ import Feedback from "./Screens/Feedback/Feedback";
 import Settings from "./Screens/Settings";
 import ManualActivity from "./Screens/ManualActivitity/ManualActivity";
 import AwaitingBattle from "./Screens/Battle/AwaitingBattle/AwaitingBattle";
-import BattleReport from "./Screens/Battle/BattleReport";
-import BattleReportDetail from "./Screens/Battle/BattleReportDetail";
+import BattleReport from "./Screens/Battle/BattleReport/BattleReport";
+import BattleReportDetail from "./Screens/Battle/BattleReportDetail/BattleReportDetail";
 
 // MULTI-USE SCREENS
 import Loading from "./Screens/Loading/Loading";

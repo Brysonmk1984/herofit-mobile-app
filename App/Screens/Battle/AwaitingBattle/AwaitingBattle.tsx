@@ -17,7 +17,7 @@ const AwaitingBattle: React.FC<MainDrawerProps<"AwaitingBattle">> = ({ navigatio
   useEffect(() => {
     const screenPop = setTimeout(() => {
       navigation.pop();
-    }, 3000);
+    }, 6000);
 
     return () => clearTimeout(screenPop);
   }, []);

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getHeroImage } from "../helperFunctions";
-import { SkinName } from "../types";
+import { CharacterName, SkinName } from "../types";
 
-const useHeroImage = (character: string, skin?: SkinName): { heroImage: number } => {
+const useHeroImage = (character: CharacterName, skin?: SkinName): { heroImage: number } => {
   // CHARACTER WITH COSTUME - EITHER TINT OR NEW IMAGE
   // If no skin, base skin is returned
   const [costumeImage, setCostumeImage] = useState(getHeroImage(character, skin));
