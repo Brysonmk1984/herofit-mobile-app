@@ -6,7 +6,7 @@ import { ScreenContainer } from "../../../Components/CustomComponents";
 import { updateBattleReportSeen } from "../../../api/battle";
 import { GlobalStateContext } from "../../../store";
 import OutcomeSection from "./OutcomeSection";
-import { BattleFoe, BattleOutcome } from "../../../common/types-battle";
+import { BattleDetailOnly, BattleFoe, BattleOutcome } from "../../../common/types-battle";
 import { Hero } from "../../../common/types";
 import TopSection from "./TopSection";
 import BottomSection from "./BottomSection";
@@ -60,6 +60,20 @@ const BattleReport: React.FC<MainDrawerProps<"BattleReport">> = ({ navigation, r
     }
   }
 
+  function handleNavigateToDetails(br: BattleDetailOnly) {
+    const battleReport = (({ scenario, roundBreakdown, avatar, bra, foe, brf, foeType, effects, updatedAt, seasonalBonusElement }): BattleDetailOnly => ({ scenario, roundBreakdown, avatar, bra, foe, brf, foeType, effects, updatedAt, seasonalBonusElement }))(br);
+
+    navigation.push("App", { screen: "BattleReportDetail", params: { battleReport } });
+  }
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      handleNavigateToDetails(route.params.battleReport);
+    }, 6000);
+
+    return () => clearTimeout(timeout);
+  }, []);
+
   //DISABLED FOR TESTING
   // useEffect(() => {
   //   updateBattleReportSeen({ id });
@@ -88,7 +102,7 @@ const BattleReport: React.FC<MainDrawerProps<"BattleReport">> = ({ navigation, r
         <>
           <TopSection height={height} {...specificProps(top, outcome, ptGain, xpGain, itemsAcquired)} />
           <BottomSection height={height} {...specificProps(bottom, outcome, ptGain, xpGain, itemsAcquired)} />
-          <OutcomeSection height={height} push={() => navigation.push("BattleReportDetail")} top={top} bottom={bottom} outcome={outcome} endRound={legacyBattle ? null : roundBreakdown.length} legacyBattle={legacyBattle} />
+          <OutcomeSection height={height} push={() => handleNavigateToDetails(route.params.battleReport)} top={top} bottom={bottom} outcome={outcome} endRound={legacyBattle ? null : roundBreakdown.length} legacyBattle={legacyBattle} />
         </>
       ) : null}
       <ImageBackground style={styles.backgroundImage} source={backgroundImage} resizeMode="stretch" opacity={0.6} />

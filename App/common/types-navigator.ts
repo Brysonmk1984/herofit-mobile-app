@@ -1,7 +1,7 @@
 import { NavigatorScreenParams, RouteProp, CompositeScreenProps } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { HeroChoice, Hero, CharacterName, StartingElementalPower, CharacterAlias, SelectedHero, HeroWithStats, DefaultHeroProperties, UserStatus, Activity, Foe, Item } from "./types";
-import { Battle } from "./types-battle";
+import { Battle, BattleDetailOnly } from "./types-battle";
 
 /*
 REACT NAVIGATOR TYPES
@@ -35,7 +35,9 @@ type MainDrawerParamList = {
   BattleReport: {
     battleReport: Battle | null;
   };
-  BattleReportDetail: undefined;
+  BattleReportDetail: {
+    battleReport: BattleDetailOnly;
+  };
 };
 
 type AuthStackParamList = {

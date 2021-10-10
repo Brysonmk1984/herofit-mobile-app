@@ -87,11 +87,6 @@ interface BattleBRA {
 }
 
 interface Battle {
-  aElmDamage: BattleElementStats;
-  aElmReduction: BattleElementStats;
-  aHealthRemaining: number;
-  aPhyDamage: number;
-  aPhyReduction: number;
   aStatus: HeroStatus;
   avatar: Hero;
   avatarID: number;
@@ -100,11 +95,6 @@ interface Battle {
   brf: BattleFoe;
   createdAt: Date;
   effects: string[] | null;
-  fElmDamage: BattleElementStats;
-  fElmReduction: BattleElementStats;
-  fHealthRemaining: number;
-  fPhyDamage: number;
-  fPhyReduction: number;
   foe: BattleFoe;
   foeType: FoeType;
   itemsAcquired: Item[] | undefined;
@@ -124,4 +114,20 @@ interface Battle {
   xpGain: number;
 }
 
-export { Battle, BattleFoe, BattleBRA, BattleRound, BattleElementalProcs, BattleElementStats, BattleOutcome };
+interface BattleDetailOnly {
+  avatar: Hero;
+  bra: BattleBRA;
+  brf: BattleFoe;
+  effects: string[] | null;
+  foe: BattleFoe;
+  foeType: FoeType;
+  roundBreakdown: BattleRound[];
+  scenario: number;
+  seasonalBonusElement: {
+    element: PrimaryElement;
+    sign: ZodiacSign;
+  };
+  updatedAt: Date;
+}
+
+export { Battle, BattleDetailOnly, BattleFoe, BattleBRA, BattleRound, BattleElementalProcs, BattleElementStats, BattleOutcome };

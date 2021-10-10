@@ -9,7 +9,7 @@ import { rankingSuffix } from "../../../common/helperFunctions";
 
 interface OutcomeSectionProps {
   height: number;
-  push: (count?: number) => void;
+  push: () => void;
   top: Hero | BattleFoe;
   bottom: Hero | BattleFoe;
   outcome: BattleOutcome;
@@ -18,7 +18,7 @@ interface OutcomeSectionProps {
 }
 
 const OutcomeSection: React.FC<OutcomeSectionProps> = ({ height, push, top, bottom, outcome, endRound, legacyBattle = false }) => {
-  const vsColors = ["transparent", "#ffffff", "transparent"];
+  const gradient = ["transparent", "#ffffff", "transparent"];
   const topNameSize = determineNameSize(top.name.length);
   const bottomNameSize = determineNameSize(bottom.name.length);
 
@@ -90,8 +90,8 @@ const OutcomeSection: React.FC<OutcomeSectionProps> = ({ height, push, top, bott
 
   return (
     <VStack zIndex={100} h={height * 0.45} w="100%" justifyContent="center" alignItems="center" position="absolute" top={height * 0.26}>
-      <LinearGradient colors={vsColors} style={styles.vsGradient} alignItems="center" />
-      <Pressable onPress={() => push()}>
+      <LinearGradient colors={gradient} style={styles.vsGradient} alignItems="center" />
+      <Pressable onPress={push}>
         <Box justifyContent="center" alignItems="center">
           {renderHeadline()}
         </Box>

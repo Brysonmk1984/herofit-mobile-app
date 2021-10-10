@@ -50,10 +50,15 @@ function useStravaConnect() {
   const [request, response, promptAsync] = AuthSession.useAuthRequest({ clientId, scopes: ["activity:read_all"], redirectUri: redirectUri || `${STRAVA_REDIRECT_URI}` }, stravaEndpoints);
 
   async function getStravaCredentials() {
-    const { clientId, redirectUri, clientSecret } = await getStravaClientCredentials();
-    setClientId(clientId);
-    setRedirectUri(redirectUri);
-    setClientSecret(clientSecret);
+    try {
+      const { clientId, redirectUri, clientSecret } = await getStravaClientCredentials();
+      setClientId(clientId);
+      setRedirectUri(redirectUri);
+      setClientSecret(clientSecret);
+    } catch (error) {
+      debugErrors(error);
+      throw error;
+    }
   }
 
   // When receiving an incoming user back from Strava redirect
