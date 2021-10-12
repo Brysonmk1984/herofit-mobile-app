@@ -121,6 +121,7 @@ interface BattleDetailOnly {
   effects: string[] | null;
   foe: BattleFoe;
   foeType: FoeType;
+  outcome: BattleOutcome;
   roundBreakdown: BattleRound[];
   scenario: number;
   seasonalBonusElement: {

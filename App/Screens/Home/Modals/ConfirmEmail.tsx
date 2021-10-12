@@ -76,9 +76,11 @@ const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
     //   setShowChecklist(false);
     // }, 4000);
     // Timeout is only to prevent the user from clicking the action button right away without checking email
-    setTimeout(() => {
+    const disableButtonTimeout = setTimeout(() => {
       setDisableButton(false);
     }, 8000);
+
+    return clearTimeout(disableButtonTimeout);
   }, []);
 
   return (

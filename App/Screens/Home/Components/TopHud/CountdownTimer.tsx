@@ -32,7 +32,7 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({ type, hideType =
       interval = 1000,
       duration = moment.duration(diffTime * 1000, "milliseconds");
 
-    setInterval(() => {
+    const countdownInterval = setInterval(() => {
       duration = moment.duration(duration.asMilliseconds() - interval, "milliseconds");
       let h = moment.duration(duration).hours().toString(),
         m = moment.duration(duration).minutes().toString(),
@@ -48,7 +48,7 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({ type, hideType =
       setSeconds(s);
     }, interval);
 
-    return () => clearInterval(interval);
+    return () => clearInterval(countdownInterval);
   }, []);
 
   return (

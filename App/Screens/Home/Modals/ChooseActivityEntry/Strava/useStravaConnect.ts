@@ -122,6 +122,9 @@ function useStravaConnect() {
         }
       })();
     }
+
+    // TODO: Figure out how to write cleanup function for this
+    //return () => ()
   }, [redirectData]);
 
   return {

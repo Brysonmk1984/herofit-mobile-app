@@ -51,6 +51,12 @@ const FoeSection: React.FC<FoeSectionProps> = ({ height: deviceHeight, width: de
         <Text color="primary.800" mt={-8} fontSize={26} fontFamily="heading">
           {foe.type}
         </Text>
+        <Text mt={-8} fontSize={16} fontFamily="heading">
+          {foe.ability?.name}
+          <Text color="primary.800" fontSize={16}>
+            {foe.ability?.effect}
+          </Text>
+        </Text>
       </VStack>
     </Box>
   );

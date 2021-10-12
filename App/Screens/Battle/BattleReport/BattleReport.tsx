@@ -61,9 +61,9 @@ const BattleReport: React.FC<MainDrawerProps<"BattleReport">> = ({ navigation, r
   }
 
   function handleNavigateToDetails(br: BattleDetailOnly) {
-    const battleReport = (({ scenario, roundBreakdown, avatar, bra, foe, brf, foeType, effects, updatedAt, seasonalBonusElement }): BattleDetailOnly => ({ scenario, roundBreakdown, avatar, bra, foe, brf, foeType, effects, updatedAt, seasonalBonusElement }))(br);
+    const battleReport = (({ outcome, scenario, roundBreakdown, avatar, bra, foe, brf, foeType, effects, updatedAt, seasonalBonusElement }): BattleDetailOnly => ({ outcome, scenario, roundBreakdown, avatar, bra, foe, brf, foeType, effects, updatedAt, seasonalBonusElement }))(br);
 
-    navigation.push("App", { screen: "BattleReportDetail", params: { battleReport } });
+    navigation.push("App", { screen: "BattleReportDetail", params: { battleReport, push: navigation.push("App") } });
   }
 
   useEffect(() => {

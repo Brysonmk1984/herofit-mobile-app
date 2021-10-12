@@ -37,6 +37,7 @@ type MainDrawerParamList = {
   };
   BattleReportDetail: {
     battleReport: BattleDetailOnly;
+    push: () => void;
   };
 };
 

@@ -560,4 +560,45 @@ function getFoeColor(foeType: FoeType) {
   }
 }
 
-export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, convertAorAn, getHeroAlias, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems, capitalize, getHeroImage, getFoeImage, getPetImage, equippedSkin, equippedPet, equippedTitle, getColorFromClassName, getColorFromItemName, checkForMultipleItem, determineDataSrcType, roundNumberToTenthReturnNumber, roundNumberToThousandthReturnNumber, getFoeColor };
+function determineScenario(scenarioNum: number) {
+  switch (scenarioNum) {
+    case 0:
+      return {
+        type: "Hero attacked unprepared foe",
+        description: "Bonus power to hero, health reduction to foe",
+      };
+
+    case 1:
+      return {
+        type: "Hero attacked defending foe",
+        description: "Bonus health to foe",
+      };
+
+    case 2:
+      return {
+        type: "Hero and Foe met on open field",
+        description: "Slight power bonus to hero & foe",
+      };
+
+    case 3:
+      return {
+        type: "Foe attacked unprepared hero",
+        description: "Bonus power to foe, health reduction to Hero",
+      };
+    case 4:
+      return {
+        type: "Foe attacked defending hero",
+        description: "Bonus health to Hero",
+      };
+    case 5:
+      return {
+        type: "Both hero and foe fought defensively",
+        description: "Slight bonus health to hero & foe",
+      };
+
+    default:
+      break;
+  }
+}
+
+export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, convertAorAn, getHeroAlias, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems, capitalize, getHeroImage, getFoeImage, getPetImage, equippedSkin, equippedPet, equippedTitle, getColorFromClassName, getColorFromItemName, checkForMultipleItem, determineDataSrcType, roundNumberToTenthReturnNumber, roundNumberToThousandthReturnNumber, getFoeColor, determineScenario };
