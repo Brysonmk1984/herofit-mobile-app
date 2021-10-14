@@ -42,7 +42,7 @@ const FoeSection: React.FC<FoeSectionProps> = ({ height: deviceHeight, width: de
     <Box w="100%" flex={1}>
       <LinearGradient end={{ x: 1, y: 0.5 }} colors={foeColors} style={styles.foeGradient} />
       <Animated.View position="absolute" right={90} bottom={-50} zIndex={1} style={{ transform: [{ translateX: slideAnim }], opacity: opacityAnim }}>
-        <FoeImage width={deviceHeight * 0.5} height={deviceHeight * 0.5} foeType={foe.type} heroCharacterName={foe.type === "Shadow-Self" ? character : null} />
+        <FoeImage width={deviceHeight * 0.35} height={deviceHeight * 0.35} foeType={foe.type} heroCharacterName={foe.type === "Shadow-Self" ? character : null} />
       </Animated.View>
       <VStack position="absolute" left={1} bottom={1}>
         <Text fontSize={nameSize} fontFamily="heading">

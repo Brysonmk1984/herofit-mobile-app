@@ -30,7 +30,7 @@ async function _checkStravaToken(user: User, state, dispatch): Promise<string> {
 
     const accessTokenData = await getNewAccessToken(authData);
     const { access_token: stravaAccessToken, expires_at: stravaAccessTokenExpiration, refresh_token: stravaRefreshToken } = accessTokenData;
-    console.log("ATD", accessTokenData);
+    console.log("STRAVA - ATD", accessTokenData);
     let credentialsForDB = { email: user.email, stravaAccessToken, stravaAccessTokenExpiration, stravaRefreshToken };
 
     interface UpdatedCredentialsForDB {
@@ -147,11 +147,11 @@ function useStravaDataProcess(): { newStravaActivities: Activity[] } {
           // If there are locally saved strava activities, use cached version
           // This is to prevent too many requests against Strava API
           if (lsStrava) {
-            console.log("YES LS STRAVA DATA");
+            //console.log("YES LS STRAVA DATA");
             const formattedNewActivities = _handleStravaActivities(hero, lsStrava, state.latestSavedActivityDate, state.user);
             setNewStravaActivities(formattedNewActivities);
           } else {
-            console.log("NO LS STRAVA DATA");
+            //console.log("NO LS STRAVA DATA");
             // Otherwise, do Strava Check
             try {
               const accessToken = await _checkStravaToken(state.user, state, dispatch);

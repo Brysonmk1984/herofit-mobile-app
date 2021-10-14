@@ -14,7 +14,7 @@ const FoeImage: React.FC<FoeImageProps> = ({ foeType, heroCharacterName, width =
   return (
     <Center>
       <Box w={width} h={height}>
-        <Image source={getFoeImage(foeType, heroCharacterName)} size={height} alt={foeType} />
+        <Image source={getFoeImage(foeType, heroCharacterName)} size={height} alt={foeType} resizeMode="contain" />
       </Box>
     </Center>
   );

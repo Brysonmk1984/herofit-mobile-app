@@ -3,7 +3,7 @@ import { Box, VStack, Text, View } from "native-base";
 import { Animated, FlatList } from "react-native";
 import FoeImage from "../../../Components/FoeImage";
 import { HeroImage } from "../../../Components/HeroImage/HeroImage";
-import { capitalize, equippedSkin, getColorFromClassName, getColorFromItemName } from "../../../common/helperFunctions";
+import { capitalize, determineFoeWidthHeight, equippedSkin, getColorFromClassName, getColorFromItemName } from "../../../common/helperFunctions";
 import { GlobalStateContext } from "../../../store";
 import { CharacterName, Hero, Item } from "../../../common/types";
 import { BattleFoe, BattleOutcome } from "../../../common/types-battle";
@@ -31,7 +31,8 @@ const BottomSection: React.FC<BottomSectionProps> = ({ height: deviceHeight, out
       return { width: deviceHeight * 0.5, height: deviceHeight * 0.5, character, alias, skin: equippedSkin(equipped) };
     } else {
       contender = contender as BattleFoe;
-      return { width: deviceHeight * 0.5, height: deviceHeight * 0.5, foeType: contender.type, heroCharacterName: contender.type === "Shadow-Self" ? character : null };
+      const { width, height } = determineFoeWidthHeight(deviceHeight, deviceHeight, contender.type);
+      return { width, height, foeType: contender.type, heroCharacterName: contender.type === "Shadow-Self" ? character : null };
     }
   }
 

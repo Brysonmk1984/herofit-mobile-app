@@ -57,6 +57,7 @@ interface BattleFoe {
   type: FoeType;
   water: number;
   xpBounty: number;
+  aether?: number;
 }
 
 interface BattleBRA {
@@ -86,6 +87,18 @@ interface BattleBRA {
   water: number;
 }
 
+type BattleReportStats = "health" | "power" | "armor" | "fire" | "earth" | "water" | "air" | "aether";
+interface BattleEffectProc {
+  effect: string;
+  heroStatsEffected?: BattleStats[];
+  foeStatsEffected?: BattleStats[];
+  type?: "postbattle";
+}
+interface BattleSeasonalBonusElement {
+  element: PrimaryElement;
+  sign: ZodiacSign;
+}
+
 interface Battle {
   aStatus: HeroStatus;
   avatar: Hero;
@@ -95,6 +108,7 @@ interface Battle {
   brf: BattleFoe;
   createdAt: Date;
   effects: string[] | null;
+  effectProcs: BattleEffectProc[] | null;
   foe: BattleFoe;
   foeType: FoeType;
   itemsAcquired: Item[] | undefined;
@@ -105,10 +119,7 @@ interface Battle {
   ptGain: number;
   roundBreakdown: BattleRound[];
   scenario: number;
-  seasonalBonusElement: {
-    element: PrimaryElement;
-    sign: ZodiacSign;
-  };
+  seasonalBonusElement: BattleSeasonalBonusElement;
   seenReport: boolean;
   updatedAt: Date;
   xpGain: number;
@@ -119,6 +130,7 @@ interface BattleDetailOnly {
   bra: BattleBRA;
   brf: BattleFoe;
   effects: string[] | null;
+  effectProcs: BattleEffectProc[] | null;
   foe: BattleFoe;
   foeType: FoeType;
   outcome: BattleOutcome;
@@ -131,4 +143,4 @@ interface BattleDetailOnly {
   updatedAt: Date;
 }
 
-export { Battle, BattleDetailOnly, BattleFoe, BattleBRA, BattleRound, BattleElementalProcs, BattleElementStats, BattleOutcome };
+export { Battle, BattleDetailOnly, BattleFoe, BattleBRA, BattleRound, BattleElementalProcs, BattleElementStats, BattleReportStats, BattleOutcome, BattleEffectProc, BattleSeasonalBonusElement };

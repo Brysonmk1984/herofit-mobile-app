@@ -38,16 +38,14 @@ async function fetchInitialData(token: string, dispatch: AppDispatch, state: Ini
 
     if (error.status === 401) {
       // JWT has expired, just warn user so they can log in again
-      // ERROR MESSAGE IS KIND OF UNNECESSARY
-      //message = error.meta;
-      //alertType = "warning";
+      console.log("JWTexpired - Should immediately kick user out to login screen without going to homescreen first");
     } else {
       // Error unrelated to JWT, display error message
       message = error.message;
       debugErrors(error);
-      dispatch({ type: "RESET DEFAULTS" });
-      throw error;
     }
+    dispatch({ type: "RESET DEFAULTS" });
+    throw error;
   }
 }
 

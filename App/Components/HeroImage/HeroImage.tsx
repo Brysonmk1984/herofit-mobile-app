@@ -23,7 +23,7 @@ export const HeroImage: React.FC<HeroImageProps> = ({ character, width = 275, he
     return (
       <Center>
         <Box w={width} h={height}>
-          {floating ? <FloatingHeroImage status={status}>{imageMod ? <TintImage heroImage={heroImage} skinName={skinName} imageMod={imageMod} size={height} /> : <Image source={heroImage} size={height} alt={skinName} />}</FloatingHeroImage> : imageMod ? <TintImage heroImage={heroImage} skinName={skinName} imageMod={imageMod} size={height} /> : <Image source={heroImage} size={height} alt={skinName} />}
+          {floating ? <FloatingHeroImage status={status}>{imageMod ? <TintImage heroImage={heroImage} skinName={skinName} imageMod={imageMod} size={height} /> : <Image source={heroImage} size={height} alt={skinName} resizeMode="contain" />}</FloatingHeroImage> : imageMod ? <TintImage heroImage={heroImage} skinName={skinName} imageMod={imageMod} size={height} /> : <Image source={heroImage} size={height} alt={skinName} resizeMode="contain" />}
         </Box>
       </Center>
     );
