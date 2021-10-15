@@ -8,9 +8,10 @@ interface Subheader {
   color?: string;
   fontSize?: number | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
   fontFamily?: "heading" | "body" | "handwriting" | "cursive";
+  dividerColor?: string;
 }
 
-export default function Subheader({ text, mt = 3, mb = 3, color, fontSize = "3xl", fontFamily = "heading" }: Subheader) {
+export default function Subheader({ text, mt = 3, mb = 3, color, fontSize = "3xl", fontFamily = "heading", dividerColor = "base.white" }: Subheader) {
   return (
     <Center mt={mt} mb={mb}>
       <Heading>
@@ -18,7 +19,7 @@ export default function Subheader({ text, mt = 3, mb = 3, color, fontSize = "3xl
           {text}
         </Text>
       </Heading>
-      <Divider variant="subheaderDivider" />
+      <Divider bgColor={dividerColor} variant="subheaderDivider" />
     </Center>
   );
 }

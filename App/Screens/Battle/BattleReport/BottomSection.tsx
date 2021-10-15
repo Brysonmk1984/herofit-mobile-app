@@ -3,7 +3,7 @@ import { Box, VStack, Text, View } from "native-base";
 import { Animated, FlatList } from "react-native";
 import FoeImage from "../../../Components/FoeImage";
 import { HeroImage } from "../../../Components/HeroImage/HeroImage";
-import { capitalize, determineFoeWidthHeight, equippedSkin, getColorFromClassName, getColorFromItemName } from "../../../common/helperFunctions";
+import { capitalize, equippedSkin, getColorFromClassName, getColorFromItemName } from "../../../common/helperFunctions";
 import { GlobalStateContext } from "../../../store";
 import { CharacterName, Hero, Item } from "../../../common/types";
 import { BattleFoe, BattleOutcome } from "../../../common/types-battle";
@@ -31,8 +31,8 @@ const BottomSection: React.FC<BottomSectionProps> = ({ height: deviceHeight, out
       return { width: deviceHeight * 0.5, height: deviceHeight * 0.5, character, alias, skin: equippedSkin(equipped) };
     } else {
       contender = contender as BattleFoe;
-      const { width, height } = determineFoeWidthHeight(deviceHeight, deviceHeight, contender.type);
-      return { width, height, foeType: contender.type, heroCharacterName: contender.type === "Shadow-Self" ? character : null };
+
+      return { width: deviceHeight * 0.5, height: deviceHeight * 0.5, foeType: contender.type, heroCharacterName: contender.type === "Shadow-Self" ? character : null };
     }
   }
 
@@ -50,7 +50,7 @@ const BottomSection: React.FC<BottomSectionProps> = ({ height: deviceHeight, out
 
   return (
     <Box flex={1}>
-      <Animated.View position="absolute" right={-95} bottom={-35} style={{ opacity: opacityAnim }}>
+      <Animated.View position="absolute" right={-65} bottom={-35} style={{ opacity: opacityAnim }}>
         {contenderType === "hero" ? <HeroImage {...determinePropsForImage(contender, contenderType)} /> : <FoeImage {...determinePropsForImage(contender, contenderType)} />}
       </Animated.View>
       <Rewards reversedText={outcome !== "Avatar Wins"} topOrBottom={"bottom"} itemsAcquired={itemsAcquired} ptGain={ptGain} xpGain={xpGain} />

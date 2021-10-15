@@ -124,7 +124,7 @@ const StatDisplay: React.FC<StatDisplayProps> = ({ battleReport }) => {
     const isAfterChange = moment.utc(battleDate).isAfter("October 10, 2021");
     return isAfterChange ? (
       <Center>
-        <Text fontSize="25" color="primary.500" mb={-15} mt={5}>
+        <Text fontSize={20} color="primary.700">
           {battleDate.format("MM-DD-YYYY")}
         </Text>
       </Center>
@@ -139,7 +139,7 @@ const StatDisplay: React.FC<StatDisplayProps> = ({ battleReport }) => {
   }, []);
 
   return (
-    <ScrollView w="100%">
+    <ScrollView>
       {/* DATE */}
       {renderDate(updatedAt)}
       {/* NAMES */}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FlatList, ImageBackground, Pressable, StyleSheet, useWindowDimensions } from "react-native";
 import { View, Text, useTheme, Box, Center, VStack, HStack, ScrollView } from "native-base";
 import { MainDrawerProps } from "../../../common/types-navigator";
-import { Icon, ScreenContainer } from "../../../Components/CustomComponents";
+import { Header, Icon, ScreenActionButton, ScreenActionFixedWrapper, ScreenContainer, Subheader } from "../../../Components/CustomComponents";
 import { LinearGradient } from "expo-linear-gradient";
 import { determineScenario } from "../../../common/helperFunctions";
 import moment from "moment";
@@ -32,21 +32,16 @@ const BattleReportDetail: React.FC<MainDrawerProps<"BattleReportDetail">> = ({ n
 
   return (
     <ScreenContainer screenName={route.name} bgColor={outcome === "Avatar Wins" ? colors.base.highlight : colors.base.lowlight}>
-      <VStack zIndex={100} h={height * 0.9} w="100%" justifyContent="center" alignItems="center" position="absolute">
-        <LinearGradient colors={gradient} style={styles.vsGradient} />
-        <View w="100%" h="100%">
-          {showFirstScreen ? <StatDisplay battleReport={route.params.battleReport} /> : <RoundDisplay battleReport={route.params.battleReport} />}
-          <View position="absolute" bottom={20} w="100%">
-            <Center>
-              <Pressable onPress={nextPage}>
-                <Text color="base.link" fontFamily="heading" fontSize={30}>
-                  {showFirstScreen ? "Next" : "Done"}
-                </Text>
-              </Pressable>
-            </Center>
-          </View>
-        </View>
+      <VStack zIndex={100} height="100%">
+        <Header mb={-7} text={"Battle Report"} />
+
+        <View>{showFirstScreen ? <StatDisplay battleReport={route.params.battleReport} /> : <RoundDisplay battleReport={route.params.battleReport} />}</View>
+        <ScreenActionFixedWrapper>
+          <ScreenActionButton text={showFirstScreen ? "Next" : "Done"} action={nextPage} />
+        </ScreenActionFixedWrapper>
       </VStack>
+
+      <View opacity={0.7} bgColor="base.white" zIndex={99} mt={-10} h={height + 17} w="100%" justifyContent="center" alignItems="center" position="absolute"></View>
       <ImageBackground style={styles.backgroundImage} source={backgroundImage} resizeMode="stretch" opacity={0.6} />
     </ScreenContainer>
   );
