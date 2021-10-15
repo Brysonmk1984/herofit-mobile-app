@@ -60,24 +60,24 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fir
     navigation.push("App", { screen: "BattleReport", params: { battleReport: latestBattle } });
   }
 
-  // useEffect(() => {
-  //   if (latestBattle && !latestBattle.seenReport) {
-  //     setBattleReportAvailable(true);
-  //     setBattleButtonDisabled(false);
-  //   } else {
-  //     setBattleReportAvailable(false);
-  //     if (status === "Knocked Out") {
-  //       setBattleButtonDisabled(true);
-  //     } else {
-  //       setBattleButtonDisabled(false);
-  //     }
-  //   }
-  // }, [latestBattle]);
+  useEffect(() => {
+    if (latestBattle && !latestBattle.seenReport) {
+      setBattleReportAvailable(true);
+      setBattleButtonDisabled(false);
+    } else {
+      setBattleReportAvailable(false);
+      if (status === "Knocked Out") {
+        setBattleButtonDisabled(true);
+      } else {
+        setBattleButtonDisabled(false);
+      }
+    }
+  }, [latestBattle]);
 
   // TESTING
-  useEffect(() => {
-    setBattleReportAvailable(true);
-  }, []);
+  // useEffect(() => {
+  //   setBattleReportAvailable(true);
+  // }, []);
 
   return (
     <Box position="absolute" bottom={0}>
@@ -97,13 +97,13 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fir
             </Button>
           </Box>
           <Box w="50%" p={2}>
-            {/* <Button bgColor={battleReportAvailable ? "base.highlight" : "base.success"} disabled={battleButtonDisabled} _text={{ fontFamily: "heading", fontSize: 30, color: battleButtonDisabled ? "base.disabledText" : "base.white" }} borderRadius={0} onPress={latestBattle && !latestBattle.seenReport ? handleBattleReport : goToBattle ? handleFetchUpcomingBattle : () => openModal("GoToBattle")}>
-              {battleReportAvailable ? "Report" : "Battle"}
-            </Button> */}
-
-            <Button borderRadius={0} onPress={handleBattleReport}>
+            <Button bgColor={battleReportAvailable ? "base.highlight" : "base.success"} disabled={battleButtonDisabled} _text={{ fontFamily: "heading", fontSize: 30, color: battleButtonDisabled ? "base.disabledText" : "base.white" }} borderRadius={0} onPress={latestBattle && !latestBattle.seenReport ? handleBattleReport : goToBattle ? handleFetchUpcomingBattle : () => openModal("GoToBattle")}>
               {battleReportAvailable ? "Report" : "Battle"}
             </Button>
+
+            {/* <Button borderRadius={0} onPress={handleBattleReport}>
+              {battleReportAvailable ? "Report" : "Battle"}
+            </Button> */}
           </Box>
         </Box>
       </Box>

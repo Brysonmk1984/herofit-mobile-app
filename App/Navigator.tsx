@@ -35,6 +35,7 @@ const AuthStackScreen = () => {
 };
 
 function filterDrawerContent(props) {
+  const hiddenScreens = ["SpendQP", "ManualActivity", "AwaitingBattle", "BattleReport", "BattleReportDetail"];
   const filteredProps = {
     ...props,
     state: {
@@ -43,11 +44,9 @@ function filterDrawerContent(props) {
         // To hide single option
         // (routeName) => routeName !== 'HiddenPage1',
         // To hide multiple options you can add & condition
-        routeName => {
-          routeName !== "SpendQP" && routeName !== "HiddenPage2";
-        },
+        routeName => hiddenScreens.includes(routeName) === false,
       ),
-      routes: props.state.routes.filter(route => route.name !== "SpendQP" && route.name !== "HiddenPage2"),
+      routes: props.state.routes.filter(route => hiddenScreens.includes(route.name) === false),
     },
   };
   return (

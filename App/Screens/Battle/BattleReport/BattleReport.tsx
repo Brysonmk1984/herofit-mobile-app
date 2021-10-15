@@ -12,6 +12,7 @@ import TopSection from "./TopSection";
 import BottomSection from "./BottomSection";
 
 const BattleReport: React.FC<MainDrawerProps<"BattleReport">> = ({ navigation, route }) => {
+  const { state, dispatch } = useContext(GlobalStateContext);
   const { height, width } = useWindowDimensions();
   const { id, avatar: hero, aStatus, foe, outcome, roundBreakdown, ptGain, xpGain, itemsAcquired } = route.params.battleReport;
   const backgroundImage = require("../../../../assets/images/backgrounds/battle-report-background.webp");
@@ -75,10 +76,10 @@ const BattleReport: React.FC<MainDrawerProps<"BattleReport">> = ({ navigation, r
   }, []);
 
   //DISABLED FOR TESTING
-  // useEffect(() => {
-  //   updateBattleReportSeen({ id });
-  //   dispatch({ type: "SEEN BATTLE REPORT", payload: { latestBattle: { ...route.params.battleReport, seenReport: true } } });
-  // }, []);
+  useEffect(() => {
+    updateBattleReportSeen({ id });
+    dispatch({ type: "SEEN BATTLE REPORT", payload: { latestBattle: { ...route.params.battleReport, seenReport: true } } });
+  }, []);
 
   useEffect(() => {
     if (outcome === "Avatar Wins") {

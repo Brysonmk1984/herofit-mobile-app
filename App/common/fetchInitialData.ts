@@ -24,7 +24,7 @@ async function fetchInitialData(token: string, dispatch: AppDispatch, state: Ini
     const allGameItems: Item[] = p3.items;
     const latestBattle = p4.latestBattle;
     const { activities: latestSavedActivities, latestActivityDate: latestSavedActivityDate } = p5;
-    //console.log("LATEsT BATT", latestBattle);
+    console.log("LATEsT BATT", latestBattle);
     //console.log("ACTS=", latestSavedActivities, "LAD", latestSavedActivityDate);
     // Takes item instance IDs and assigns full items to the hero under 'equipped' property
     const equipped = convertItemIdsToFullItems(hero.equipped, allGameItems);

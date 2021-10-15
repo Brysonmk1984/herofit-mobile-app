@@ -71,6 +71,7 @@ const StatDisplay: React.FC<StatDisplayProps> = ({ battleReport }) => {
   const gradient = ["transparent", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "transparent"];
   const stats: BattleReportStats = ["health", "power", "armor", "fire", "earth", "water", "air", "aether"];
   const [allEffectProcs, setAllEffectProcs] = useState(effectProcs);
+  const postBattleEffects = effectProcs.filter(ep => ep.type === "postbattle").map(ep => ep.effect);
 
   function renderStatRows(stat: BattleReportStats) {
     if (stat === "aether" && !brf.aether && !brh.aether) {
@@ -78,14 +79,14 @@ const StatDisplay: React.FC<StatDisplayProps> = ({ battleReport }) => {
     }
     const effectHero = allEffectProcs
       .filter(ep => ep?.heroStatsEffected?.includes(stat))
-      .map(ep => ep.effect)
-      .join(", ");
+      .map(ep => (ep.effect.length > 17 ? `${ep.effect.slice(0, 17)}...` : ep.effect))
+      .join("\n");
     const statHero = brh[stat] || 0;
     const statFoe = brf[stat] || 0;
     const effectFoe = allEffectProcs
       .filter(ep => ep?.foeStatsEffected?.includes(stat))
-      .map(ep => ep.effect)
-      .join(", ");
+      .map(ep => (ep.effect.length > 17 ? `${ep.effect.slice(0, 17)}...` : ep.effect))
+      .join("\n");
 
     return (
       <HStack>
@@ -94,18 +95,18 @@ const StatDisplay: React.FC<StatDisplayProps> = ({ battleReport }) => {
           <Text fontSize="sm">{effectHero}</Text>
         </Box>
         {/* Stat - Hero */}
-        <Box flex={1} borderRightWidth={1} px={1}>
-          <Text color={determineStatColor(hero[stat], brh[stat])} fontSize="2xl" fontFamily="heading" textAlign="right">
+        <Box flex={1} p={1} bgColor="base.highlightTransparent">
+          <Text color={determineStatColor(hero[stat], brh[stat])} fontSize="2xl" fontFamily="heading" textAlign="center">
             {Math.floor(statHero)}
           </Text>
         </Box>
         {/* Stat */}
-        <Box alignItems="center" flex={1}>
+        <Box alignItems="center" flex={1} py={1} bgColor="base.highlightTransparent">
           <Icon iconName={stat} size={30} color={`base.${stat}`} />
         </Box>
         {/* Stat - Foe */}
-        <Box flex={1} borderLeftWidth={1} px={1}>
-          <Text color={determineStatColor(foe[stat], brf[stat])} fontSize="2xl" fontFamily="heading">
+        <Box flex={1} p={1} bgColor="base.highlightTransparent">
+          <Text color={determineStatColor(foe[stat], brf[stat])} fontSize="2xl" fontFamily="heading" textAlign="center">
             {Math.floor(statFoe)}
           </Text>
         </Box>
@@ -124,7 +125,7 @@ const StatDisplay: React.FC<StatDisplayProps> = ({ battleReport }) => {
     const isAfterChange = battleDate.isAfter("2021-10-14");
     return isAfterChange ? (
       <Center>
-        <Text fontSize={20} color="primary.700">
+        <Text fontSize={20} color="primary.800">
           {battleDate.format("MM-DD-YYYY")}
         </Text>
       </Center>
@@ -139,45 +140,48 @@ const StatDisplay: React.FC<StatDisplayProps> = ({ battleReport }) => {
   }, []);
 
   return (
-    <ScrollView>
-      {/* DATE */}
-      {renderDate(updatedAt)}
-      {/* NAMES */}
-      <HStack>
-        <Text fontSize={hero.name.length > 10 ? 20 : hero.name.length > 7 ? 30 : 40} flex="1" fontFamily="heading" textAlign="left" px={2}>
-          {hero.name}
-        </Text>
-        <Text fontSize={foe.name.length > 10 ? 20 : foe.name.length > 7 ? 30 : 40} flex="1" fontFamily="heading" textAlign="right" px={2}>
-          {foe.name}
-        </Text>
-      </HStack>
-      {/* SCENARIO */}
-      <Center borderTopWidth={1}>
-        <Text fontFamily="heading" fontSize={20}>
-          {determineScenario(scenario).type}
-        </Text>
-      </Center>
-      {/* TABLE HEADER */}
-      <HStack justifyContent="center" borderBottomWidth={1} borderTopWidth={1} p={1}>
-        <Text fontSize={20} flex="2" fontFamily="heading" textAlign="left">
-          Effects
-        </Text>
-        <Text borderLeftWidth={1} borderRightWidth={1} fontSize={20} flex="2" fontFamily="heading" textAlign="center">
-          Stats
-        </Text>
-        <Text fontSize={20} flex="2" fontFamily="heading" textAlign="right">
-          Effects
-        </Text>
-      </HStack>
-      {/* STATS */}
-      <FlatList data={stats} renderItem={({ item }) => renderStatRows(item)} keyExtractor={(item, index) => index.toString()} />
-      <Center p={2} borderTopWidth={1}>
-        <Text fontFamily="heading" fontSize={20}>
-          Post-Battle Effects
-        </Text>
-        <FlatList data={effectProcs.filter(ep => ep.type === "postbattle").map(ep => ep.effect)} renderItem={({ item }) => <Text>{item}</Text>} keyExtractor={(item, index) => index.toString()} />
-      </Center>
-    </ScrollView>
+    <View pb={125}>
+      <ScrollView>
+        {/* DATE */}
+        {renderDate(updatedAt)}
+        {/* SCENARIO */}
+        <Center bgColor="base.highlightTransparent" borderTopWidth={1} borderBottomWidth={1}>
+          <Text fontSize={13}>Scenario: {determineScenario(scenario).type}</Text>
+        </Center>
+        {/* NAMES */}
+        <HStack bgColor="base.highlightTransparent">
+          <Text fontSize={hero.name.length > 12 ? 30 : hero.name.length > 8 ? 35 : 40} flex="1" fontFamily="heading" textAlign="left" px={2} borderRightWidth={1}>
+            {hero.name}
+          </Text>
+          <Text fontSize={foe.name.length > 12 ? 30 : foe.name.length > 8 ? 35 : 40} flex="1" fontFamily="heading" textAlign="right" px={2}>
+            {foe.name}
+          </Text>
+        </HStack>
+
+        {/* TABLE HEADER */}
+        <HStack bgColor="base.highlightTransparent" justifyContent="center" borderBottomWidth={1} borderTopWidth={1} p={1}>
+          <Text fontSize={20} flex="2" fontFamily="heading" textAlign="left">
+            Effects
+          </Text>
+          <Text borderLeftWidth={1} borderRightWidth={1} fontSize={20} flex="2" fontFamily="heading" textAlign="center">
+            Stats
+          </Text>
+          <Text fontSize={20} flex="2" fontFamily="heading" textAlign="right">
+            Effects
+          </Text>
+        </HStack>
+        {/* STATS */}
+        <FlatList data={stats} renderItem={({ item }) => renderStatRows(item)} keyExtractor={(item, index) => index.toString()} />
+        {postBattleEffects.length ? (
+          <Center p={2} borderTopWidth={1}>
+            <Text fontFamily="heading" fontSize={20}>
+              Post-Battle Effects
+            </Text>
+            <FlatList data={postBattleEffects} renderItem={({ item }) => <Text>{item}</Text>} keyExtractor={(item, index) => index.toString()} />
+          </Center>
+        ) : null}
+      </ScrollView>
+    </View>
   );
 };
 

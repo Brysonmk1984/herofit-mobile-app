@@ -15,7 +15,7 @@ const XpText: React.FC<XpTextProps> = ({ levelXp, levelXpRequired }) => {
           XP
         </Text>
       </Box>
-      <Text color="base.highlight" fontSize="sm" fontFamily="heading">
+      <Text fontSize="sm" fontFamily="heading">
         <CountUp isCounting end={levelXp} duration={2} />
       </Text>
       <Text mt={-1.5} color="base.primary" fontSize="2xl" fontFamily="heading">
