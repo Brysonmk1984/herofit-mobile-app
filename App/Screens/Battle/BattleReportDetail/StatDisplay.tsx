@@ -121,7 +121,7 @@ const StatDisplay: React.FC<StatDisplayProps> = ({ battleReport }) => {
 
   function renderDate(updatedAt: Date) {
     const battleDate = moment(updatedAt);
-    const isAfterChange = moment.utc(battleDate).isAfter("October 10, 2021");
+    const isAfterChange = battleDate.isAfter("2021-10-14");
     return isAfterChange ? (
       <Center>
         <Text fontSize={20} color="primary.700">

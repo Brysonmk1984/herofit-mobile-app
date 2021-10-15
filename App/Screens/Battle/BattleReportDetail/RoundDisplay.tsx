@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, ScrollView, Box, VStack, HStack, FlatList } from "native-base";
 import { BattleDetailOnly } from "../../../common/types-battle";
-import { Subheader } from "../../../Components/CustomComponents";
+import { Icon, Subheader } from "../../../Components/CustomComponents";
 
 interface RoundDisplayProps {
   battleReport: BattleDetailOnly;
@@ -28,8 +28,6 @@ const RoundDisplay: React.FC<RoundDisplayProps> = ({ battleReport }) => {
     const didHeal = elementalProcs.water?.amountHealed > 0;
     const didThornsToHero = elementalProcs.earth?.thornsDamageToAttacker > 0 && aggressor === "Avatar";
     const didThornsToFoe = elementalProcs.earth?.thornsDamageToAttacker > 0 && aggressor === "Foe";
-
-    console.log(round);
 
     return (
       <HStack>
@@ -92,7 +90,9 @@ const RoundDisplay: React.FC<RoundDisplayProps> = ({ battleReport }) => {
       <Box px={5}>
         <Subheader dividerColor="base.primary" text="Round - By - Round" />
       </Box>
-      <View>
+      {/* TABLE */}
+      <View borderBottomWidth={1} pb={5} mb={5}>
+        {/* HEADER */}
         <HStack>
           <VStack space={0.2} flex={1}>
             <Text textAlign="center" fontFamily="heading">
@@ -135,8 +135,48 @@ const RoundDisplay: React.FC<RoundDisplayProps> = ({ battleReport }) => {
             </Text>
           </VStack>
         </HStack>
+        {/* ROUNDS */}
         <FlatList data={battleReport.roundBreakdown} renderItem={({ item }) => renderRoundRow(item)} keyExtractor={(item, i) => i.toString()} />
       </View>
+      {/* LEGEND */}
+      <Box>
+        <Text textAlign="center" fontFamily="heading" fontSize="lg" mb={3}>
+          Elemental Effects
+        </Text>
+        <HStack mb={3}>
+          <HStack justifyContent="flex-start" flex={1}>
+            <Icon iconName="fire" size={25} color="base.fire" />
+            <Text color="base.fire" mr={2} fontSize="lg">
+              Critical Strike
+            </Text>
+            <Icon iconName="critical_strike" size={25} color="base.fire" />
+          </HStack>
+          <HStack flex={1}>
+            <Icon iconName="earth" size={25} color="base.earth" />
+
+            <Text color="base.earth" ml={2} fontSize="lg">
+              Thorns Damage
+            </Text>
+            <Icon iconName="thorns_damage" size={25} color="base.earth" />
+          </HStack>
+        </HStack>
+        <HStack>
+          <HStack justifyContent="flex-start" flex={1}>
+            <Icon iconName="water" size={25} color="base.water" />
+            <Text color="base.water" mt={-1} mr={2} fontSize="lg">
+              Vampiric Touch
+            </Text>
+            <Icon iconName="vampiric_touch" size={25} color="base.water" />
+          </HStack>
+          <HStack flex={1}>
+            <Icon iconName="air" size={25} color="base.air" />
+            <Text color="base.air" mt={-1} ml={2} fontSize="lg">
+              Evasion
+            </Text>
+            <Icon iconName="evasion" size={25} color="base.air" />
+          </HStack>
+        </HStack>
+      </Box>
     </ScrollView>
   );
 };

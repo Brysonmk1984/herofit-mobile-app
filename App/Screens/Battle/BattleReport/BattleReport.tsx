@@ -69,7 +69,7 @@ const BattleReport: React.FC<MainDrawerProps<"BattleReport">> = ({ navigation, r
   useEffect(() => {
     const timeout = setTimeout(() => {
       handleNavigateToDetails(route.params.battleReport);
-    }, 6000);
+    }, 4000);
 
     return () => clearTimeout(timeout);
   }, []);
