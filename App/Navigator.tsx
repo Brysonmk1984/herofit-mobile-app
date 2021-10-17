@@ -1,12 +1,13 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer";
+import { createDrawerNavigator, DrawerContentComponentProps, DrawerContentOptions, DrawerContentScrollView, DrawerItem, DrawerItemList } from "@react-navigation/drawer";
 import herofitTheme from "./styles/herofitTheme";
 import * as Screens from "./Screens";
 import { AuthStackParamList, MainDrawerParamList, RootStackParamList } from "./common/types-navigator";
 import { DrawerIndicator } from "./Components/DrawerIndicator";
 import { AntDesign } from "@expo/vector-icons";
 import { Icon } from "native-base";
+import * as WebBrowser from "expo-web-browser";
 // ROOT First level Navigator, used to determine if the user should go through auth sequence of straight to the app
 // TS - Ben doesn't pass a generic here, but the docs do.
 const RootStack = createStackNavigator<RootStackParamList>();
@@ -34,24 +35,21 @@ const AuthStackScreen = () => {
   );
 };
 
-function filterDrawerContent(props) {
-  const hiddenScreens = ["SpendQP", "ManualActivity", "AwaitingBattle", "BattleReport", "BattleReportDetail"];
+function filterDrawerContent(props: DrawerContentComponentProps<DrawerContentOptions>) {
+  const hiddenScreens = ["SpendQP", "ManualActivity", "AwaitingBattle", "BattleReport", "BattleReportDetail", "Profile"];
   const filteredProps = {
     ...props,
     state: {
       ...props.state,
-      routeNames: props.state.routeNames.filter(
-        // To hide single option
-        // (routeName) => routeName !== 'HiddenPage1',
-        // To hide multiple options you can add & condition
-        routeName => hiddenScreens.includes(routeName) === false,
-      ),
+      routeNames: props.state.routeNames.filter((routeName: string) => hiddenScreens.includes(routeName) === false),
       routes: props.state.routes.filter(route => hiddenScreens.includes(route.name) === false),
     },
   };
   return (
     <DrawerContentScrollView {...filteredProps}>
       <DrawerItemList {...filteredProps} />
+      <DrawerItem label="ItemWiki" onPress={() => WebBrowser.openBrowserAsync(`https://herofit.io/items/`)} />
+      <DrawerItem label="Ranking" onPress={() => WebBrowser.openBrowserAsync(`https://herofit.io/ranking/`)} />
     </DrawerContentScrollView>
   );
 }
@@ -62,11 +60,8 @@ const DrawerScreen = () => {
   return (
     <MainDrawer.Navigator drawerContent={props => filterDrawerContent(props)} drawerPosition="right" screenOptions={{ headerShown: false, ...baseScreenStyle }}>
       <MainDrawer.Screen options={{ drawerIcon: ({ focused, size }) => <Icon as={AntDesign} name="home" size={10} color="base.link" /> }} name="Home" component={Screens.Home} />
-      <MainDrawer.Screen name="Profile" component={Screens.Profile} />
-      <MainDrawer.Screen name="Ranking" component={Screens.Ranking} />
       <MainDrawer.Screen name="Campaign" component={Screens.Campaign} />
       <MainDrawer.Screen name="Inventory" component={Screens.Inventory} />
-      <MainDrawer.Screen name="Items" component={Screens.Items} />
       <MainDrawer.Screen name="Feedback" component={Screens.Feedback} />
       <MainDrawer.Screen name="Settings" component={Screens.Settings} />
       <MainDrawer.Screen name="SpendQP" component={Screens.SpendQP} options={{ title: "Quantum Points" }} />

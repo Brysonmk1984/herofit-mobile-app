@@ -1,6 +1,6 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useContext } from "react";
 import { useWindowDimensions } from "react-native";
-import { View, Button, Box, useTheme } from "native-base";
+import { View, Button, Box, useTheme, Text } from "native-base";
 import RBSheet from "react-native-raw-bottom-sheet";
 import Triangle from "./Triangle";
 import StatDisplay from "../../../../Components/StatDisplay";
@@ -10,46 +10,36 @@ import useModal from "../../../../common/hooks/useModal";
 import { fetchUpcomingFoeAndRewards } from "../../../../api/battle";
 import useGlobalToast from "../../../../common/hooks/useGlobalToast";
 import debugErrors from "../../../../common/debugErrors";
-import { CharacterName, HeroStatus, User } from "../../../../common/types";
+import { CharacterName, DefaultHeroProperties, Hero, HeroStatus, HeroWithStats, User } from "../../../../common/types";
 import { Battle } from "../../../../common/types-battle";
 import { LinearGradient } from "expo-linear-gradient";
+import { GlobalStateContext } from "../../../../store";
+import HiddenInventory from "./HiddenInventory/HiddenInventory";
 
 interface BottomDrawerProps {
-  power: number;
-  recovery: number;
-  armor: number;
-  fire: number;
-  earth: number;
-  water: number;
-  air: number;
-  aether: number;
-  photonTokens: number;
-  qp: number;
+  hero: Hero | (HeroWithStats & DefaultHeroProperties);
   newActivitiesAvailable: boolean;
-  goToBattle: boolean;
-  heroId: number;
-  heroCharacter: CharacterName;
-  user: User;
   latestBattle: Battle | null;
-  status: HeroStatus;
+  user: User;
 }
 
-const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, qp, newActivitiesAvailable, goToBattle, heroId, heroCharacter, user, latestBattle, status }) => {
+const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailable, latestBattle, user }) => {
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
   const bottomDrawerHeight = windowHeight / 2.75;
   const refRBSheet = useRef({ open: () => null });
-  const { colors } = useTheme();
+
   const navigation = useNavigation();
   const { openModal } = useModal();
   const { addToast } = useGlobalToast();
   const [battleReportAvailable, setBattleReportAvailable] = useState(false);
   const [battleButtonDisabled, setBattleButtonDisabled] = useState(false);
+  const { power, recovery, armor, fire, earth, water, air, aether, photonTokens, qp, goToBattle, id, character, status } = hero;
 
   async function handleFetchUpcomingBattle() {
     try {
-      const { foe, rewards } = await fetchUpcomingFoeAndRewards({ avatarID: heroId });
-      navigation.push("App", { screen: "AwaitingBattle", params: { foe, rewards, character: heroCharacter } });
+      const { foe, rewards } = await fetchUpcomingFoeAndRewards({ avatarID: id });
+      navigation.push("App", { screen: "AwaitingBattle", params: { foe, rewards, character } });
     } catch (error) {
       addToast("error", `${error.status}: ${error.message}`);
       return debugErrors(error, user);
@@ -109,50 +99,15 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ power, recovery, armor, fir
       </Box>
 
       {/* HIDDEN MENU */}
-      <View flex={1} justifyContent="center" alignItems="center" backgroundColor="#000">
-        <RBSheet
-          ref={refRBSheet}
-          closeOnDragDown={true}
-          closeOnPressMask={false}
-          height={bottomDrawerHeight}
-          openDuration={750}
-          customStyles={{
-            wrapper: {
-              backgroundColor: "transparent",
-            },
-            container: {
-              backgroundColor: colors.base.primary,
-            },
-            draggableIcon: {
-              backgroundColor: "#f1c85b",
-            },
-          }}
-        >
-          <Box flexDirection="row">
-            <StatDisplay flex={1} statColor={colors.base.highlight} stat="Power" value={power} reversedText size="sm" />
-            <StatDisplay flex={1} statColor={colors.base.highlight} stat="Recovery" value={recovery} reversedText size="sm" />
-            <StatDisplay flex={1} statColor={colors.base.highlight} stat="Armor" value={armor} reversedText size="sm" />
-            {aether > 0 ? <StatDisplay flex={1} stat="Aether" value={aether} reversedText size="sm" /> : null}
-          </Box>
-          <Box display="flex" flexDirection="row">
-            <StatDisplay flex={1} statColor={colors.base.highlight} stat="Fire" value={fire} reversedText size="sm" />
-            <StatDisplay flex={1} statColor={colors.base.highlight} stat="Earth" value={earth} reversedText size="sm" />
-            <StatDisplay flex={1} statColor={colors.base.highlight} stat="Water" value={water} reversedText size="sm" />
-            <StatDisplay flex={1} statColor={colors.base.highlight} stat="Air" value={air} reversedText size="sm" />
-          </Box>
-          <Box flexDirection="row">
-            <Button m={1} flex={1}>
-              Inventory
-            </Button>
-            <Button m={1} flex={1}>
-              Profile
-            </Button>
-            <Button m={1} flex={1}>
-              Campaign
-            </Button>
-          </Box>
-        </RBSheet>
-      </View>
+      <HiddenInventory refRBSheet={refRBSheet} bottomDrawerHeight={bottomDrawerHeight}>
+        <Text>Test</Text>
+        <Text>Test2</Text>
+        {/* <Costumes />
+        <Pets />
+        <Consumables />
+        <Titles />
+        <Codeci /> */}
+      </HiddenInventory>
     </Box>
   );
 };

@@ -28,7 +28,6 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const [newActivities, setNewActivities] = useState<Activity[]>([]);
   const { addToast } = useGlobalToast();
   const propsForHeroImage = (({ character, equipped, alias, status }) => ({ character, equipped, alias, skin: equippedSkin(equipped), status, floating: true }))(state.hero);
-  const propsForBottomConsole = (({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, qp, goToBattle, id, character, status }) => ({ power, recovery, armor, fire, earth, water, air, aether, photonTokens, qp, newActivitiesAvailable: newActivities.length > 0 ? true : false, goToBattle, heroId: id, heroCharacter: character, user: state.user, latestBattle: state.latestBattle, status }))(state.hero);
   const hero = state.hero as Hero;
 
   async function handleHeroUpgrade(activities: Activity[]) {
@@ -105,7 +104,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
       </View>
 
       {/* BOTTOM CONSOLE */}
-      <BottomDrawer {...propsForBottomConsole} />
+      <BottomDrawer hero={state.hero} newActivitiesAvailable={newActivities.length > 0 ? true : false} latestBattle={state.latestBattle} user={state.user} />
 
       {/* MODALS */}
       <SignupToSave id="SignupToSave" modalAction={() => navigation.push("Register")} />

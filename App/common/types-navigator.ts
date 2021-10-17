@@ -17,11 +17,8 @@ type MainDrawerParamList = {
   Home: {
     newManualActivity?: Activity;
   };
-  Profile: undefined;
-  Ranking: undefined;
   Campaign: undefined;
   Inventory: undefined;
-  Items: undefined;
   Feedback: undefined;
   Settings: undefined;
   Loading: undefined;
