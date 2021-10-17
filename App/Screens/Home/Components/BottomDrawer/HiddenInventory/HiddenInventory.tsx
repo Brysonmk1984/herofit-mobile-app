@@ -3,15 +3,27 @@ import { Box, View, Button, useTheme } from "native-base";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { ReactChild } from "react-transition-group/node_modules/@types/react";
 import ItemTabs from "./ItemTabs";
+import { LinearGradient } from "expo-linear-gradient";
+import { ItemType, TabColors } from "../../../../../common/types";
 
 interface HiddenInventoryProps {
   children: ReactChild | ReactChild[];
   refRBSheet: React.MutableRefObject<{ open: () => any }>;
   bottomDrawerHeight: number;
+  activeTab: string;
+  setActiveTab: (tab: ItemType) => void;
 }
 
-const HiddenInventory: React.FC<HiddenInventoryProps> = ({ children, refRBSheet, bottomDrawerHeight }) => {
+const HiddenInventory: React.FC<HiddenInventoryProps> = ({ children, refRBSheet, bottomDrawerHeight, activeTab, setActiveTab }) => {
   const { colors } = useTheme();
+
+  const tabColors: TabColors = {
+    Consumables: ["#b91c1c", "red.700"],
+    Pets: ["#15803d", "green.700"],
+    Costumes: ["#7e22ce", "purple.700"],
+    Titles: ["#f97316", "orange.500"],
+    Codex: ["#9d174d", "pink.800"],
+  };
   return (
     <View flex={1} justifyContent="center" alignItems="center" backgroundColor="#000">
       <RBSheet
@@ -33,8 +45,9 @@ const HiddenInventory: React.FC<HiddenInventoryProps> = ({ children, refRBSheet,
           },
         }}
       >
-        <ItemTabs />
+        <ItemTabs activeTab={activeTab} setActiveTab={setActiveTab} tabColors={tabColors} />
         {children}
+        <LinearGradient end={{ x: 0, y: 1.5 }} colors={["transparent", tabColors[activeTab][0]]} style={{ height: "100%", width: "100%" }} />
       </RBSheet>
     </View>
   );

@@ -314,4 +314,10 @@ type SkinLcUnderscoreName = UniqueImageSkin | Tint;
 type SkinName = "Fire Tint" | "Earth Tint" | "Water Tint" | "Air Tint" | "Banshee Tint" | "Poltergeist Tint" | "Specter Tint" | "Wraith Tint" | "Phantom Tint" | "Phantasm Tint" | "Shade Tint" | "Apparition Tint" | "Shadow Self" | "Ascended Self" | "Gale Force" | "Fire Brand" | "Earth Shaker" | "Tide Caller";
 type ZodiacSign = "Capricorn" | "Aquarius" | "Pisces" | "Aries" | "Taurus" | "Gemini" | "Cancer" | "Leo" | "Virgo" | "Libra" | "Scorpio" | "Sagittarius";
 
-export { Action, AppDispatch, InitialAppState, AppAction, Store, User, UserStatus, Activity, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, Stat, PrimaryElement, EveryElement, HeroChoice, CharacterName, CharacterAlias, FoeType, FoeClasses, SkinLcUnderscoreName, SkinName, Tint, Foe, ZodiacSign };
+type ItemType = "Consumables" | "Pets" | "Costumes" | "Titles" | "Codex";
+
+type TabColors = {
+  [T in ItemType]: [string, string];
+};
+
+export { Action, AppDispatch, InitialAppState, AppAction, Store, User, UserStatus, Activity, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, Stat, PrimaryElement, EveryElement, HeroChoice, CharacterName, CharacterAlias, FoeType, FoeClasses, SkinLcUnderscoreName, SkinName, Tint, Foe, ZodiacSign, ItemType, TabColors };

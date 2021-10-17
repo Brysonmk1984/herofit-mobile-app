@@ -10,7 +10,7 @@ import useModal from "../../../../common/hooks/useModal";
 import { fetchUpcomingFoeAndRewards } from "../../../../api/battle";
 import useGlobalToast from "../../../../common/hooks/useGlobalToast";
 import debugErrors from "../../../../common/debugErrors";
-import { CharacterName, DefaultHeroProperties, Hero, HeroStatus, HeroWithStats, User } from "../../../../common/types";
+import { CharacterName, DefaultHeroProperties, Hero, HeroStatus, HeroWithStats, ItemType, User } from "../../../../common/types";
 import { Battle } from "../../../../common/types-battle";
 import { LinearGradient } from "expo-linear-gradient";
 import { GlobalStateContext } from "../../../../store";
@@ -34,6 +34,8 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
   const { addToast } = useGlobalToast();
   const [battleReportAvailable, setBattleReportAvailable] = useState(false);
   const [battleButtonDisabled, setBattleButtonDisabled] = useState(false);
+  const [activeTab, setActiveTab] = useState<ItemType>("Consumables");
+
   const { power, recovery, armor, fire, earth, water, air, aether, photonTokens, qp, goToBattle, id, character, status } = hero;
 
   async function handleFetchUpcomingBattle() {
@@ -99,7 +101,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
       </Box>
 
       {/* HIDDEN MENU */}
-      <HiddenInventory refRBSheet={refRBSheet} bottomDrawerHeight={bottomDrawerHeight}>
+      <HiddenInventory refRBSheet={refRBSheet} bottomDrawerHeight={bottomDrawerHeight} activeTab={activeTab} setActiveTab={setActiveTab}>
         <Text>Test</Text>
         <Text>Test2</Text>
         {/* <Costumes />
