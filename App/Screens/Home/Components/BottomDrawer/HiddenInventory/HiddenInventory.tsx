@@ -47,7 +47,7 @@ const HiddenInventory: React.FC<HiddenInventoryProps> = ({ children, refRBSheet,
       >
         <ItemTabs activeTab={activeTab} setActiveTab={setActiveTab} tabColors={tabColors} />
         {children}
-        <LinearGradient end={{ x: 0, y: 1.5 }} colors={["transparent", tabColors[activeTab][0]]} style={{ height: "100%", width: "100%" }} />
+        <LinearGradient end={{ x: 0, y: 1.2 }} colors={["transparent", tabColors[activeTab][0]]} style={{ height: "100%", width: "100%" }} />
       </RBSheet>
     </View>
   );

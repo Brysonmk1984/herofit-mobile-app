@@ -15,6 +15,9 @@ import { Battle } from "../../../../common/types-battle";
 import { LinearGradient } from "expo-linear-gradient";
 import { GlobalStateContext } from "../../../../store";
 import HiddenInventory from "./HiddenInventory/HiddenInventory";
+import useInventory from "./HiddenInventory/useInventory";
+import { isExistingHero } from "../../../../common/typeGuards";
+import ItemCarousel from "./HiddenInventory/ItemCarousel";
 
 interface BottomDrawerProps {
   hero: Hero | (HeroWithStats & DefaultHeroProperties);
@@ -32,6 +35,11 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
   const navigation = useNavigation();
   const { openModal } = useModal();
   const { addToast } = useGlobalToast();
+  let heroId: number | null = null;
+  if (isExistingHero(hero)) {
+    heroId = hero.id;
+  }
+  const { consumables, pets, costumes, titles, codex, equippedPet, equippedCostume, equippedTitle } = useInventory(heroId, user);
   const [battleReportAvailable, setBattleReportAvailable] = useState(false);
   const [battleButtonDisabled, setBattleButtonDisabled] = useState(false);
   const [activeTab, setActiveTab] = useState<ItemType>("Consumables");
@@ -102,13 +110,11 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
 
       {/* HIDDEN MENU */}
       <HiddenInventory refRBSheet={refRBSheet} bottomDrawerHeight={bottomDrawerHeight} activeTab={activeTab} setActiveTab={setActiveTab}>
-        <Text>Test</Text>
-        <Text>Test2</Text>
-        {/* <Costumes />
-        <Pets />
-        <Consumables />
-        <Titles />
-        <Codeci /> */}
+        {activeTab === "Consumables" && <ItemCarousel type="consumables" data={consumables} />}
+        {activeTab === "Pets" && <ItemCarousel type="pets" data={pets} equipped={equippedPet} />}
+        {activeTab === "Costumes" && <ItemCarousel type="costumes" data={costumes} equipped={equippedCostume} />}
+        {activeTab === "Titles" && <ItemCarousel type="titles" data={titles} equipped={equippedTitle} />}
+        {activeTab === "Codex" && <ItemCarousel type="codex" data={codex} />}
       </HiddenInventory>
     </Box>
   );

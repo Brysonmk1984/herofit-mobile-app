@@ -34,7 +34,7 @@ function objectIsOfType<T, K>(objectInQuestion: T | object, propertyNames: K): o
   return allPropertiesExist;
 }
 
-function isExistingHero(hero): hero is Hero {
+function isExistingHero(hero: unknown): hero is Hero {
   return hero.hasOwnProperty("id");
 }
 
