@@ -29,7 +29,7 @@ interface BottomDrawerProps {
 const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailable, latestBattle, user }) => {
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
-  const bottomDrawerHeight = windowHeight / 2.75;
+  const bottomDrawerHeight = windowHeight / 2.25;
   const refRBSheet = useRef({ open: () => null });
 
   const navigation = useNavigation();
@@ -112,7 +112,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
       <HiddenInventory refRBSheet={refRBSheet} bottomDrawerHeight={bottomDrawerHeight} activeTab={activeTab} setActiveTab={setActiveTab}>
         {activeTab === "Consumables" && <ItemCarousel type="consumables" data={consumables} />}
         {activeTab === "Pets" && <ItemCarousel type="pets" data={pets} equipped={equippedPet} />}
-        {activeTab === "Costumes" && <ItemCarousel type="costumes" data={costumes} equipped={equippedCostume} />}
+        {activeTab === "Costumes" && <ItemCarousel type="costumes" data={costumes} equipped={equippedCostume} character={hero.character} />}
         {activeTab === "Titles" && <ItemCarousel type="titles" data={titles} equipped={equippedTitle} />}
         {activeTab === "Codex" && <ItemCarousel type="codex" data={codex} />}
       </HiddenInventory>

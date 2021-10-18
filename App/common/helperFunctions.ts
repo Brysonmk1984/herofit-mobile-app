@@ -276,6 +276,7 @@ function getHeroImage(characterName: CharacterName, skin?: SkinName): number {
   // Figure out which Skin / Costume to use
   const lcName = lowercaseUnderscore(characterName);
   const lcSkin = lowercaseUnderscore<SkinName>(skin) as SkinLcUnderscoreName;
+
   switch (lcName) {
     case "timber_terror":
       return getTimberTerrorImage(lcSkin);
@@ -472,8 +473,9 @@ function getColorFromClassName(className) {
   }
 }
 
-function getColorFromItemName(name) {
+function getColorFromItemName(name: string, reverseDefault?: boolean) {
   const lcName = lowercaseUnderscore(name);
+
   switch (lcName) {
     case "white_belt":
     case "white_light_warrior":
@@ -496,7 +498,8 @@ function getColorFromItemName(name) {
     case "black_belt_sensei":
       return "#000000";
     default:
-      return "#242423";
+      console.log(lcName, reverseDefault);
+      return reverseDefault ? "#f8f8ff" : "#242423";
   }
 }
 
