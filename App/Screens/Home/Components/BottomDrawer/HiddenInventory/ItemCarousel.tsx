@@ -23,13 +23,13 @@ const ITEM_IMAGE_HEIGHT = ITEM_WIDTH * 1.2;
 const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, character }) => {
   const [activeIndex, setActiveIndex] = useState(equipped ? data.findIndex(item => item.name === equipped.name) : Math.floor(data.length / 2));
 
-  function _getItemImage(item: Item, type: Lowercase<ItemType>) {
+  function _getItemImage(item: Item, type: Lowercase<ItemType>, activeItem: Item) {
     const iconColor = item.class ? getColorFromClassName(item.class) : getColorFromItemName(item.name, true);
 
     switch (type) {
       case "consumables":
         return (
-          <Box position="absolute" alignSelf="center">
+          <Box style={styles.itemImage}>
             <Text textAlign="center">
               <Icon iconName={item.name} size={ITEM_IMAGE_WIDTH} color={iconColor} />
             </Text>
@@ -46,7 +46,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
         );
       case "titles":
         return (
-          <Box position="absolute" alignSelf="center">
+          <Box style={styles.itemImage}>
             <Text textAlign="center">
               <Icon iconName={item.name} size={ITEM_IMAGE_WIDTH} color={iconColor} />
             </Text>
@@ -54,7 +54,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
         );
       case "codex":
         return (
-          <Box position="absolute" alignSelf="center">
+          <Box style={styles.itemImage}>
             <Text textAlign="center">
               <Icon iconName={item.name} size={ITEM_IMAGE_WIDTH} color={iconColor} />
             </Text>
@@ -62,7 +62,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
         );
       default:
         return (
-          <Box position="absolute" alignSelf="center">
+          <Box style={styles.itemImage}>
             <Icon iconName={"?"} size={ITEM_IMAGE_WIDTH} color={iconColor} />
           </Box>
         );
@@ -76,9 +76,9 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
     return (
       <Pressable onPress={() => console.log(item.name)}>
         <View bg={"base.primary"} style={styles.itemContainer}>
-          <ImageBackground source={require("../../../../../../assets/images/layout/carousel-background.webp")} resizeMode="cover" style={styles.panelBackground} />
+          <ImageBackground source={require("../../../../../../assets/images/layout/carousel-background.webp")} resizeMode="contain" style={styles.panelBackground} />
         </View>
-        {_getItemImage(item, type)}
+        {_getItemImage(item, type, activeItem)}
         {/* 
         {activeItem ? (
           <Image style={styles.itemImage} source={image} alt={item.name} resizeMode="contain" />
@@ -116,7 +116,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
         </Text>
       </View>
       <View style={styles.carouselView}>
-        <Carousel firstItem={activeIndex} containerCustomStyle={styles.carouselContainer} onSnapToItem={index => _handleSelectedItem(index)} data={data} renderItem={_renderItem} sliderWidth={SLIDER_WIDTH} itemWidth={120} inactiveSlideOpacity={1} inactiveSlideScale={0.7} />
+        <Carousel enableMomentum={true} firstItem={activeIndex} containerCustomStyle={styles.carouselContainer} onSnapToItem={index => _handleSelectedItem(index)} data={data} renderItem={_renderItem} sliderWidth={SLIDER_WIDTH} itemWidth={SLIDER_WIDTH * 0.28} inactiveSlideOpacity={1} inactiveSlideScale={0.6} />
       </View>
     </SafeAreaView>
   );
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   carouselWrapper: {
     elevation: Platform.OS === "android" ? 101 : 0,
     position: "absolute",
-    left: 0,
+    left: -10,
     bottom: 10,
     zIndex: 1000,
   },
@@ -154,7 +154,8 @@ const styles = StyleSheet.create({
     height: ITEM_IMAGE_HEIGHT,
     width: ITEM_IMAGE_WIDTH,
     position: "absolute",
-    alignSelf: "center",
+    left: 0,
+    marginLeft: -7,
     opacity: 1,
   },
   carouselView: { flex: 1, flexDirection: "row", justifyContent: "center" },
