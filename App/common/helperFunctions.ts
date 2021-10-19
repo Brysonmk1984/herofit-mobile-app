@@ -397,6 +397,17 @@ function getPetImage(petName: string): number {
       return require("../../assets/images/items/pets/raven_of_omens.webp");
     case "spirit_hawk":
       return require("../../assets/images/items/pets/spirit_hawk.webp");
+
+    case "splash_artist":
+      return require("../../assets/images/foes/elementals/splash_artist.webp");
+    case "rock_skipper":
+      return require("../../assets/images/foes/elementals/rock_skipper.webp");
+    case "flame_fiend":
+      return require("../../assets/images/foes/elementals/flame_fiend.webp");
+    case "gusty_rascal":
+      return require("../../assets/images/foes/elementals/gusty_rascal.webp");
+    default:
+      throw new Error("No matching image");
   }
 }
 
@@ -498,7 +509,6 @@ function getColorFromItemName(name: string, reverseDefault?: boolean) {
     case "black_belt_sensei":
       return "#000000";
     default:
-      console.log(lcName, reverseDefault);
       return reverseDefault ? "#f8f8ff" : "#242423";
   }
 }

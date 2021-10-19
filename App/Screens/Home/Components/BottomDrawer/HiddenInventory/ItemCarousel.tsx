@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, Platform, SafeAreaView, Dimensions, Pressable, ImageBackground } from "react-native";
 import { View, Text, Image, Box } from "native-base";
 import { CharacterName, Item, ItemType } from "../../../../../common/types";
 import Carousel from "react-native-snap-carousel";
-import { getColorFromClassName, getColorFromItemName, getHeroImage, getPetImage } from "../../../../../common/helperFunctions";
+import { getColorFromClassName, getColorFromItemName, getHeroImage, getPetImage, thousandsFormat } from "../../../../../common/helperFunctions";
 import { Icon } from "../../../../../Components/CustomComponents";
 import { HeroImage } from "../../../../../Components/HeroImage/HeroImage";
+import { GlobalStateContext } from "../../../../../store";
 
 interface ItemCarouselProps {
   type: Lowercase<ItemType>;
@@ -13,6 +14,8 @@ interface ItemCarouselProps {
   equipped?: Item;
   character?: CharacterName;
 }
+type SliderItem = Item & { unowned: boolean };
+type AllSliderItems = SliderItem[];
 
 const SLIDER_WIDTH = Dimensions.get("window").width;
 const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.32);
@@ -21,49 +24,93 @@ const ITEM_IMAGE_WIDTH = ITEM_WIDTH * 1.2;
 const ITEM_IMAGE_HEIGHT = ITEM_WIDTH * 1.2;
 
 const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, character }) => {
-  const [activeIndex, setActiveIndex] = useState(equipped ? data.findIndex(item => item.name === equipped.name) : Math.floor(data.length / 2));
+  const { state, dispatch } = useContext(GlobalStateContext);
+  const [allItemsOfType, setAllItemsOfType] = useState([]);
+  const [activeIndex, setActiveIndex] = useState(null);
 
-  function _getItemImage(item: Item, type: Lowercase<ItemType>, activeItem: Item) {
+  function _getItemImage(item: SliderItem, type: Lowercase<ItemType>) {
     const iconColor = item.class ? getColorFromClassName(item.class) : getColorFromItemName(item.name, true);
+    const IMAGE_WIDTH = item.unowned ? ITEM_IMAGE_WIDTH * 0.8 : ITEM_IMAGE_WIDTH;
+    const MARGIN_LEFT = item.unowned ? 2 : -7;
+    const MARGIN_TOP = item.unowned ? 0 : -8;
 
     switch (type) {
       case "consumables":
         return (
           <Box style={styles.itemImage}>
+            {item.unowned && (
+              <Box position="absolute" w="100%" top="35%" zIndex="1000">
+                <Text textAlign="center" color={item.ptCost ? "base.brand" : "primary.400"} ml="2">
+                  {item.ptCost ? thousandsFormat(item.ptCost) : "NOT FOR SALE"}
+                </Text>
+              </Box>
+            )}
             <Text textAlign="center">
-              <Icon iconName={item.name} size={ITEM_IMAGE_WIDTH} color={iconColor} />
+              <Icon iconName={item.name} size={IMAGE_WIDTH} color={iconColor} />
             </Text>
           </Box>
         );
       case "pets":
-        return <Image style={styles.itemImage} source={getPetImage(item.name)} alt={item.name} resizeMode="contain" />;
+        return (
+          <>
+            {item.unowned && (
+              <Box position="absolute" w="100%" top="35%" zIndex="1000">
+                <Text textAlign="center" color={item.ptCost ? "base.brand" : "primary.400"} ml="2">
+                  {item.ptCost ? thousandsFormat(item.ptCost) : "NOT FOR SALE"}
+                </Text>
+              </Box>
+            )}
+            <Image style={[styles.itemImage, { width: IMAGE_WIDTH, height: IMAGE_WIDTH, marginLeft: MARGIN_LEFT, marginTop: MARGIN_TOP }]} source={getPetImage(item.name)} alt={item.name} resizeMode="contain" />
+          </>
+        );
 
       case "costumes":
         return (
           <Box position="absolute" alignSelf="center">
-            <HeroImage character={character} width={ITEM_IMAGE_WIDTH} height={ITEM_IMAGE_HEIGHT} skin={item} />
+            {item.unowned && (
+              <Box position="absolute" w="100%" top="35%" zIndex="1000">
+                <Text textAlign="center" color={item.ptCost ? "base.brand" : "primary.400"} ml="2">
+                  {item.ptCost ? thousandsFormat(item.ptCost) : "NOT FOR SALE"}
+                </Text>
+              </Box>
+            )}
+            <HeroImage character={character} width={IMAGE_WIDTH} height={IMAGE_WIDTH} skin={item} />
           </Box>
         );
       case "titles":
         return (
           <Box style={styles.itemImage}>
+            {item.unowned && (
+              <Box position="absolute" w="100%" top="35%" zIndex="1000">
+                <Text textAlign="center" color={item.ptCost ? "base.brand" : "primary.400"} ml="2">
+                  {item.ptCost ? thousandsFormat(item.ptCost) : "NOT FOR SALE"}
+                </Text>
+              </Box>
+            )}
             <Text textAlign="center">
-              <Icon iconName={item.name} size={ITEM_IMAGE_WIDTH} color={iconColor} />
+              <Icon iconName={item.name} size={IMAGE_WIDTH} color={iconColor} />
             </Text>
           </Box>
         );
       case "codex":
         return (
           <Box style={styles.itemImage}>
+            {item.unowned && (
+              <Box position="absolute" w="100%" top="35%" zIndex="1000">
+                <Text textAlign="center" color={item.ptCost ? "base.brand" : "primary.400"} ml="2">
+                  {item.ptCost ? thousandsFormat(item.ptCost) : "NOT FOR SALE"}
+                </Text>
+              </Box>
+            )}
             <Text textAlign="center">
-              <Icon iconName={item.name} size={ITEM_IMAGE_WIDTH} color={iconColor} />
+              <Icon iconName={item.name} size={IMAGE_WIDTH} color={iconColor} />
             </Text>
           </Box>
         );
       default:
         return (
           <Box style={styles.itemImage}>
-            <Icon iconName={"?"} size={ITEM_IMAGE_WIDTH} color={iconColor} />
+            <Icon iconName={"?"} size={IMAGE_WIDTH} color={iconColor} />
           </Box>
         );
     }
@@ -71,53 +118,61 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
 
   function _renderItem({ item, index }) {
     const activeItem = index === activeIndex;
-    //const image = type === "pets" ? getPetImage(item.name) : type === "costumes" ? getHeroImage(character, item.name) : require("../../../../../../assets/images/items/pets/alpha_dog.webp");
-
     return (
-      <Pressable onPress={() => console.log(item.name)}>
-        <View bg={"base.primary"} style={styles.itemContainer}>
+      <Pressable style={{ marginLeft: -4 }} onPress={() => console.log(item.id)}>
+        {/* Background image */}
+        <View bg={"base.primary"} style={[styles.itemContainer]}>
           <ImageBackground source={require("../../../../../../assets/images/layout/carousel-background.webp")} resizeMode="contain" style={styles.panelBackground} />
         </View>
-        {_getItemImage(item, type, activeItem)}
-        {/* 
-        {activeItem ? (
-          <Image style={styles.itemImage} source={image} alt={item.name} resizeMode="contain" />
-        ) : (
-          <>
-            <Image style={[styles.itemImage, { tintColor: "black" }]} source={image} alt={item.name} resizeMode="contain" />
-            <Image style={[styles.itemImage, { position: "absolute", opacity: 0.3 }]} source={image} alt={item.name} resizeMode="contain" />
-          </>
-        )} */}
+        {/* Item image or icon */}
+        {_getItemImage(item, type)}
+        {/* Darken filter for items not owned */}
+        {item.unowned && <View bg={"base.black"} opacity={0.4} style={[styles.itemContainer, { position: "absolute" }]}></View>}
       </Pressable>
     );
   }
 
   function _handleSelectedItem(index: number) {
     setActiveIndex(index);
-    console.log(index, data[index].name);
+    // console.log(index, data[index].name);
   }
 
-  // useEffect(() => {
-  //   if (equipped) {
-  //     console.log("EEEEEEEE", equipped);
-  //     const indexOfEquipped = data.findIndex(item => item.name === equipped.name);
-  //     console.log("ASDASD", indexOfEquipped);
-  //     setActiveIndex(indexOfEquipped);
-  //   } else {
-  //     setActiveIndex(Math.floor(data.length / 2));
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (data) {
+      const typeMap = { costumes: "skin", pets: "pet", titles: "title", consumables: "consumable", codex: "codex" };
+
+      const unownedItems: Item[] | AllSliderItems = state.allGameItems
+        // Filter all game items down to just the items of the selected item type
+        .filter(item => {
+          return item.type === typeMap[type] && !data.map(item => item.name).includes(item.name);
+        })
+        // add 'unowned' to item if user doesn't own the item
+        .map(item => ({ ...item, unowned: true }))
+        // Sort by ptCost
+        .sort((a, b) => a.ptCost - b.ptCost)
+        // Sort by buyable
+        //@ts-ignore
+        .sort((a, b) => (b.ptCost === null ? false : true));
+
+      const items = [...data, ...unownedItems];
+      setAllItemsOfType(items);
+      const startingActiveIndex = equipped ? data.findIndex(item => item.name === equipped.name) : Math.floor(data.length / 2);
+      setActiveIndex(startingActiveIndex);
+    }
+  }, [data]);
 
   return (
     <SafeAreaView style={styles.carouselWrapper}>
       <View>
         <Text fontFamily="heading" color="base.highlight" fontSize="3xl" textAlign="center">
-          {data[activeIndex] ? data[activeIndex].name : "No Items"}
+          {allItemsOfType[activeIndex] && allItemsOfType[activeIndex].name}
         </Text>
       </View>
-      <View style={styles.carouselView}>
-        <Carousel enableMomentum={true} firstItem={activeIndex} containerCustomStyle={styles.carouselContainer} onSnapToItem={index => _handleSelectedItem(index)} data={data} renderItem={_renderItem} sliderWidth={SLIDER_WIDTH} itemWidth={SLIDER_WIDTH * 0.28} inactiveSlideOpacity={1} inactiveSlideScale={0.6} />
-      </View>
+      {activeIndex !== null && (
+        <View style={styles.carouselView}>
+          <Carousel enableMomentum={true} firstItem={activeIndex} containerCustomStyle={styles.carouselContainer} onSnapToItem={index => _handleSelectedItem(index)} data={allItemsOfType} renderItem={_renderItem} sliderWidth={SLIDER_WIDTH} itemWidth={SLIDER_WIDTH * 0.28} inactiveSlideOpacity={1} inactiveSlideScale={0.6} />
+        </View>
+      )}
     </SafeAreaView>
   );
 };
@@ -139,7 +194,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 12,
     overflow: "hidden",
-    marginTop: ITEM_HEIGHT * 0.1,
+
     marginBottom: 10,
   },
   panelBackground: {
