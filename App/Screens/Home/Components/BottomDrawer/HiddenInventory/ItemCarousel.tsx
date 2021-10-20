@@ -3,7 +3,7 @@ import { StyleSheet, Platform, SafeAreaView, Dimensions, Pressable, ImageBackgro
 import { View, Text, Image, Box } from "native-base";
 import { CharacterName, Item, ItemType } from "../../../../../common/types";
 import Carousel from "react-native-snap-carousel";
-import { getColorFromClassName, getColorFromItemName, getHeroImage, getPetImage, thousandsFormat } from "../../../../../common/helperFunctions";
+import { capitalize, getColorFromClassName, getColorFromItemName, getHeroImage, getPetImage, thousandsFormat } from "../../../../../common/helperFunctions";
 import { Icon } from "../../../../../Components/CustomComponents";
 import { HeroImage } from "../../../../../Components/HeroImage/HeroImage";
 import { GlobalStateContext } from "../../../../../store";
@@ -27,12 +27,25 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
   const { state, dispatch } = useContext(GlobalStateContext);
   const [allItemsOfType, setAllItemsOfType] = useState([]);
   const [activeIndex, setActiveIndex] = useState(null);
+  const unequippedTypes = ["costumes", "pets", "titles"];
 
   function _getItemImage(item: SliderItem, type: Lowercase<ItemType>) {
     const iconColor = item.class ? getColorFromClassName(item.class) : getColorFromItemName(item.name, true);
-    const IMAGE_WIDTH = item.unowned ? ITEM_IMAGE_WIDTH * 0.8 : ITEM_IMAGE_WIDTH;
-    const MARGIN_LEFT = item.unowned ? 2 : -7;
-    const MARGIN_TOP = item.unowned ? 0 : -8;
+    const IMAGE_WIDTH = ITEM_IMAGE_WIDTH * 0.8;
+    const MARGIN_LEFT = 2;
+    const MARGIN_TOP = 0;
+
+    if (item.name.includes(`NO `)) {
+      return (
+        <Box style={styles.itemImage}>
+          <Box justifyContent="center" position="absolute" w="100%" top="30%" ml={-1} zIndex="1000">
+            <Text textAlign="center" color={"primary.400"}>
+              {item.name}
+            </Text>
+          </Box>
+        </Box>
+      );
+    }
 
     switch (type) {
       case "consumables":
@@ -48,6 +61,13 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
             <Text textAlign="center">
               <Icon iconName={item.name} size={IMAGE_WIDTH} color={iconColor} />
             </Text>
+            {item.count && (
+              <Box position="absolute" bottom={4} right={3} borderRadius={4} h={8} w={8} bgColor="primary.800">
+                <Text color="base.highlight" fontFamily="heading" textAlign="center" lineHeight={8} fontSize="2xl">
+                  {item.count}
+                </Text>
+              </Box>
+            )}
           </Box>
         );
       case "pets":
@@ -155,6 +175,13 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
         .sort((a, b) => (b.ptCost === null ? false : true));
 
       const items = [...data, ...unownedItems];
+
+      if (unequippedTypes.includes(type)) {
+        const name = type === "costumes" ? "NO COSTUME" : `NO ${typeMap[type].toUpperCase()}`;
+        const nothingItem = { type: typeMap[type], name } as Item;
+        items.unshift(nothingItem);
+      }
+
       setAllItemsOfType(items);
       const startingActiveIndex = equipped ? data.findIndex(item => item.name === equipped.name) : Math.floor(data.length / 2);
       setActiveIndex(startingActiveIndex);

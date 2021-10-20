@@ -234,6 +234,7 @@ interface Item extends ItemInstance {
   ptCost: number | null;
   type: "skin" | "title" | "pet" | "consumable" | "codex";
   updatedAt: string;
+  count?: number;
 }
 
 interface Effect {
