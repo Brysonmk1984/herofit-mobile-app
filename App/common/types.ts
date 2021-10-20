@@ -237,6 +237,8 @@ interface Item extends ItemInstance {
   count?: number;
 }
 
+type ItemWithOwnership = Item & { unowned: boolean };
+
 interface Effect {
   name: string;
   type: string;
@@ -321,4 +323,4 @@ type TabColors = {
   [T in ItemType]: [string, string];
 };
 
-export { Action, AppDispatch, InitialAppState, AppAction, Store, User, UserStatus, Activity, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, Stat, PrimaryElement, EveryElement, HeroChoice, CharacterName, CharacterAlias, FoeType, FoeClasses, SkinLcUnderscoreName, SkinName, Tint, Foe, ZodiacSign, ItemType, TabColors };
+export { Action, AppDispatch, InitialAppState, AppAction, Store, User, UserStatus, Activity, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, ItemWithOwnership, Stat, PrimaryElement, EveryElement, HeroChoice, CharacterName, CharacterAlias, FoeType, FoeClasses, SkinLcUnderscoreName, SkinName, Tint, Foe, ZodiacSign, ItemType, TabColors };

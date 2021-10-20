@@ -113,6 +113,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
       <FeedbackChoice id="FeedbackChoice" />
       <SignupFinished id="SignupFinished" />
       <GoToBattle id="GoToBattle" goTo={navigation.push} heroId={hero.id} />
+
       {newActivities.length ? <ActivityUpgrade id="ActivityUpgrade" activities={newActivities} modalAction={() => handleHeroUpgrade(newActivities)} goBack={navigation.push} state={state} closeModal={closeModal} setNewActivities={setNewActivities} /> : null}
     </ScreenContainer>
   );

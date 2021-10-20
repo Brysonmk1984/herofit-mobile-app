@@ -1,12 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { StyleSheet, Platform, SafeAreaView, Dimensions, Pressable, ImageBackground } from "react-native";
 import { View, Text, Image, Box } from "native-base";
-import { CharacterName, Item, ItemType } from "../../../../../common/types";
+import { CharacterName, ItemWithOwnership, Item, ItemType } from "../../../../../common/types";
 import Carousel from "react-native-snap-carousel";
 import { capitalize, getColorFromClassName, getColorFromItemName, getHeroImage, getPetImage, thousandsFormat } from "../../../../../common/helperFunctions";
 import { Icon } from "../../../../../Components/CustomComponents";
 import { HeroImage } from "../../../../../Components/HeroImage/HeroImage";
 import { GlobalStateContext } from "../../../../../store";
+import useModal from "../../../../../common/hooks/useModal";
+import ItemDetail from "./Modals/ItemDetail";
+import ItemImage from "../../../../../common/ItemImage";
 
 interface ItemCarouselProps {
   type: Lowercase<ItemType>;
@@ -14,8 +17,8 @@ interface ItemCarouselProps {
   equipped?: Item;
   character?: CharacterName;
 }
-type SliderItem = Item & { unowned: boolean };
-type AllSliderItems = SliderItem[];
+
+type AllSliderItems = ItemWithOwnership[];
 
 const SLIDER_WIDTH = Dimensions.get("window").width;
 const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.32);
@@ -27,9 +30,12 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
   const { state, dispatch } = useContext(GlobalStateContext);
   const [allItemsOfType, setAllItemsOfType] = useState([]);
   const [activeIndex, setActiveIndex] = useState(null);
+  const [pressedItem, setPressedItem] = useState(null);
+  const { openModal } = useModal();
+  const carousel = useRef(null);
   const unequippedTypes = ["costumes", "pets", "titles"];
 
-  function _getItemImage(item: SliderItem, type: Lowercase<ItemType>) {
+  function _getItemImage(item: ItemWithOwnership, type: Lowercase<ItemType>) {
     const iconColor = item.class ? getColorFromClassName(item.class) : getColorFromItemName(item.name, true);
     const IMAGE_WIDTH = ITEM_IMAGE_WIDTH * 0.8;
     const MARGIN_LEFT = 2;
@@ -58,9 +64,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
                 </Text>
               </Box>
             )}
-            <Text ml={-3} mt={2} textAlign="center">
-              <Icon iconName={item.name} size={IMAGE_WIDTH} color={iconColor} />
-            </Text>
+            <ItemImage item={item} w={IMAGE_WIDTH} />
             {item.count && (
               <Box position="absolute" bottom={4} right={3} borderRadius={4} h={8} w={8} bgColor="primary.800">
                 <Text color="base.highlight" fontFamily="heading" textAlign="center" lineHeight={8} fontSize="2xl">
@@ -80,7 +84,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
                 </Text>
               </Box>
             )}
-            <Image style={[styles.itemImage, { width: IMAGE_WIDTH, height: IMAGE_WIDTH, marginLeft: MARGIN_LEFT, marginTop: MARGIN_TOP }]} source={getPetImage(item.name)} alt={item.name} resizeMode="contain" />
+            <ItemImage style={[styles.itemImage, { width: IMAGE_WIDTH, height: IMAGE_WIDTH, marginLeft: MARGIN_LEFT, marginTop: MARGIN_TOP }]} item={item} character={character} w={IMAGE_WIDTH} />
           </>
         );
 
@@ -94,7 +98,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
                 </Text>
               </Box>
             )}
-            <HeroImage character={character} width={IMAGE_WIDTH} height={IMAGE_WIDTH} skin={item} />
+            <ItemImage item={item} character={character} w={IMAGE_WIDTH} />
           </Box>
         );
       case "titles":
@@ -107,9 +111,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
                 </Text>
               </Box>
             )}
-            <Text ml={-3} mt={2} textAlign="center">
-              <Icon iconName={item.name} size={IMAGE_WIDTH} color={iconColor} />
-            </Text>
+            <ItemImage item={item} w={IMAGE_WIDTH} />
           </Box>
         );
       case "codex":
@@ -122,9 +124,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
                 </Text>
               </Box>
             )}
-            <Text textAlign="center">
-              <Icon iconName={item.name} size={IMAGE_WIDTH} color={iconColor} />
-            </Text>
+            <ItemImage item={item} w={IMAGE_WIDTH} />
           </Box>
         );
       default:
@@ -139,7 +139,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
   function _renderItem({ item, index }) {
     const activeItem = index === activeIndex;
     return (
-      <Pressable style={{ marginLeft: -4 }} onPress={() => console.log(item.id)}>
+      <Pressable style={{ marginLeft: -4 }} onPress={() => _openModal(item, index)}>
         {/* Background image */}
         <View bg={"base.primary"} style={[styles.itemContainer]}>
           <ImageBackground source={require("../../../../../../assets/images/layout/carousel-background.webp")} resizeMode="contain" style={styles.panelBackground} />
@@ -157,6 +157,16 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
     // console.log(index, data[index].name);
   }
 
+  function _openModal(item: Item | ItemWithOwnership, index: number) {
+    if (index !== activeIndex) {
+      carousel.current.snapToItem(index);
+    }
+    if (!item.name.includes("NO ")) {
+      setPressedItem(item);
+      openModal("ItemDetail");
+    }
+  }
+
   useEffect(() => {
     if (data) {
       const typeMap = { costumes: "skin", pets: "pet", titles: "title", consumables: "consumable", codex: "codex" };
@@ -164,7 +174,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
       const unownedItems: Item[] | AllSliderItems = state.allGameItems
         // Filter all game items down to just the items of the selected item type
         .filter(item => {
-          if (item.type === "consumable") {
+          if (type === "consumables" && item.type === "consumable") {
             // Since consumables can stack, set consumable item to unowned
             return true;
           } else {
@@ -203,9 +213,10 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
       </View>
       {activeIndex !== null && (
         <View style={styles.carouselView}>
-          <Carousel enableMomentum={true} firstItem={activeIndex} containerCustomStyle={styles.carouselContainer} onSnapToItem={index => _handleSelectedItem(index)} data={allItemsOfType} renderItem={_renderItem} sliderWidth={SLIDER_WIDTH} itemWidth={SLIDER_WIDTH * 0.28} inactiveSlideOpacity={1} inactiveSlideScale={0.6} />
+          <Carousel ref={carousel} enableMomentum={true} firstItem={activeIndex} containerCustomStyle={styles.carouselContainer} onSnapToItem={index => _handleSelectedItem(index)} data={allItemsOfType} renderItem={_renderItem} sliderWidth={SLIDER_WIDTH} itemWidth={SLIDER_WIDTH * 0.28} inactiveSlideOpacity={1} inactiveSlideScale={0.6} />
         </View>
       )}
+      {pressedItem && <ItemDetail id="ItemDetail" item={pressedItem} character={character} />}
     </SafeAreaView>
   );
 };

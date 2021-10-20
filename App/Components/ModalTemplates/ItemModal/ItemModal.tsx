@@ -6,22 +6,24 @@ import ItemHeader from "./ItemHeader";
 import ItemDescription from "./ItemDescription";
 import { IActionHeader } from "../BasicModal/Content";
 import useModal from "../../../common/hooks/useModal";
-import { Item } from "../../../common/types";
+import { CharacterName, Item } from "../../../common/types";
 import ItemModalActionButton from "./ItemModalActionButton";
+import ItemImage from "../../../common/ItemImage";
 
 interface ItemModalProps {
+  children: React.ReactChild[];
   id: string;
   modalOpen: boolean;
   modalAction?: () => void;
   item: Item;
-  children: React.ReactChild[];
+  character?: CharacterName;
   actionHeader?: IActionHeader;
   buttonText?: string;
   disabled?: boolean;
   preventClose?: boolean;
 }
 
-function ItemModal({ children, id, modalOpen, modalAction, item, buttonText, disabled, preventClose }: ItemModalProps) {
+const ItemModal = function ({ children, id, modalOpen, modalAction, item, character, buttonText, disabled, preventClose }: ItemModalProps) {
   const { closeModal } = useModal();
 
   function handleModalAction(idToClose: string, modalAction: () => void) {
@@ -36,7 +38,8 @@ function ItemModal({ children, id, modalOpen, modalAction, item, buttonText, dis
     <Modal isOpen={modalOpen} onClose={() => closeModal(id)} _backdrop={{ backgroundColor: "layout.modalBackdrop" }}>
       <Modal.Content p={0}>
         <ItemHeader>
-          <Image zIndex="10" elevation={10} w={105} position="absolute" left={-12} top={-20} alignSelf={"flex-end"} source={_getItemImage(item, item.type)} size={100} />
+          <ItemImage item={item} w={105} character={character} />
+          {/* <Image zIndex="10" elevation={10} w={105} position="absolute" left={-12} top={-20} alignSelf={"flex-end"} source={_getItemImage(item, item.type)} size={100} /> */}
           <ItemDescription>
             <Text textAlign="justify" color="primary.700" flexWrap="wrap" lineHeight="18px" fontSize={15}>
               {item.description}
@@ -49,6 +52,6 @@ function ItemModal({ children, id, modalOpen, modalAction, item, buttonText, dis
       </Modal.Content>
     </Modal>
   );
-}
+};
 
 export default ItemModal;
