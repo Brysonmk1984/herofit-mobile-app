@@ -58,7 +58,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
                 </Text>
               </Box>
             )}
-            <Text textAlign="center">
+            <Text ml={-3} mt={2} textAlign="center">
               <Icon iconName={item.name} size={IMAGE_WIDTH} color={iconColor} />
             </Text>
             {item.count && (
@@ -107,7 +107,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
                 </Text>
               </Box>
             )}
-            <Text textAlign="center">
+            <Text ml={-3} mt={2} textAlign="center">
               <Icon iconName={item.name} size={IMAGE_WIDTH} color={iconColor} />
             </Text>
           </Box>
@@ -191,7 +191,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
   return (
     <SafeAreaView style={styles.carouselWrapper}>
       <View>
-        <Text fontFamily="heading" color="base.highlight" fontSize="3xl" textAlign="center">
+        <Text fontFamily="heading" color="base.highlight" fontSize="3xl" textAlign="center" mt={-7} mb={5}>
           {allItemsOfType[activeIndex] && allItemsOfType[activeIndex].name}
         </Text>
       </View>
