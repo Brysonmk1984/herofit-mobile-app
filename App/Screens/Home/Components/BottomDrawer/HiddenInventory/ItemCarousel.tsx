@@ -53,7 +53,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
           <Box style={styles.itemImage}>
             {item.unowned && (
               <Box position="absolute" w="100%" top="35%" zIndex="1000">
-                <Text textAlign="center" color={item.ptCost ? "base.brand" : "primary.400"} ml="2">
+                <Text textAlign="center" color={item.ptCost ? "base.brand" : "primary.400"} ml={-2}>
                   {item.ptCost ? thousandsFormat(item.ptCost) : "NOT FOR SALE"}
                 </Text>
               </Box>
@@ -164,7 +164,13 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
       const unownedItems: Item[] | AllSliderItems = state.allGameItems
         // Filter all game items down to just the items of the selected item type
         .filter(item => {
-          return item.type === typeMap[type] && !data.map(item => item.name).includes(item.name);
+          if (item.type === "consumable") {
+            // Since consumables can stack, set consumable item to unowned
+            return true;
+          } else {
+            // Otherwise Filter all game items down to just the items of the selected item type
+            return item.type === typeMap[type] && !data.map(item => item.name).includes(item.name);
+          }
         })
         // add 'unowned' to item if user doesn't own the item
         .map(item => ({ ...item, unowned: true }))
