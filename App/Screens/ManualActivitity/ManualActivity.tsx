@@ -173,7 +173,7 @@ const ManualActivity = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
 
       {/* HIDDEN MENU */}
       <Box position="absolute" bottom={0}>
-        <View flex={1} justifyContent="center" alignItems="center" backgroundColor="#000">
+        <View flex={1} justifyContent="center" alignItems="center" bgColor="#000">
           <RBSheet
             ref={refRBSheet}
             closeOnDragDown={true}

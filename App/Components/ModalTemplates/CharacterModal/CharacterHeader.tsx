@@ -7,7 +7,7 @@ interface CharacterHeaderProps {
 
 export const CharacterHeader: React.FC<CharacterHeaderProps> = ({ children }) => {
   return (
-    <Box minHeight={85} backgroundColor="base.background">
+    <Box minHeight={85} bgColor="base.background">
       {children}
     </Box>
   );

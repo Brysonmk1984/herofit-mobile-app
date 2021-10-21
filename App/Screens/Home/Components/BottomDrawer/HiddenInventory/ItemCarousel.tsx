@@ -64,7 +64,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
                 </Text>
               </Box>
             )}
-            <ItemImage item={item} w={IMAGE_WIDTH} />
+            <ItemImage item={item} w={IMAGE_WIDTH} reverseIconDefaultColor={true} />
             {item.count && (
               <Box position="absolute" bottom={4} right={3} borderRadius={4} h={8} w={8} bgColor="primary.800">
                 <Text color="base.highlight" fontFamily="heading" textAlign="center" lineHeight={8} fontSize="2xl">
@@ -111,7 +111,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
                 </Text>
               </Box>
             )}
-            <ItemImage item={item} w={IMAGE_WIDTH} />
+            <ItemImage item={item} w={IMAGE_WIDTH} reverseIconDefaultColor={true} />
           </Box>
         );
       case "codex":
@@ -124,13 +124,13 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
                 </Text>
               </Box>
             )}
-            <ItemImage item={item} w={IMAGE_WIDTH} />
+            <ItemImage item={item} w={IMAGE_WIDTH} reverseIconDefaultColor={true} />
           </Box>
         );
       default:
         return (
           <Box style={styles.itemImage}>
-            <Icon iconName={"?"} size={IMAGE_WIDTH} color={iconColor} />
+            <Icon iconName={"?"} size={IMAGE_WIDTH} color={iconColor} reverseIconDefaultColor={true} />
           </Box>
         );
     }

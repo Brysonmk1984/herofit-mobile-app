@@ -3,11 +3,12 @@ import { View, Text } from "native-base";
 
 interface ItemDescriptionProps {
   children: React.ReactChild;
+  shadow?: number;
 }
 
 const ItemDescriptionProps: React.FC<ItemDescriptionProps> = ({ children }) => {
   return (
-    <View shadow="5" borderRadius={8} backgroundColor="base.white" ml={95} my={2} mr={8} p={2}>
+    <View borderRadius={8} bgColor="base.white" ml={100} my={2} mr={8} p={1.5}>
       {children}
     </View>
   );

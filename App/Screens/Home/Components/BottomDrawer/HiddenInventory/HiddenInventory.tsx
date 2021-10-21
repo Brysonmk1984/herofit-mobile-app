@@ -25,7 +25,7 @@ const HiddenInventory: React.FC<HiddenInventoryProps> = ({ children, refRBSheet,
     Codex: ["#9d174d", "pink.800"],
   };
   return (
-    <View flex={1} justifyContent="center" alignItems="center" backgroundColor="#000">
+    <View flex={1} justifyContent="center" alignItems="center" bgColor="#000">
       <RBSheet
         ref={refRBSheet}
         closeOnDragDown={true}

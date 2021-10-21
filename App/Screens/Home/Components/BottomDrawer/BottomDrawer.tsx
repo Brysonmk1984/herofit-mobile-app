@@ -90,7 +90,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
           <Triangle action={() => refRBSheet.current.open()} />
         </Box>
 
-        <Box borderTopColor="primary.800" borderTopWidth={1} display="flex" flexDirection="row" backgroundColor="base.primary">
+        <Box borderTopColor="primary.800" borderTopWidth={1} display="flex" flexDirection="row" bgColor="base.primary">
           <Box w="50%" p={2} borderRightWidth={1} borderRightColor="primary.800">
             <Button bgColor={newActivitiesAvailable ? "base.highlight" : null} onPress={() => (newActivitiesAvailable ? openModal("ActivityUpgrade") : navigation.push("App", { screen: "ManualActivity" }))} _text={{ fontFamily: "heading", fontSize: 30 }} borderRadius="0px">
               Activity

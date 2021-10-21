@@ -21,7 +21,7 @@ export default function StravaConnectButton({ request, promptAsync, setHasFetche
   return (
     <Button
       mb={3}
-      backgroundColor="base.strava"
+      bgColor="base.strava"
       disabled={disabled}
       onPress={() => {
         setHasBeenClicked(true);

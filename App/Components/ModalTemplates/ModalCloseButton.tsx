@@ -2,12 +2,12 @@ import React from "react";
 import { View, Button, Box, Modal } from "native-base";
 
 interface ModalCloseButton {
-  backgroundColor: string;
+  bgColor: string;
 }
 
-const ModalCloseButton: React.FC<ModalCloseButton> = ({ backgroundColor = "warmGray.50" }) => {
+const ModalCloseButton: React.FC<ModalCloseButton> = ({ bgColor = "warmGray.50" }) => {
   return (
-    <Box w={46} h={46} position="absolute" top={-15} right={-13} borderRadius={46 / 2} backgroundColor={backgroundColor}>
+    <Box w={46} h={46} position="absolute" top={-15} right={-13} borderRadius={46 / 2} bgColor={bgColor}>
       <Modal.CloseButton position="absolute" left={-7} top={1} w="100%" />
     </Box>
   );

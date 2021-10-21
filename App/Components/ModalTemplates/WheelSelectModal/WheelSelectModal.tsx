@@ -22,7 +22,7 @@ const WheelSelectModal: React.FC<WheelSelectModalProps> = ({ children, id, modal
   return (
     <Modal isOpen={modalOpen} onClose={() => closeModal(id)} /*closeOnOverlayClick={closeable}*/ isKeyboardDismissable={closeable}>
       <Modal.Content p={2}>
-        {closeable && <ModalCloseButton backgroundColor="primary.50" />}
+        {closeable && <ModalCloseButton bgColor="primary.50" />}
         <Modal.Header pl={4} py={4}>
           <Text fontSize="2xl" fontFamily="heading">
             {title}

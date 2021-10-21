@@ -509,7 +509,7 @@ function getColorFromItemName(name: string, reverseDefault?: boolean) {
     case "black_belt_sensei":
       return "#000000";
     default:
-      return reverseDefault ? "#f8f8ff" : "#242423";
+      return reverseDefault ? "#f8f8ff" : "#57534e";
   }
 }
 

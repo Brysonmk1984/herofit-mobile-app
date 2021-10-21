@@ -30,7 +30,7 @@ function BasicModal({ children, id, modalOpen, modalAction, title, buttonText = 
   return (
     <Modal isOpen={modalOpen} onClose={() => closeModal(id)}>
       <Modal.Content p={0}>
-        <ModalCloseButton backgroundColor="primary.50" />
+        <ModalCloseButton bgColor="primary.50" />
         <Modal.Header px={5} py={6}>
           <View>
             <Text fontSize="2xl" fontFamily="heading" overflow="hidden">

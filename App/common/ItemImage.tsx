@@ -10,9 +10,11 @@ interface getItemImageProps {
   w?: number;
   style?: object | any[];
   character?: CharacterName;
+  // Change color of default icon color
+  reverseIconDefaultColor?: boolean;
 }
 
-const ItemImage: React.FC<getItemImageProps> = ({ item, w, style, character }) => {
+const ItemImage: React.FC<getItemImageProps> = ({ item, w, style, character, reverseIconDefaultColor }) => {
   function getItemImage(item: Item, character?: CharacterName) {
     switch (item.type) {
       //Get Hero Image
@@ -23,7 +25,7 @@ const ItemImage: React.FC<getItemImageProps> = ({ item, w, style, character }) =
         return <HeroImage character={character} width={w} height={w} skin={item} />;
       // Get Item Image
       case "pet":
-        return <Image style={style} source={getPetImage(item.name)} alt={item.name} resizeMode="contain" />;
+        return <Image style={style} source={getPetImage(item.name)} alt={item.name} resizeMode="contain" w={w} h={w} />;
       // Get Icon as Image
       case "title":
       case "consumable":
@@ -31,7 +33,7 @@ const ItemImage: React.FC<getItemImageProps> = ({ item, w, style, character }) =
         if (!w) {
           throw new Error("Must pass width");
         }
-        const iconColor = item.class ? getColorFromClassName(item.class) : getColorFromItemName(item.name, true);
+        const iconColor = item.class ? getColorFromClassName(item.class) : getColorFromItemName(item.name, reverseIconDefaultColor);
         return (
           <Box>
             <Text textAlign="center">

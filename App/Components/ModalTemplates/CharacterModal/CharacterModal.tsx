@@ -8,6 +8,7 @@ import { CharacterDialog } from "./CharacterDialog";
 import { IActionHeader } from "../BasicModal/Content";
 import useModal from "../../../common/hooks/useModal";
 import Triangle from "../../../Screens/Home/Components/BottomDrawer/Triangle";
+import ModalHeaderImage from "../ModalHeaderImage";
 
 interface ICharacterModal {
   id: string;
@@ -45,14 +46,16 @@ function CharacterModal({ children, id, modalOpen, modalAction, character = "Mas
     <Modal isOpen={modalOpen} onClose={() => closeModal(id)} _backdrop={{ backgroundColor: "layout.modalBackdrop" }}>
       <Modal.Content p={0}>
         <CharacterHeader>
-          <Image zIndex="10" elevation={10} w={105} position="absolute" left={-12} top={-20} alignSelf={"flex-end"} source={getCharacterImage(character)} size={100} alt={character} />
+          <ModalHeaderImage zIndex={10}>
+            <Image source={getCharacterImage(character)} size={100} alt={character} alignSelf="flex-end" />
+          </ModalHeaderImage>
           <CharacterDialog>
             <View style={styles.triangle}></View>
             <Text textAlign="justify" color="primary.700" flexWrap="wrap" lineHeight="18px" fontSize={15}>
               {speech}
             </Text>
           </CharacterDialog>
-          <ModalCloseButton backgroundColor="base.background" />
+          <ModalCloseButton bgColor="base.background" />
         </CharacterHeader>
         <View paddingBottom={74}>{children}</View>
         {buttonText && <CharacterModalActionButton disabled={disabled} buttonText={buttonText} action={() => handleModalAction(id, modalAction)} />}
