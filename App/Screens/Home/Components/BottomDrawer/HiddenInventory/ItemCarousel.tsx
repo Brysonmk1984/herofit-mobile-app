@@ -16,6 +16,7 @@ interface ItemCarouselProps {
   data: Item[];
   equipped?: Item;
   character?: CharacterName;
+  setPressedItem: (item: Item) => void;
 }
 
 type AllSliderItems = ItemWithOwnership[];
@@ -26,11 +27,11 @@ const ITEM_HEIGHT = ITEM_WIDTH;
 const ITEM_IMAGE_WIDTH = ITEM_WIDTH * 1.2;
 const ITEM_IMAGE_HEIGHT = ITEM_WIDTH * 1.2;
 
-const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, character }) => {
+const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, character, setPressedItem, refRBSheet }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const [allItemsOfType, setAllItemsOfType] = useState([]);
   const [activeIndex, setActiveIndex] = useState(null);
-  const [pressedItem, setPressedItem] = useState(null);
+
   const { openModal } = useModal();
   const carousel = useRef(null);
   const unequippedTypes = ["costumes", "pets", "titles"];
@@ -163,6 +164,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
     }
     if (!item.name.includes("NO ")) {
       setPressedItem(item);
+      refRBSheet.current.close();
       openModal("ItemDetail");
     }
   }
@@ -216,7 +218,6 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
           <Carousel ref={carousel} enableMomentum={true} firstItem={activeIndex} containerCustomStyle={styles.carouselContainer} onSnapToItem={index => _handleSelectedItem(index)} data={allItemsOfType} renderItem={_renderItem} sliderWidth={SLIDER_WIDTH} itemWidth={SLIDER_WIDTH * 0.28} inactiveSlideOpacity={1} inactiveSlideScale={0.6} />
         </View>
       )}
-      {pressedItem && <ItemDetail id="ItemDetail" item={pressedItem} character={character} />}
     </SafeAreaView>
   );
 };

@@ -1,6 +1,5 @@
 import React from "react";
-import { Modal, Text, Image, View } from "native-base";
-import CharacterModalActionButton from "./CharacterModalActionButton";
+import { Modal, Text, View, Box } from "native-base";
 import ModalCloseButton from "../ModalCloseButton";
 import ItemHeader from "./ItemHeader";
 import ItemDescription from "./ItemDescription";
@@ -10,9 +9,11 @@ import { CharacterName, Item } from "../../../common/types";
 import ItemModalActionButton from "./ItemModalActionButton";
 import ItemImage from "../../../common/ItemImage";
 import ModalHeaderImage from "../ModalHeaderImage";
+import ItemTitle from "./ItemTitle";
+import ItemLore from "./ItemLore";
 
 interface ItemModalProps {
-  children: React.ReactChild[];
+  children: React.ReactChild;
   id: string;
   modalOpen: boolean;
   modalAction?: () => void;
@@ -38,18 +39,25 @@ const ItemModal = function ({ children, id, modalOpen, modalAction, item, charac
   return (
     <Modal isOpen={modalOpen} onClose={() => closeModal(id)} _backdrop={{ backgroundColor: "layout.modalBackdrop" }}>
       <Modal.Content p={0}>
-        <ItemHeader>
-          <ModalHeaderImage bgColor="base.background">
-            <ItemImage item={item} w={105} character={character} />
-          </ModalHeaderImage>
-          <ItemDescription>
-            <Text textAlign="center" color="primary.700" flexWrap="wrap" lineHeight="18px" fontSize={15}>
-              {item.description}
-            </Text>
-          </ItemDescription>
-          <ModalCloseButton bgColor="base.background" />
-        </ItemHeader>
-        <View paddingBottom={74}>{children}</View>
+        <Box pb={100}>
+          <ItemHeader>
+            <ModalHeaderImage bgColor="base.background">
+              <ItemImage item={item} w={105} character={character} />
+            </ModalHeaderImage>
+            <ItemDescription>
+              <Text textAlign="center" color="primary.700" flexWrap="wrap" lineHeight="18px" fontSize={15}>
+                {item.description}
+              </Text>
+            </ItemDescription>
+            <ModalCloseButton bgColor="base.background" />
+          </ItemHeader>
+          <View paddingBottom={74} overflow="hidden">
+            <ItemTitle title={item.name} ptCost={item.ptCost ?? null} />
+
+            {item.lore && <ItemLore lore={item.lore} />}
+            {children}
+          </View>
+        </Box>
         {buttonText && <ItemModalActionButton disabled={disabled} buttonText={buttonText} action={() => handleModalAction(id, modalAction)} />}
       </Modal.Content>
     </Modal>

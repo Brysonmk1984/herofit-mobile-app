@@ -18,6 +18,7 @@ import HiddenInventory from "./HiddenInventory/HiddenInventory";
 import useInventory from "./HiddenInventory/useInventory";
 import { isExistingHero } from "../../../../common/typeGuards";
 import ItemCarousel from "./HiddenInventory/ItemCarousel";
+import ItemDetail from "./HiddenInventory/Modals/ItemDetail";
 
 interface BottomDrawerProps {
   hero: Hero | (HeroWithStats & DefaultHeroProperties);
@@ -43,7 +44,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
   const [battleReportAvailable, setBattleReportAvailable] = useState(false);
   const [battleButtonDisabled, setBattleButtonDisabled] = useState(false);
   const [activeTab, setActiveTab] = useState<ItemType>("Consumables");
-
+  const [pressedItem, setPressedItem] = useState(null);
   const { power, recovery, armor, fire, earth, water, air, aether, photonTokens, qp, goToBattle, id, character, status } = hero;
 
   async function handleFetchUpcomingBattle() {
@@ -107,14 +108,14 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
           </Box>
         </Box>
       </Box>
-
+      {pressedItem && <ItemDetail id="ItemDetail" item={pressedItem} character={character} />}
       {/* HIDDEN MENU */}
       <HiddenInventory refRBSheet={refRBSheet} bottomDrawerHeight={bottomDrawerHeight} activeTab={activeTab} setActiveTab={setActiveTab}>
-        {activeTab === "Consumables" && <ItemCarousel type="consumables" data={consumables} />}
-        {activeTab === "Pets" && <ItemCarousel type="pets" data={pets} equipped={equippedPet} />}
-        {activeTab === "Costumes" && <ItemCarousel type="costumes" data={costumes} equipped={equippedCostume} character={hero.character} />}
-        {activeTab === "Titles" && <ItemCarousel type="titles" data={titles} equipped={equippedTitle} />}
-        {activeTab === "Codex" && <ItemCarousel type="codex" data={codex} />}
+        {activeTab === "Consumables" && <ItemCarousel type="consumables" data={consumables} setPressedItem={setPressedItem} refRBSheet={refRBSheet} />}
+        {activeTab === "Pets" && <ItemCarousel type="pets" data={pets} equipped={equippedPet} setPressedItem={setPressedItem} refRBSheet={refRBSheet} />}
+        {activeTab === "Costumes" && <ItemCarousel type="costumes" data={costumes} equipped={equippedCostume} character={hero.character} setPressedItem={setPressedItem} refRBSheet={refRBSheet} />}
+        {activeTab === "Titles" && <ItemCarousel type="titles" data={titles} equipped={equippedTitle} setPressedItem={setPressedItem} refRBSheet={refRBSheet} />}
+        {activeTab === "Codex" && <ItemCarousel type="codex" data={codex} setPressedItem={setPressedItem} refRBSheet={refRBSheet} />}
       </HiddenInventory>
     </Box>
   );

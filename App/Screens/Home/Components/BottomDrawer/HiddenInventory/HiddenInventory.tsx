@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, View, Button, useTheme } from "native-base";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { ReactChild } from "react-transition-group/node_modules/@types/react";
@@ -12,9 +12,10 @@ interface HiddenInventoryProps {
   bottomDrawerHeight: number;
   activeTab: string;
   setActiveTab: (tab: ItemType) => void;
+  showInventory: boolean;
 }
 
-const HiddenInventory: React.FC<HiddenInventoryProps> = ({ children, refRBSheet, bottomDrawerHeight, activeTab, setActiveTab }) => {
+const HiddenInventory: React.FC<HiddenInventoryProps> = ({ children, refRBSheet, bottomDrawerHeight, activeTab, setActiveTab, showInventory }) => {
   const { colors } = useTheme();
 
   const tabColors: TabColors = {
