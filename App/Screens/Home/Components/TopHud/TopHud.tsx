@@ -8,9 +8,11 @@ import { CountdownTimer } from "./CountdownTimer";
 import StatusBar from "./StatusBar";
 import { GlobalStateContext } from "../../../../store";
 
-interface TopHudProps {}
+interface TopHudProps {
+  equippedTitle?: Item;
+}
 
-export const TopHud: React.FC<TopHudProps> = () => {
+export const TopHud: React.FC<TopHudProps> = ({ equippedTitle }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const hero = state.hero;
   const windowWidth = Dimensions.get("window").width;
@@ -22,7 +24,7 @@ export const TopHud: React.FC<TopHudProps> = () => {
         <Image size={windowWidth * 0.32} source={require("../../../../../assets/images/misc/hf-logo.webp")} alt="HeroFit Logo" />
       </Box>
       <View ml={8} mt={0}>
-        <HeroTitle title={hero.equipped.find(i => i.type === "title")} />
+        <HeroTitle title={equippedTitle} />
         <HealthProg name={hero.name} windowWidth={windowWidth} health={hero.health} maxHealth={hero.maxHealth} />
         <XpProg level={hero.level} albedo={hero.albedo} windowWidth={windowWidth} xp={hero.activityXP + hero.battleXP} thisLevelStartXp={hero.thisLevelStartXp} nextLevelStartXp={hero.nextLevelStartXp} />
       </View>

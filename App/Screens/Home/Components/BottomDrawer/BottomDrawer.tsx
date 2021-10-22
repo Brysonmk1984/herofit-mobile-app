@@ -15,7 +15,7 @@ import { Battle } from "../../../../common/types-battle";
 import { LinearGradient } from "expo-linear-gradient";
 import { GlobalStateContext } from "../../../../store";
 import HiddenInventory from "./HiddenInventory/HiddenInventory";
-import useInventory from "./HiddenInventory/useInventory";
+import useInventory from "../../../../common/hooks/useInventory";
 import { isExistingHero } from "../../../../common/typeGuards";
 import ItemCarousel from "./HiddenInventory/ItemCarousel";
 import ItemDetail from "./HiddenInventory/Modals/ItemDetail";
@@ -40,7 +40,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
   if (isExistingHero(hero)) {
     heroId = hero.id;
   }
-  const { consumables, pets, costumes, titles, codex, equippedPet, equippedCostume, equippedTitle } = useInventory(heroId, user);
+  const { consumables, pets, costumes, titles, codex, equippedPet, equippedCostume, equippedTitle } = useInventory();
   const [battleReportAvailable, setBattleReportAvailable] = useState(false);
   const [battleButtonDisabled, setBattleButtonDisabled] = useState(false);
   const [activeTab, setActiveTab] = useState<ItemType>("Consumables");
@@ -79,6 +79,8 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
   // useEffect(() => {
   //   setBattleReportAvailable(true);
   // }, []);
+
+  console.log("!!!!", pets);
 
   return (
     <Box position="absolute" bottom={0}>

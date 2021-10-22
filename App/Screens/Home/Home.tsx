@@ -20,6 +20,7 @@ import buildGainsMessages from "./Components/gainsMessages";
 import useStravaDataProcess from "./useStravaDataProcess";
 import moment from "moment";
 import useGlobalToast from "../../common/hooks/useGlobalToast";
+import useInventory from "../../common/hooks/useInventory";
 
 const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -27,7 +28,9 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { newStravaActivities } = useStravaDataProcess();
   const [newActivities, setNewActivities] = useState<Activity[]>([]);
   const { addToast } = useGlobalToast();
-  const propsForHeroImage = (({ character, equipped, alias, status }) => ({ character, equipped, alias, skin: equippedSkin(equipped), status, floating: true }))(state.hero);
+  const { equippedCostume, equippedPet, equippedTitle } = useInventory(true);
+  const propsForHeroImage = (({ character, equipped, alias, status }) => ({ character, equipped, alias, skin: equippedCostume, status, floating: true }))(state.hero);
+
   const hero = state.hero as Hero;
 
   async function handleHeroUpgrade(activities: Activity[]) {
@@ -60,12 +63,12 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   }
 
   // Automatic Activity Data fetching
-  useEffect(() => {
-    // For new users, newStravaActivities is undefined, otherwise it's an array
-    if (newStravaActivities && newStravaActivities.length) {
-      setNewActivities(newStravaActivities);
-    }
-  }, [newStravaActivities]);
+  // useEffect(() => {
+  //   // For new users, newStravaActivities is undefined, otherwise it's an array
+  //   if (newStravaActivities && newStravaActivities.length) {
+  //     setNewActivities(newStravaActivities);
+  //   }
+  // }, [newStravaActivities]);
 
   // Determine which modal should pop up
   useEffect(() => {
@@ -90,7 +93,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
     <ScreenContainer bg={<Background />} screenName={route.name}>
       {/* TOP SECTION */}
       <View>
-        <TopHud />
+        <TopHud equippedTitle={equippedTitle} />
         {state.isSignedIn && <DrawerIndicator />}
       </View>
       {/* HERO & PET */}
@@ -99,7 +102,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
           <HeroImage {...propsForHeroImage} />
         </Box>
         <Box position="absolute" right={0} bottom={95}>
-          <PetImage pet={equippedPet(state.hero?.equipped)} />
+          <PetImage pet={equippedPet} />
         </Box>
       </View>
 

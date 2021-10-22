@@ -1,5 +1,7 @@
 import { Battle } from "./types-battle";
 
+type Pluralize<T extends string> = `${T}s`;
+
 type ActionType = "TOGGLE LOADING" | "SET EXISTING USER INIT DATA" | "SET ISSIGNEDIN" | "SET NEW USER" | "SET HERO" | "SET USER" | "RESET DEFAULTS" | "POST UPGRADE" | "SEEN BATTLE REPORT";
 
 interface ToggleLoadingAction {
@@ -212,6 +214,19 @@ interface ExistingHeroProperties {
 // A user's Hero that includes the final DB fields not directly related to the game
 type Hero = ExistingHeroProperties & HeroWithStats;
 
+// ITEM TYPES
+type ServerItemType = "skin" | "title" | "pet" | "consumable" | "codex";
+type ServerInventoryCategories = {
+  [T in Pluralize<Exclude<ServerItemType, "Codex">> | "codices"]: Item[];
+};
+
+type ItemType = Capitalize<Exclude<ServerItemType, "skin"> | "costume">;
+type EquippableItemType = Exclude<ServerItemType, "codex" | "consumable">;
+
+type InventoryCategories = {
+  [T in Pluralize<Lowercase<Exclude<ItemType, "Codex">>> | "codex"]: Item[];
+};
+
 interface ItemInstance {
   equipped: boolean;
   itemID: number;
@@ -232,7 +247,7 @@ interface Item extends ItemInstance {
   lore: string | null;
   name: string;
   ptCost: number | null;
-  type: "skin" | "title" | "pet" | "consumable" | "codex";
+  type: ServerItemType;
   updatedAt: string;
   count?: number;
 }
@@ -317,10 +332,8 @@ type SkinLcUnderscoreName = UniqueImageSkin | Tint;
 type SkinName = "Fire Tint" | "Earth Tint" | "Water Tint" | "Air Tint" | "Banshee Tint" | "Poltergeist Tint" | "Specter Tint" | "Wraith Tint" | "Phantom Tint" | "Phantasm Tint" | "Shade Tint" | "Apparition Tint" | "Shadow Self" | "Ascended Self" | "Gale Force" | "Fire Brand" | "Earth Shaker" | "Tide Caller";
 type ZodiacSign = "Capricorn" | "Aquarius" | "Pisces" | "Aries" | "Taurus" | "Gemini" | "Cancer" | "Leo" | "Virgo" | "Libra" | "Scorpio" | "Sagittarius";
 
-type ItemType = "Consumables" | "Pets" | "Costumes" | "Titles" | "Codex";
-
 type TabColors = {
   [T in ItemType]: [string, string];
 };
 
-export { Action, AppDispatch, InitialAppState, AppAction, Store, User, UserStatus, Activity, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, Effect, ItemWithOwnership, Stat, PrimaryElement, EveryElement, HeroChoice, CharacterName, CharacterAlias, FoeType, FoeClasses, SkinLcUnderscoreName, SkinName, Tint, Foe, ZodiacSign, ItemType, TabColors };
+export { Action, AppDispatch, InitialAppState, AppAction, Store, User, UserStatus, Activity, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, ItemWithOwnership, ServerItemType, ServerInventoryCategories, ItemType, EquippableItemType, InventoryCategories, Effect, Stat, PrimaryElement, EveryElement, HeroChoice, CharacterName, CharacterAlias, FoeType, FoeClasses, SkinLcUnderscoreName, SkinName, Tint, Foe, ZodiacSign, TabColors };
