@@ -2,7 +2,7 @@ import { Battle } from "./types-battle";
 
 type Pluralize<T extends string> = `${T}s`;
 
-type ActionType = "TOGGLE LOADING" | "SET EXISTING USER INIT DATA" | "SET ISSIGNEDIN" | "SET NEW USER" | "SET HERO" | "SET USER" | "RESET DEFAULTS" | "POST UPGRADE" | "SEEN BATTLE REPORT";
+type ActionType = "TOGGLE LOADING" | "SET EXISTING USER INIT DATA" | "SET ISSIGNEDIN" | "SET NEW USER" | "SET HERO" | "SET USER" | "RESET DEFAULTS" | "POST UPGRADE" | "SEEN BATTLE REPORT" | "UPDATE_INVENTORY";
 
 interface ToggleLoadingAction {
   type: "TOGGLE LOADING";
@@ -47,9 +47,13 @@ interface SeenBattleReportAction {
   type: "SEEN BATTLE REPORT";
   payload: { latestBattle: Battle };
 }
+interface UpdateInventoryAction {
+  type: "UPDATE INVENTORY";
+  payload: { inventory: { pets: Item[]; consumables: Item[]; costumes: Item[]; titles: Item[]; codex: Item[] } };
+}
 
 // Same as ShoppingListAction in example
-type AppAction = ToggleLoadingAction | SetExistingUserInitDataAction | SetIsSignedInAction | SetUserStatusAction | SetHeroAction | SetUserAction | ResetDefaultsAction | AddModalAction | RemoveModalAction | PostUpgradeAction | SeenBattleReportAction;
+type AppAction = ToggleLoadingAction | SetExistingUserInitDataAction | SetIsSignedInAction | SetUserStatusAction | SetHeroAction | SetUserAction | ResetDefaultsAction | AddModalAction | RemoveModalAction | PostUpgradeAction | SeenBattleReportAction | UpdateInventoryAction;
 type AppDispatch = (action: AppAction) => void;
 
 type Payload = {
@@ -93,6 +97,7 @@ interface InitialAppState {
   latestBattle: Battle | null;
   modalQueue: string[];
   allGameItems: Item[];
+  inventory: InventoryCategories;
 }
 
 interface Store {

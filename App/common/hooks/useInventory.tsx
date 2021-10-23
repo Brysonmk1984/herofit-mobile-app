@@ -23,7 +23,7 @@ interface UpdaterMethods {
 export default function useInventory(makeInventoryRequest?: boolean): InventoryCategories & EquippedItems & UpdaterMethods {
   const { addToast } = useGlobalToast();
   const { state, dispatch } = useContext(GlobalStateContext);
-  const { hero, user } = state;
+  const { hero, user, inventory } = state;
 
   const [consumables, setConsumables] = useState<Item[]>([]);
   const [pets, setPets] = useState<Item[]>([]);
@@ -165,26 +165,15 @@ export default function useInventory(makeInventoryRequest?: boolean): InventoryC
     }
   }
 
-  // Any time an equipped item changes, update the global hero state
+  // ONE-TIME - Homepage makes a fresh inventory request
   useEffect(() => {
-    dispatch({ type: "SET HERO", payload: { hero: { ...hero, equipped: [equippedPet, equippedCostume, equippedTitle] } } });
-  }, [equippedPet, equippedCostume, equippedTitle]);
-
-  // Homepage makes a fresh inventory request
-  useEffect(() => {
-    // Only fetch Equipment if active hero
+    // Only fetch Inventory if the makeInventoryRequest parameter was passed (true) - happens from home page
+    // I could alternatively fetch inventory as part of the initial app data, but this seems fine and will help spread out the data-fetching burden
     if (makeInventoryRequest) {
       try {
         (async () => {
-          const equipment = await fetchAvatarInventory({ avatarID: hero.id });
-          console.log("EQ - ", equipment.pets);
-          setPets(equipment.pets);
-          setCostumes(equipment.costumes);
-          setTitles(equipment.titles);
-          setConsumables(equipment.consumables);
-          setCodex(equipment.codex);
-
-          _setEquippedItems(equipment);
+          const inventory = await fetchAvatarInventory({ avatarID: hero.id });
+          dispatch({ type: "UPDATE INVENTORY", payload: { inventory } });
         })();
       } catch (error) {
         debugErrors(error, user);
@@ -192,6 +181,53 @@ export default function useInventory(makeInventoryRequest?: boolean): InventoryC
       }
     }
   }, [makeInventoryRequest]);
+
+  /*---------------*/
+
+  // Any time an inventory type updates in global state, update the local state of the useInventory hook
+  // The Inventory Component will read from this state
+
+  // PETS
+  useEffect(() => {
+    setPets(inventory.pets);
+    // Sets Hero's inventory
+    _setEquippedItems(inventory);
+  }, [inventory.pets.length]);
+
+  // COSTUMES
+  useEffect(() => {
+    setCostumes(inventory.costumes);
+    // Sets Hero's inventory
+    _setEquippedItems(inventory);
+  }, [inventory.costumes.length]);
+
+  // TITLES
+  useEffect(() => {
+    setTitles(inventory.titles);
+    // Sets Hero's inventory
+    _setEquippedItems(inventory);
+  }, [inventory.titles.length]);
+
+  // CONSUMABLES
+  useEffect(() => {
+    setConsumables(inventory.consumables);
+    // Sets Hero's inventory
+    _setEquippedItems(inventory);
+  }, [inventory.consumables.length]);
+
+  // CODEX
+  useEffect(() => {
+    setCodex(inventory.codex);
+    // Sets Hero's inventory
+    _setEquippedItems(inventory);
+  }, [inventory.codex.length]);
+
+  /*---------------*/
+
+  // Any time an equipped item changes, update the global hero state
+  useEffect(() => {
+    dispatch({ type: "SET HERO", payload: { hero: { ...hero, equipped: [equippedPet, equippedCostume, equippedTitle] } } });
+  }, [equippedPet, equippedCostume, equippedTitle]);
 
   return {
     // All Owned Items

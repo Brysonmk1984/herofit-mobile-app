@@ -1,7 +1,7 @@
 import React, { createContext, useReducer, Context, FC, ReactElement } from "react";
 import { InitialAppState, AppAction } from "./common/types";
 
-const initialState: InitialAppState = { isLoading: true, isSignedIn: false, userStatus: "new", user: null, hero: null, latestSavedActivities: [], latestSavedActivityDate: null, latestBattle: null, jwt: null, modalQueue: [], allGameItems: [] };
+const initialState: InitialAppState = { isLoading: true, isSignedIn: false, userStatus: "new", user: null, hero: null, latestSavedActivities: [], latestSavedActivityDate: null, latestBattle: null, jwt: null, modalQueue: [], allGameItems: [], inventory: { pets: [], consumables: [], costumes: [], titles: [], codex: [] } };
 
 type AppState = typeof initialState;
 
@@ -69,6 +69,10 @@ function appStateReducer(state: AppState, action: AppAction): AppState {
     case "SEEN BATTLE REPORT": {
       const { latestBattle } = action.payload;
       return { ...state, latestBattle };
+    }
+    case "UPDATE INVENTORY": {
+      const { inventory } = action.payload;
+      return { ...state, inventory };
     }
     default:
       throw new Error("In Store default, should not happen.");
