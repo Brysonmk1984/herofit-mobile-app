@@ -14,3 +14,14 @@
       <FeedbackModal id="feedback" modalOpen={state.modalQueue[0] === "feedback"} title="Quick Question">
         <FeedbackChoiceForm id="feedback" title={"How would you feel if you could never play HeroFit again?"} postSubmitAction={() => formActionHappens("feedback")} />
       </FeedbackModal>
+
+      <ItemModal id={id} modalOpen={state.modalQueue[0] === id} buttonText="OK" modalAction={modalAction} item={item} character={character}>
+        <BodyContent>
+          {item.effects?.length && !item.lore && (
+            <Text fontFamily="heading" fontSize="3xl" mb={3}>
+              Effects
+            </Text>
+          )}
+          <FlatList data={item.effects} renderItem={({ item }) => _renderEffect(item)} keyExtractor={(item, i) => i.toString()} />
+        </BodyContent>
+      </ItemModal>

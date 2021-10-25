@@ -36,6 +36,11 @@ type MainDrawerParamList = {
     battleReport: BattleDetailOnly;
     push: () => void;
   };
+  Adversaries: {
+    heroId: number;
+    allGameItems: Item[];
+    character: CharacterName;
+  };
 };
 
 type AuthStackParamList = {

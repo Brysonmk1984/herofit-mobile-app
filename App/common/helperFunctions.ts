@@ -1,6 +1,6 @@
 import heroList from "./heroList.json";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ItemInstance, Item, FoeType, FoeClasses, HeroChoice, CharacterName, CharacterAlias, SkinLcUnderscoreName, SkinName } from "./types";
+import { ItemInstance, Item, FoeType, HeroChoice, CharacterName, CharacterAlias, SkinLcUnderscoreName, SkinName } from "./types";
 import { getBoulderBroImage, getChronoGuyImage, getCompostCreatureImage, getEmpathAureliaImage, getFiltronFiveImage, getNaturalNinjaImage, getRepeteImage, getSolarCelesteImage, getTimberTerrorImage, getWilhelmTheWildImage } from "./heroImageVariants";
 
 function capitalize<T = string>(val: T) {
@@ -164,23 +164,6 @@ function getHeroAlias(character: CharacterName): CharacterAlias {
   const heroes: HeroChoice[] = heroList as HeroChoice[];
   return heroes.find(h => h.character === character)?.alias;
 }
-
-// function determineFoeClass(type: FoeType) {
-//   const foeClasses = {
-//     spirits: ["wraith", "specter", "apparition", "banshee", "poltergeist", "phantasm", "shade", "phantom", "shadow-self"],
-//     elementals: ["gusty rascal", "rock skipper", "flame fiend", "splash artist", "wheezing jinn", "granite golem", "burning jinn", "cyclonic siren", "storming oni", "hulking aggro crag", "scorching archfiend", "high priestess of the tides"],
-//     titans: ["plaguebringer"],
-//   };
-//   let parentClass = null;
-//   for (let targetClass in foeClasses) {
-//     const containedInClass = foeClasses[targetClass].includes(type);
-//     if (containedInClass) {
-//       parentClass = targetClass;
-//       break;
-//     }
-//   }
-//   return parentClass;
-// }
 
 function rankingSuffix(num: number) {
   const numStr = num.toString();

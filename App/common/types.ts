@@ -302,12 +302,6 @@ type TitanFoe = "Plaguebringer";
 
 type FoeType = SpiritFoe | ElementalFoe | TitanFoe;
 
-interface FoeClasses {
-  spirits: SpiritFoe[];
-  elementals: ElementalFoe[];
-  titans: TitanFoe[];
-}
-
 interface FoeAbility {
   effect: string;
   name: string;
@@ -331,6 +325,12 @@ interface Foe {
   xpBounty: number;
 }
 
+interface AllFoes {
+  Spirits: Foe[];
+  Elementals: Foe[];
+  Titans: Foe[];
+}
+
 type Tint = "fire_tint" | "earth_tint" | "water_tint" | "air_tint" | "banshee_tint" | "poltergeist_tint" | "specter_tint" | "wraith_tint" | "phantom_tint" | "phantasm_tint" | "shade_tint" | "apparition_tint";
 type UniqueImageSkin = "shadow_self" | "ascended_self" | "gale_force" | "fire_brand" | "earth_shaker" | "tide_caller";
 type SkinLcUnderscoreName = UniqueImageSkin | Tint;
@@ -341,4 +341,4 @@ type TabColors = {
   [T in ItemType]: [string, string];
 };
 
-export { Action, AppDispatch, InitialAppState, AppAction, Store, User, UserStatus, Activity, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, ItemWithOwnership, ServerItemType, ServerInventoryCategories, ItemType, EquippableItemType, InventoryCategories, Effect, Stat, PrimaryElement, EveryElement, HeroChoice, CharacterName, CharacterAlias, FoeType, FoeClasses, SkinLcUnderscoreName, SkinName, Tint, Foe, ZodiacSign, TabColors };
+export { Action, AppDispatch, InitialAppState, AppAction, Store, User, UserStatus, Activity, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, ItemWithOwnership, ServerItemType, ServerInventoryCategories, ItemType, EquippableItemType, InventoryCategories, Effect, Stat, PrimaryElement, EveryElement, HeroChoice, CharacterName, CharacterAlias, FoeType, AllFoes, SkinLcUnderscoreName, SkinName, Tint, Foe, ZodiacSign, TabColors };

@@ -13,8 +13,7 @@ import FinalizeHeroSelection from "./Screens/HeroSelection/FinalizeHeroSelection
 
 // AUTHENTICATED SCREENS
 import Home from "./Screens/Home/Home";
-import Campaign from "./Screens/Campaign";
-import Inventory from "./Screens/Inventory";
+import Adversaries from "./Screens/Adversaries";
 import Feedback from "./Screens/Feedback/Feedback";
 import Settings from "./Screens/Settings";
 import ManualActivity from "./Screens/ManualActivitity/ManualActivity";
@@ -26,4 +25,4 @@ import BattleReportDetail from "./Screens/Battle/BattleReportDetail/BattleReport
 import Loading from "./Screens/Loading/Loading";
 import SpendQP from "./Screens/Common/SpendQP";
 
-export { Splash, SignIn, Register, ForgotPassword, AboutGame, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection, Home, Campaign, Inventory, Feedback, Settings, ManualActivity, AwaitingBattle, BattleReport, BattleReportDetail, Loading, SpendQP };
+export { Splash, SignIn, Register, ForgotPassword, AboutGame, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection, Home, Adversaries, Feedback, Settings, ManualActivity, AwaitingBattle, BattleReport, BattleReportDetail, Loading, SpendQP };

@@ -60,8 +60,7 @@ const DrawerScreen = () => {
   return (
     <MainDrawer.Navigator drawerContent={props => filterDrawerContent(props)} drawerPosition="right" screenOptions={{ headerShown: false, ...baseScreenStyle }}>
       <MainDrawer.Screen options={{ drawerIcon: ({ focused, size }) => <Icon as={AntDesign} name="home" size={10} color="base.link" /> }} name="Home" component={Screens.Home} />
-      <MainDrawer.Screen name="Campaign" component={Screens.Campaign} />
-      <MainDrawer.Screen name="Inventory" component={Screens.Inventory} />
+      <MainDrawer.Screen name="Adversaries" component={Screens.Adversaries} />
       <MainDrawer.Screen name="Feedback" component={Screens.Feedback} />
       <MainDrawer.Screen name="Settings" component={Screens.Settings} />
       <MainDrawer.Screen name="SpendQP" component={Screens.SpendQP} options={{ title: "Quantum Points" }} />

@@ -3,7 +3,8 @@ import axiosRetry from "axios-retry";
 import { axiosOptions, axiosDeleteConfig } from "./axiosDefaults";
 import handleHttpError from "./handleHttpError";
 import Constants from "expo-constants";
-import { Hero } from "../common/types";
+import { AllFoes, Hero } from "../common/types";
+import { Battle } from "../common/types-battle";
 const endpoint: string = Constants.manifest.extra.HF_ENDPOINT;
 
 let axios = _axios.create();
@@ -60,7 +61,7 @@ const updateBattleReportSeen = async function (body) {
     });
 };
 
-const getVillainList = async function () {
+const getVillainList = async function (): Promise<{ villains: AllFoes[] }> {
   return axios
     .get(`${endpoint}battle/villain-list`, await axiosOptions())
     .then(({ data }) => {
@@ -71,10 +72,15 @@ const getVillainList = async function () {
     });
 };
 
-const fetchBattlesWonOrDkoByAvatarID = async function (body) {
+const fetchBattlesWonOrDkoByAvatarID = async function (body: { avatarID: number }): Promise<{ battles: Battle[] }> {
+  interface Data {
+    data: {
+      battles: Battle[];
+    };
+  }
   return axios
-    .post(`${endpoint}battle//fetch-battles-won-or-dko`, body, await axiosOptions())
-    .then(({ data }) => {
+    .post(`${endpoint}battle/fetch-battles-won-or-dko`, body, await axiosOptions())
+    .then(({ data }: { data: Data }) => {
       return data.data;
     })
     .catch(({ request, response }) => {
