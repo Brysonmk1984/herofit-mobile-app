@@ -54,7 +54,7 @@ const ItemModal = function ({ children, id, modalOpen, modalAction, item, charac
           <View paddingBottom={74} overflow="hidden">
             <ItemTitle title={item.name} ptCost={item.ptCost ?? null} />
 
-            {item.lore && <ItemLore lore={item.lore} numEffects={item.effects.length} />}
+            {item.lore && <ItemLore lore={item.lore} numEffects={item.effects?.length ?? 0} />}
             {children}
           </View>
         </Box>

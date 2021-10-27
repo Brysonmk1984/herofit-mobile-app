@@ -3,7 +3,7 @@ import axiosRetry from "axios-retry";
 import { axiosOptions, axiosDeleteConfig } from "./axiosDefaults";
 import handleHttpError from "./handleHttpError";
 import Constants from "expo-constants";
-import { InventoryCategories, Item, ServerInventoryCategories } from "../common/types";
+import { Hero, InventoryCategories, Item, ServerInventoryCategories } from "../common/types";
 const endpoint: string = Constants.manifest.extra.HF_ENDPOINT;
 
 let axios = _axios.create();
@@ -36,7 +36,6 @@ const equipItem = async function (body): Promise<{ equippedItem: Item }> {
 };
 
 const equipUnequipItem = async function (body): Promise<{ equippedItem: Item; unequippedItem: Item }> {
-  console.log("THEBODY", body);
   return axios
     .post(`${endpoint}inventory/equip-unequip-item`, body, await axiosOptions())
     .then(({ data }) => {
@@ -122,10 +121,14 @@ const buyItemByAvatarId = async function (body): Promise<BuyItemReturnType> {
     });
 };
 
-const consumeItemRequest = async function (body) {
+interface ConsumeItemRequestReturnType {
+  consumables: Item[];
+  avatar: Hero;
+}
+const consumeItemRequest = async function (body): Promise<ConsumeItemRequestReturnType> {
   return axios
     .delete(`${endpoint}inventory/use-consumable-item`, await axiosDeleteConfig(body))
-    .then(({ data }) => {
+    .then(({ data }: { data: { data: ConsumeItemRequestReturnType } }) => {
       return data.data;
     })
     .catch(({ request, response }) => {

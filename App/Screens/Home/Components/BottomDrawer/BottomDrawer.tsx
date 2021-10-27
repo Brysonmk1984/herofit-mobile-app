@@ -10,7 +10,7 @@ import useModal from "../../../../common/hooks/useModal";
 import { fetchUpcomingFoeAndRewards } from "../../../../api/battle";
 import useGlobalToast from "../../../../common/hooks/useGlobalToast";
 import debugErrors from "../../../../common/debugErrors";
-import { CharacterName, DefaultHeroProperties, EquippableItemType, Hero, HeroStatus, HeroWithStats, Item, TabType, User } from "../../../../common/types";
+import { CharacterName, DefaultHeroProperties, EquippableItemType, Hero, HeroStatus, HeroWithStats, Item, ItemWithOwnership, TabType, User } from "../../../../common/types";
 import { Battle } from "../../../../common/types-battle";
 import { LinearGradient } from "expo-linear-gradient";
 import { GlobalStateContext } from "../../../../store";
@@ -19,6 +19,7 @@ import useInventory from "../../../../common/hooks/useInventory";
 import { isExistingHero } from "../../../../common/typeGuards";
 import ItemCarousel from "./HiddenInventory/ItemCarousel";
 import ItemDetail from "./HiddenInventory/Modals/ItemDetail";
+import { consumeItemRequest } from "../../../../api/inventory";
 
 interface BottomDrawerProps {
   hero: Hero | (HeroWithStats & DefaultHeroProperties);
@@ -40,7 +41,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
   if (isExistingHero(hero)) {
     heroId = hero.id;
   }
-  const { consumables, pets, skins, titles, codices, equippedPet, equippedSkin, equippedTitle, equip, equipUnequip, unequip } = useInventory();
+  const { consumables, pets, skins, titles, codices, equippedPet, equippedSkin, equippedTitle, equip, equipUnequip, unequip, consume, buy } = useInventory();
   const [battleReportAvailable, setBattleReportAvailable] = useState(false);
   const [battleButtonDisabled, setBattleButtonDisabled] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>("Consumables");
@@ -87,6 +88,33 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
         console.log("BEFORE EQUIPPING = ", item.itemID, equippedOfType[category].itemID);
         equipUnequip(item, equippedOfType[category].itemID, hero as Hero);
       }
+    }
+  }
+
+  async function handleConsuming(item: Item) {
+    console.log("using=", item.name, item.type);
+    if (item.type !== "consumable") {
+      throw new Error("Wrong Item type");
+    }
+    consume(item, hero as Hero);
+  }
+
+  async function handleBuying(item: Item) {
+    if (!item.ptCost) {
+      throw new Error("Wrong Item type");
+    }
+    buy(item, hero as Hero);
+  }
+
+  function determineItemModalProps(item: ItemWithOwnership) {
+    console.log(item.name, item.owned, item.count, item.ptCost);
+    //
+    if (item.type === "consumable" && item.owned) {
+      // Modal Action is to Consume Item
+      return { buttonText: "Use", modalAction: () => handleConsuming(item) };
+    } else if (!item.owned && item.ptCost) {
+      // Modal Action is to Buy Item
+      return { buttonText: "Buy", modalAction: () => handleBuying(item) };
     }
   }
 
@@ -137,14 +165,14 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
           </Box>
         </Box>
       </Box>
-      {pressedItem && <ItemDetail id="ItemDetail" item={pressedItem} character={character} />}
+      {pressedItem && <ItemDetail id="ItemDetail" item={pressedItem} character={character} {...determineItemModalProps(pressedItem)} />}
       {/* HIDDEN MENU */}
       <HiddenInventory refRBSheet={refRBSheet} bottomDrawerHeight={bottomDrawerHeight} activeTab={activeTab} setActiveTab={setActiveTab}>
-        {activeTab === "Skins" && <ItemCarousel type="consumable" data={consumables} setPressedItem={setPressedItem} refRBSheet={refRBSheet} />}
+        {activeTab === "Consumables" && <ItemCarousel type="consumable" data={consumables} setPressedItem={setPressedItem} refRBSheet={refRBSheet} />}
         {activeTab === "Pets" && <ItemCarousel type="pet" data={pets} equipped={equippedPet} setPressedItem={setPressedItem} refRBSheet={refRBSheet} handleEquipping={handleEquipping} />}
         {activeTab === "Costumes" && <ItemCarousel type="skin" data={skins} equipped={equippedSkin} character={hero.character} setPressedItem={setPressedItem} refRBSheet={refRBSheet} handleEquipping={handleEquipping} />}
         {activeTab === "Titles" && <ItemCarousel type="title" data={titles} equipped={equippedTitle} setPressedItem={setPressedItem} refRBSheet={refRBSheet} handleEquipping={handleEquipping} />}
-        {activeTab === "Codices" && <ItemCarousel type="codex" data={codices} setPressedItem={setPressedItem} refRBSheet={refRBSheet} />}
+        {activeTab === "Codex" && <ItemCarousel type="codex" data={codices} setPressedItem={setPressedItem} refRBSheet={refRBSheet} />}
       </HiddenInventory>
     </Box>
   );

@@ -11,11 +11,12 @@ interface ItemDetailProps {
   id: string;
   item: Item | ItemWithOwnership;
   character?: CharacterName;
+  buttonText?: "Use" | "Buy" | "OK";
   modalAction?: () => void;
   closeModal?: () => void;
 }
 
-const ItemDetail: React.FC<ItemDetailProps> = ({ id, modalAction, closeModal, item, character }) => {
+const ItemDetail: React.FC<ItemDetailProps> = ({ id, buttonText = "OK", modalAction, closeModal, item, character }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
 
   function _renderEffect(effect: Effect) {
@@ -39,10 +40,10 @@ const ItemDetail: React.FC<ItemDetailProps> = ({ id, modalAction, closeModal, it
     if (item.effects) {
       item.effects = item.effects.reverse();
     }
-  }, []);
+  }, [item]);
 
   return (
-    <ItemModal id={id} modalOpen={state.modalQueue[0] === id} buttonText="OK" modalAction={modalAction} item={item} character={character}>
+    <ItemModal id={id} modalOpen={state.modalQueue[0] === id} buttonText={buttonText} modalAction={modalAction} item={item} character={character}>
       <BodyContent>
         {item.effects?.length && !item.lore && (
           <Text fontFamily="heading" fontSize="3xl" mb={3}>

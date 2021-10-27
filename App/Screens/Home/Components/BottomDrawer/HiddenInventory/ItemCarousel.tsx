@@ -143,7 +143,6 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
   }
 
   function _renderItem({ item, index }) {
-    const activeItem = index === activeIndex;
     return (
       <Pressable style={{ marginLeft: -4 }} onPress={() => _openModal(item, index)}>
         {/* Background image */}
@@ -183,6 +182,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
     if (index !== activeIndex) {
       carousel.current.snapToItem(index);
     }
+    console.log("NEWPRESSED", item.owned);
     if (!item.name.includes("NO ")) {
       setPressedItem(item);
       refRBSheet.current.close();
@@ -191,49 +191,48 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
   }
 
   useEffect(() => {
-    if (data) {
-      // Filter down to just items of carousel type
-      const filteredToItemType = state.allGameItems.filter(item => item.type === type);
+    // Filter down to just items of carousel type
+    const filteredToItemType = state.allGameItems.filter(item => item.type === type);
 
-      // Add "owned" property to filtered items
-      const itemsWithOwnership: ItemWithOwnership[] = filteredToItemType.map((item: any) => {
-        if (type === "consumable" && item.type === "consumable") {
-          // Since consumables can stack, set consumable item to be included in  unowned item list
-          item.owned = false;
-        } else if (data.map(ownedItem => ownedItem.name).includes(item.name)) {
-          // "data" are items of this category that the user owns
-          item.owned = true;
-        } else {
-          item.owned = false;
-        }
-        return item;
-      });
-
-      // Divide ItemsWithOwnership into two arrays, owned and unowned
-      const unownedItems = itemsWithOwnership
-        .filter(item => item.owned === false)
-        // Sort by ptCost
-        .sort((a, b) => a.ptCost - b.ptCost)
-        // Sort by buyable
-        //@ts-ignore
-        .sort((a, b) => (b.ptCost === null ? false : true));
-      const ownedItems = itemsWithOwnership.filter(item => item.owned === true);
-
-      // Final items array, with owned items at the front
-      const items = [...ownedItems, ...unownedItems];
-
-      // Add item type for 'no item' for categories that are equippable
-      if (_determineEquippableType(type)) {
-        const name = type === "skin" ? "NO COSTUME" : `NO ${type.toUpperCase()}`;
-        const nothingItem = { type, name } as ItemWithOwnership;
-        items.unshift(nothingItem);
+    // Add "owned" property to filtered items
+    const itemsWithOwnership: ItemWithOwnership[] = filteredToItemType.map((item: any) => {
+      if (type === "consumable" && item.type === "consumable") {
+        // Since consumables can stack, set consumable item to be included in  unowned item list
+        item.owned = false;
+      } else if (data.map(ownedItem => ownedItem.name).includes(item.name)) {
+        // "data" are items of this category that the user owns
+        item.owned = true;
+      } else {
+        item.owned = false;
       }
-      // Set completed array to state
-      setAllItemsOfType(items);
-      // Set active Index to equipped item, or halfway through
-      const startingActiveIndex = equipped ? items.findIndex(item => item.name === equipped.name) : Math.floor(data.length / 2);
-      setActiveIndex(startingActiveIndex);
+      return item;
+    });
+
+    // Divide ItemsWithOwnership into two arrays, owned and unowned
+    const unownedItems = itemsWithOwnership
+      .filter(item => item.owned === false)
+      // Sort by ptCost
+      .sort((a, b) => a.ptCost - b.ptCost)
+      // Sort by buyable
+      //@ts-ignore
+      .sort((a, b) => (b.ptCost === null ? false : true));
+    // Consumables in 'data' are owned but haven't had the property set yet, so do it here, otherwise use itemsWithOwnership from above
+    const ownedItems = type === "consumable" ? data.map(item => ({ ...item, owned: true })) : itemsWithOwnership.filter(item => item.owned === true);
+
+    // Final items array, with owned items at the front
+    const items = [...ownedItems, ...unownedItems];
+
+    // Add item type for 'no item' for categories that are equippable
+    if (_determineEquippableType(type)) {
+      const name = type === "skin" ? "NO COSTUME" : `NO ${type.toUpperCase()}`;
+      const nothingItem = { type, name } as ItemWithOwnership;
+      items.unshift(nothingItem);
     }
+    // Set completed array to state
+    setAllItemsOfType(items);
+    // Set active Index to equipped item, or halfway through
+    const startingActiveIndex = equipped ? items.findIndex(item => item.name === equipped.name) : allItemsOfType[0];
+    setActiveIndex(startingActiveIndex);
   }, [data]);
 
   return (

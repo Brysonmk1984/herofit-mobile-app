@@ -70,9 +70,11 @@ export default function useInventory(makeInventoryRequest?: boolean): ServerInve
   // CONSUME A CONSUMABLE ITEM
   async function consume(item: Item, heroObj: Hero) {
     try {
-      const { consumables, hero } = await consumeItemRequest({ id: item.id, email: heroObj.owner, avatarID: heroObj.id, effects: item.effects });
-      _updateInventoryCategoriesByItemType(consumables, "consumable");
-      dispatch({ type: "SET HERO", payload: { hero } });
+      const { consumables, avatar: hero } = await consumeItemRequest({ id: item.id, email: heroObj.owner, avatarID: heroObj.id, effects: item.effects });
+      const updatedInventory = { ...inventory, consumables };
+      const updatedHero: Hero = { ...heroObj, ...hero };
+      dispatch({ type: "UPDATE INVENTORY", payload: { inventory: { ...updatedInventory } } });
+      dispatch({ type: "SET HERO", payload: { hero: updatedHero } });
       addToast("success", `${hero.name} used ${convertAorAn(item.name)} ${item.name}.`);
     } catch (error) {
       addToast("error", `${error.status}: ${error.message}`);
@@ -98,7 +100,6 @@ export default function useInventory(makeInventoryRequest?: boolean): ServerInve
   async function unequip(oldItem: Item, hero: Hero) {
     try {
       const { unequippedItem } = await unequipItem({ avatarId: hero.id, unequipId: oldItem.itemID });
-      console.log("UNEEEQ", unequippedItem);
       const updatedEquipped = equipped;
       updatedEquipped[oldItem.type] = null;
       dispatch({ type: "UPDATE EQUIPPED", payload: { equipped: updatedEquipped } });
@@ -165,33 +166,32 @@ export default function useInventory(makeInventoryRequest?: boolean): ServerInve
   // PETS
   useEffect(() => {
     setPets(inventory.pets);
-  }, [inventory.pets.length]);
+  }, [inventory.pets]);
 
   // COSTUMES
   useEffect(() => {
     setSkins(inventory.skins);
-  }, [inventory.skins.length]);
+  }, [inventory.skins]);
 
   // TITLES
   useEffect(() => {
     setTitles(inventory.titles);
-  }, [inventory.titles.length]);
+  }, [inventory.titles]);
 
   // CONSUMABLES
   useEffect(() => {
     setConsumables(inventory.consumables);
-  }, [inventory.consumables.length]);
+  }, [inventory.consumables]);
 
   // CODEX
   useEffect(() => {
     setCodices(inventory.codices);
-  }, [inventory.codices.length]);
+  }, [inventory.codices]);
 
   /*---------------*/
 
   // PETS
   useEffect(() => {
-    console.log("EP=", equipped.pet);
     // Sets Hero's inventory
     setEquippedPet(equipped.pet);
   }, [equipped.pet]);
