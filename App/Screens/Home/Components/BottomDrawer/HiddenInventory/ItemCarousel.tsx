@@ -31,7 +31,7 @@ const ITEM_IMAGE_HEIGHT = ITEM_WIDTH * 1.2;
 const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, character, setPressedItem, refRBSheet, handleEquipping }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const [allItemsOfType, setAllItemsOfType] = useState([]);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(null);
 
   const { openModal } = useModal();
   const carousel = useRef(null);
@@ -231,6 +231,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
     setAllItemsOfType(items);
     // Set active Index to equipped item, or halfway through
     const startingActiveIndex = equipped ? items.findIndex(item => item.name === equipped.name) : 0;
+    console.log("SAI=", startingActiveIndex);
     setActiveIndex(startingActiveIndex);
   }, [data]);
 

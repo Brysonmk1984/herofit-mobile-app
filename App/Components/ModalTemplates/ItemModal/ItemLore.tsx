@@ -1,13 +1,20 @@
-import { View, Text, Image } from "native-base";
+import { View, Text, Image, ScrollView } from "native-base";
 import React from "react";
 
 interface ItemLoreProps {
   lore: string;
   numEffects: number;
+  fullCodex: boolean;
 }
 
-const ItemLore: React.FC<ItemLoreProps> = ({ lore, numEffects }) => {
-  return (
+const ItemLore: React.FC<ItemLoreProps> = ({ lore, numEffects, fullCodex }) => {
+  return fullCodex ? (
+    <ScrollView bgColor="base.background" py={2}>
+      <Text mt={-1} pb={1} px={2} bgColor="base.background" fontFamily="cursive">
+        {lore}
+      </Text>
+    </ScrollView>
+  ) : (
     <View zIndex={100} flexWrap="wrap" justifyContent="center" flexDirection="row" bgColor="base.background" py={2}>
       <Text mt={-1} pb={1} px={2} bgColor="base.background" fontFamily="cursive">
         {numEffects > 1 ? `${lore.slice(0, 150)}...` : lore.length > 250 ? `${lore.slice(0, 250)}...` : lore}

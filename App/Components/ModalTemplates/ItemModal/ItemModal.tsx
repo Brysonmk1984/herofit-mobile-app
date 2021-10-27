@@ -5,7 +5,7 @@ import ItemHeader from "./ItemHeader";
 import ItemDescription from "./ItemDescription";
 import { IActionHeader } from "../BasicModal/Content";
 import useModal from "../../../common/hooks/useModal";
-import { CharacterName, Item } from "../../../common/types";
+import { CharacterName, Item, ItemWithOwnership } from "../../../common/types";
 import ItemModalActionButton from "./ItemModalActionButton";
 import ItemImage from "../../../common/ItemImage";
 import ModalHeaderImage from "../ModalHeaderImage";
@@ -17,7 +17,7 @@ interface ItemModalProps {
   id: string;
   modalOpen: boolean;
   modalAction?: () => void;
-  item: Item;
+  item: Item | ItemWithOwnership;
   character?: CharacterName;
   actionHeader?: IActionHeader;
   buttonText?: string;
@@ -53,11 +53,11 @@ const ItemModal = function ({ children, id, modalOpen, modalAction, item, charac
           </ItemHeader>
           <View paddingBottom={74} overflow="hidden">
             <ItemTitle title={item.name} ptCost={(buttonText === "BUY" && item.ptCost) ?? null} />
-            {item.lore && <ItemLore lore={item.lore} numEffects={item.effects?.length ?? 0} />}
+            {item.lore && <ItemLore lore={item.lore} numEffects={item.effects?.length ?? 0} fullCodex={item.type === "codex" && item.owned} />}
             {children}
           </View>
         </Box>
-        {buttonText && <ItemModalActionButton disabled={disabled} buttonText={buttonText} action={() => handleModalAction(id, modalAction)} bgColor={buttonText === "USE" || buttonText === "BUY" ? "base.caution" : "base.success"} />}
+        {item.type === "codex" && item.owned ? null : buttonText && <ItemModalActionButton disabled={disabled} buttonText={buttonText} action={() => handleModalAction(id, modalAction)} bgColor={buttonText === "USE" || buttonText === "BUY" ? "base.caution" : "base.success"} />}
       </Modal.Content>
     </Modal>
   );

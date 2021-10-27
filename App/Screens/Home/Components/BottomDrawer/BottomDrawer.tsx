@@ -81,18 +81,15 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
         return;
         // No existing item equipped of same category, just equip
       } else if (!equippedOfType[category]) {
-        console.log("JUST EQUIP=", item.name);
         equip(item, hero as Hero);
         // Existing item of same category, equipUnequip
       } else {
-        console.log("BEFORE EQUIPPING = ", item.itemID, equippedOfType[category].itemID);
         equipUnequip(item, equippedOfType[category].itemID, hero as Hero);
       }
     }
   }
 
   async function handleConsuming(item: Item) {
-    console.log("using=", item.name, item.type);
     if (item.type !== "consumable") {
       throw new Error("Wrong Item type");
     }
@@ -103,13 +100,10 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
     if (!item.ptCost) {
       throw new Error("Wrong Item type");
     }
-    console.log("!!!", item, hero);
     buy(item, hero as Hero);
   }
 
   function determineItemModalProps(item: ItemWithOwnership) {
-    console.log(item.name, item.owned, item.count, item.ptCost);
-    //
     if (item.type === "consumable" && item.owned) {
       // Modal Action is to Consume Item
       return { buttonText: "USE", modalAction: () => handleConsuming(item) };
