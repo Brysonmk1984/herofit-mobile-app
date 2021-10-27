@@ -3,13 +3,13 @@ import { buyItemByAvatarId, consumeItemRequest, equipItem, equipUnequipItem, fet
 import debugErrors from "../debugErrors";
 import { convertAorAn } from "../helperFunctions";
 import useGlobalToast from "./useGlobalToast";
-import { EquippableItemType, Hero, InventoryCategories, Item, ItemType, ServerItemType } from "../types";
+import { Hero, Item, ServerInventoryCategories, ServerItemType } from "../types";
 import { GlobalStateContext } from "../../store";
 
 interface EquippedItems {
-  equippedPet: Item;
-  equippedCostume: Item;
-  equippedTitle: Item;
+  equippedPet: Item | null;
+  equippedSkin: Item | null;
+  equippedTitle: Item | null;
 }
 
 interface UpdaterMethods {
@@ -20,48 +20,19 @@ interface UpdaterMethods {
   equipUnequip: (newItem: Item, oldItemId: number, hero: Hero) => void;
 }
 
-export default function useInventory(makeInventoryRequest?: boolean): InventoryCategories & EquippedItems & UpdaterMethods {
+export default function useInventory(makeInventoryRequest?: boolean): ServerInventoryCategories & EquippedItems & UpdaterMethods {
   const { addToast } = useGlobalToast();
   const { state, dispatch } = useContext(GlobalStateContext);
-  const { hero, user, inventory } = state;
+  const { hero, user, inventory, equipped } = state;
 
   const [consumables, setConsumables] = useState<Item[]>([]);
   const [pets, setPets] = useState<Item[]>([]);
-  const [costumes, setCostumes] = useState<Item[]>([]);
+  const [skins, setSkins] = useState<Item[]>([]);
   const [titles, setTitles] = useState<Item[]>([]);
-  const [codex, setCodex] = useState<Item[]>([]);
+  const [codices, setCodices] = useState<Item[]>([]);
   const [equippedPet, setEquippedPet] = useState<Item>(null);
-  const [equippedCostume, setEquippedCostume] = useState<Item>(null);
+  const [equippedSkin, setEquippedSkin] = useState<Item>(null);
   const [equippedTitle, setEquippedTitle] = useState<Item>(null);
-
-  function updateEquipped(item?: Item, unequipOnly?: EquippableItemType) {
-    // For Unequipping only
-    if (unequipOnly) {
-      switch (unequipOnly) {
-        case "pet":
-          return setEquippedPet(null);
-        case "skin":
-          return setEquippedCostume(null);
-        case "title":
-          return setEquippedTitle(null);
-        default:
-          throw new Error("Inappropriate Item Type");
-      }
-    }
-
-    // For Equipping and Equip/Unequip
-    switch (item.type) {
-      case "pet":
-        return setEquippedPet(item);
-      case "skin":
-        return setEquippedCostume(item);
-      case "title":
-        return setEquippedTitle(item);
-      default:
-        console.log(item.type);
-        throw new Error("Inappropriate Item Type");
-    }
-  }
 
   function _updateInventoryCategoriesByItemType(itemCategory: Item[], type: ServerItemType) {
     switch (type) {
@@ -70,11 +41,11 @@ export default function useInventory(makeInventoryRequest?: boolean): InventoryC
       case "pet":
         setPets(itemCategory);
       case "skin":
-        setCostumes(itemCategory);
+        setSkins(itemCategory);
       case "title":
         setTitles(itemCategory);
       case "codex":
-        setCodex(itemCategory);
+        setCodices(itemCategory);
       default:
         throw new Error("No matching item type!");
     }
@@ -113,11 +84,13 @@ export default function useInventory(makeInventoryRequest?: boolean): InventoryC
   async function equip(newItem: Item, hero: Hero) {
     try {
       const { equippedItem } = await equipItem({ avatarId: hero.id, equipId: newItem.itemID });
-      //_updateInventoryCategoriesByItemType(equippedItem, newItem.type);
-      updateEquipped(equippedItem);
-      addToast("success", `${equippedItem.name} Item has been equipped!`);
+      equippedItem.itemID = equippedItem.id;
+      const updatedEquipped = equipped;
+      updatedEquipped[newItem.type] = equippedItem;
+      dispatch({ type: "UPDATE EQUIPPED", payload: { equipped: updatedEquipped } });
+      addToast("success", `${equippedItem.name} Item has been equipped!`, "top");
     } catch (error) {
-      addToast("error", `${error.status}: ${error.message}`);
+      addToast("error", `${error.status}: ${error.message}`, "top");
       return debugErrors(error, user);
     }
   }
@@ -125,44 +98,43 @@ export default function useInventory(makeInventoryRequest?: boolean): InventoryC
   async function unequip(oldItem: Item, hero: Hero) {
     try {
       const { unequippedItem } = await unequipItem({ avatarId: hero.id, unequipId: oldItem.itemID });
-      updateEquipped(null, unequippedItem.type as EquippableItemType);
-      addToast("success", `${unequippedItem.name} has been unequipped!`);
+      console.log("UNEEEQ", unequippedItem);
+      const updatedEquipped = equipped;
+      updatedEquipped[oldItem.type] = null;
+      dispatch({ type: "UPDATE EQUIPPED", payload: { equipped: updatedEquipped } });
+      addToast("success", `${oldItem.name} has been unequipped!`, "top");
     } catch (error) {
-      addToast("error", `${error.status}: ${error.message}`);
+      addToast("error", `${error.status}: ${error.message}`, "top");
       return debugErrors(error, user);
     }
   }
 
-  async function equipUnequip(newItem: Item, oldItemId: number, hero: Hero) {
+  async function equipUnequip(newItem: Item, oldItemId: number) {
     // If the clicked on item is not the same item
+    // newItem needs to use "id", oldItemId is the itemID, but they mean the same thing in this case
     if (newItem.itemID !== oldItemId) {
       try {
         const { equippedItem } = await equipUnequipItem({ avatarId: hero.id, equipId: newItem.itemID, unequipId: oldItemId });
-        updateEquipped(equippedItem);
-        addToast("success", `${equippedItem.name} has been equipped!`);
+        // It gets confusing with the inventory, some items have itemID coming from the server, others not. this makes sure it will be set
+        equippedItem.itemID = equippedItem.id;
+        const updatedEquipped = equipped;
+        updatedEquipped[newItem.type] = equippedItem;
+
+        dispatch({ type: "UPDATE EQUIPPED", payload: { equipped: updatedEquipped } });
+        //updateEquipped(equippedItem);
+        addToast("success", `${equippedItem.name} has been equipped!`, "top");
       } catch (error) {
-        addToast("error", `${error.status}: ${error.message}`);
+        addToast("error", `${error.status}: ${error.message}`, "top");
         return debugErrors(error, user);
       }
     }
   }
 
-  // Determines which items are equipped for each item type
-  function _setEquippedItems(equipment: InventoryCategories) {
-    // // LOOP through each type of equipment
-    for (let equipType in equipment) {
-      // Find the item that's equipped for that specific equipment type
-      const equippedItem: Item | null = equipment[equipType].find((item: Item) => item.equipped === true);
-
-      console.log("EQQITEM", equippedItem);
-      if (equippedItem) {
-        try {
-          updateEquipped(equippedItem);
-        } catch (error) {
-          console.log("THE ERR", error);
-        }
-      }
-    }
+  function _determineEquippedItems(heroInventory: ServerInventoryCategories): { skin: Item | null; pet: Item | null; title: Item | null } {
+    const skin = heroInventory.skins.find((item: Item) => item.equipped === true);
+    const pet = heroInventory.pets.find((item: Item) => item.equipped === true);
+    const title = heroInventory.titles.find((item: Item) => item.equipped === true);
+    return { skin: skin ?? null, pet: pet ?? null, title: title ?? null };
   }
 
   // ONE-TIME - Homepage makes a fresh inventory request
@@ -173,7 +145,10 @@ export default function useInventory(makeInventoryRequest?: boolean): InventoryC
       try {
         (async () => {
           const inventory = await fetchAvatarInventory({ avatarID: hero.id });
+          const equipped = _determineEquippedItems(inventory);
+
           dispatch({ type: "UPDATE INVENTORY", payload: { inventory } });
+          dispatch({ type: "UPDATE EQUIPPED", payload: { equipped } });
         })();
       } catch (error) {
         debugErrors(error, user);
@@ -190,55 +165,57 @@ export default function useInventory(makeInventoryRequest?: boolean): InventoryC
   // PETS
   useEffect(() => {
     setPets(inventory.pets);
-    // Sets Hero's inventory
-    _setEquippedItems(inventory);
   }, [inventory.pets.length]);
 
   // COSTUMES
   useEffect(() => {
-    setCostumes(inventory.costumes);
-    // Sets Hero's inventory
-    _setEquippedItems(inventory);
-  }, [inventory.costumes.length]);
+    setSkins(inventory.skins);
+  }, [inventory.skins.length]);
 
   // TITLES
   useEffect(() => {
     setTitles(inventory.titles);
-    // Sets Hero's inventory
-    _setEquippedItems(inventory);
   }, [inventory.titles.length]);
 
   // CONSUMABLES
   useEffect(() => {
     setConsumables(inventory.consumables);
-    // Sets Hero's inventory
-    _setEquippedItems(inventory);
   }, [inventory.consumables.length]);
 
   // CODEX
   useEffect(() => {
-    setCodex(inventory.codex);
-    // Sets Hero's inventory
-    _setEquippedItems(inventory);
-  }, [inventory.codex.length]);
+    setCodices(inventory.codices);
+  }, [inventory.codices.length]);
 
   /*---------------*/
 
-  // Any time an equipped item changes, update the global hero state
+  // PETS
   useEffect(() => {
-    dispatch({ type: "SET HERO", payload: { hero: { ...hero, equipped: [equippedPet, equippedCostume, equippedTitle] } } });
-  }, [equippedPet, equippedCostume, equippedTitle]);
+    console.log("EP=", equipped.pet);
+    // Sets Hero's inventory
+    setEquippedPet(equipped.pet);
+  }, [equipped.pet]);
+
+  // COSTUMES
+  useEffect(() => {
+    setEquippedSkin(equipped.skin);
+  }, [equipped.skin]);
+
+  // TITLES
+  useEffect(() => {
+    setEquippedTitle(equipped.title);
+  }, [equipped.title]);
 
   return {
     // All Owned Items
     consumables,
     pets,
-    costumes,
+    skins,
     titles,
-    codex,
+    codices,
     // Equipped Items
     equippedPet,
-    equippedCostume,
+    equippedSkin,
     equippedTitle,
     // Updater Methods
     equip,

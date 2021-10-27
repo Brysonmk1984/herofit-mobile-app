@@ -28,8 +28,8 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { newStravaActivities } = useStravaDataProcess();
   const [newActivities, setNewActivities] = useState<Activity[]>([]);
   const { addToast } = useGlobalToast();
-  const { equippedCostume, equippedPet, equippedTitle } = useInventory(true);
-  const propsForHeroImage = (({ character, equipped, alias, status }) => ({ character, equipped, alias, skin: equippedCostume, status, floating: true }))(state.hero);
+  const { equippedSkin, equippedPet, equippedTitle } = useInventory(true);
+  const propsForHeroImage = (({ character, equipped, alias, status }) => ({ character, equipped, alias, skin: equippedSkin, status, floating: true }))(state.hero);
 
   const hero = state.hero as Hero;
 
@@ -63,12 +63,12 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   }
 
   // Automatic Activity Data fetching
-  // useEffect(() => {
-  //   // For new users, newStravaActivities is undefined, otherwise it's an array
-  //   if (newStravaActivities && newStravaActivities.length) {
-  //     setNewActivities(newStravaActivities);
-  //   }
-  // }, [newStravaActivities]);
+  useEffect(() => {
+    // For new users, newStravaActivities is undefined, otherwise it's an array
+    if (newStravaActivities && newStravaActivities.length) {
+      setNewActivities(newStravaActivities);
+    }
+  }, [newStravaActivities]);
 
   // Determine which modal should pop up
   useEffect(() => {

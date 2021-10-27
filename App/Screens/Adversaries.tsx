@@ -9,6 +9,7 @@ import useGlobalToast from "../common/hooks/useGlobalToast";
 import { Battle } from "../common/types-battle";
 import { Item } from "../common/types";
 import ItemDetail from "./Home/Components/BottomDrawer/HiddenInventory/Modals/ItemDetail";
+import useModal from "../common/hooks/useModal";
 
 const Adversaries: React.FC<MainDrawerProps<"Adversaries">> = ({ navigation, route }) => {
   const { openModal } = useModal();

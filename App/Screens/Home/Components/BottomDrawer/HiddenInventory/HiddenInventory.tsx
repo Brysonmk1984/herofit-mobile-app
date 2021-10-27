@@ -4,14 +4,14 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { ReactChild } from "react-transition-group/node_modules/@types/react";
 import ItemTabs from "./ItemTabs";
 import { LinearGradient } from "expo-linear-gradient";
-import { ItemType, TabColors } from "../../../../../common/types";
+import { TabType, TabColors } from "../../../../../common/types";
 
 interface HiddenInventoryProps {
   children: ReactChild | ReactChild[];
   refRBSheet: React.MutableRefObject<{ open: () => any }>;
   bottomDrawerHeight: number;
   activeTab: string;
-  setActiveTab: (tab: ItemType) => void;
+  setActiveTab: (tab: TabType) => void;
   showInventory: boolean;
 }
 

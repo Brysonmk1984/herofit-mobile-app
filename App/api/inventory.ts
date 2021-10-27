@@ -9,7 +9,7 @@ const endpoint: string = Constants.manifest.extra.HF_ENDPOINT;
 let axios = _axios.create();
 axiosRetry(axios, { retries: 3 });
 
-const fetchAvatarInventory = async function (body): Promise<InventoryCategories> {
+const fetchAvatarInventory = async function (body): Promise<ServerInventoryCategories> {
   interface Data {
     data: ServerInventoryCategories;
   }
@@ -17,15 +17,7 @@ const fetchAvatarInventory = async function (body): Promise<InventoryCategories>
   return axios
     .post(`${endpoint}inventory/fetch-avatar-inventory`, body, await axiosOptions())
     .then(({ data }: { data: Data }) => {
-      // Convert incoming data to front-end friendly
-      const inventoryCategories = {
-        codex: data.data.codices,
-        titles: data.data.titles,
-        pets: data.data.pets,
-        consumables: data.data.consumables,
-        costumes: data.data.skins,
-      };
-      return inventoryCategories;
+      return data.data;
     })
     .catch(({ request, response }) => {
       throw handleHttpError(request, response);
@@ -44,6 +36,7 @@ const equipItem = async function (body): Promise<{ equippedItem: Item }> {
 };
 
 const equipUnequipItem = async function (body): Promise<{ equippedItem: Item; unequippedItem: Item }> {
+  console.log("THEBODY", body);
   return axios
     .post(`${endpoint}inventory/equip-unequip-item`, body, await axiosOptions())
     .then(({ data }) => {
@@ -114,7 +107,7 @@ interface BuyItemReturnType {
   pets: Item[];
   skins: Item[];
   titles: Item[];
-  codex: Item[];
+  codices: Item[];
   remainingPT: number;
 }
 

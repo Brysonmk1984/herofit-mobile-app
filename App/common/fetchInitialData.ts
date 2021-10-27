@@ -21,10 +21,10 @@ async function fetchInitialData(token: string, dispatch: AppDispatch, state: Ini
     const [p1, p2, p3, p4, p5] = await Promise.all([getUser(), getAvatar({ email }), fetchAllGameItems(), fetchBattleReport({ owner: email }), getSavedActivities({ email, count: 10 })]);
     const user: User = p1.user;
     const hero: Hero = p2.hero;
-    const allGameItems: Item[] = p3.items;
+    const allGameItems: Item[] = p3.items.map(item => ({ ...item, itemID: item.id }));
     const latestBattle = p4.latestBattle;
     const { activities: latestSavedActivities, latestActivityDate: latestSavedActivityDate } = p5;
-    console.log("LATEsT BATT", latestBattle);
+    //console.log("LATEsT BATT", latestBattle);
     //console.log("ACTS=", latestSavedActivities, "LAD", latestSavedActivityDate);
     // Takes item instance IDs and assigns full items to the hero under 'equipped' property
     const equipped = convertItemIdsToFullItems(hero.equipped, allGameItems);

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { View, Box, Text, HStack, Pressable } from "native-base";
 import Tab from "./Tab";
-import { ItemType, TabColors } from "../../../../../common/types";
+import { TabType, TabColors } from "../../../../../common/types";
 
 interface ItemTabsProps {
   activeTab: string;
-  setActiveTab: (tab: ItemType) => void;
+  setActiveTab: (tab: TabType) => void;
   tabColors: TabColors;
 }
 
@@ -16,7 +16,7 @@ const ItemTabs: React.FC<ItemTabsProps> = ({ activeTab, setActiveTab, tabColors 
     setTabGroup(tg => (tg === 0 ? 1 : 0));
   }
 
-  function changeActiveTab(tab: ItemType) {
+  function changeActiveTab(tab: TabType) {
     setActiveTab(tab);
   }
 

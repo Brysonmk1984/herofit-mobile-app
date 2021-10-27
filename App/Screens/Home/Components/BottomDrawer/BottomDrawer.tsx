@@ -10,7 +10,7 @@ import useModal from "../../../../common/hooks/useModal";
 import { fetchUpcomingFoeAndRewards } from "../../../../api/battle";
 import useGlobalToast from "../../../../common/hooks/useGlobalToast";
 import debugErrors from "../../../../common/debugErrors";
-import { CharacterName, DefaultHeroProperties, Hero, HeroStatus, HeroWithStats, ItemType, User } from "../../../../common/types";
+import { CharacterName, DefaultHeroProperties, EquippableItemType, Hero, HeroStatus, HeroWithStats, Item, TabType, User } from "../../../../common/types";
 import { Battle } from "../../../../common/types-battle";
 import { LinearGradient } from "expo-linear-gradient";
 import { GlobalStateContext } from "../../../../store";
@@ -40,25 +40,54 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
   if (isExistingHero(hero)) {
     heroId = hero.id;
   }
-  const { consumables, pets, costumes, titles, codex, equippedPet, equippedCostume, equippedTitle } = useInventory();
+  const { consumables, pets, skins, titles, codices, equippedPet, equippedSkin, equippedTitle, equip, equipUnequip, unequip } = useInventory();
   const [battleReportAvailable, setBattleReportAvailable] = useState(false);
   const [battleButtonDisabled, setBattleButtonDisabled] = useState(false);
-  const [activeTab, setActiveTab] = useState<ItemType>("Consumables");
+  const [activeTab, setActiveTab] = useState<TabType>("Consumables");
   const [pressedItem, setPressedItem] = useState(null);
-  const { power, recovery, armor, fire, earth, water, air, aether, photonTokens, qp, goToBattle, id, character, status } = hero;
+  const { photonTokens, qp, goToBattle, id, character, status } = hero;
 
   async function handleFetchUpcomingBattle() {
     try {
       const { foe, rewards } = await fetchUpcomingFoeAndRewards({ avatarID: id });
       navigation.push("App", { screen: "AwaitingBattle", params: { foe, rewards, character } });
     } catch (error) {
-      addToast("error", `${error.status}: ${error.message}`);
+      addToast("error", `${error.status}: ${error.message}`, "top");
       return debugErrors(error, user);
     }
   }
 
   function handleBattleReport() {
     navigation.push("App", { screen: "BattleReport", params: { battleReport: latestBattle } });
+  }
+
+  function handleEquipping(category: EquippableItemType, item?: Item) {
+    const equippedOfType = { skin: equippedSkin, pet: equippedPet, title: equippedTitle };
+
+    // If there's no passed item, the user is unequipping
+    if (!item) {
+      // Equipped item exists in this category, unequip it
+      if (equippedOfType[category]) {
+        unequip(equippedOfType[category], hero as Hero);
+        // User doesn't have an item of the same category already equipped - just return
+      } else {
+        return;
+      }
+      // passed item, user is equipping
+    } else {
+      // User selected the same item, just return
+      if (item.name === equippedOfType[category]?.name) {
+        return;
+        // No existing item equipped of same category, just equip
+      } else if (!equippedOfType[category]) {
+        console.log("JUST EQUIP=", item.name);
+        equip(item, hero as Hero);
+        // Existing item of same category, equipUnequip
+      } else {
+        console.log("BEFORE EQUIPPING = ", item.itemID, equippedOfType[category].itemID);
+        equipUnequip(item, equippedOfType[category].itemID, hero as Hero);
+      }
+    }
   }
 
   useEffect(() => {
@@ -79,8 +108,6 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
   // useEffect(() => {
   //   setBattleReportAvailable(true);
   // }, []);
-
-  console.log("!!!!", pets);
 
   return (
     <Box position="absolute" bottom={0}>
@@ -113,11 +140,11 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
       {pressedItem && <ItemDetail id="ItemDetail" item={pressedItem} character={character} />}
       {/* HIDDEN MENU */}
       <HiddenInventory refRBSheet={refRBSheet} bottomDrawerHeight={bottomDrawerHeight} activeTab={activeTab} setActiveTab={setActiveTab}>
-        {activeTab === "Consumables" && <ItemCarousel type="consumables" data={consumables} setPressedItem={setPressedItem} refRBSheet={refRBSheet} />}
-        {activeTab === "Pets" && <ItemCarousel type="pets" data={pets} equipped={equippedPet} setPressedItem={setPressedItem} refRBSheet={refRBSheet} />}
-        {activeTab === "Costumes" && <ItemCarousel type="costumes" data={costumes} equipped={equippedCostume} character={hero.character} setPressedItem={setPressedItem} refRBSheet={refRBSheet} />}
-        {activeTab === "Titles" && <ItemCarousel type="titles" data={titles} equipped={equippedTitle} setPressedItem={setPressedItem} refRBSheet={refRBSheet} />}
-        {activeTab === "Codex" && <ItemCarousel type="codex" data={codex} setPressedItem={setPressedItem} refRBSheet={refRBSheet} />}
+        {activeTab === "Skins" && <ItemCarousel type="consumable" data={consumables} setPressedItem={setPressedItem} refRBSheet={refRBSheet} />}
+        {activeTab === "Pets" && <ItemCarousel type="pet" data={pets} equipped={equippedPet} setPressedItem={setPressedItem} refRBSheet={refRBSheet} handleEquipping={handleEquipping} />}
+        {activeTab === "Costumes" && <ItemCarousel type="skin" data={skins} equipped={equippedSkin} character={hero.character} setPressedItem={setPressedItem} refRBSheet={refRBSheet} handleEquipping={handleEquipping} />}
+        {activeTab === "Titles" && <ItemCarousel type="title" data={titles} equipped={equippedTitle} setPressedItem={setPressedItem} refRBSheet={refRBSheet} handleEquipping={handleEquipping} />}
+        {activeTab === "Codices" && <ItemCarousel type="codex" data={codices} setPressedItem={setPressedItem} refRBSheet={refRBSheet} />}
       </HiddenInventory>
     </Box>
   );

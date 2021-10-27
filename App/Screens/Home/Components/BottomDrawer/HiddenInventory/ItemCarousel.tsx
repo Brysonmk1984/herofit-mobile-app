@@ -1,22 +1,23 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { StyleSheet, Platform, SafeAreaView, Dimensions, Pressable, ImageBackground } from "react-native";
-import { View, Text, Image, Box } from "native-base";
-import { CharacterName, ItemWithOwnership, Item, ItemType } from "../../../../../common/types";
+import { View, Text, Box } from "native-base";
+import { CharacterName, ItemWithOwnership, Item, ServerItemType, EquippableItemType } from "../../../../../common/types";
 import Carousel from "react-native-snap-carousel";
-import { capitalize, getColorFromClassName, getColorFromItemName, getHeroImage, getPetImage, thousandsFormat } from "../../../../../common/helperFunctions";
+import { getColorFromClassName, getColorFromItemName, thousandsFormat } from "../../../../../common/helperFunctions";
 import { Icon } from "../../../../../Components/CustomComponents";
-import { HeroImage } from "../../../../../Components/HeroImage/HeroImage";
 import { GlobalStateContext } from "../../../../../store";
 import useModal from "../../../../../common/hooks/useModal";
-import ItemDetail from "./Modals/ItemDetail";
 import ItemImage from "../../../../../common/ItemImage";
+import { useDebounce, useDebouncedCallback } from "use-debounce/lib";
+import { PetImage } from "../../PetImage";
 
 interface ItemCarouselProps {
-  type: Lowercase<ItemType>;
+  type: ServerItemType;
   data: Item[];
   equipped?: Item;
   character?: CharacterName;
   setPressedItem: (item: Item) => void;
+  handleEquipping?: (category: EquippableItemType, item?: Item) => void;
 }
 
 type AllSliderItems = ItemWithOwnership[];
@@ -27,16 +28,20 @@ const ITEM_HEIGHT = ITEM_WIDTH;
 const ITEM_IMAGE_WIDTH = ITEM_WIDTH * 1.2;
 const ITEM_IMAGE_HEIGHT = ITEM_WIDTH * 1.2;
 
-const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, character, setPressedItem, refRBSheet }) => {
+const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, character, setPressedItem, refRBSheet, handleEquipping }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const [allItemsOfType, setAllItemsOfType] = useState([]);
   const [activeIndex, setActiveIndex] = useState(null);
 
   const { openModal } = useModal();
   const carousel = useRef(null);
-  const unequippedTypes = ["costumes", "pets", "titles"];
 
-  function _getItemImage(item: ItemWithOwnership, type: Lowercase<ItemType>) {
+  function _determineEquippableType(type: ServerItemType): type is EquippableItemType {
+    const equippableTypes = ["skin", "pet", "title"];
+    return equippableTypes.includes(type);
+  }
+
+  function _getItemImage(item: ItemWithOwnership, type: ServerItemType) {
     const iconColor = item.class ? getColorFromClassName(item.class) : getColorFromItemName(item.name, true);
     const IMAGE_WIDTH = ITEM_IMAGE_WIDTH * 0.8;
     const MARGIN_LEFT = 2;
@@ -55,10 +60,10 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
     }
 
     switch (type) {
-      case "consumables":
+      case "consumable":
         return (
           <Box style={styles.itemImage}>
-            {item.unowned && (
+            {!item.owned && (
               <Box position="absolute" w="100%" top="35%" zIndex="1000">
                 <Text textAlign="center" color={item.ptCost ? "base.brand" : "primary.400"} ml={-2}>
                   {item.ptCost ? thousandsFormat(item.ptCost) : "NOT FOR SALE"}
@@ -75,10 +80,10 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
             )}
           </Box>
         );
-      case "pets":
+      case "pet":
         return (
           <>
-            {item.unowned && (
+            {!item.owned && (
               <Box position="absolute" w="100%" top="35%" zIndex="1000">
                 <Text textAlign="center" color={item.ptCost ? "base.brand" : "primary.400"} ml="2">
                   {item.ptCost ? thousandsFormat(item.ptCost) : "NOT FOR SALE"}
@@ -89,10 +94,10 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
           </>
         );
 
-      case "costumes":
+      case "skin":
         return (
           <Box position="absolute" alignSelf="center">
-            {item.unowned && (
+            {!item.owned && (
               <Box position="absolute" w="100%" top="35%" zIndex="1000">
                 <Text textAlign="center" color={item.ptCost ? "base.brand" : "primary.400"} ml="2">
                   {item.ptCost ? thousandsFormat(item.ptCost) : "NOT FOR SALE"}
@@ -102,10 +107,10 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
             <ItemImage item={item} character={character} w={IMAGE_WIDTH} />
           </Box>
         );
-      case "titles":
+      case "title":
         return (
           <Box style={styles.itemImage}>
-            {item.unowned && (
+            {!item.owned && (
               <Box position="absolute" w="100%" top="35%" zIndex="1000">
                 <Text textAlign="center" color={item.ptCost ? "base.brand" : "primary.400"} ml="2">
                   {item.ptCost ? thousandsFormat(item.ptCost) : "NOT FOR SALE"}
@@ -118,7 +123,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
       case "codex":
         return (
           <Box style={styles.itemImage}>
-            {item.unowned && (
+            {!item.owned && (
               <Box position="absolute" w="100%" top="35%" zIndex="1000">
                 <Text textAlign="center" color={item.ptCost ? "base.brand" : "primary.400"} ml="2">
                   {item.ptCost ? thousandsFormat(item.ptCost) : "NOT FOR SALE"}
@@ -148,14 +153,30 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
         {/* Item image or icon */}
         {_getItemImage(item, type)}
         {/* Darken filter for items not owned */}
-        {item.unowned && <View bg={"base.black"} opacity={0.4} style={[styles.itemContainer, { position: "absolute" }]}></View>}
+        {!item.owned && <View bg={"base.black"} opacity={0.4} style={[styles.itemContainer, { position: "absolute" }]}></View>}
       </Pressable>
     );
   }
 
+  const _delayedSelection = useDebouncedCallback((type: EquippableItemType, activeIndex?: number) => {
+    //console.log("NEWWW", type, activeIndex);
+    handleEquipping(type, activeIndex ? allItemsOfType[activeIndex] : null);
+  }, 750);
+
   function _handleSelectedItem(index: number) {
     setActiveIndex(index);
-    // console.log(index, data[index].name);
+    const selectedItem = allItemsOfType[index];
+    // Equipping item - only for equippable Item types
+    if (_determineEquippableType(type)) {
+      // AND must own item
+      if (selectedItem.owned) {
+        _delayedSelection(type, index);
+        // For unequipping
+      } else if (selectedItem.name.includes("NO ")) {
+        _delayedSelection(type);
+      }
+      // Anything else doesn't get equipped (unowned items)
+    }
   }
 
   function _openModal(item: Item | ItemWithOwnership, index: number) {
@@ -171,37 +192,46 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
 
   useEffect(() => {
     if (data) {
-      const typeMap = { costumes: "skin", pets: "pet", titles: "title", consumables: "consumable", codex: "codex" };
+      // Filter down to just items of carousel type
+      const filteredToItemType = state.allGameItems.filter(item => item.type === type);
 
-      const unownedItems: Item[] | AllSliderItems = state.allGameItems
-        // Filter all game items down to just the items of the selected item type
-        .filter(item => {
-          if (type === "consumables" && item.type === "consumable") {
-            // Since consumables can stack, set consumable item to unowned
-            return true;
-          } else {
-            // Otherwise Filter all game items down to just the items of the selected item type
-            return item.type === typeMap[type] && !data.map(item => item.name).includes(item.name);
-          }
-        })
-        // add 'unowned' to item if user doesn't own the item
-        .map(item => ({ ...item, unowned: true }))
+      // Add "owned" property to filtered items
+      const itemsWithOwnership: ItemWithOwnership[] = filteredToItemType.map((item: any) => {
+        if (type === "consumable" && item.type === "consumable") {
+          // Since consumables can stack, set consumable item to be included in  unowned item list
+          item.owned = false;
+        } else if (data.map(ownedItem => ownedItem.name).includes(item.name)) {
+          // "data" are items of this category that the user owns
+          item.owned = true;
+        } else {
+          item.owned = false;
+        }
+        return item;
+      });
+
+      // Divide ItemsWithOwnership into two arrays, owned and unowned
+      const unownedItems = itemsWithOwnership
+        .filter(item => item.owned === false)
         // Sort by ptCost
         .sort((a, b) => a.ptCost - b.ptCost)
         // Sort by buyable
         //@ts-ignore
         .sort((a, b) => (b.ptCost === null ? false : true));
+      const ownedItems = itemsWithOwnership.filter(item => item.owned === true);
 
-      const items = [...data, ...unownedItems];
+      // Final items array, with owned items at the front
+      const items = [...ownedItems, ...unownedItems];
 
-      if (unequippedTypes.includes(type)) {
-        const name = type === "costumes" ? "NO COSTUME" : `NO ${typeMap[type].toUpperCase()}`;
-        const nothingItem = { type: typeMap[type], name } as Item;
+      // Add item type for 'no item' for categories that are equippable
+      if (_determineEquippableType(type)) {
+        const name = type === "skin" ? "NO COSTUME" : `NO ${type.toUpperCase()}`;
+        const nothingItem = { type, name } as ItemWithOwnership;
         items.unshift(nothingItem);
       }
-
+      // Set completed array to state
       setAllItemsOfType(items);
-      const startingActiveIndex = equipped ? data.findIndex(item => item.name === equipped.name) : Math.floor(data.length / 2);
+      // Set active Index to equipped item, or halfway through
+      const startingActiveIndex = equipped ? items.findIndex(item => item.name === equipped.name) : Math.floor(data.length / 2);
       setActiveIndex(startingActiveIndex);
     }
   }, [data]);
@@ -221,6 +251,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
     </SafeAreaView>
   );
 };
+
 export default ItemCarousel;
 
 const styles = StyleSheet.create({

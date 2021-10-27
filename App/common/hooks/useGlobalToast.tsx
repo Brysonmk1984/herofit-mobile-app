@@ -56,9 +56,10 @@ const useGlobalToast = () => {
   }
 
   return {
-    addToast: (type: AlertType, message: string) =>
+    addToast: (type: AlertType, message: string, placement: "top" | "bottom" = "bottom") =>
       (toastIdRef.current = toast.show({
         render: () => renderToast(type, message),
+        placement,
       })),
   };
 };

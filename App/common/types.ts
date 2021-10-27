@@ -2,7 +2,7 @@ import { Battle } from "./types-battle";
 
 type Pluralize<T extends string> = `${T}s`;
 
-type ActionType = "TOGGLE LOADING" | "SET EXISTING USER INIT DATA" | "SET ISSIGNEDIN" | "SET NEW USER" | "SET HERO" | "SET USER" | "RESET DEFAULTS" | "POST UPGRADE" | "SEEN BATTLE REPORT" | "UPDATE_INVENTORY";
+type ActionType = "TOGGLE LOADING" | "SET EXISTING USER INIT DATA" | "SET ISSIGNEDIN" | "SET NEW USER" | "SET HERO" | "SET USER" | "RESET DEFAULTS" | "POST UPGRADE" | "SEEN BATTLE REPORT" | "UPDATE INVENTORY" | "UPDATE EQUIPPED";
 
 interface ToggleLoadingAction {
   type: "TOGGLE LOADING";
@@ -49,23 +49,23 @@ interface SeenBattleReportAction {
 }
 interface UpdateInventoryAction {
   type: "UPDATE INVENTORY";
-  payload: { inventory: { pets: Item[]; consumables: Item[]; costumes: Item[]; titles: Item[]; codex: Item[] } };
+  payload: { inventory: { pets: Item[]; consumables: Item[]; skins: Item[]; titles: Item[]; codices: Item[] } };
+}
+
+interface UpdateEquippedAction {
+  type: "UPDATE EQUIPPED";
+  payload: {
+    equipped: {
+      pet: Item | null;
+      skin: Item | null;
+      title: Item | null;
+    };
+  };
 }
 
 // Same as ShoppingListAction in example
-type AppAction = ToggleLoadingAction | SetExistingUserInitDataAction | SetIsSignedInAction | SetUserStatusAction | SetHeroAction | SetUserAction | ResetDefaultsAction | AddModalAction | RemoveModalAction | PostUpgradeAction | SeenBattleReportAction | UpdateInventoryAction;
+type AppAction = ToggleLoadingAction | SetExistingUserInitDataAction | SetIsSignedInAction | SetUserStatusAction | SetHeroAction | SetUserAction | ResetDefaultsAction | AddModalAction | RemoveModalAction | PostUpgradeAction | SeenBattleReportAction | UpdateInventoryAction | UpdateEquippedAction;
 type AppDispatch = (action: AppAction) => void;
-
-type Payload = {
-  user: object;
-  hero: object;
-  gameItems: [];
-  latestBattle: object;
-  isSignedIn: boolean;
-  isLoading: boolean;
-  userStatus: UserStatus;
-  indiciesForRemoval: string[];
-};
 
 interface Action<Payload = {}> {
   type: ActionType;
@@ -97,7 +97,18 @@ interface InitialAppState {
   latestBattle: Battle | null;
   modalQueue: string[];
   allGameItems: Item[];
-  inventory: InventoryCategories;
+  inventory: {
+    skins: Item[];
+    pets: Item[];
+    titles: Item[];
+    consumables: Item[];
+    codices: Item[];
+  };
+  equipped: {
+    skin: Item | null;
+    pet: Item | null;
+    title: Item | null;
+  };
 }
 
 interface Store {
@@ -222,15 +233,9 @@ type Hero = ExistingHeroProperties & HeroWithStats;
 // ITEM TYPES
 type ServerItemType = "skin" | "title" | "pet" | "consumable" | "codex";
 type ServerInventoryCategories = {
-  [T in Pluralize<Exclude<ServerItemType, "Codex">> | "codices"]: Item[];
+  [T in Pluralize<Exclude<ServerItemType, "codex">> | "codices"]: Item[];
 };
-
-type ItemType = Capitalize<Exclude<ServerItemType, "skin"> | "costume">;
-type EquippableItemType = Exclude<ServerItemType, "codex" | "consumable">;
-
-type InventoryCategories = {
-  [T in Pluralize<Lowercase<Exclude<ItemType, "Codex">>> | "codex"]: Item[];
-};
+type EquippableItemType = Exclude<ServerItemType, "consumable" | "codex">;
 
 interface ItemInstance {
   equipped: boolean;
@@ -257,7 +262,7 @@ interface Item extends ItemInstance {
   count?: number;
 }
 
-type ItemWithOwnership = Item & { unowned: boolean };
+type ItemWithOwnership = Item & { owned: boolean };
 
 interface Effect {
   name: string;
@@ -337,8 +342,9 @@ type SkinLcUnderscoreName = UniqueImageSkin | Tint;
 type SkinName = "Fire Tint" | "Earth Tint" | "Water Tint" | "Air Tint" | "Banshee Tint" | "Poltergeist Tint" | "Specter Tint" | "Wraith Tint" | "Phantom Tint" | "Phantasm Tint" | "Shade Tint" | "Apparition Tint" | "Shadow Self" | "Ascended Self" | "Gale Force" | "Fire Brand" | "Earth Shaker" | "Tide Caller";
 type ZodiacSign = "Capricorn" | "Aquarius" | "Pisces" | "Aries" | "Taurus" | "Gemini" | "Cancer" | "Leo" | "Virgo" | "Libra" | "Scorpio" | "Sagittarius";
 
+type TabType = "Consumables" | "Costumes" | "Pets" | "Codex" | "Titles";
 type TabColors = {
-  [T in ItemType]: [string, string];
+  [T in TabType]: [string, string];
 };
 
-export { Action, AppDispatch, InitialAppState, AppAction, Store, User, UserStatus, Activity, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, ItemWithOwnership, ServerItemType, ServerInventoryCategories, ItemType, EquippableItemType, InventoryCategories, Effect, Stat, PrimaryElement, EveryElement, HeroChoice, CharacterName, CharacterAlias, FoeType, AllFoes, SkinLcUnderscoreName, SkinName, Tint, Foe, ZodiacSign, TabColors };
+export { Action, AppDispatch, InitialAppState, AppAction, Store, User, UserStatus, Activity, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, ItemWithOwnership, ServerItemType, ServerInventoryCategories, EquippableItemType, Effect, Stat, PrimaryElement, EveryElement, HeroChoice, CharacterName, CharacterAlias, FoeType, AllFoes, SkinLcUnderscoreName, SkinName, Tint, Foe, ZodiacSign, TabType, TabColors };
