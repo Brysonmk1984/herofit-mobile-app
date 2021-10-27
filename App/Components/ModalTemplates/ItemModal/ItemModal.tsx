@@ -52,13 +52,12 @@ const ItemModal = function ({ children, id, modalOpen, modalAction, item, charac
             <ModalCloseButton bgColor="base.background" />
           </ItemHeader>
           <View paddingBottom={74} overflow="hidden">
-            <ItemTitle title={item.name} ptCost={item.ptCost ?? null} />
-
+            <ItemTitle title={item.name} ptCost={(buttonText === "BUY" && item.ptCost) ?? null} />
             {item.lore && <ItemLore lore={item.lore} numEffects={item.effects?.length ?? 0} />}
             {children}
           </View>
         </Box>
-        {buttonText && <ItemModalActionButton disabled={disabled} buttonText={buttonText} action={() => handleModalAction(id, modalAction)} />}
+        {buttonText && <ItemModalActionButton disabled={disabled} buttonText={buttonText} action={() => handleModalAction(id, modalAction)} bgColor={buttonText === "USE" || buttonText === "BUY" ? "base.caution" : "base.success"} />}
       </Modal.Content>
     </Modal>
   );

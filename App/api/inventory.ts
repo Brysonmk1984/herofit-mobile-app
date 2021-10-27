@@ -102,18 +102,20 @@ const insertItemForAllAvatars = async function (body) {
 };
 
 interface BuyItemReturnType {
-  consumables: Item[];
-  pets: Item[];
-  skins: Item[];
-  titles: Item[];
-  codices: Item[];
-  remainingPT: number;
+  inventory: {
+    consumables: Item[];
+    pets: Item[];
+    skins: Item[];
+    titles: Item[];
+    codices: Item[];
+  };
+  photonTokens: number;
 }
 
 const buyItemByAvatarId = async function (body): Promise<BuyItemReturnType> {
   return axios
     .post(`${endpoint}inventory/buy-item-by-avatar-id`, body, await axiosOptions())
-    .then(({ data }) => {
+    .then(({ data }: { data: { data: BuyItemReturnType } }) => {
       return data.data;
     })
     .catch(({ request, response }) => {

@@ -54,11 +54,11 @@ export default function useInventory(makeInventoryRequest?: boolean): ServerInve
   // BUY AN ITEM
   async function buy(item: Item, hero: Hero) {
     try {
-      const itemCategoryData = await buyItemByAvatarId({ itemID: item.id, ptCost: item.ptCost, avatarID: hero.id });
-      const itemCategoryMap = { consumable: "consumables", pet: "pets", skin: "skins", title: "titles", codex: "codex" };
-      // Only update the category of the item bought
-      _updateInventoryCategoriesByItemType(itemCategoryData[itemCategoryMap[item.type]], item.type);
-      dispatch({ type: "SET HERO", payload: { hero: { ...hero, photonTokens: itemCategoryData.remainingPT } } });
+      const { inventory, photonTokens } = await buyItemByAvatarId({ itemID: item.id, ptCost: item.ptCost, avatarID: hero.id });
+
+      dispatch({ type: "UPDATE INVENTORY", payload: { inventory: { ...inventory } } });
+      dispatch({ type: "SET HERO", payload: { hero: { ...hero, photonTokens } } });
+
       addToast("success", `Bought ${convertAorAn(item.name)} ${item.name}`);
     } catch (error) {
       error.message = `Unable to buy Item, Please try again later.`;

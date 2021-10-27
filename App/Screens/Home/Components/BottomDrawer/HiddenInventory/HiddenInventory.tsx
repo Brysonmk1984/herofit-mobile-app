@@ -12,10 +12,9 @@ interface HiddenInventoryProps {
   bottomDrawerHeight: number;
   activeTab: string;
   setActiveTab: (tab: TabType) => void;
-  showInventory: boolean;
 }
 
-const HiddenInventory: React.FC<HiddenInventoryProps> = ({ children, refRBSheet, bottomDrawerHeight, activeTab, setActiveTab, showInventory }) => {
+const HiddenInventory: React.FC<HiddenInventoryProps> = ({ children, refRBSheet, bottomDrawerHeight, activeTab, setActiveTab }) => {
   const { colors } = useTheme();
 
   const tabColors: TabColors = {

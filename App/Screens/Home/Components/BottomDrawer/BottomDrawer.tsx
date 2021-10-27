@@ -103,6 +103,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
     if (!item.ptCost) {
       throw new Error("Wrong Item type");
     }
+    console.log("!!!", item, hero);
     buy(item, hero as Hero);
   }
 
@@ -111,10 +112,10 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
     //
     if (item.type === "consumable" && item.owned) {
       // Modal Action is to Consume Item
-      return { buttonText: "Use", modalAction: () => handleConsuming(item) };
+      return { buttonText: "USE", modalAction: () => handleConsuming(item) };
     } else if (!item.owned && item.ptCost) {
       // Modal Action is to Buy Item
-      return { buttonText: "Buy", modalAction: () => handleBuying(item) };
+      return { buttonText: "BUY", modalAction: () => handleBuying(item) };
     }
   }
 

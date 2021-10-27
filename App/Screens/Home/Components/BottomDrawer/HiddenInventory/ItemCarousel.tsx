@@ -31,7 +31,7 @@ const ITEM_IMAGE_HEIGHT = ITEM_WIDTH * 1.2;
 const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, character, setPressedItem, refRBSheet, handleEquipping }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const [allItemsOfType, setAllItemsOfType] = useState([]);
-  const [activeIndex, setActiveIndex] = useState(null);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const { openModal } = useModal();
   const carousel = useRef(null);
@@ -158,7 +158,6 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
   }
 
   const _delayedSelection = useDebouncedCallback((type: EquippableItemType, activeIndex?: number) => {
-    //console.log("NEWWW", type, activeIndex);
     handleEquipping(type, activeIndex ? allItemsOfType[activeIndex] : null);
   }, 750);
 
@@ -182,7 +181,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
     if (index !== activeIndex) {
       carousel.current.snapToItem(index);
     }
-    console.log("NEWPRESSED", item.owned);
+
     if (!item.name.includes("NO ")) {
       setPressedItem(item);
       refRBSheet.current.close();
@@ -231,7 +230,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
     // Set completed array to state
     setAllItemsOfType(items);
     // Set active Index to equipped item, or halfway through
-    const startingActiveIndex = equipped ? items.findIndex(item => item.name === equipped.name) : allItemsOfType[0];
+    const startingActiveIndex = equipped ? items.findIndex(item => item.name === equipped.name) : 0;
     setActiveIndex(startingActiveIndex);
   }, [data]);
 

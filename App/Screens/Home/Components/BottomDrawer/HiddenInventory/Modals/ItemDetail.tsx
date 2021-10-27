@@ -11,7 +11,7 @@ interface ItemDetailProps {
   id: string;
   item: Item | ItemWithOwnership;
   character?: CharacterName;
-  buttonText?: "Use" | "Buy" | "OK";
+  buttonText?: "USE" | "BUY" | "OK";
   modalAction?: () => void;
   closeModal?: () => void;
 }
