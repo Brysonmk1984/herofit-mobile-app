@@ -20,8 +20,6 @@ interface ItemCarouselProps {
   handleEquipping?: (category: EquippableItemType, item?: Item) => void;
 }
 
-type AllSliderItems = ItemWithOwnership[];
-
 const SLIDER_WIDTH = Dimensions.get("window").width;
 const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.32);
 const ITEM_HEIGHT = ITEM_WIDTH;
@@ -231,7 +229,6 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
     setAllItemsOfType(items);
     // Set active Index to equipped item, or halfway through
     const startingActiveIndex = equipped ? items.findIndex(item => item.name === equipped.name) : 0;
-    console.log("SAI=", startingActiveIndex);
     setActiveIndex(startingActiveIndex);
   }, [data]);
 

@@ -13,7 +13,7 @@ import FinalizeHeroSelection from "./Screens/HeroSelection/FinalizeHeroSelection
 
 // AUTHENTICATED SCREENS
 import Home from "./Screens/Home/Home";
-import Adversaries from "./Screens/Adversaries";
+import Adversaries from "./Screens/Adversaries/Adversaries";
 import Feedback from "./Screens/Feedback/Feedback";
 import Settings from "./Screens/Settings";
 import ManualActivity from "./Screens/ManualActivitity/ManualActivity";

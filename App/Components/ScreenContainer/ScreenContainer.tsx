@@ -36,6 +36,8 @@ function determineImageBackground({ type, name }: { type: string; name: string }
         return require("../../../assets/images/backgrounds/splash-background-day.webp");
       case "Loading":
         return require("../../../assets/images/backgrounds/splash-background-night.webp");
+      case "Adversaries":
+        return require("../../../assets/images/backgrounds/adversaries-background.webp");
       case "BattleReport":
       case "BattleReportDetail":
         return;

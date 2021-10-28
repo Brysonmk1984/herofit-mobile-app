@@ -60,7 +60,7 @@ const updateBattleReportSeen = async function (body) {
     });
 };
 
-const getVillainList = async function (): Promise<{ villains: AllFoes[] }> {
+const getVillainList = async function (): Promise<{ villains: AllFoes }> {
   return axios
     .get(`${endpoint}battle/villain-list`, await axiosOptions())
     .then(({ data }) => {

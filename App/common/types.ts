@@ -316,12 +316,12 @@ interface FoeAbility {
   name: string;
   type: string;
 }
-
+type FoeClass = "Elementals" | "Spirits" | "Titans";
 interface Foe {
   ability: FoeAbility;
   air: number;
   armor: number;
-  class: "Elementals" | "Spirits" | "Titans";
+  class: FoeClass;
   difficulty: number;
   earth: number;
   fire: number;
@@ -351,4 +351,4 @@ type TabColors = {
   [T in TabType]: [string, string];
 };
 
-export { Action, AppDispatch, InitialAppState, AppAction, Store, User, UserStatus, Activity, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, ItemWithOwnership, BattleInstantItem, ServerItemType, ServerInventoryCategories, EquippableItemType, Effect, Stat, PrimaryElement, EveryElement, HeroChoice, CharacterName, CharacterAlias, FoeType, AllFoes, SkinLcUnderscoreName, SkinName, Tint, Foe, ZodiacSign, TabType, TabColors };
+export { Action, AppDispatch, InitialAppState, AppAction, Store, User, UserStatus, Activity, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, ItemWithOwnership, BattleInstantItem, ServerItemType, ServerInventoryCategories, EquippableItemType, Effect, Stat, PrimaryElement, EveryElement, HeroChoice, CharacterName, CharacterAlias, FoeType, AllFoes, SkinLcUnderscoreName, SkinName, Tint, Foe, FoeClass, ZodiacSign, TabType, TabColors };
