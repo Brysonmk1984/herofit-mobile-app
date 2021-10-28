@@ -1,6 +1,6 @@
 import React, { useContext, useRef, useEffect } from "react";
 import { Animated, StyleSheet } from "react-native";
-import { VStack, Text, Box, FlatList } from "native-base";
+import { VStack, Text, Box, FlatList, Pressable } from "native-base";
 import { LinearGradient } from "expo-linear-gradient";
 import { HeroImage } from "../../../Components/HeroImage/HeroImage";
 import { capitalize, equippedSkin, getColorFromClassName, getColorFromItemName } from "../../../common/helperFunctions";
@@ -11,9 +11,10 @@ interface HeroSectionProps {
   height: number;
   width: number;
   rewards: Item[];
+  setPressedItem: (item: Item) => void;
 }
 
-const HeroSection: React.FC<HeroSectionProps> = ({ height: deviceHeight, width: deviceWidth, rewards }) => {
+const HeroSection: React.FC<HeroSectionProps> = ({ height: deviceHeight, width: deviceWidth, rewards, setPressedItem }) => {
   const { state } = useContext(GlobalStateContext);
   const propsForHeroImage = (({ character, equipped, alias, status }) => ({ character, equipped, alias, skin: equippedSkin(equipped), status }))(state.hero);
   const heroColors = [state.hero.colors[0], "#ffffff"];
@@ -23,9 +24,11 @@ const HeroSection: React.FC<HeroSectionProps> = ({ height: deviceHeight, width: 
   function renderItem(item: Item) {
     const color = item.class ? getColorFromClassName(item.class) : getColorFromItemName(item.name);
     return (
-      <Text textAlign="right">
-        <Text>New {capitalize(item.type)}</Text> - <Text color={color}>{item.name}</Text>
-      </Text>
+      <Pressable onPress={() => setPressedItem(item)}>
+        <Text textAlign="right" textDecoration="underline">
+          <Text color="base.link">New {capitalize(item.type)}</Text> - <Text color={color}>{item.name}</Text>
+        </Text>
+      </Pressable>
     );
   }
 

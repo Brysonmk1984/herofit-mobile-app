@@ -28,6 +28,7 @@ type MainDrawerParamList = {
     foe: Foe;
     rewards: Item[] | null;
     character: CharacterName;
+    isInstant: boolean;
   };
   BattleReport: {
     battleReport: Battle | null;

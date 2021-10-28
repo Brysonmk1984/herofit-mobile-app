@@ -2,7 +2,7 @@ import { Battle } from "./types-battle";
 
 type Pluralize<T extends string> = `${T}s`;
 
-type ActionType = "TOGGLE LOADING" | "SET EXISTING USER INIT DATA" | "SET ISSIGNEDIN" | "SET NEW USER" | "SET HERO" | "SET USER" | "RESET DEFAULTS" | "POST UPGRADE" | "SEEN BATTLE REPORT" | "UPDATE INVENTORY" | "UPDATE EQUIPPED";
+type ActionType = "TOGGLE LOADING" | "SET EXISTING USER INIT DATA" | "SET ISSIGNEDIN" | "SET NEW USER" | "SET HERO" | "SET USER" | "RESET DEFAULTS" | "POST UPGRADE" | "SEEN BATTLE REPORT" | "UPDATE INVENTORY" | "UPDATE EQUIPPED" | "UPDATE LATEST BATTLE";
 
 interface ToggleLoadingAction {
   type: "TOGGLE LOADING";
@@ -10,7 +10,7 @@ interface ToggleLoadingAction {
 }
 interface SetExistingUserInitDataAction {
   type: "SET EXISTING USER INIT DATA";
-  payload: { user: User; hero: Hero; latestSavedActivities: Activity[]; latestSavedActivityDate: string | null; latestBattle: any; isSignedIn: boolean; allGameItems: Item[] };
+  payload: { user: User; hero: Hero; latestSavedActivities: Activity[]; latestSavedActivityDate: string | null; latestBattle: Battle; isSignedIn: boolean; allGameItems: Item[] };
 }
 interface SetIsSignedInAction {
   type: "SET ISSIGNEDIN";
@@ -51,7 +51,6 @@ interface UpdateInventoryAction {
   type: "UPDATE INVENTORY";
   payload: { inventory: { pets: Item[]; consumables: Item[]; skins: Item[]; titles: Item[]; codices: Item[] } };
 }
-
 interface UpdateEquippedAction {
   type: "UPDATE EQUIPPED";
   payload: {
@@ -62,9 +61,13 @@ interface UpdateEquippedAction {
     };
   };
 }
+interface UpdateLatestBattleAction {
+  type: "UPDATE LATEST BATTLE";
+  payload: { latestBattle: Battle };
+}
 
 // Same as ShoppingListAction in example
-type AppAction = ToggleLoadingAction | SetExistingUserInitDataAction | SetIsSignedInAction | SetUserStatusAction | SetHeroAction | SetUserAction | ResetDefaultsAction | AddModalAction | RemoveModalAction | PostUpgradeAction | SeenBattleReportAction | UpdateInventoryAction | UpdateEquippedAction;
+type AppAction = ToggleLoadingAction | SetExistingUserInitDataAction | SetIsSignedInAction | SetUserStatusAction | SetHeroAction | SetUserAction | ResetDefaultsAction | AddModalAction | RemoveModalAction | PostUpgradeAction | SeenBattleReportAction | UpdateInventoryAction | UpdateEquippedAction | UpdateLatestBattleAction;
 type AppDispatch = (action: AppAction) => void;
 
 interface Action<Payload = {}> {
@@ -263,6 +266,7 @@ interface Item extends ItemInstance {
 }
 
 type ItemWithOwnership = Item & { owned: boolean };
+type BattleInstantItem = "Storm Crow Bone Chimes" | "Smoldering Skull Torch" | "Petrified Power Totem" | "Wave-Swept Battle Conch" | "Plague Token" | "Obsidian Mirror";
 
 interface Effect {
   name: string;
@@ -347,4 +351,4 @@ type TabColors = {
   [T in TabType]: [string, string];
 };
 
-export { Action, AppDispatch, InitialAppState, AppAction, Store, User, UserStatus, Activity, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, ItemWithOwnership, ServerItemType, ServerInventoryCategories, EquippableItemType, Effect, Stat, PrimaryElement, EveryElement, HeroChoice, CharacterName, CharacterAlias, FoeType, AllFoes, SkinLcUnderscoreName, SkinName, Tint, Foe, ZodiacSign, TabType, TabColors };
+export { Action, AppDispatch, InitialAppState, AppAction, Store, User, UserStatus, Activity, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, ItemWithOwnership, BattleInstantItem, ServerItemType, ServerInventoryCategories, EquippableItemType, Effect, Stat, PrimaryElement, EveryElement, HeroChoice, CharacterName, CharacterAlias, FoeType, AllFoes, SkinLcUnderscoreName, SkinName, Tint, Foe, ZodiacSign, TabType, TabColors };

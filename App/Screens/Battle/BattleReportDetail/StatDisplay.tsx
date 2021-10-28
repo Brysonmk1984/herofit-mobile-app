@@ -68,10 +68,11 @@ function determineStatColor(base: number, battleTime: number) {
 const StatDisplay: React.FC<StatDisplayProps> = ({ battleReport }) => {
   const { height } = useWindowDimensions();
   const { outcome, scenario, roundBreakdown, avatar: hero, bra: brh, foe, brf, foeType, effects, updatedAt, seasonalBonusElement, effectProcs } = battleReport;
+  const nonNullEffectProcs = effectProcs ?? [];
   const gradient = ["transparent", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "transparent"];
   const stats: BattleReportStats = ["health", "power", "armor", "fire", "earth", "water", "air", "aether"];
-  const [allEffectProcs, setAllEffectProcs] = useState(effectProcs);
-  const postBattleEffects = effectProcs.filter(ep => ep.type === "postbattle").map(ep => ep.effect);
+  const [allEffectProcs, setAllEffectProcs] = useState(nonNullEffectProcs);
+  const postBattleEffects = nonNullEffectProcs.filter(ep => ep.type === "postbattle").map(ep => ep.effect);
 
   function renderStatRows(stat: BattleReportStats) {
     if (stat === "aether" && !brf.aether && !brh.aether) {
@@ -135,8 +136,7 @@ const StatDisplay: React.FC<StatDisplayProps> = ({ battleReport }) => {
   useEffect(() => {
     const elementalBonusProc = determineElementalBonusProc(seasonalBonusElement);
     const scenarioBonusProc = determineScenarioBonusProc(scenario);
-
-    setAllEffectProcs([...effectProcs, elementalBonusProc, scenarioBonusProc]);
+    setAllEffectProcs([...nonNullEffectProcs, elementalBonusProc, scenarioBonusProc]);
   }, []);
 
   return (

@@ -10,6 +10,8 @@ import { BattleDetailOnly, BattleFoe, BattleOutcome } from "../../../common/type
 import { Hero } from "../../../common/types";
 import TopSection from "./TopSection";
 import BottomSection from "./BottomSection";
+import ItemDetail from "../../Home/Components/BottomDrawer/HiddenInventory/Modals/ItemDetail";
+import useModal from "../../../common/hooks/useModal";
 
 const BattleReport: React.FC<MainDrawerProps<"BattleReport">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -20,6 +22,8 @@ const BattleReport: React.FC<MainDrawerProps<"BattleReport">> = ({ navigation, r
   const [top, setTop] = useState(null);
   const [bottom, setBottom] = useState(null);
   const [legacyBattle, setLegacyBattle] = useState(roundBreakdown.length ? false : true);
+  const [pressedItem, setPressedItem] = useState(null);
+  const { openModal } = useModal();
 
   function renderSpecialStatus() {
     const status = battleReport.aStatus;
@@ -75,7 +79,6 @@ const BattleReport: React.FC<MainDrawerProps<"BattleReport">> = ({ navigation, r
     return () => clearTimeout(timeout);
   }, []);
 
-  //DISABLED FOR TESTING
   useEffect(() => {
     updateBattleReportSeen({ id });
     dispatch({ type: "SEEN BATTLE REPORT", payload: { latestBattle: { ...route.params.battleReport, seenReport: true } } });
@@ -97,16 +100,23 @@ const BattleReport: React.FC<MainDrawerProps<"BattleReport">> = ({ navigation, r
     }
   }, []);
 
+  useEffect(() => {
+    if (pressedItem) {
+      openModal("BattleReportItemDetail");
+    }
+  }, [pressedItem]);
+
   return (
     <ScreenContainer screenName={route.name} bgColor={outcome === "Avatar Wins" ? colors.base.highlight : colors.base.lowlight}>
       {top && bottom ? (
         <>
-          <TopSection height={height} {...specificProps(top, outcome, ptGain, xpGain, itemsAcquired)} />
-          <BottomSection height={height} {...specificProps(bottom, outcome, ptGain, xpGain, itemsAcquired)} />
+          <TopSection height={height} {...specificProps(top, outcome, ptGain, xpGain, itemsAcquired)} setPressedItem={setPressedItem} />
+          <BottomSection height={height} {...specificProps(bottom, outcome, ptGain, xpGain, itemsAcquired)} setPressedItem={setPressedItem} />
           <OutcomeSection height={height} push={() => handleNavigateToDetails(route.params.battleReport)} top={top} bottom={bottom} outcome={outcome} endRound={legacyBattle ? null : roundBreakdown.length} legacyBattle={legacyBattle} />
         </>
       ) : null}
       <ImageBackground style={styles.backgroundImage} source={backgroundImage} resizeMode="stretch" opacity={0.6} />
+      {pressedItem && <ItemDetail id="BattleReportItemDetail" item={pressedItem} character={hero.character} buttonText="OK" modalAction={() => setPressedItem(null)} />}
     </ScreenContainer>
   );
 };

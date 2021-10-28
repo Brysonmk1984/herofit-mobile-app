@@ -26,7 +26,7 @@ const sendHeroToBattle = async function (body: SendHeroToBattleBody) {
     });
 };
 
-const fetchBattleReport = async function (body) {
+const fetchBattleReport = async function (body): Promise<{ latestBattle: Battle | null }> {
   return axios
     .post(`${endpoint}battle/fetch-battle-report`, body, await axiosOptions())
     .then(({ data }) => {
@@ -34,7 +34,6 @@ const fetchBattleReport = async function (body) {
       return { latestBattle: result ? result : null };
     })
     .catch(({ request, response }) => {
-      console.log("ERR", request, response);
       throw handleHttpError(request, response);
     });
 };

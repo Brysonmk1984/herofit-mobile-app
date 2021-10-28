@@ -48,10 +48,10 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
   const [pressedItem, setPressedItem] = useState(null);
   const { photonTokens, qp, goToBattle, id, character, status } = hero;
 
-  async function handleFetchUpcomingBattle() {
+  async function handleFetchUpcomingBattle(isInstant = false) {
     try {
       const { foe, rewards } = await fetchUpcomingFoeAndRewards({ avatarID: id });
-      navigation.push("App", { screen: "AwaitingBattle", params: { foe, rewards, character } });
+      navigation.push("App", { screen: "AwaitingBattle", params: { foe, rewards, character, isInstant } });
     } catch (error) {
       addToast("error", `${error.status}: ${error.message}`, "top");
       return debugErrors(error, user);
@@ -90,10 +90,19 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
   }
 
   async function handleConsuming(item: Item) {
-    if (item.type !== "consumable") {
-      throw new Error("Wrong Item type");
+    try {
+      if (item.type !== "consumable") {
+        throw new Error("Wrong Item type");
+      }
+      const { isBattleInstantItem } = await consume(item, hero as Hero);
+      // Instantiate Battle, open Awaiting Battle Screen
+      if (isBattleInstantItem) {
+        handleFetchUpcomingBattle(true);
+      }
+    } catch (error) {
+      addToast("error", `${error.message}`);
+      debugErrors(error, user);
     }
-    consume(item, hero as Hero);
   }
 
   async function handleBuying(item: Item) {
@@ -150,7 +159,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
             </Button>
           </Box>
           <Box w="50%" p={2}>
-            <Button bgColor={battleReportAvailable ? "base.highlight" : "base.success"} disabled={battleButtonDisabled} _text={{ fontFamily: "heading", fontSize: 30, color: battleButtonDisabled ? "base.disabledText" : "base.white" }} borderRadius={0} onPress={latestBattle && !latestBattle.seenReport ? handleBattleReport : goToBattle ? handleFetchUpcomingBattle : () => openModal("GoToBattle")}>
+            <Button bgColor={battleReportAvailable ? "base.highlight" : "base.success"} disabled={battleButtonDisabled} _text={{ fontFamily: "heading", fontSize: 30, color: battleButtonDisabled ? "base.disabledText" : "base.white" }} borderRadius={0} onPress={latestBattle && !latestBattle.seenReport ? handleBattleReport : goToBattle ? () => handleFetchUpcomingBattle(false) : () => openModal("GoToBattle")}>
               {battleReportAvailable ? "Report" : "Battle"}
             </Button>
 

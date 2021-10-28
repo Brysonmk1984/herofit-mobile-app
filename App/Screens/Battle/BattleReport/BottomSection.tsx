@@ -16,12 +16,13 @@ interface BottomSectionProps {
   contenderType: "hero" | "foe";
   xpGain: number;
   ptGain: number;
+  setPressedItem: (item: Item) => void;
   itemsAcquired?: Item[];
   // Foe needs Character name for potential Shadow-Self fight
   character?: CharacterName;
 }
 
-const BottomSection: React.FC<BottomSectionProps> = ({ height: deviceHeight, outcome, contender, contenderType, xpGain, ptGain, itemsAcquired, character }) => {
+const BottomSection: React.FC<BottomSectionProps> = ({ height: deviceHeight, outcome, contender, contenderType, xpGain, ptGain, itemsAcquired, character, setPressedItem }) => {
   const { state } = useContext(GlobalStateContext);
   const opacityAnim = useRef(new Animated.Value(0)).current;
 
@@ -53,7 +54,7 @@ const BottomSection: React.FC<BottomSectionProps> = ({ height: deviceHeight, out
       <Animated.View position="absolute" right={-65} bottom={-35} style={{ opacity: opacityAnim }}>
         {contenderType === "hero" ? <HeroImage {...determinePropsForImage(contender, contenderType)} /> : <FoeImage {...determinePropsForImage(contender, contenderType)} />}
       </Animated.View>
-      <Rewards reversedText={outcome !== "Avatar Wins"} topOrBottom={"bottom"} itemsAcquired={itemsAcquired} ptGain={ptGain} xpGain={xpGain} />
+      <Rewards reversedText={outcome !== "Avatar Wins"} topOrBottom={"bottom"} itemsAcquired={itemsAcquired} ptGain={ptGain} xpGain={xpGain} setPressedItem={setPressedItem} />
     </Box>
   );
 };

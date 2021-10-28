@@ -1,5 +1,5 @@
 import React from "react";
-import { VStack, Text } from "native-base";
+import { VStack, Text, Pressable } from "native-base";
 import { FlatList } from "react-native";
 import { capitalize, getColorFromClassName, getColorFromItemName } from "../../../common/helperFunctions";
 import { Item } from "../../../common/types";
@@ -7,18 +7,25 @@ import { Item } from "../../../common/types";
 interface RewardsProps {
   reversedText: boolean;
   topOrBottom: "top" | "bottom";
+  setPressedItem: (item: Item) => void;
   itemsAcquired?: Item[];
   xpGain?: number;
   ptGain?: number;
 }
 
-const Rewards: React.FC<RewardsProps> = ({ reversedText, topOrBottom, itemsAcquired, ptGain, xpGain }) => {
+const Rewards: React.FC<RewardsProps> = ({ reversedText, topOrBottom, itemsAcquired, ptGain, xpGain, setPressedItem }) => {
   function renderItem(item: Item) {
     const color = item.class ? getColorFromClassName(item.class) : getColorFromItemName(item.name);
     return (
-      <Text textAlign="right">
-        <Text>New {capitalize(item.type)}</Text> - <Text color={color}>{item.name}</Text>
-      </Text>
+      <Pressable
+        onPress={() => {
+          setPressedItem(item);
+        }}
+      >
+        <Text textAlign="right" textDecoration="underline">
+          <Text color="base.link">New {capitalize(item.type)}</Text> - <Text color={color}>{item.name}</Text>
+        </Text>
+      </Pressable>
     );
   }
 
@@ -50,11 +57,11 @@ const Rewards: React.FC<RewardsProps> = ({ reversedText, topOrBottom, itemsAcqui
   return (
     <>
       {topOrBottom === "top" ? (
-        <VStack position="absolute" right={1} top={1}>
+        <VStack position="absolute" right={1} top={1} zIndex={1000}>
           {renderRewards(itemsAcquired, reversedText)}
         </VStack>
       ) : (
-        <VStack position="absolute" left={1} bottom={1}>
+        <VStack position="absolute" left={1} bottom={1} zIndex={1000}>
           {renderRewards(itemsAcquired)}
         </VStack>
       )}

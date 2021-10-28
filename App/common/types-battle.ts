@@ -90,8 +90,8 @@ interface BattleBRA {
 type BattleReportStats = "health" | "power" | "armor" | "fire" | "earth" | "water" | "air" | "aether";
 interface BattleEffectProc {
   effect: string;
-  heroStatsEffected?: BattleStats[];
-  foeStatsEffected?: BattleStats[];
+  heroStatsEffected?: BattleReportStats[];
+  foeStatsEffected?: BattleReportStats[];
   type?: "postbattle";
 }
 interface BattleSeasonalBonusElement {

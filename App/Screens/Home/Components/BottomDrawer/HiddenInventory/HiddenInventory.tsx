@@ -29,7 +29,6 @@ const HiddenInventory: React.FC<HiddenInventoryProps> = ({ children, refRBSheet,
       <RBSheet
         ref={refRBSheet}
         closeOnDragDown={true}
-        closeOnPressMask={false}
         height={bottomDrawerHeight}
         openDuration={750}
         customStyles={{
@@ -38,7 +37,6 @@ const HiddenInventory: React.FC<HiddenInventoryProps> = ({ children, refRBSheet,
           },
           container: {
             backgroundColor: colors.base.primary,
-            overflow: "visible",
           },
           draggableIcon: {
             backgroundColor: "#f1c85b",

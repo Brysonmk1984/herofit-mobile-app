@@ -341,6 +341,8 @@ function getFoeImage(foeType: FoeType, heroCharacterName?: CharacterName): numbe
     // Titans
     case "plaguebringer":
       return require("../../assets/images/foes/titans/plaguebringer.webp");
+    case "guardian_of_the_depths":
+      return require("../../assets/images/foes/titans/guardian_of_the_depths.webp");
     default:
       throw new Error("No image by that foe type");
   }
@@ -395,7 +397,6 @@ function getPetImage(petName: string): number {
 }
 
 function equippedSkin(equipped: Item[]): Item {
-  console.log("EQ!!!!", equipped);
   return equipped.find(i => i.type === "costume");
 }
 
@@ -544,9 +545,10 @@ function getFoeColor(foeType: FoeType) {
     // Titans
     case "plaguebringer":
       return "#8da728";
-
+    case "guardian_of_the_depths":
+      return "#a13d2d";
     default:
-      throw new Error("No image by that foe type");
+      throw new Error("Foe Color - No image by that foe type");
   }
 }
 

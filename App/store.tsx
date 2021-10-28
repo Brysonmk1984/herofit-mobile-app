@@ -78,6 +78,10 @@ function appStateReducer(state: AppState, action: AppAction): AppState {
       const { equipped } = action.payload;
       return { ...state, equipped };
     }
+    case "UPDATE LATEST BATTLE": {
+      const { latestBattle } = action.payload;
+      return { ...state, latestBattle };
+    }
     default:
       throw new Error("In Store default, should not happen.");
   }

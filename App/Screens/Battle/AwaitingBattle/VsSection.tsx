@@ -7,16 +7,16 @@ import herofitTheme from "../../../styles/herofitTheme";
 
 interface VsSectionProps {
   height: number;
-  pop: (count?: number) => void;
+  handleNavigation: () => void;
 }
 
-const VsSection: React.FC<VsSectionProps> = ({ height, pop }) => {
+const VsSection: React.FC<VsSectionProps> = ({ height, handleNavigation }) => {
   const vsColors = ["transparent", "#ffffff", "transparent"];
 
   return (
     <VStack zIndex={100} h={height * 0.45} w="100%" justifyContent="center" alignItems="center" position="absolute" top={height * 0.26}>
       <LinearGradient colors={vsColors} style={styles.vsGradient} alignItems="center" />
-      <Pressable onPress={() => pop()}>
+      <Pressable onPress={() => handleNavigation()}>
         <Box justifyContent="center" alignItems="center">
           <Text style={styles.textShadow} mt={-10} mb={-5} fontSize={140} fontFamily="heading">
             VS

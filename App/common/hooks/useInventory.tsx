@@ -3,7 +3,7 @@ import { buyItemByAvatarId, consumeItemRequest, equipItem, equipUnequipItem, fet
 import debugErrors from "../debugErrors";
 import { convertAorAn } from "../helperFunctions";
 import useGlobalToast from "./useGlobalToast";
-import { Hero, Item, ServerInventoryCategories, ServerItemType } from "../types";
+import { BattleInstantItem, Hero, Item, ServerInventoryCategories, ServerItemType } from "../types";
 import { GlobalStateContext } from "../../store";
 
 interface EquippedItems {
@@ -14,7 +14,7 @@ interface EquippedItems {
 
 interface UpdaterMethods {
   buy: (item: Item, hero: Hero) => void;
-  consume: (item: Item, heroObj: Hero) => void;
+  consume: (item: Item, heroObj: Hero) => Promise<{ isBattleInstantItem: boolean }>;
   equip: (newItem: Item, hero: Hero) => void;
   unequip: (oldItem: Item, hero: Hero) => void;
   equipUnequip: (newItem: Item, oldItemId: number, hero: Hero) => void;
@@ -68,17 +68,28 @@ export default function useInventory(makeInventoryRequest?: boolean): ServerInve
   }
 
   // CONSUME A CONSUMABLE ITEM
-  async function consume(item: Item, heroObj: Hero) {
+  async function consume(item: Item, heroObj: Hero): Promise<{ isBattleInstantItem: boolean }> {
     try {
+      if (heroObj.goToBattle) {
+        throw new Error("Hero is already queued for a battle!");
+      }
       const { consumables, avatar: hero } = await consumeItemRequest({ id: item.id, email: heroObj.owner, avatarID: heroObj.id, effects: item.effects });
+
       const updatedInventory = { ...inventory, consumables };
       const updatedHero: Hero = { ...heroObj, ...hero };
       dispatch({ type: "UPDATE INVENTORY", payload: { inventory: { ...updatedInventory } } });
       dispatch({ type: "SET HERO", payload: { hero: updatedHero } });
-      addToast("success", `${hero.name} used ${convertAorAn(item.name)} ${item.name}.`);
+      addToast("success", `${heroObj.name} used ${convertAorAn(item.name)} ${item.name}.`);
+
+      const battleInstantItems: BattleInstantItem[] = ["Storm Crow Bone Chimes", "Smoldering Skull Torch", "Petrified Power Totem", "Wave-Swept Battle Conch", "Plague Token", "Obsidian Mirror"];
+      if (battleInstantItems.includes(item.name)) {
+        return { isBattleInstantItem: true };
+      } else {
+        return { isBattleInstantItem: false };
+      }
     } catch (error) {
-      addToast("error", `${error.status}: ${error.message}`);
-      return debugErrors(error, user);
+      // Error handled one level up, so throw one more time
+      throw error;
     }
   }
 
