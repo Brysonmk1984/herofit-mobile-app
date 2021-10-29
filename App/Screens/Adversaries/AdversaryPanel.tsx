@@ -1,8 +1,8 @@
-import { View, Text, Box, Pressable } from "native-base";
-import React from "react";
-import useModal from "../../common/hooks/useModal";
+import { View, Text, Box, Pressable, HStack } from "native-base";
+import React, { useState, useEffect } from "react";
 import { CharacterName, Foe, PrimaryElement } from "../../common/types";
 import FoeImage from "../../Components/FoeImage";
+import Icon from "../../Components/Icon";
 import AdversaryAbility from "./AdversaryAbility";
 import FoeList from "./FoeList";
 
@@ -10,12 +10,14 @@ interface AdversaryPanelProps {
   foesDefeated: string[];
   foe: Foe;
   index: number;
+  heroLevel: number;
   character: CharacterName;
-  elementType?: Lowercase<PrimaryElement>;
   displayRewardItem: (name: string) => void;
+  elementType?: Lowercase<PrimaryElement>;
 }
 
-export const AdversaryPanel: React.FC<AdversaryPanelProps> = ({ foesDefeated, foe, index, character, elementType, displayRewardItem }) => {
+export const AdversaryPanel: React.FC<AdversaryPanelProps> = ({ foesDefeated, foe, index, heroLevel, character, displayRewardItem, elementType }) => {
+  const [requiredLevel, setRequiredLevel] = useState(null);
   const isOdd = index % 2;
   function determineBackgroundColor(isOdd) {
     if (foe["class"] == "Spirits") {
@@ -27,8 +29,23 @@ export const AdversaryPanel: React.FC<AdversaryPanelProps> = ({ foesDefeated, fo
     }
   }
 
+  useEffect(() => {
+    // Elemental foes don't have a level requirement, but their item drop DOES have a level requirement
+    // The only foes with itemSummonOnly are the elemental bosses, so use 40 if no levelRequirement exist on boss
+    if (foe.levelRequirement || foe.itemSummonOnly) {
+      setRequiredLevel(foe.levelRequirement ?? 40);
+    }
+  }, []);
+
   return (
     <View minHeight={220} bgColor={determineBackgroundColor(isOdd)}>
+      {requiredLevel && heroLevel < requiredLevel && (
+        <Box zIndex={1001} w="100%" position="absolute" top="35%" bgColor="base.brand">
+          <Text fontSize="3xl" fontFamily="heading" textAlign="center" py={3} color="base.white">
+            Available at Level {requiredLevel}
+          </Text>
+        </Box>
+      )}
       {isOdd ? (
         <>
           <Box position="absolute" left={-20} bottom={2}>
@@ -42,8 +59,14 @@ export const AdversaryPanel: React.FC<AdversaryPanelProps> = ({ foesDefeated, fo
           <Box alignItems="flex-end" pb={5} pr={2}>
             <Box maxWidth="60%">
               <Text textAlign="right" fontFamily="heading" fontSize={foe.type.length > 19 ? 35 : 40}>
+                {(foe.levelRequirement || foe.itemSummonOnly) && (
+                  <Text>
+                    <Icon iconName="boss" size={35} color="base.default" />
+                  </Text>
+                )}
                 {foe.type}
               </Text>
+
               <AdversaryAbility ability={foe.ability} textDirection="right" />
               <FoeList foesDefeated={foesDefeated} textAlign="right" foes={foe.foe} color={foe.class === "Spirits" ? "base.black" : "base.white"} />
             </Box>
@@ -62,8 +85,14 @@ export const AdversaryPanel: React.FC<AdversaryPanelProps> = ({ foesDefeated, fo
           <Box alignItems="flex-start" pl={2}>
             <Box maxWidth="60%">
               <Text fontFamily="heading" fontSize={foe.type.length > 19 ? 35 : 40}>
+                {(foe.levelRequirement || foe.itemSummonOnly) && (
+                  <Text>
+                    <Icon iconName="boss" size={35} color="base.default" />
+                  </Text>
+                )}
                 {foe.type}
               </Text>
+
               <AdversaryAbility ability={foe.ability} textDirection="left" />
 
               <FoeList foesDefeated={foesDefeated} textAlign="left" foes={foe.foe} color={foe.class === "Spirits" ? "base.black" : "base.white"} />

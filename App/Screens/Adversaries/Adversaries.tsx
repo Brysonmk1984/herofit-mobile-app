@@ -54,7 +54,7 @@ const Adversaries: React.FC<MainDrawerProps<"Adversaries">> = ({ navigation, rou
   }
 
   function renderItem({ item, index }) {
-    return <AdversaryPanel foesDefeated={foesDefeated} foe={item} index={index} character={hero.character} elementType={item.class === "Elementals" ? determineElementalElement(item.type) : null} displayRewardItem={handleItemClick} />;
+    return <AdversaryPanel foesDefeated={foesDefeated} foe={item} index={index} heroLevel={hero.level} character={hero.character} elementType={item.class === "Elementals" ? determineElementalElement(item.type) : null} displayRewardItem={handleItemClick} />;
   }
 
   useEffect(() => {

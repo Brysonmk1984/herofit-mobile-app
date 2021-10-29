@@ -337,6 +337,8 @@ interface Foe {
     type: string;
     name: string;
   };
+  levelRequirement?: number;
+  itemSummonOnly?: boolean;
 }
 
 interface AllFoes {
