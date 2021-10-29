@@ -18,21 +18,21 @@ const AdversaryTabs: React.FC<ItemTabsProps> = ({ activeTab, setActiveTab }) => 
     <HStack>
       <Pressable flex={1} onPress={() => changeActiveTab("Spirits")}>
         <Box bgColor={"base.white"} px={4} py={3}>
-          <Text textAlign="center" fontFamily="heading" color={activeTab === "Spirits" ? "base.highlight" : "base.black"}>
+          <Text fontSize="2xl" textAlign="center" fontFamily="heading" color={activeTab === "Spirits" ? "base.highlight" : "base.black"}>
             Spirits
           </Text>
         </Box>
       </Pressable>
       <Pressable flex={1} onPress={() => changeActiveTab("Elementals")}>
-        <Box bgColor={"base.fire"} px={4} py={3}>
-          <Text textAlign="center" fontFamily="heading" color={activeTab === "Elementals" ? "base.highlight" : "base.black"}>
+        <Box bgColor={"base.fire"} px={2} py={3}>
+          <Text fontSize="2xl" textAlign="center" fontFamily="heading" color={activeTab === "Elementals" ? "base.highlight" : "base.black"}>
             Elementals
           </Text>
         </Box>
       </Pressable>
       <Pressable flex={1} onPress={() => changeActiveTab("Titans")}>
         <Box bgColor={"base.black"} px={4} py={3}>
-          <Text textAlign="center" fontFamily="heading" color={activeTab === "Titans" ? "base.highlight" : "base.white"}>
+          <Text fontSize="2xl" textAlign="center" fontFamily="heading" color={activeTab === "Titans" ? "base.highlight" : "base.white"}>
             Titans
           </Text>
         </Box>
