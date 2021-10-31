@@ -1,11 +1,12 @@
 {
   "expo": {
     "name": "HeroFit",
-    "slug": "herofit",
+    "slug" : "herofit",
     "owner":"brysonmk1984",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/ios-logo-512.png",
+    "scheme": "herofit",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -24,6 +25,8 @@
       }
     },
     "ios": {
+    "bundleIdentifier": "com.herofitllc.herofit",
+     "buildNumber": "1.0.0",
       "infoPlist": {
          "LSApplicationQueriesSchemes": [
             "message",
