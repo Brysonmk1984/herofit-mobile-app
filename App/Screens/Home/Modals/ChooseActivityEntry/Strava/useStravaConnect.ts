@@ -13,6 +13,7 @@ import stravaEndpoints, { STRAVA_REDIRECT_URI } from "./stravaEndpoints";
 import { insertStravaCredentials, getStravaClientCredentials } from "../../../../../api/authentication";
 import { getStravaUserId } from "../../../../../api/strava";
 import useGlobalToast from "../../../../../common/hooks/useGlobalToast";
+import { makeRedirectUri } from "expo-auth-session";
 
 // For Web Only
 //WebBrowser.maybeCompleteAuthSession();
@@ -47,7 +48,18 @@ function useStravaConnect() {
   const [data, loading, error] = useAxios(null, null, false, null);
   const { addToast } = useGlobalToast();
   // One-Time Strava Auth Request
-  const [request, response, promptAsync] = AuthSession.useAuthRequest({ clientId, scopes: ["activity:read_all"], redirectUri: redirectUri || `${STRAVA_REDIRECT_URI}` }, stravaEndpoints);
+  const [request, response, promptAsync] = AuthSession.useAuthRequest(
+    {
+      clientId,
+      scopes: ["activity:read_all"],
+      //redirectUri: redirectUri || `${STRAVA_REDIRECT_URI}`,
+
+      // !!!For usage in bare and standalone
+      // the "redirect" must match your "Authorization Callback Domain" in the Strava dev console.
+      redirectUri: makeRedirectUri({ native: "herofit://redirect", useProxy: false }),
+    },
+    stravaEndpoints,
+  );
 
   async function getStravaCredentials() {
     try {
@@ -71,7 +83,7 @@ function useStravaConnect() {
     }
 
     const data = Linking.parse(event.url);
-
+    console.log("DATA FROM REDIRECT - ", console.log(data));
     setRedirectData(data);
   }
 
