@@ -14,6 +14,7 @@ import { insertStravaCredentials, getStravaClientCredentials } from "../../../..
 import { getStravaUserId } from "../../../../../api/strava";
 import useGlobalToast from "../../../../../common/hooks/useGlobalToast";
 import { makeRedirectUri } from "expo-auth-session";
+import { Alert } from "react-native";
 
 // For Web Only
 //WebBrowser.maybeCompleteAuthSession();
@@ -53,10 +54,10 @@ function useStravaConnect() {
       clientId,
       scopes: ["activity:read_all"],
       //redirectUri: redirectUri || `${STRAVA_REDIRECT_URI}`,
-
+      redirectUri,
       // !!!For usage in bare and standalone
       // the "redirect" must match your "Authorization Callback Domain" in the Strava dev console.
-      redirectUri: makeRedirectUri({ native: "herofit://redirect", useProxy: false }),
+      //redirectUri: makeRedirectUri({ native: "herofit://redirect", useProxy: false }),
     },
     stravaEndpoints,
   );
@@ -83,7 +84,16 @@ function useStravaConnect() {
     }
 
     const data = Linking.parse(event.url);
-    console.log("DATA FROM REDIRECT - ", console.log(data));
+
+    Alert.alert("Redirect Data", `data - ${data}`, [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      { text: "OK", onPress: () => console.log("OK Pressed") },
+    ]);
+
     setRedirectData(data);
   }
 

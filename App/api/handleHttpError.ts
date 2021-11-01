@@ -93,6 +93,7 @@ function handleHttpError(request: AxiosRequestConfig, response: AxiosResponse | 
 
     // client never received a response, or request never left
   } else if (request) {
+    //console.log("REQUEST!", request);
     return {
       status: null,
       message: "Network Error, please try again later.",
