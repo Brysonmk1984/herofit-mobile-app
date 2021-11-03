@@ -28,7 +28,7 @@ function BasicModal({ children, id, modalOpen, modalAction, title, buttonText = 
   }
 
   return (
-    <Modal isOpen={modalOpen} onClose={() => closeModal(id)}>
+    <Modal isOpen={modalOpen} onClose={() => closeModal(id)} closeOnOverlayClick={!preventClose}>
       <Modal.Content p={0}>
         <ModalCloseButton bgColor="primary.50" />
         <Modal.Header px={5} py={6}>

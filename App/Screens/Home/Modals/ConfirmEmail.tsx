@@ -50,12 +50,13 @@ const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
   }
 
   async function handleEmailConfirmed() {
+    console.log("ASD", state.user.email);
     setLoading(true);
 
     try {
       // * First time the user is assigned
       const { user } = await getUser({ email: state.user.email });
-
+      console.log("THE USER", user);
       if (user.active) {
         dispatch({ type: "SET USER", payload: { user, isSignedIn: true } });
         dispatch({ type: "SET HERO", payload: { hero: { ...state.hero } } });
@@ -66,22 +67,33 @@ const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
       }
       setLoading(false);
     } catch (error) {
+      console.log("HERE", error);
       debugErrors(error, state.user);
       setLoading(false);
     }
   }
 
-  useEffect(() => {
-    // setTimeout(() => {
-    //   setShowChecklist(false);
-    // }, 4000);
-    // Timeout is only to prevent the user from clicking the action button right away without checking email
-    const disableButtonTimeout = setTimeout(() => {
-      setDisableButton(false);
-    }, 8000);
+  async function openEmailApp() {
+    try {
+      await MailComposer.composeAsync({});
+    } catch (error) {
+      if (error.toString() === "Error: Mail services are not available. Make sure you're signed into the Mail app") {
+        return addToast("error", "Mail services are not available. Make sure you're signed into the Mail app");
+      }
+      return addToast("error", "Unable to use Phone's mail application, try verifying through a web browser.");
+    }
+  }
 
-    return clearTimeout(disableButtonTimeout);
-  }, []);
+  useEffect(() => {
+    if (state.modalQueue[0] === id) {
+      // Timeout is only to prevent the user from clicking the action button right away without checking email
+      const disableButtonTimeout = setTimeout(() => {
+        setDisableButton(false);
+      }, 8000);
+
+      return () => clearTimeout(disableButtonTimeout);
+    }
+  }, [state.modalQueue[0]]);
 
   return (
     <BasicModal id={id} modalOpen={state.modalQueue[0] === id} modalAction={() => handleEmailConfirmed()} disabled={disableButton} title="Please Confirm Your Email!" buttonText="Ok, I did it!" preventClose={state.userStatus === "unconfirmed" ? true : false}>
@@ -93,10 +105,10 @@ const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
           </ScrollView>
         ) : (
           <View>
-            <Link p={1} justifyContent={"center"} _text={{ fontSize: "2xl", textDecoration: "underline" }} onPress={() => MailComposer.composeAsync({})} mt={1}>
+            <Link p={1} justifyContent={"center"} _text={{ fontSize: "2xl", textDecoration: "underline" }} onPress={openEmailApp} mt={1}>
               Open Email App
             </Link>
-            <Link p={1} justifyContent={"center"} _text={{ fontSize: "2xl", textDecoration: "underline" }} onPress={() => resendEmailLink()} mt={1}>
+            <Link p={1} justifyContent={"center"} _text={{ fontSize: "2xl", textDecoration: "underline" }} onPress={resendEmailLink} mt={1}>
               Resend Link
             </Link>
           </View>

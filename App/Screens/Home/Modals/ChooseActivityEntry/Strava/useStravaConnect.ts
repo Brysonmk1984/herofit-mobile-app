@@ -53,11 +53,17 @@ function useStravaConnect() {
     {
       clientId,
       scopes: ["activity:read_all"],
-      //redirectUri: redirectUri || `${STRAVA_REDIRECT_URI}`,
-      redirectUri,
+      //redirectUri: `${STRAVA_REDIRECT_URI}`,
+
       // !!!For usage in bare and standalone
       // the "redirect" must match your "Authorization Callback Domain" in the Strava dev console.
-      //redirectUri: makeRedirectUri({ native: "herofit://redirect", useProxy: false }),
+      //redirectUri: makeRedirectUri({ native: "exp://home", useProxy: true }),
+      //redirectUri: "exp://home",
+      redirectUri: makeRedirectUri({
+        // For usage in bare and standalone
+        native: "herofit://redirect",
+        useProxy: false,
+      }),
     },
     stravaEndpoints,
   );
@@ -77,6 +83,7 @@ function useStravaConnect() {
   // When receiving an incoming user back from Strava redirect
   // save data to state
   function handleStravaRedirect(event) {
+    console.log("HERER", handleStravaRedirect);
     if (Constants.platform.ios) {
       WebBrowser.dismissBrowser();
     } else {
@@ -84,15 +91,6 @@ function useStravaConnect() {
     }
 
     const data = Linking.parse(event.url);
-
-    Alert.alert("Redirect Data", `data - ${data}`, [
-      {
-        text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
-        style: "cancel",
-      },
-      { text: "OK", onPress: () => console.log("OK Pressed") },
-    ]);
 
     setRedirectData(data);
   }
@@ -105,7 +103,7 @@ function useStravaConnect() {
 
   // When the data is saved to state from Strava, get new Access token
   useEffect(() => {
-    // Only attempt fetch if there is redirect data AND detaisl have not been fetched yet
+    // Only attempt fetch if there is redirect data AND details have not been fetched yet
     if (redirectData && !hasFetchedStravaDetails) {
       (async () => {
         const { accessToken, refreshToken, expiresIn } = await AuthSession.exchangeCodeAsync(
@@ -148,6 +146,12 @@ function useStravaConnect() {
     // TODO: Figure out how to write cleanup function for this
     //return () => ()
   }, [redirectData]);
+
+  useEffect(() => {
+    if (response) {
+      handleStravaRedirect(response);
+    }
+  }, [response]);
 
   return {
     getStravaCredentials,

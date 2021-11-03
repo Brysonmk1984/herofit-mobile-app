@@ -12,14 +12,24 @@ export default {
         // },
         marginLeft: 2,
         marginRight: 2,
-        _disabled: {
-          opacity: 1,
-          backgroundColor: "base.disabled",
-          // color: "#555554",
-          // _text: {
-          //   color: "#555554",
-          // },
-        },
+        //DOESNT WORK
+        // _disabled: {
+        //   opacity: 1,
+        //   backgroundColor: "base.disabled",
+        //   // color: "#555554",
+        //   // _text: {
+        //   //   color: "#555554",
+        //   // },
+        // },
+      },
+      // DOESN't WORK
+      _disabled: {
+        opacity: 1,
+        backgroundColor: "base.disabled",
+        // color: "#555554",
+        // _text: {
+        //   color: "#555554",
+        // },
       },
       Toast: {
         baseStyle: {

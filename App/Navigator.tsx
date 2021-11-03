@@ -8,6 +8,7 @@ import { DrawerIndicator } from "./Components/DrawerIndicator";
 import { AntDesign } from "@expo/vector-icons";
 import { Icon } from "native-base";
 import * as WebBrowser from "expo-web-browser";
+
 // ROOT First level Navigator, used to determine if the user should go through auth sequence of straight to the app
 // TS - Ben doesn't pass a generic here, but the docs do.
 const RootStack = createStackNavigator<RootStackParamList>();

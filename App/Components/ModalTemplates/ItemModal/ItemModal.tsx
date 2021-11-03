@@ -37,7 +37,7 @@ const ItemModal = function ({ children, id, modalOpen, modalAction, item, charac
     }
   }
   return (
-    <Modal isOpen={modalOpen} onClose={() => closeModal(id)} _backdrop={{ backgroundColor: "layout.modalBackdrop" }}>
+    <Modal isOpen={modalOpen} onClose={() => closeModal(id)} _backdrop={{ backgroundColor: "layout.modalBackdrop" }} closeOnOverlayClick={preventClose}>
       <Modal.Content p={0}>
         <Box pb={100}>
           <ItemHeader>

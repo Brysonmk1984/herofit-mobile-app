@@ -27,7 +27,7 @@ export default function StravaConnectButton({ request, promptAsync, setHasFetche
         setHasBeenClicked(true);
 
         promptAsync();
-        // In case a user needs to reclick the Strava button
+        // In case a user needs to re-click the Strava button
         setHasFetchedStravaDetails(false);
       }}
     >
