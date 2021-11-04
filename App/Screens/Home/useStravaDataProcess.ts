@@ -138,39 +138,39 @@ function useStravaDataProcess(): { newStravaActivities: Activity[] } {
 
   // Either Use LS Strava Data OR
   // Initialize Strava Data Fetch Sequence
-  // useEffect(() => {
-  //   // Only run Strava code if user is an existing user who already set up Strava with their HF account
-  //   if (isExistingHero(state.hero) && determineDataSrcType(state.user?.dataSrcId) === "Strava") {
-  //     (async () => {
-  //       // Only run this after LS check happened
-  //       if (lsStravaCheckHappened) {
-  //         // If there are locally saved strava activities, use cached version
-  //         // This is to prevent too many requests against Strava API
-  //         if (lsStrava) {
-  //           //console.log("YES LS STRAVA DATA");
-  //           const formattedNewActivities = _handleStravaActivities(hero, lsStrava, state.latestSavedActivityDate, state.user);
-  //           setNewStravaActivities(formattedNewActivities);
-  //         } else {
-  //           //console.log("NO LS STRAVA DATA");
-  //           // Otherwise, do Strava Check
-  //           try {
-  //             const accessToken = await _checkStravaToken(state.user, state, dispatch);
-  //             const activities = await getStravaActivityData(accessToken);
+  useEffect(() => {
+    // Only run Strava code if user is an existing user who already set up Strava with their HF account
+    if (isExistingHero(state.hero) && determineDataSrcType(state.user?.dataSrcId) === "Strava") {
+      (async () => {
+        // Only run this after LS check happened
+        if (lsStravaCheckHappened) {
+          // If there are locally saved strava activities, use cached version
+          // This is to prevent too many requests against Strava API
+          if (lsStrava) {
+            //console.log("YES LS STRAVA DATA");
+            const formattedNewActivities = _handleStravaActivities(hero, lsStrava, state.latestSavedActivityDate, state.user);
+            setNewStravaActivities(formattedNewActivities);
+          } else {
+            //console.log("NO LS STRAVA DATA");
+            // Otherwise, do Strava Check
+            try {
+              const accessToken = await _checkStravaToken(state.user, state, dispatch);
+              const activities = await getStravaActivityData(accessToken);
 
-  //             const formattedNewActivities = _handleStravaActivities(hero, activities, state.latestSavedActivityDate, state.user);
+              const formattedNewActivities = _handleStravaActivities(hero, activities, state.latestSavedActivityDate, state.user);
 
-  //             setNewStravaActivities(formattedNewActivities);
-  //             // Setting LS to prevent repeated calls to strava server - Expires in 30 minutes
-  //             setLsWithExpiry("herofit-stravaActivities", formattedNewActivities, 1800000);
-  //           } catch (error) {
-  //             debugErrors(error, state.user);
-  //             addToast("error", `${error.status}: ${error.message}`);
-  //           }
-  //         }
-  //       }
-  //     })();
-  //   }
-  // }, [lsStravaCheckHappened]);
+              setNewStravaActivities(formattedNewActivities);
+              // Setting LS to prevent repeated calls to strava server - Expires in 30 minutes
+              setLsWithExpiry("herofit-stravaActivities", formattedNewActivities, 1800000);
+            } catch (error) {
+              debugErrors(error, state.user);
+              addToast("error", `${error.status}: ${error.message}`);
+            }
+          }
+        }
+      })();
+    }
+  }, [lsStravaCheckHappened]);
 
   return {
     newStravaActivities,
