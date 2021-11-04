@@ -12,6 +12,7 @@ import { LoadingInPane } from "../../../Components/CustomComponents";
 import { getUser } from "../../../api/user";
 import useModal from "../../../common/hooks/useModal";
 import useGlobalToast from "../../../common/hooks/useGlobalToast";
+import * as WebBrowser from "expo-web-browser";
 
 interface ConfirmEmailProps {
   id: string;
@@ -24,6 +25,8 @@ const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
   const [loading, setLoading] = useState(false);
   const [disableButton, setDisableButton] = useState(true);
   const [showChecklist, setShowChecklist] = useState(false);
+  const [result, setResult] = useState(null);
+
   const { addToast } = useGlobalToast();
   // const [request, response, promptAsync] = useAuthRequest(
   //   {
@@ -73,23 +76,33 @@ const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
     }
   }
 
-  async function openEmailApp() {
-    try {
-      await MailComposer.composeAsync({});
-    } catch (error) {
-      if (error.toString() === "Error: Mail services are not available. Make sure you're signed into the Mail app") {
-        return addToast("error", "Mail services are not available. Make sure you're signed into the Mail app");
-      }
-      return addToast("error", "Unable to use Phone's mail application, try verifying through a web browser.");
-    }
-  }
+  // async function openEmailApp() {
+  //   try {
+  //     await MailComposer.composeAsync({});
+  //   } catch (error) {
+  //     if (error.toString() === "Error: Mail services are not available. Make sure you're signed into the Mail app") {
+  //       return addToast("error", "Mail services are not available. Make sure you're signed into the Mail app");
+  //     }
+  //     return addToast("error", "Unable to use Phone's mail application, try verifying through a web browser.");
+  //   }
+  // }
+
+  // async function openWebBrowser() {
+  //   try {
+  //     let result = await WebBrowser.openBrowserAsync();
+  //     setResult(result);
+  //     console.log("RESULT=", result);
+  //   } catch (error) {
+  //     console.log("ERRRROR", error);
+  //   }
+  // }
 
   useEffect(() => {
     if (state.modalQueue[0] === id) {
       // Timeout is only to prevent the user from clicking the action button right away without checking email
       const disableButtonTimeout = setTimeout(() => {
         setDisableButton(false);
-      }, 8000);
+      }, 10000);
 
       return () => clearTimeout(disableButtonTimeout);
     }
@@ -105,10 +118,17 @@ const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
           </ScrollView>
         ) : (
           <View>
-            <Link p={1} justifyContent={"center"} _text={{ fontSize: "2xl", textDecoration: "underline" }} onPress={openEmailApp} mt={1}>
+            {/* <Link p={1} justifyContent={"center"} _text={{ fontSize: "2xl", textDecoration: "underline" }} onPress={openEmailApp} mt={1}>
               Open Email App
             </Link>
-            <Link p={1} justifyContent={"center"} _text={{ fontSize: "2xl", textDecoration: "underline" }} onPress={resendEmailLink} mt={1}>
+            <Link mb={3} p={1} justifyContent={"center"} _text={{ fontSize: "2xl", textDecoration: "underline" }} onPress={openWebBrowser} mt={1}>
+              Open Web Browser
+            </Link> */}
+
+            <Text textAlign="center" fontSize="xl">
+              Go ahead, we'll wait!
+            </Text>
+            <Link display={disableButton ? "none" : "flex"} p={3} justifyContent={"center"} _text={{ fontSize: "lg", textDecoration: "underline" }} onPress={resendEmailLink} mt={1}>
               Resend Link
             </Link>
           </View>

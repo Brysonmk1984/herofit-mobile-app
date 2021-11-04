@@ -4,20 +4,18 @@ import Constants from "expo-constants";
 import * as WebBrowser from "expo-web-browser";
 import * as Linking from "expo-linking";
 import moment from "moment";
+const ENV: string = Constants.manifest.extra.ENV;
+
 // COMMON
 import debugErrors from "../../../../../common/debugErrors";
 import { GlobalStateContext } from "../../../../../store";
 import useAxios from "../../../../../common/hooks/useAxios";
 // API
-import stravaEndpoints, { STRAVA_REDIRECT_URI } from "./stravaEndpoints";
+import stravaEndpoints from "./stravaEndpoints";
 import { insertStravaCredentials, getStravaClientCredentials } from "../../../../../api/authentication";
 import { getStravaUserId } from "../../../../../api/strava";
 import useGlobalToast from "../../../../../common/hooks/useGlobalToast";
 import { makeRedirectUri } from "expo-auth-session";
-import { Alert } from "react-native";
-
-// For Web Only
-//WebBrowser.maybeCompleteAuthSession();
 
 interface StravaCredentials {
   stravaAccessToken: string;
@@ -53,17 +51,15 @@ function useStravaConnect() {
     {
       clientId,
       scopes: ["activity:read_all"],
-      //redirectUri: `${STRAVA_REDIRECT_URI}`,
 
-      // !!!For usage in bare and standalone
-      // the "redirect" must match your "Authorization Callback Domain" in the Strava dev console.
-      //redirectUri: makeRedirectUri({ native: "exp://home", useProxy: true }),
-      //redirectUri: "exp://home",
-      redirectUri: makeRedirectUri({
-        // For usage in bare and standalone
-        native: "herofit://redirect",
-        useProxy: false,
-      }),
+      redirectUri:
+        ENV === "development"
+          ? "exp://redirect"
+          : makeRedirectUri({
+              // For usage in bare and standalone
+              native: "herofit://redirect",
+              useProxy: false,
+            }),
     },
     stravaEndpoints,
   );

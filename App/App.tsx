@@ -1,7 +1,7 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { LogBox, Dimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useLinking } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { GlobalStateContext } from "./store";
 import RootStackScreen from "./Navigator";
@@ -76,8 +76,46 @@ const App: React.FC = () => {
     }
   }, [jwt]);
 
+  /* 
+    BEGIN NEW EMAIL VERIFICATION TEST
+    !!! INBOUND THIS WORKS, HOWEVER THERES TOO MANY ISSUES WITH THE REDIRECT
+    SO DON'T USE FOR NOW
+  */
+
+  // const [isReady, setIsReady] = useState(false);
+  // const [linking, setLinking] = useState();
+  // const ref = useRef();
+  // const prefix = Linking.makeUrl("/");
+
+  // const linking = {
+  //   prefixes: ["https://herofitgame.com", "herofit://", "exp://"],
+  //   config: {
+  //     screens: {
+  //       Home: "home",
+  //     },
+  //   },
+  // };
+
+  //Linking.getInitialURL().then(url => console.log("Test=", url));
+  //Linking.addEventListener("url", data => console.log("EventListener=", data));
+  // useEffect(() => {
+  //   getInitialState()
+  //     .then(state => {
+  //       if (state !== undefined) {
+  //         setLinking(state);
+  //       }
+
+  //       setIsReady(true);
+  //     })
+  //     .catch((error) => console.log('ERROR', error););
+  // }, [getInitialState]);
+
+  /* 
+    END NEW EMAIL VERIFICATION TEST
+  */
+
   return (
-    <NavigationContainer linking={linking}>
+    <NavigationContainer /*linking={linking}*/>
       <View style={{ height }}>
         {/* If app is loading -> state.isLoading === true
           OR

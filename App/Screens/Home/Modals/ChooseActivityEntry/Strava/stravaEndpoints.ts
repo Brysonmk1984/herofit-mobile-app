@@ -1,5 +1,4 @@
 import Constants from "expo-constants";
-export const STRAVA_REDIRECT_URI: string = Constants.manifest.extra.STRAVA_REDIRECT_URI;
 
 const STRAVA_AUTHORIZATION_ENDPOINT: string = Constants.manifest.extra.STRAVA_AUTHORIZATION_ENDPOINT;
 const STRAVA_TOKEN_ENDPOINT: string = Constants.manifest.extra.STRAVA_TOKEN_ENDPOINT;
