@@ -7,7 +7,7 @@ import { getColorFromClassName, getColorFromItemName, thousandsFormat } from "..
 import { Icon } from "../../../../../Components/CustomComponents";
 import { GlobalStateContext } from "../../../../../store";
 import useModal from "../../../../../common/hooks/useModal";
-import ItemImage from "../../../../../common/ItemImage";
+import ItemImage from "../../../../../Components/ItemImage";
 import { useDebounce, useDebouncedCallback } from "use-debounce/lib";
 import { PetImage } from "../../PetImage";
 
@@ -71,7 +71,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
             <ItemImage item={item} w={IMAGE_WIDTH} reverseIconDefaultColor={true} />
             {item.count && (
               <Box position="absolute" bottom={4} right={3} borderRadius={4} h={8} w={8} bgColor="primary.800">
-                <Text color="base.highlight" fontFamily="heading" textAlign="center" lineHeight={8} fontSize="2xl">
+                <Text color="base.highlight" fontFamily="heading" textAlign="center" lineHeight={33} fontSize="2xl">
                   {item.count}
                 </Text>
               </Box>

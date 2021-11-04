@@ -1,9 +1,9 @@
 import React from "react";
 import { Box, Text, Image } from "native-base";
-import { HeroImage } from "../Components/HeroImage/HeroImage";
-import { getColorFromClassName, getColorFromItemName, getPetImage } from "./helperFunctions";
-import { Item, CharacterName, ItemWithOwnership } from "./types";
-import Icon from "../Components/Icon";
+import { HeroImage } from "./HeroImage/HeroImage";
+import { getColorFromClassName, getColorFromItemName, getPetImage } from "../common/helperFunctions";
+import { Item, CharacterName, ItemWithOwnership } from "../common/types";
+import Icon from "./Icon";
 
 interface getItemImageProps {
   item: Item | ItemWithOwnership;
@@ -35,10 +35,8 @@ const ItemImage: React.FC<getItemImageProps> = ({ item, w, style, character, rev
         }
         const iconColor = item.class ? getColorFromClassName(item.class) : getColorFromItemName(item.name, reverseIconDefaultColor);
         return (
-          <Box>
-            <Text textAlign="center">
-              <Icon iconName={item.name} size={w} color={iconColor} />
-            </Text>
+          <Box alignItems="center">
+            <Icon iconName={item.name} size={w} color={iconColor} />
           </Box>
         );
 

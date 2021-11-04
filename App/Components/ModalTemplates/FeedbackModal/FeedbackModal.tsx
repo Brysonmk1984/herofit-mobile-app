@@ -63,7 +63,7 @@ function FeedbackModal({ children, id, modalOpen, title, modalAction, closeable 
 
   return (
     <Modal isOpen={modalOpen} onClose={() => closeModal(id)} /*closeOnOverlayClick={closeable}*/ isKeyboardDismissable={closeable}>
-      <Modal.Content p={2}>
+      <Modal.Content overflow="visible" p={2}>
         {closeable && <ModalCloseButton bgColor="primary.50" />}
         <Modal.Header pl={4} py={4}>
           <Text fontSize="2xl" fontFamily="heading">

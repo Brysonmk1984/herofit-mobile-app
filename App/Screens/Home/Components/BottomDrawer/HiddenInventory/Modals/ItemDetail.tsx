@@ -29,9 +29,7 @@ const ItemDetail: React.FC<ItemDetailProps> = ({ id, buttonText = "OK", modalAct
           <Text color="success.500">{capitalize(effect.type)}</Text>
         </HStack>
 
-        <Text color="primary.500" lineHeight={5}>
-          {effect.description}
-        </Text>
+        <Text color="primary.500">{effect.description}</Text>
       </Box>
     );
   }

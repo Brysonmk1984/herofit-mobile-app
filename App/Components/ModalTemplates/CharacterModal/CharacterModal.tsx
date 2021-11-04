@@ -44,7 +44,7 @@ function CharacterModal({ children, id, modalOpen, modalAction, character = "Mas
   }
   return (
     <Modal isOpen={modalOpen} onClose={() => closeModal(id)} _backdrop={{ backgroundColor: "layout.modalBackdrop" }}>
-      <Modal.Content p={0}>
+      <Modal.Content p={0} overflow="visible">
         <CharacterHeader>
           <ModalHeaderImage zIndex={10}>
             <Image source={getCharacterImage(character)} size={100} alt={character} alignSelf="flex-end" />

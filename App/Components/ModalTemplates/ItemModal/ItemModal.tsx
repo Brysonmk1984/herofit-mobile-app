@@ -7,7 +7,7 @@ import { IActionHeader } from "../BasicModal/Content";
 import useModal from "../../../common/hooks/useModal";
 import { CharacterName, Item, ItemWithOwnership } from "../../../common/types";
 import ItemModalActionButton from "./ItemModalActionButton";
-import ItemImage from "../../../common/ItemImage";
+import ItemImage from "../../ItemImage";
 import ModalHeaderImage from "../ModalHeaderImage";
 import ItemTitle from "./ItemTitle";
 import ItemLore from "./ItemLore";
@@ -38,7 +38,7 @@ const ItemModal = function ({ children, id, modalOpen, modalAction, item, charac
   }
   return (
     <Modal isOpen={modalOpen} onClose={() => closeModal(id)} _backdrop={{ backgroundColor: "layout.modalBackdrop" }} closeOnOverlayClick={preventClose}>
-      <Modal.Content p={0}>
+      <Modal.Content overflow="visible" p={0}>
         <Box pb={100}>
           <ItemHeader>
             <ModalHeaderImage bgColor="base.background">
@@ -51,7 +51,7 @@ const ItemModal = function ({ children, id, modalOpen, modalAction, item, charac
             </ItemDescription>
             <ModalCloseButton bgColor="base.background" />
           </ItemHeader>
-          <View paddingBottom={74} overflow="hidden">
+          <View paddingBottom={174} overflow="hidden">
             <ItemTitle title={item.name} ptCost={(buttonText === "BUY" && item.ptCost) ?? null} />
             {item.lore && <ItemLore lore={item.lore} numEffects={item.effects?.length ?? 0} fullCodex={item.type === "codex" && item.owned} />}
             {children}
