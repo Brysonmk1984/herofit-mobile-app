@@ -63,6 +63,8 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
   }
 
   function handleEquipping(category: EquippableItemType, item?: Item, goToBattle?: boolean) {
+    // Prevent item switching if awaiting battle
+    // Only applies to pets for now
     if (goToBattle) {
       return addToast("error", "Unable to switch pet's while waiting for battle!", "top");
     }
