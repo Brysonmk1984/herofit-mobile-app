@@ -18,6 +18,7 @@ interface ItemCarouselProps {
   character?: CharacterName;
   setPressedItem: (item: Item) => void;
   handleEquipping?: (category: EquippableItemType, item?: Item) => void;
+  goToBattle?: boolean;
 }
 
 const SLIDER_WIDTH = Dimensions.get("window").width;
@@ -26,7 +27,7 @@ const ITEM_HEIGHT = ITEM_WIDTH;
 const ITEM_IMAGE_WIDTH = ITEM_WIDTH * 1.2;
 const ITEM_IMAGE_HEIGHT = ITEM_WIDTH * 1.2;
 
-const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, character, setPressedItem, refRBSheet, handleEquipping }) => {
+const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, character, setPressedItem, refRBSheet, handleEquipping, goToBattle }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const [allItemsOfType, setAllItemsOfType] = useState([]);
   const [activeIndex, setActiveIndex] = useState(null);
@@ -156,7 +157,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
   }
 
   const _delayedSelection = useDebouncedCallback((type: EquippableItemType, activeIndex?: number) => {
-    handleEquipping(type, activeIndex ? allItemsOfType[activeIndex] : null);
+    handleEquipping(type, activeIndex ? allItemsOfType[activeIndex] : null, goToBattle);
   }, 750);
 
   function _handleSelectedItem(index: number) {

@@ -54,12 +54,9 @@ const ChooseActivityEntry: React.FC<ChooseActivityEntryProps> = ({ id }) => {
 
   // DEPENDING ON WHICH RADIO IS CLICKED, EITHER HANDLE STRAVA OR MANUAL DETAILS
   useEffect(() => {
-    console.log("TOGGLE");
     if (activityRadioValue) {
-      console.log(1);
       //let stravaLinkEventListener;
       if (activityRadioValue === "Strava") {
-        console.log(2);
         // Sets the state for all the strava details, then sets the event listener
         _handleStravaDetails();
       } else if (activityRadioValue === "Manual") {

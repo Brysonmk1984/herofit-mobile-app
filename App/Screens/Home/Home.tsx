@@ -8,7 +8,6 @@ import useModal from "../../common/hooks/useModal";
 import { ChooseActivityEntry, SignupToSave, SignupFinished, ConfirmEmail, FeedbackChoice, ActivityUpgrade, GoToBattle } from "./Modals/Modals";
 import Background from "./Components/Background";
 import BottomDrawer from "./Components/BottomDrawer/BottomDrawer";
-import { equippedPet, equippedSkin } from "../../common/helperFunctions";
 import { HeroImage } from "../../Components/HeroImage/HeroImage";
 import { TopHud } from "./Components/TopHud/TopHud";
 import { PetImage } from "./Components/PetImage";
@@ -102,7 +101,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
           <HeroImage {...propsForHeroImage} />
         </Box>
         <Box position="absolute" right={0} bottom={95}>
-          <PetImage pet={equippedPet} />
+          {equippedPet && <PetImage pet={equippedPet} />}
         </Box>
       </View>
 

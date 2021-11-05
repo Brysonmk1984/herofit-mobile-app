@@ -62,7 +62,11 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
     navigation.push("App", { screen: "BattleReport", params: { battleReport: latestBattle } });
   }
 
-  function handleEquipping(category: EquippableItemType, item?: Item) {
+  function handleEquipping(category: EquippableItemType, item?: Item, goToBattle?: boolean) {
+    if (goToBattle) {
+      return addToast("error", "Unable to switch pet's while waiting for battle!", "top");
+    }
+
     const equippedOfType = { skin: equippedSkin, pet: equippedPet, title: equippedTitle };
 
     // If there's no passed item, the user is unequipping
@@ -173,7 +177,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
       {/* HIDDEN MENU */}
       <HiddenInventory refRBSheet={refRBSheet} bottomDrawerHeight={bottomDrawerHeight} activeTab={activeTab} setActiveTab={setActiveTab}>
         {activeTab === "Consumables" && <ItemCarousel type="consumable" data={consumables} setPressedItem={setPressedItem} refRBSheet={refRBSheet} />}
-        {activeTab === "Pets" && <ItemCarousel type="pet" data={pets} equipped={equippedPet} setPressedItem={setPressedItem} refRBSheet={refRBSheet} handleEquipping={handleEquipping} />}
+        {activeTab === "Pets" && <ItemCarousel type="pet" data={pets} equipped={equippedPet} setPressedItem={setPressedItem} refRBSheet={refRBSheet} handleEquipping={handleEquipping} goToBattle={hero.goToBattle} />}
         {activeTab === "Costumes" && <ItemCarousel type="skin" data={skins} equipped={equippedSkin} character={hero.character} setPressedItem={setPressedItem} refRBSheet={refRBSheet} handleEquipping={handleEquipping} />}
         {activeTab === "Titles" && <ItemCarousel type="title" data={titles} equipped={equippedTitle} setPressedItem={setPressedItem} refRBSheet={refRBSheet} handleEquipping={handleEquipping} />}
         {activeTab === "Codex" && <ItemCarousel type="codex" data={codices} setPressedItem={setPressedItem} refRBSheet={refRBSheet} />}

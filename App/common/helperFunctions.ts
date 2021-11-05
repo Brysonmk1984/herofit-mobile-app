@@ -260,7 +260,6 @@ function getHeroImage(characterName: CharacterName, skin?: SkinName): number {
   // Figure out which Skin / Costume to use
   const lcName = lowercaseUnderscore(characterName);
   const lcSkin = lowercaseUnderscore<SkinName>(skin) as SkinLcUnderscoreName;
-
   switch (lcName) {
     case "timber_terror":
       return getTimberTerrorImage(lcSkin);

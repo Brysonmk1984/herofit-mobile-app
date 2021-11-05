@@ -28,18 +28,23 @@ function debugErrors(error: appError, user?: User, dispatch?: AppDispatch): stri
     if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging") {
       // 403 is usually related to leaving HeroFit open on a device. The default message will now tell them to refresh the page.
       if (error.status === 403) {
+        console.log("403 error, usually from first startup? - B");
         // These errors should redirect the user to the login page
         if (error.message === "Invalid credentials, try signing in again.") {
+          console.log("403 error, invalid credentials, signing user out");
           dispatch({ type: "SET ISSIGNEDIN", payload: { isSignedIn: false } });
         }
       } else {
+        console.log("NOT 403, emailing app error");
         emailAppError({ status: error.status, message: error.message, debug: error.debug, version: process.env.APP_VERSION, accountInfo: user, meta: error.meta });
       }
       return error.message;
     } else {
       console.log(`STATUS: ${error.status} \n`, `MESSAGE: ${error.message} \n`, `DEBUG:`, error.debug, `META: ${error.meta}`);
       if (error.status === 403) {
+        console.log("403 error, usually from first startup? -  A");
         if (error.message === "Invalid credentials, try signing in again.") {
+          console.log("403 error, invalid credentials, signing user out");
           dispatch({ type: "SET ISSIGNEDIN", payload: { isSignedIn: false } });
         }
       }
