@@ -6,6 +6,7 @@ import { GlobalStateContext } from "../../../../../../store";
 import { ItemModal } from "../../../../../../Components/ModalTemplates/ModalTemplates";
 import BodyContent from "../../../../../../Components/ModalTemplates/ItemModal/BodyContent";
 import { capitalize } from "../../../../../../common/helperFunctions";
+import ItemLore from "../../../../../../Components/ModalTemplates/ItemModal/ItemLore";
 
 interface ItemDetailProps {
   id: string;
@@ -43,12 +44,7 @@ const ItemDetail: React.FC<ItemDetailProps> = ({ id, buttonText = "OK", modalAct
   return (
     <ItemModal id={id} modalOpen={state.modalQueue[0] === id} buttonText={buttonText} modalAction={modalAction} item={item} character={character}>
       <BodyContent>
-        {item.effects?.length && !item.lore && (
-          <Text fontFamily="heading" fontSize="3xl" mb={3}>
-            Effects
-          </Text>
-        )}
-        <FlatList data={item.effects} renderItem={({ item }) => _renderEffect(item)} keyExtractor={(item, i) => i.toString()} />
+        <FlatList ListHeaderComponent={item.lore && <ItemLore lore={item.lore} numEffects={item.effects?.length ?? 0} fullCodex={item.type === "codex" && item.owned} />} data={item.effects} renderItem={({ item }) => _renderEffect(item)} keyExtractor={(item, i) => i.toString()} />
       </BodyContent>
     </ItemModal>
   );

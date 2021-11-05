@@ -11,6 +11,7 @@ import ItemImage from "../../ItemImage";
 import ModalHeaderImage from "../ModalHeaderImage";
 import ItemTitle from "./ItemTitle";
 import ItemLore from "./ItemLore";
+import { ModalContent } from "./ModalContent";
 
 interface ItemModalProps {
   children: React.ReactChild;
@@ -38,27 +39,27 @@ const ItemModal = function ({ children, id, modalOpen, modalAction, item, charac
   }
   return (
     <Modal isOpen={modalOpen} onClose={() => closeModal(id)} _backdrop={{ backgroundColor: "layout.modalBackdrop" }} closeOnOverlayClick={preventClose}>
-      <Modal.Content overflow="visible" p={0}>
-        <Box pb={100}>
-          <ItemHeader>
-            <ModalHeaderImage bgColor="base.background">
-              <ItemImage item={item} w={105} character={character} />
-            </ModalHeaderImage>
-            <ItemDescription>
-              <Text textAlign="center" color="primary.700" flexWrap="wrap" lineHeight="18px" fontSize={15}>
-                {item.description}
-              </Text>
-            </ItemDescription>
-            <ModalCloseButton bgColor="base.background" />
-          </ItemHeader>
-          <View paddingBottom={174} overflow="hidden">
-            <ItemTitle title={item.name} ptCost={(buttonText === "BUY" && item.ptCost) ?? null} />
-            {item.lore && <ItemLore lore={item.lore} numEffects={item.effects?.length ?? 0} fullCodex={item.type === "codex" && item.owned} />}
-            {children}
-          </View>
-        </Box>
+      {/* <Modal.Content> */}
+      <ModalContent>
+        <ItemHeader>
+          <ModalHeaderImage bgColor="base.background">
+            <ItemImage item={item} w={105} character={character} />
+          </ModalHeaderImage>
+          <ItemDescription>
+            <Text color="primary.700" flexWrap="wrap" lineHeight="18px" fontSize="xs">
+              {item.description}
+            </Text>
+          </ItemDescription>
+          <ModalCloseButton bgColor="base.background" />
+        </ItemHeader>
+
+        <ItemTitle title={item.name} ptCost={(buttonText === "BUY" && item.ptCost) ?? null} type={item.type} />
+
+        {children}
+
         {item.type === "codex" && item.owned ? null : buttonText && <ItemModalActionButton disabled={disabled} buttonText={buttonText} action={() => handleModalAction(id, modalAction)} bgColor={buttonText === "USE" || buttonText === "BUY" ? "base.caution" : "base.success"} />}
-      </Modal.Content>
+      </ModalContent>
+      {/* </Modal.Content> */}
     </Modal>
   );
 };

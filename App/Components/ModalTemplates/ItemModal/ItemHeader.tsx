@@ -7,7 +7,7 @@ interface ItemHeaderProps {
 
 const ItemHeader: React.FC<ItemHeaderProps> = ({ children }) => {
   return (
-    <Box justifyContent="center" minHeight={85} bgColor="base.background">
+    <Box flex={0.2} flexBasis={85} justifyContent="center" bgColor="base.background">
       {children}
     </Box>
   );

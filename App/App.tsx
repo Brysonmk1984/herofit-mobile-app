@@ -14,7 +14,7 @@ import { View } from "native-base";
 import useGlobalToast from "./common/hooks/useGlobalToast";
 import { Logs } from "expo";
 import * as Linking from "expo-linking";
-LogBox.ignoreLogs(["Reanimated 2", "Remote debugger", "VirtualizedLists should never be nested", 'Expected style "lineHeight: 24" to contain units', 'Expected style "lineHeight: 30" to contain units', 'Expected style "lineHeight: 40" to contain units', 'Expected style "lineHeight: 50" to contain units', 'Expected style "lineHeight: 85" to contain units', 'Expected style "lineHeight: 120" to contain units', "Please pass alt prop to Image component", "Non-serializable values were found in the navigation state", "When server rendering, you must wrap your application in an <SSRProvider> to ensure consistent ids are generated between the client and server."]);
+LogBox.ignoreLogs(["Reanimated 2", "Remote debugger", "VirtualizedLists should never be nested", 'Expected style "lineHeight: 24" to contain units', 'Expected style "lineHeight: 30" to contain units', 'Expected style "lineHeight: 40" to contain units', 'Expected style "lineHeight: 50" to contain units', 'Expected style "lineHeight: 85" to contain units', 'Expected style "lineHeight: 120" to contain units', "Please pass alt prop to Image component", "Non-serializable values were found in the navigation state", "When server rendering, you must wrap your application in an <SSRProvider> to ensure consistent ids are generated between the client and server.", "VirtualizedLists should never be nested inside plain ScrollViews with the same orientation because it can break windowing and other functionality - use another VirtualizedList-backed container instead."]);
 //LogBox.ignoreAllLogs(true);
 
 Logs.enableExpoCliLogging();
@@ -113,6 +113,10 @@ const App: React.FC = () => {
   /* 
     END NEW EMAIL VERIFICATION TEST
   */
+
+  // Sometimes on first startup, user will go to homescreen only to be kicked back to signin
+  // perhaps isSignedIn is being set to false somewhere in app?
+  //console.log(state.isLoading, !fontsLoaded, state.isSignedIn);
 
   return (
     <NavigationContainer /*linking={linking}*/>

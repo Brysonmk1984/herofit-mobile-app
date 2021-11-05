@@ -9,7 +9,7 @@ const Root = () => {
   const theme = extendTheme(herofitTheme);
 
   return (
-    <NativeBaseProvider theme={theme}>
+    <NativeBaseProvider theme={theme} config={{ suppressColorAccessibilityWarning: true }}>
       <StateProvider>
         <App />
       </StateProvider>

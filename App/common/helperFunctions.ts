@@ -1,7 +1,8 @@
 import heroList from "./heroList.json";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ItemInstance, Item, FoeType, HeroChoice, CharacterName, CharacterAlias, SkinLcUnderscoreName, SkinName } from "./types";
+import { ItemInstance, Item, FoeType, HeroChoice, CharacterName, CharacterAlias, SkinLcUnderscoreName, SkinName, ServerItemType } from "./types";
 import { getBoulderBroImage, getChronoGuyImage, getCompostCreatureImage, getEmpathAureliaImage, getFiltronFiveImage, getNaturalNinjaImage, getRepeteImage, getSolarCelesteImage, getTimberTerrorImage, getWilhelmTheWildImage } from "./heroImageVariants";
+import herofitTheme from "../styles/herofitTheme";
 
 function capitalize<T = string>(val: T) {
   if (typeof val === "string") {
@@ -593,4 +594,24 @@ function determineScenario(scenarioNum: number) {
   }
 }
 
-export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, convertAorAn, getHeroAlias, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems, capitalize, getHeroImage, getFoeImage, getPetImage, equippedSkin, equippedPet, equippedTitle, getColorFromClassName, getColorFromItemName, checkForMultipleItem, determineDataSrcType, roundNumberToTenthReturnNumber, roundNumberToThousandthReturnNumber, getFoeColor, determineScenario };
+function convertItemTypeName(serverItemType: ServerItemType) {
+  if (serverItemType === "skin") {
+    return "costume";
+  }
+  return serverItemType;
+}
+
+function determineItemTypeColor(serverItemType: ServerItemType) {
+  switch (serverItemType) {
+    case "codex":
+    case "consumable":
+    case "skin":
+    case "codex":
+    case "pet":
+      return herofitTheme.colors.base[serverItemType];
+    default:
+      throw new Error("Can't determine color, no matching item type!");
+  }
+}
+
+export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, convertAorAn, getHeroAlias, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems, capitalize, getHeroImage, getFoeImage, getPetImage, equippedSkin, equippedPet, equippedTitle, getColorFromClassName, getColorFromItemName, checkForMultipleItem, determineDataSrcType, roundNumberToTenthReturnNumber, roundNumberToThousandthReturnNumber, getFoeColor, determineScenario, convertItemTypeName, determineItemTypeColor };
