@@ -10,7 +10,7 @@ interface ItemLoreProps {
 const ItemLore: React.FC<ItemLoreProps> = ({ lore, numEffects, fullCodex }) => {
   return fullCodex ? (
     <ScrollView flex={1} bgColor="base.background" py={2}>
-      <Text mt={-1} pb={1} px={2} bgColor="base.background" fontFamily="cursive">
+      <Text mt={-1} py={1} px={2} bgColor="base.background" fontFamily="cursive" fontSize="lg">
         {lore}
       </Text>
     </ScrollView>

@@ -6,12 +6,9 @@ export default {
       baseStyle: {
         rounded: "md",
         bg: "base.water",
-        // Doesn't work!
-        // _text: {
-        //   color: 'base.primary',
-        // },
         marginLeft: 2,
         marginRight: 2,
+
         //DOESNT WORK
         // _disabled: {
         //   opacity: 1,
@@ -20,6 +17,9 @@ export default {
         //   // _text: {
         //   //   color: "#555554",
         //   // },
+        // },
+        // _text: {
+        //   color: 'base.primary',
         // },
       },
       // DOESN't WORK
@@ -31,26 +31,16 @@ export default {
         //   color: "#555554",
         // },
       },
-      Toast: {
-        baseStyle: {
-          width: "100%",
-          flex: 1,
-          margin: 0,
-        },
-        variants: {
-          test: {
-            backgroundColor: "black",
-            _text: {
-              color: "base.white",
-            },
-          },
-        },
-      },
+
       // defaultProps works
       defaultProps: {
         colorScheme: "buttonPrimary",
+        py: 3,
         _pressed: {
           backgroundColor: "success.300",
+        },
+        _text: {
+          fontSize: "2xl",
         },
       },
       variants: {
@@ -64,6 +54,21 @@ export default {
         },
         warning: {
           bg: `buttonWarning.200`,
+        },
+      },
+    },
+    Toast: {
+      baseStyle: {
+        width: "100%",
+        flex: 1,
+        margin: 0,
+      },
+      variants: {
+        test: {
+          backgroundColor: "black",
+          _text: {
+            color: "base.white",
+          },
         },
       },
     },
@@ -99,6 +104,7 @@ export default {
       },
       defaultProps: {
         shadow: 1,
+        fontSize: "xl",
       },
     },
     Link: {
