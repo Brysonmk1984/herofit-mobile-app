@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { ActivityEntrySelect } from "./ActivityEntrySelect";
 import StravaConnectButton from "./Strava/StravaConnectButton";
 import { CharacterModal } from "../../../../Components/ModalTemplates/ModalTemplates";
-import { ActionHeader, BodyContent } from "../../../../Components/ModalTemplates/BasicModal/Content";
+import { BodyContent } from "../../../../Components/ModalTemplates/BasicModal/Content";
 import { GlobalStateContext } from "../../../../store";
 import { createManualDataSrcId } from "../../../../api/authentication";
 import debugErrors from "../../../../common/debugErrors";
@@ -13,6 +13,7 @@ import HelperText from "../../../../Components/HelperText";
 import LoadingInPane from "../../../../Components/LoadingInPane";
 import { Box } from "native-base";
 import { BackHandler } from "react-native";
+import { ModalActionHeader } from "../../../../Components/ModalTemplates/ModalActionHeader";
 
 interface ChooseActivityEntryProps {
   id: string;
@@ -78,7 +79,7 @@ const ChooseActivityEntry: React.FC<ChooseActivityEntryProps> = ({ id }) => {
 
   return (
     <CharacterModal id={id} modalOpen={state.modalQueue[0] === id} speech="Now that you're a pupil in my Dojo?, we'll need to hold you accountable!" disabled={!activityRadioValue} modalAction={confirmButton.modalAction} buttonText={activityRadioValue === "Manual" ? confirmButton.buttonText : null}>
-      <ActionHeader type="info" text="How will you log activities??" />
+      <ModalActionHeader type="info" text="How will you log activities??" />
       <BodyContent>
         {stravaSuccess ? (
           <HelperText type="success" text="HeroFit is now connected to your Strava account!" />

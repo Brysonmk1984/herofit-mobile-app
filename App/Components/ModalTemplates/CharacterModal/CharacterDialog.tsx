@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text } from "native-base";
 
 interface CharacterDialogProps {
-  children: React.ReactChild;
+  children: React.ReactChild | React.ReactChild[];
 }
 
 export const CharacterDialog: React.FC<CharacterDialogProps> = ({ children }) => {

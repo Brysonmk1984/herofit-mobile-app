@@ -11,7 +11,7 @@ import ItemImage from "../../ItemImage";
 import ModalHeaderImage from "../ModalHeaderImage";
 import ItemTitle from "./ItemTitle";
 import ItemLore from "./ItemLore";
-import { ModalContent } from "./ModalContent";
+import { ModalContent } from "../ModalContent";
 
 interface ItemModalProps {
   children: React.ReactChild;

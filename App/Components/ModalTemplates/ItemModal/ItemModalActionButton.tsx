@@ -10,8 +10,8 @@ interface ItemModalActionButton {
 
 const ItemModalActionButton: React.FC<ItemModalActionButton> = ({ buttonText, disabled, action, bgColor = "base.success" }) => {
   return (
-    <Box flex={1} flexBasis={70}>
-      <Button bgColor={disabled ? "base.disabled" : bgColor} position="absolute" bottom={0} left={1} shadow={3} mb={2} w="93%" py={2} _text={{ fontSize: "3xl", color: disabled ? "muted.500" : "base.white" }} disabled={disabled} onPress={action} borderTopRightRadius={0} borderTopLeftRadius={0}>
+    <Box flex={1} flexBasis={70} justifyContent="flex-end">
+      <Button mb={2} bgColor={disabled ? "base.disabled" : bgColor} shadow={3} py={2} _text={{ fontFamily: "heading", fontSize: "4xl", lineHeight: 45, color: disabled ? "muted.500" : "base.white" }} disabled={disabled} onPress={action} borderTopRightRadius={0} borderTopLeftRadius={0}>
         {buttonText}
       </Button>
     </Box>

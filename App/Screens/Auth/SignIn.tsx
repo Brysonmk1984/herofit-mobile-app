@@ -32,7 +32,7 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
 
       // User hasn't confirmed email yet
       if (!user.active) {
-        addToast("warning", "Please Confirm your Email by Clicking the link in the message sent after registration.");
+        addToast("caution", "Please Confirm your Email by Clicking the link in the message sent after registration.");
         dispatch({ type: "SET USER", payload: { user, isSignedIn: false } });
         return setLoading(false);
       }

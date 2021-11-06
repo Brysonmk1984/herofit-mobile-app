@@ -4,7 +4,7 @@ import { Pressable, Button, View, useToast, Text, Toast, Box, HStack } from "nat
 import Ionicons from "@expo/vector-icons/build/Ionicons";
 import MaterialIcons from "@expo/vector-icons/build/MaterialIcons";
 import toastTheme from "../../styles/toastTheme";
-type AlertType = "error" | "warning" | "success" | "info";
+import { ActionFeedbackType } from "../types";
 
 const useGlobalToast = () => {
   const toast = useToast();
@@ -16,11 +16,11 @@ const useGlobalToast = () => {
     }
   }
 
-  function _renderIcon(type: AlertType, style: { color: string }) {
+  function _renderIcon(type: ActionFeedbackType, style: { color: string }) {
     switch (type) {
       case "success":
         return <Ionicons name="md-checkmark-circle" size={24} color={style.color} />;
-      case "warning":
+      case "caution":
         return <Ionicons name="md-warning-sharp" size={24} color={style.color} />;
       case "error":
         return <MaterialIcons name="error" size={24} color={style.color} />;
@@ -31,7 +31,7 @@ const useGlobalToast = () => {
     }
   }
 
-  function renderToast(type: AlertType, message: string) {
+  function renderToast(type: ActionFeedbackType, message: string) {
     const aStyle = toastTheme[type];
     return (
       // Single Alert
@@ -56,7 +56,7 @@ const useGlobalToast = () => {
   }
 
   return {
-    addToast: (type: AlertType, message: string, placement: "top" | "bottom" = "bottom") =>
+    addToast: (type: ActionFeedbackType, message: string, placement: "top" | "bottom" = "bottom") =>
       (toastIdRef.current = toast.show({
         render: () => renderToast(type, message),
         placement,

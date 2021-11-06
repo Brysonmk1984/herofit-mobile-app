@@ -358,4 +358,6 @@ type TabColors = {
   [T in TabType]: [string, string];
 };
 
-export { Action, AppDispatch, InitialAppState, AppAction, Store, User, UserStatus, Activity, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, ItemWithOwnership, BattleInstantItem, ServerItemType, ServerInventoryCategories, EquippableItemType, Effect, Stat, PrimaryElement, EveryElement, HeroChoice, CharacterName, CharacterAlias, FoeAbility, FoeType, AllFoes, SkinLcUnderscoreName, SkinName, Tint, Foe, FoeClass, ZodiacSign, TabType, TabColors };
+type ActionFeedbackType = "info" | "caution" | "error" | "success";
+
+export { Action, AppDispatch, InitialAppState, AppAction, Store, User, UserStatus, Activity, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, ItemWithOwnership, BattleInstantItem, ServerItemType, ServerInventoryCategories, EquippableItemType, Effect, Stat, PrimaryElement, EveryElement, HeroChoice, CharacterName, CharacterAlias, FoeAbility, FoeType, AllFoes, SkinLcUnderscoreName, SkinName, Tint, Foe, FoeClass, ZodiacSign, TabType, TabColors, ActionFeedbackType };

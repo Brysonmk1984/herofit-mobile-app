@@ -2,7 +2,7 @@ import React from "react";
 import { Modal, Text, Box, View } from "native-base";
 import ModalCloseButton from "../ModalCloseButton";
 import useModal from "../../../common/hooks/useModal";
-import { ActionButton } from "./ActionButton";
+import ModalActionButton from "../ModalActionButton";
 
 interface IBasicModal {
   id: string;
@@ -29,21 +29,19 @@ function BasicModal({ children, id, modalOpen, modalAction, title, buttonText = 
 
   return (
     <Modal isOpen={modalOpen} onClose={() => closeModal(id)} closeOnOverlayClick={!preventClose}>
-      <Modal.Content overflow="visible" p={0}>
-        <ModalCloseButton bgColor="primary.50" />
-        <Modal.Header px={5} py={6}>
+      <Modal.Content>
+        {!preventClose && <ModalCloseButton bgColor="primary.50" />}
+        <Modal.Header px={5} py={3}>
           <View>
-            <Text fontSize="2xl" fontFamily="heading" overflow="hidden">
+            <Text textAlign="center" fontSize="2xl" fontFamily="heading" overflow="hidden">
               {title}
             </Text>
           </View>
         </Modal.Header>
         <Box overflow="hidden">{children}</Box>
-        <Box p={2} pb={4}>
-          <ActionButton disabled={disabled} action={() => handleModalAction(id, modalAction, preventClose)}>
-            {buttonText}
-          </ActionButton>
-        </Box>
+        <ModalActionButton disabled={disabled} action={() => handleModalAction(id, modalAction, preventClose)}>
+          {buttonText}
+        </ModalActionButton>
       </Modal.Content>
     </Modal>
   );

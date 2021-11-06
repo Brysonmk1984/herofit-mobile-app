@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Modal, Box, Text, HStack } from "native-base";
-import { ActionButton } from "../BasicModal/ActionButton";
+import ModalActionButton from "../ModalActionButton";
 import ModalCloseButton from "../ModalCloseButton";
 import useModal from "../../../common/hooks/useModal";
 import { GlobalStateContext } from "../../../store";
@@ -31,11 +31,10 @@ const WheelSelectModal: React.FC<WheelSelectModalProps> = ({ children, id, modal
         <Modal.Body p={0} justifyContent="center">
           <HStack>{children}</HStack>
         </Modal.Body>
-        <Box p={2} pb={4}>
-          <ActionButton disabled={disabled} action={modalAction}>
-            OK
-          </ActionButton>
-        </Box>
+
+        <ModalActionButton disabled={disabled} action={modalAction}>
+          OK
+        </ModalActionButton>
       </Modal.Content>
     </Modal>
   );

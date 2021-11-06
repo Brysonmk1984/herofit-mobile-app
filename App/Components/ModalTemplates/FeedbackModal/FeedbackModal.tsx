@@ -2,12 +2,13 @@ import React, { useState, useContext, useEffect } from "react";
 import { Modal, Text, Box } from "native-base";
 import ModalCloseButton from "../ModalCloseButton";
 import useModal from "../../../common/hooks/useModal";
-import { ActionButton } from "../BasicModal/ActionButton";
+import ModalActionButton from "../ModalActionButton";
 import { emailFeedbackData, FeedbackChoiceBody } from "../../../api/email";
 
 import debugErrors from "../../../common/debugErrors";
 import { GlobalStateContext } from "../../../store";
 import useGlobalToast from "../../../common/hooks/useGlobalToast";
+import { ModalContent } from "../ModalContent";
 
 interface IFeedbackModal {
   modalOpen: boolean;
@@ -63,7 +64,7 @@ function FeedbackModal({ children, id, modalOpen, title, modalAction, closeable 
 
   return (
     <Modal isOpen={modalOpen} onClose={() => closeModal(id)} /*closeOnOverlayClick={closeable}*/ isKeyboardDismissable={closeable}>
-      <Modal.Content overflow="visible" p={2}>
+      <ModalContent>
         {closeable && <ModalCloseButton bgColor="primary.50" />}
         <Modal.Header pl={4} py={4}>
           <Text fontSize="2xl" fontFamily="heading">
@@ -73,12 +74,10 @@ function FeedbackModal({ children, id, modalOpen, title, modalAction, closeable 
         <Modal.Body p={0} justifyContent="center">
           {children(radioValue, setRadioValue, openResponse, setOpenResponse)}
         </Modal.Body>
-        <Box p={2} pb={4}>
-          <ActionButton disabled={!radioValue} action={() => handleFormAction(id, modalAction)}>
-            Send Feedback
-          </ActionButton>
-        </Box>
-      </Modal.Content>
+        <ModalActionButton disabled={!radioValue} action={() => handleFormAction(id, modalAction)}>
+          Send Feedback
+        </ModalActionButton>
+      </ModalContent>
     </Modal>
   );
 }

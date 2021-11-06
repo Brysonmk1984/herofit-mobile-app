@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Heading, Box, View, Text, ScrollView, Link } from "native-base";
 import * as MailComposer from "expo-mail-composer";
 import { BasicModal } from "../../../Components/ModalTemplates/ModalTemplates";
-import { ActionHeader, BodyContent } from "../../../Components/ModalTemplates/BasicModal/Content";
+import { BodyContent } from "../../../Components/ModalTemplates/BasicModal/Content";
 import { GlobalStateContext } from "../../../store";
 import HeroInitiationChecklist from "./Components/HeroInitiationChecklist";
 import { resendEmailConfirmation } from "../../../api/authentication";
@@ -13,6 +13,7 @@ import { getUser } from "../../../api/user";
 import useModal from "../../../common/hooks/useModal";
 import useGlobalToast from "../../../common/hooks/useGlobalToast";
 import * as WebBrowser from "expo-web-browser";
+import { ModalActionHeader } from "../../../Components/ModalTemplates/ModalActionHeader";
 
 interface ConfirmEmailProps {
   id: string;
@@ -110,7 +111,7 @@ const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
 
   return (
     <BasicModal id={id} modalOpen={state.modalQueue[0] === id} modalAction={() => handleEmailConfirmed()} disabled={disableButton} title="Please Confirm Your Email!" buttonText="Ok, I did it!" preventClose={state.userStatus === "unconfirmed" ? true : false}>
-      <ActionHeader type="warning" text="Must click the link in your email" />
+      <ModalActionHeader type="caution" text="Must click the link in your email" preventClose={state.userStatus === "unconfirmed" ? true : false} />
       <BodyContent>
         {showChecklist ? (
           <ScrollView>
@@ -125,7 +126,7 @@ const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
               Open Web Browser
             </Link> */}
 
-            <Text textAlign="center" fontSize="xl">
+            <Text textAlign="center" fontSize="xl" my={7}>
               Go ahead, we'll wait!
             </Text>
             <Link display={disableButton ? "none" : "flex"} p={3} justifyContent={"center"} _text={{ fontSize: "lg", textDecoration: "underline" }} onPress={resendEmailLink} mt={1}>

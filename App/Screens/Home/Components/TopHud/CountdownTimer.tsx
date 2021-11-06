@@ -60,14 +60,14 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({ type, hideType =
               Battle:
             </Text>
           )}
-          <Text fontSize={fontSize} fontFamily="heading" color="base.warning">
+          <Text fontSize={fontSize} fontFamily="heading" color="base.caution">
             {" "}
             {hours}:
           </Text>
-          <Text fontSize={fontSize} fontFamily="heading" color="base.warning">
+          <Text fontSize={fontSize} fontFamily="heading" color="base.caution">
             {minutes}:
           </Text>
-          <Text fontSize={fontSize} fontFamily="heading" color="base.warning">
+          <Text fontSize={fontSize} fontFamily="heading" color="base.caution">
             {seconds}
           </Text>
         </View>

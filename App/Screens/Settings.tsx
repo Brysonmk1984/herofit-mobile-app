@@ -73,7 +73,7 @@ const Settings: React.FC<MainDrawerProps<"Settings">> = ({ navigation, route }) 
     <ScreenContainer screenName={route.name}>
       <Button onPress={signOut}>Delete JWT</Button>
       <Button onPress={() => clearLs("herofit-stravaActivities")}>Delete LS Activities</Button>
-      <Button variant="warning" onPress={() => createDeleteAlert()}>
+      <Button variant="caution" onPress={() => createDeleteAlert()}>
         Delete ACCOUNT
       </Button>
       <Button

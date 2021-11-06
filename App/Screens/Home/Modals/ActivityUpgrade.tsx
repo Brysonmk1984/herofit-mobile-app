@@ -2,11 +2,12 @@ import React from "react";
 import { AppState, FlatList, useWindowDimensions } from "react-native";
 import { Text, Box, ScrollView, Link } from "native-base";
 import { CharacterModal } from "../../../Components/ModalTemplates/ModalTemplates";
-import { ActionHeader, BodyContent } from "../../../Components/ModalTemplates/BasicModal/Content";
+import { BodyContent } from "../../../Components/ModalTemplates/BasicModal/Content";
 import { convertSecondsToReadableTime } from "../../../common/activityCalculations";
 
 import moment from "moment";
 import { Activity } from "../../../common/types";
+import { ModalActionHeader } from "../../../Components/ModalTemplates/ModalActionHeader";
 
 interface ActivityUpgradeProps {
   id: string;
@@ -42,7 +43,7 @@ const ActivityUpgrade: React.FC<ActivityUpgradeProps> = ({ id, activities, modal
 
   return (
     <CharacterModal id={id} modalOpen={state.modalQueue[0] === id} speech={`Masterful form, young ${state.hero.name}! I see you've been working out. Keep it up and the Dark Forces will be no match for you`} buttonText="Upgrade" modalAction={modalAction}>
-      <ActionHeader type="info" text="You've been working out!" />
+      <ModalActionHeader type="info" text="You've been working out!" />
       <BodyContent>
         <ScrollView maxHeight={windowHeight * 0.3}>
           <Text mb={3} textAlign="center">

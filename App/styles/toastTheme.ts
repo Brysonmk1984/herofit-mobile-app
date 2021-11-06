@@ -22,7 +22,7 @@ const successStyle = {
   backgroundColor: "#81c784",
 };
 
-const warningStyle = {
+const cautionStyle = {
   color: "#663C00",
   backgroundColor: "#ffb74d",
 };
@@ -34,7 +34,7 @@ const errorStyle = {
 
 const info = { ...base, ...infoStyle };
 const success = { ...base, ...successStyle };
-const warning = { ...base, ...warningStyle };
+const caution = { ...base, ...cautionStyle };
 const error = { ...base, ...errorStyle };
 
-export default { info, success, warning, error };
+export default { info, success, caution, error };

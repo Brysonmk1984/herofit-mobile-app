@@ -5,19 +5,17 @@ import CharacterModalActionButton from "./CharacterModalActionButton";
 import ModalCloseButton from "../ModalCloseButton";
 import { CharacterHeader } from "./CharacterHeader";
 import { CharacterDialog } from "./CharacterDialog";
-import { IActionHeader } from "../BasicModal/Content";
 import useModal from "../../../common/hooks/useModal";
-import Triangle from "../../../Screens/Home/Components/BottomDrawer/Triangle";
 import ModalHeaderImage from "../ModalHeaderImage";
+import { ModalContent } from "../ModalContent";
 
 interface ICharacterModal {
   id: string;
   modalOpen: boolean;
   modalAction?: () => void;
   speech: string;
-  children: React.ReactChild[];
+  children: React.ReactChild | React.ReactChild[];
   character?: "Master Sensei Owl";
-  actionHeader?: IActionHeader;
   buttonText?: string;
   disabled?: boolean;
   preventClose?: boolean;
@@ -43,23 +41,23 @@ function CharacterModal({ children, id, modalOpen, modalAction, character = "Mas
     }
   }
   return (
-    <Modal isOpen={modalOpen} onClose={() => closeModal(id)} _backdrop={{ backgroundColor: "layout.modalBackdrop" }}>
-      <Modal.Content p={0} overflow="visible">
+    <Modal isOpen={modalOpen} onClose={() => closeModal(id)} _backdrop={{ backgroundColor: "rgba(0,0,0,0)" }}>
+      <ModalContent>
         <CharacterHeader>
           <ModalHeaderImage zIndex={10}>
             <Image source={getCharacterImage(character)} size={100} alt={character} alignSelf="flex-end" />
           </ModalHeaderImage>
           <CharacterDialog>
             <View style={styles.triangle}></View>
-            <Text textAlign="justify" color="primary.700" flexWrap="wrap" lineHeight="18px" fontSize={15}>
+            <Text color="primary.700" flexWrap="wrap" lineHeight="18px" fontSize={speech.length > 100 ? "xs" : "sm"}>
               {speech}
             </Text>
           </CharacterDialog>
           <ModalCloseButton bgColor="base.background" />
         </CharacterHeader>
-        <View paddingBottom={74}>{children}</View>
+        {children}
         {buttonText && <CharacterModalActionButton disabled={disabled} buttonText={buttonText} action={() => handleModalAction(id, modalAction)} />}
-      </Modal.Content>
+      </ModalContent>
     </Modal>
   );
 }
@@ -69,15 +67,15 @@ export default CharacterModal;
 const styles = StyleSheet.create({
   triangle: {
     position: "absolute",
-    left: -20,
+    left: -16,
     top: 25,
     width: 0,
     height: 0,
     backgroundColor: "transparent",
     borderStyle: "solid",
-    borderTopWidth: 20,
-    borderRightWidth: 20,
-    borderBottomWidth: 20,
+    borderTopWidth: 18,
+    borderRightWidth: 18,
+    borderBottomWidth: 18,
     borderTopColor: "transparent",
     borderBottomColor: "transparent",
     borderRightColor: "#fff",
