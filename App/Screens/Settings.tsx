@@ -1,38 +1,48 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Alert } from "react-native";
 import { Image, Pressable, FlatList, SectionList, Box, Center, View, Text, Heading, VStack, FormControl, Input, Link, Button, IconButton, HStack, Divider, Toast } from "native-base";
 import ScreenContainer from "../Components/ScreenContainer/ScreenContainer";
 import { clearJwtInLocalStorage } from "../common/jwtModule";
 import debugErrors, { createAppError } from "../common/debugErrors";
 import { Hero, User } from "../common/types";
-import { deleteAccount } from "../api/account";
+import { deleteAccount, disconnectStrava } from "../api/account";
 import { GlobalStateContext } from "../store";
 import { MainDrawerProps } from "../common/types-navigator";
 import { isExistingHero } from "../common/typeGuards";
 import { DrawerIndicator, Header, Pane, Subheader } from "../Components/CustomComponents";
-import { clearLs } from "../common/helperFunctions";
+import { checkDataSrcType, clearLs, createAlert } from "../common/helperFunctions";
 import useGlobalToast from "../common/hooks/useGlobalToast";
+import { PaneSupportText } from "../Components/PaneSupportText";
+import { ScrollView } from "react-native-gesture-handler";
+import { createManualDataSrcId, getStravaClientCredentials } from "../api/authentication";
+import useStravaConnect from "../common/hooks/useStravaConnect";
+import StravaConnectButton from "../Components/Buttons/StravaConnectButton";
 
 const Settings: React.FC<MainDrawerProps<"Settings">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { addToast } = useGlobalToast();
-  const hero = state.hero;
+  const { hero, user } = state;
+  const isStravaUser = "strava" === checkDataSrcType(user.dataSrcId);
 
-  const createDeleteAlert = () => {
-    return Alert.alert(
-      "Delete Account",
-      "WARNING: This is non-reversible!",
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
-        },
-        { text: "OK", onPress: () => handleDeleteAccount() },
-      ],
-      { cancelable: true },
-    );
-  };
+  const { getStravaCredentials, handleStravaRedirect, request, promptAsync, stravaSuccess, helperText, setHasFetchedStravaDetails } = useStravaConnect();
+
+  function handleStravaDisconnection() {
+    async function disconnect() {
+      try {
+        // First Disconnect
+        await disconnectStrava({ email: user.email });
+        // Then add new hf- datasrcid
+        const { user: updatedUser } = await createManualDataSrcId({ email: user.email });
+        dispatch({ type: "SET USER", payload: { user: updatedUser, isSignedIn: true } });
+        addToast("success", `Your Strava credentials have been removed from HeroFit`);
+        clearLs("herofit-stravaActivities");
+      } catch (error) {
+        debugErrors(error, user);
+        addToast("error", `Unable to delete account- ${error.message}`);
+      }
+    }
+    createAlert("Disconnect Strava Account", "Your activities wont sync if you disconnect", disconnect);
+  }
 
   function handleDeleteAccount() {
     // TODO: Delete immediately after account creation doesnt work, hero doesn't have ID
@@ -60,19 +70,52 @@ const Settings: React.FC<MainDrawerProps<"Settings">> = ({ navigation, route }) 
     }
   }
 
+  //Fetch Strava client details ahead of time
+  useEffect(() => {
+    if (!isStravaUser) {
+      // The Strava Client credentials are stored in the state of the hook, and applied to the "Connect Strava" button
+      // Here we are fetching the credentials ahead of time in case they click the button
+      getStravaCredentials();
+    }
+  }, [isStravaUser]);
+
+  useEffect(() => {
+    if (stravaSuccess) {
+      addToast("success", "Strava Connection Successful!");
+    }
+  }, [stravaSuccess]);
+
   return (
     <ScreenContainer screenName={route.name}>
-      <View justifyContent="flex-start">
-        <DrawerIndicator />
-        <Header text="Settings" />
-        <Pane>
-          <Subheader fontSize="lg" text="Permanently remove your account" />
-          <Button onPress={() => clearLs("herofit-stravaActivities")}>Delete LS Activities</Button>
-          <Button variant="caution" onPress={() => createDeleteAlert()}>
+      <DrawerIndicator />
+      <Header text="Settings" />
+      <ScrollView>
+        <Pane mt={5} mb={10}>
+          <Subheader fontSize="xl" text="Strava Settings" />
+          <PaneSupportText iconName="caution" iconColor="base.caution" text="Connect or Disconnect Strava Account.">
+            Disconnecting Strava won't impact your existing activities or Hero. This is useful if you want to assign your Strava account to another Hero.
+          </PaneSupportText>
+          {isStravaUser ? (
+            <Button bgColor="base.strava" _text={{ fontFamily: "heading", fontSize: "2xl" }} mt={5} onPress={() => handleStravaDisconnection()}>
+              Disconnect Strava
+            </Button>
+          ) : (
+            <StravaConnectButton request={getStravaCredentials} promptAsync={promptAsync} setHasFetchedStravaDetails={setHasFetchedStravaDetails} />
+          )}
+        </Pane>
+        <Pane mb={10}>
+          <Subheader fontSize="xl" text="Delete activities cached on device" />
+          <Button _text={{ fontFamily: "heading", fontSize: "2xl" }} mt={5} onPress={() => clearLs("herofit-stravaActivities")}>
+            Delete Activity Cache
+          </Button>
+        </Pane>
+        <Pane mb={10}>
+          <Subheader fontSize="xl" text="Permanently delete your account" />
+          <Button variant="caution" onPress={() => createAlert("Delete Account", "WARNING: This is non-reversible!", handleDeleteAccount)} _text={{ fontFamily: "heading", fontSize: "2xl" }}>
             Delete Account
           </Button>
         </Pane>
-      </View>
+      </ScrollView>
     </ScreenContainer>
   );
 };

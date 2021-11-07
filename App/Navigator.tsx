@@ -39,7 +39,7 @@ const AuthStackScreen = () => {
 };
 
 function filterDrawerContent(props: DrawerContentComponentProps<DrawerContentOptions>, signOut: () => void) {
-  const hiddenScreens = ["SpendQP", "ManualActivity", "AwaitingBattle", "BattleReport", "BattleReportDetail", "Profile"];
+  const hiddenScreens = ["SpendQP", "Activity", "AwaitingBattle", "BattleReport", "BattleReportDetail", "Profile"];
   const filteredProps = {
     ...props,
     state: {
@@ -71,7 +71,7 @@ const DrawerScreen = () => {
       <MainDrawer.Screen name="Feedback" component={Screens.Feedback} />
       <MainDrawer.Screen name="Settings" component={Screens.Settings} />
       <MainDrawer.Screen name="SpendQP" component={Screens.SpendQP} options={{ title: "Quantum Points" }} />
-      <MainDrawer.Screen name="ManualActivity" component={Screens.ManualActivity} />
+      <MainDrawer.Screen name="Activity" component={Screens.Activity} />
       <MainDrawer.Screen name="AwaitingBattle" component={Screens.AwaitingBattle} />
       <MainDrawer.Screen name="BattleReport" component={Screens.BattleReport} />
       <MainDrawer.Screen name="BattleReportDetail" component={Screens.BattleReportDetail} />

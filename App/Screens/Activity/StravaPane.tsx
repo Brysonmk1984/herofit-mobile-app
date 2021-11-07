@@ -27,7 +27,7 @@ const StravaPane: React.FC<StravaPaneProps> = ({ pop }) => {
   return (
     <Pane mb={280}>
       <Subheader fontSize="2xl" text="Strava" />
-      <Box pb={7} mb={7} borderBottomWidth={1} borderBottomColor="white">
+      <Box pb={7} mb={7}>
         <PaneSupportText iconName="info" iconColor="base.info" text="Missing an activity recorded on Strava? Check for new activities:">
           Data is fetched automatically after the app is opened. You can manually check for new activities below:
         </PaneSupportText>
@@ -36,15 +36,6 @@ const StravaPane: React.FC<StravaPaneProps> = ({ pop }) => {
           CHECK STRAVA
         </Button>
       </Box>
-
-      {/* <Box>
-        <PaneSupportText iconName="caution" iconColor="base.caution" text="Connect or Disconnect Strava Account.">
-          Disconnecting Strava won't impact your existing activities or Hero This is useful if you want to assign your Strava account to another Hero.
-        </PaneSupportText>
-        <Button bgColor={!formIsValid ? "base.disabled" : "base.success"} _text={{ fontFamily: "heading", fontSize: "4xl", lineHeight: 45, color: !formIsValid ? "muted.500" : "base.white" }} mt={5} disabled={!formIsValid} onPress={() => handleSubmit(activity, date, duration, distance, speed)}>
-          Disconnect Strava
-        </Button>
-      </Box> */}
     </Pane>
   );
 };

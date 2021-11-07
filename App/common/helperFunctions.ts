@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ItemInstance, Item, FoeType, HeroChoice, CharacterName, CharacterAlias, SkinLcUnderscoreName, SkinName, ServerItemType } from "./types";
 import { getBoulderBroImage, getChronoGuyImage, getCompostCreatureImage, getEmpathAureliaImage, getFiltronFiveImage, getNaturalNinjaImage, getRepeteImage, getSolarCelesteImage, getTimberTerrorImage, getWilhelmTheWildImage } from "./heroImageVariants";
 import herofitTheme from "../styles/herofitTheme";
+import { Alert } from "react-native";
 
 function capitalize<T = string>(val: T) {
   if (typeof val === "string") {
@@ -401,12 +402,10 @@ function equippedSkin(equipped: Item[]): Item {
 }
 
 function equippedPet(equipped: Item[]): Item {
-  console.log("OR THIS", equipped);
   return equipped.find(i => i.type === "pet");
 }
 
 function equippedTitle(equipped: Item[]): Item {
-  console.log("THIS2", equipped);
   return equipped.find(i => i.type === "title");
 }
 
@@ -613,4 +612,27 @@ function determineItemTypeColor(serverItemType: ServerItemType) {
   }
 }
 
-export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, convertAorAn, getHeroAlias, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems, capitalize, getHeroImage, getFoeImage, getPetImage, equippedSkin, equippedPet, equippedTitle, getColorFromClassName, getColorFromItemName, checkForMultipleItem, determineDataSrcType, roundNumberToTenthReturnNumber, roundNumberToThousandthReturnNumber, getFoeColor, determineScenario, convertItemTypeName, determineItemTypeColor };
+function checkDataSrcType(id: string) {
+  if (id) {
+    if (id.length === 8) {
+      return "strava";
+    } else if (id.includes("hf-")) {
+      return "herofit";
+    }
+  }
+  throw new Error("DataSrcId is unknown");
+}
+
+const createAlert = (title: string, message: string, cb: () => void) => {
+  return Alert.alert(
+    title,
+    message,
+    [
+      { text: "Cancel", style: "cancel" },
+      { text: "OK", onPress: () => cb() },
+    ],
+    { cancelable: true },
+  );
+};
+
+export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, convertAorAn, getHeroAlias, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems, capitalize, getHeroImage, getFoeImage, getPetImage, equippedSkin, equippedPet, equippedTitle, getColorFromClassName, getColorFromItemName, checkForMultipleItem, determineDataSrcType, roundNumberToTenthReturnNumber, roundNumberToThousandthReturnNumber, getFoeColor, determineScenario, convertItemTypeName, determineItemTypeColor, checkDataSrcType, createAlert };

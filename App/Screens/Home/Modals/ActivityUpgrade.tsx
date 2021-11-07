@@ -37,7 +37,7 @@ const ActivityUpgrade: React.FC<ActivityUpgradeProps> = ({ id, activities, modal
 
   function handleBackToActivities() {
     setNewActivities([]);
-    goBack("App", { screen: "ManualActivity" });
+    goBack("App", { screen: "Activity" });
     closeModal(id);
   }
 

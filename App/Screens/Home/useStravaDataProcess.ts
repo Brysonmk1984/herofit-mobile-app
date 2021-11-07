@@ -30,7 +30,7 @@ async function _checkStravaToken(user: User, state, dispatch): Promise<string> {
 
     const accessTokenData = await getNewAccessToken(authData);
     const { access_token: stravaAccessToken, expires_at: stravaAccessTokenExpiration, refresh_token: stravaRefreshToken } = accessTokenData;
-    console.log("STRAVA - ATD", accessTokenData);
+    //console.log("STRAVA - ATD", accessTokenData);
     let credentialsForDB = { email: user.email, stravaAccessToken, stravaAccessTokenExpiration, stravaRefreshToken };
 
     interface UpdatedCredentialsForDB {
@@ -77,10 +77,9 @@ function _handleStravaActivities(hero: Hero, stravaActivities: any[], dateOfLate
   // IF Existing User, only use activities after latest saved, or if none are saved, use it
   if (hero.hasBeenUpgraded) {
     newStravaActivities = stravaActivities.filter(activity => {
-      let activityDate = moment.utc(activity.start_date, "YYYY-MM-DD[T]HH:mm[Z]");
-      //console.log('is after latest saved', activityDate.isAfter(dateOfLatestSaved), 'ID - ', activity.id);
-      return activityDate.isAfter(dateOfLatestSaved) || dateOfLatestSaved === null;
+      return moment(activity.start_date).isAfter(dateOfLatestSaved) || dateOfLatestSaved === null;
     });
+
     // If not a new user, but there is no saved activities, get everything after account creation AND 5 before.
     // This is for users who dont buff avatar right away.
   } else {
@@ -95,19 +94,21 @@ function _handleStravaActivities(hero: Hero, stravaActivities: any[], dateOfLate
     });
     newStravaActivities = [...afterArray, ...beforeArray.slice(0, 5)];
   }
-  // console.log("NAL!!!", newStravaActivities.length);
+
   // If there are any new activities, present user option to upgrade
   if (newStravaActivities.length) {
     const newFormatActivities = newStravaActivities.map(act => {
+      //console.log("ACT=", act);
+      // I'm confused... sometimes newStrava activities are in Strava format, but other times they're already converted to HeroFit format... Look into this
       return {
         id: act.id,
-        activityDate: act.start_date,
+        activityDate: act.start_date || act.activityDate,
         type: act.type,
-        averageSpeed: act.average_speed,
-        maxSpeed: act.max_speed,
+        averageSpeed: act.average_speed ?? act.averageSpeed,
+        maxSpeed: act.max_speed ?? act.maxSpeed,
         distance: act.distance,
-        duration: act.moving_time,
-        elevationGain: act.total_elevation_gain,
+        duration: act.moving_time ?? act.duration,
+        elevationGain: act.total_elevation_gain || act.elevationGain,
         source: "strava",
       };
     });
@@ -137,6 +138,7 @@ function useStravaDataProcess(): { newStravaActivities: Activity[]; getFreshStra
 
       const formattedNewActivities = _handleStravaActivities(hero, activities, state.latestSavedActivityDate, state.user);
       await setNewStravaActivities(formattedNewActivities);
+
       // Setting LS to prevent repeated calls to strava server - Expires in 30 minutes
       await setLsWithExpiry("herofit-stravaActivities", formattedNewActivities, 1800000);
       if (manually && !formattedNewActivities?.length) {
@@ -154,6 +156,7 @@ function useStravaDataProcess(): { newStravaActivities: Activity[]; getFreshStra
     if (state.user?.dataSrcId) {
       (async () => {
         const lsSavedStravaActivities: any[] = await getLsWithExpiry("herofit-stravaActivities");
+        //console.log("LS ACTIVITIES=", lsSavedStravaActivities);
         setLsStrava(lsSavedStravaActivities);
         setLsStravaCheckHappened(true);
       })();
@@ -171,11 +174,12 @@ function useStravaDataProcess(): { newStravaActivities: Activity[]; getFreshStra
           // If there are locally saved strava activities, use cached version
           // This is to prevent too many requests against Strava API
           if (lsStrava) {
-            //console.log("YES LS STRAVA DATA");
+            console.log("YES LS STRAVA DATA");
             const formattedNewActivities = _handleStravaActivities(hero, lsStrava, state.latestSavedActivityDate, state.user);
+            //console.log("FNA=", formattedNewActivities);
             setNewStravaActivities(formattedNewActivities);
           } else {
-            //console.log("NO LS STRAVA DATA");
+            console.log("NO LS STRAVA DATA");
             // Otherwise, do Strava Check
             getFreshStravaData();
           }

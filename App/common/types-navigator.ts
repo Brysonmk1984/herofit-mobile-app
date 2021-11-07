@@ -24,7 +24,7 @@ type MainDrawerParamList = {
   Settings: undefined;
   Loading: undefined;
   SpendQP: undefined;
-  ManualActivity: {
+  Activity: {
     isStravaUser: boolean;
   };
   AwaitingBattle: {

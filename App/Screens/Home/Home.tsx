@@ -21,6 +21,7 @@ import moment from "moment";
 import useGlobalToast from "../../common/hooks/useGlobalToast";
 import useInventory from "../../common/hooks/useInventory";
 import * as Linking from "expo-linking";
+import { clearLs } from "../../common/helperFunctions";
 const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { openModal, closeModal } = useModal();
@@ -45,6 +46,8 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
 
       dispatch({ type: "POST UPGRADE", payload: { hero: heroEquipped, latestSavedActivities: [...state.latestSavedActivities, ...upgradeResults.activities], latestSavedActivityDate: maxDate } });
       setNewActivities([]);
+      clearLs("herofit-stravaActivities");
+
       // Builds the Correct message based on returned data from upgrade
       const messageArray = buildGainsMessages(upgradeResults);
 
@@ -61,14 +64,6 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
     }
   }
 
-  // Automatic Activity Data fetching
-  useEffect(() => {
-    // For new users, newStravaActivities is undefined, otherwise it's an array
-    if (newStravaActivities && newStravaActivities.length) {
-      setNewActivities(newStravaActivities);
-    }
-  }, [newStravaActivities]);
-
   // Determine which modal should pop up
   useEffect(() => {
     //console.log("SU", state.userStatus, state.user);
@@ -81,6 +76,16 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
     }
   }, [state.userStatus, state.user, state.user?.dataSrcId]);
 
+  // STRAVA Automatic Activity Data fetching
+  useEffect(() => {
+    //console.log("NSA", newStravaActivities);
+    // For new users, newStravaActivities is undefined, otherwise it's an array
+    if (newStravaActivities && newStravaActivities.length) {
+      setNewActivities(newStravaActivities);
+    }
+  }, [newStravaActivities]);
+
+  // MANUAL ACTIVITY
   useEffect(() => {
     if (route.params?.newManualActivity) {
       setNewActivities([...newActivities, route.params.newManualActivity]);
@@ -88,6 +93,7 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
     }
   }, [route.params?.newManualActivity]);
 
+  // STRAVA MANUALLY FETCHED - User Clicked the button to manually fetch data from the Manual page
   useEffect(() => {
     if (route.params?.fetchStravaManually) {
       getFreshStravaData(true);

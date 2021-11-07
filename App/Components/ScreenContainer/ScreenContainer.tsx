@@ -28,7 +28,7 @@ function determineImageBackground({ type, name }: { type: string; name: string }
         return require("../../../assets/images/backgrounds/pets-background-2.webp");
       case "SpendQP":
         return require("../../../assets/images/backgrounds/qp-background.webp");
-      case "ManualActivity":
+      case "Activity":
         return require("../../../assets/images/backgrounds/natural-ninja-background.webp");
       case "AboutGame":
         return require("../../../assets/images/backgrounds/boulder-bro-background.webp");

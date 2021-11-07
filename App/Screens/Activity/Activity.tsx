@@ -14,12 +14,12 @@ import SpeedModal from "./SpeedModal";
 import DistanceModal from "./DistanceModal";
 import DurationModal from "./DurationModal";
 import { convertMilesToMeters, convertMilesHoursToMetersSeconds, convertDurationStringToSeconds, calculateOffSet } from "../../common/activityCalculations";
-import { roundNumberToTenthReturnNumber, roundNumberToThousandthReturnNumber } from "../../common/helperFunctions";
+import { checkDataSrcType, roundNumberToTenthReturnNumber, roundNumberToThousandthReturnNumber } from "../../common/helperFunctions";
 import moment from "moment";
 import { PaneSupportText } from "../../Components/PaneSupportText";
 import StravaPane from "./StravaPane";
 
-const ManualActivity = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
+const Activity = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
   const windowHeight = useWindowDimensions().height;
   const refRBSheet = useRef({ open: () => null, close: () => null });
   const bottomDrawerHeight = windowHeight / 2;
@@ -35,7 +35,7 @@ const ManualActivity = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
   const [speed, setSpeed] = useState(0);
   const { openModal } = useModal();
   const { state } = useContext(GlobalStateContext);
-  const isStravaUser = state.user.stravaRefreshToken !== null;
+  const isStravaUser = "strava" === checkDataSrcType(state.user.dataSrcId);
 
   function resetForm() {
     setActivity(null);
@@ -114,7 +114,7 @@ const ManualActivity = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
     //console.log(distance, typeof distance, totalMeters, speed, typeof speed, averageMetersPerSecond, duration, totalSeconds);
 
     const dateWithOffset = calculateOffSet(date);
-    console.log(date, dateWithOffset);
+    //console.log(date, dateWithOffset);
     const newManualActivity = {
       source: "herofit",
       type: activity,
@@ -220,4 +220,4 @@ const ManualActivity = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
   );
 };
 
-export default ManualActivity;
+export default Activity;

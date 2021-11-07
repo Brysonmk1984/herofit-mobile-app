@@ -7,14 +7,14 @@ import moment from "moment";
 const ENV: string = Constants.manifest.extra.ENV;
 
 // COMMON
-import debugErrors from "../../../../../common/debugErrors";
-import { GlobalStateContext } from "../../../../../store";
-import useAxios from "../../../../../common/hooks/useAxios";
+import debugErrors from "../debugErrors";
+import { GlobalStateContext } from "../../store";
+import useAxios from "./useAxios";
 // API
-import stravaEndpoints from "./stravaEndpoints";
-import { insertStravaCredentials, getStravaClientCredentials } from "../../../../../api/authentication";
-import { getStravaUserId } from "../../../../../api/strava";
-import useGlobalToast from "../../../../../common/hooks/useGlobalToast";
+import stravaEndpoints from "../../Screens/Home/Modals/ChooseActivityEntry/Strava/stravaEndpoints";
+import { insertStravaCredentials, getStravaClientCredentials } from "../../api/authentication";
+import { getStravaUserId } from "../../api/strava";
+import useGlobalToast from "./useGlobalToast";
 import { makeRedirectUri } from "expo-auth-session";
 
 interface StravaCredentials {
@@ -26,7 +26,7 @@ async function _insertUpdatedStravaCredentials(credentialsForDB: StravaCredentia
   try {
     // Insert user-specific Strava credentials into our db
     const { user } = await insertStravaCredentials({ ...credentialsForDB, dataSrcId, email });
-    dispatch({ type: "SET USER", payload: { user, isSignedIn: true } });
+    dispatch({ type: "SET USER", payload: { user, isSignedIn: true, dataSrcId: user.dataSrcId } });
   } catch (error) {
     if (error.debug[0].msg === "SequelizeUniqueConstraintError: Validation error") {
       error.message = "Strava Account already in use. Sharing Strava accounts among heroes is not permitted within HeroFit";
@@ -35,7 +35,17 @@ async function _insertUpdatedStravaCredentials(credentialsForDB: StravaCredentia
   }
 }
 
-function useStravaConnect() {
+interface StravaConnectReturn {
+  getStravaCredentials: () => void;
+  handleStravaRedirect: (event: any) => void;
+  request: AuthSession.AuthRequest;
+  promptAsync: (options?: AuthSession.AuthRequestPromptOptions) => Promise<AuthSession.AuthSessionResult>;
+  stravaSuccess: boolean;
+  helperText: string;
+  setHasFetchedStravaDetails: (hasFetchedStravaDetails: boolean) => void;
+}
+
+function useStravaConnect(): StravaConnectReturn {
   const { state, dispatch } = useContext(GlobalStateContext);
   const [redirectData, setRedirectData] = useState(null);
   const [hasFetchedStravaDetails, setHasFetchedStravaDetails] = useState(false);
@@ -79,7 +89,6 @@ function useStravaConnect() {
   // When receiving an incoming user back from Strava redirect
   // save data to state
   function handleStravaRedirect(event) {
-    console.log("HERER", handleStravaRedirect);
     if (Constants.platform.ios) {
       WebBrowser.dismissBrowser();
     } else {

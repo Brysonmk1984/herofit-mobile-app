@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ActivityEntrySelect } from "./ActivityEntrySelect";
-import StravaConnectButton from "./Strava/StravaConnectButton";
+import StravaConnectButton from "../../../../Components/Buttons/StravaConnectButton";
 import { CharacterModal } from "../../../../Components/ModalTemplates/ModalTemplates";
 import { BodyContent } from "../../../../Components/ModalTemplates/BasicModal/Content";
 import { GlobalStateContext } from "../../../../store";
@@ -8,7 +8,7 @@ import { createManualDataSrcId } from "../../../../api/authentication";
 import debugErrors from "../../../../common/debugErrors";
 import useModal from "../../../../common/hooks/useModal";
 import * as Linking from "expo-linking";
-import useStravaConnect from "./Strava/useStravaConnect";
+import useStravaConnect from "../../../../common/hooks/useStravaConnect";
 import HelperText from "../../../../Components/HelperText";
 import LoadingInPane from "../../../../Components/LoadingInPane";
 import { Box } from "native-base";
@@ -46,7 +46,7 @@ const ChooseActivityEntry: React.FC<ChooseActivityEntryProps> = ({ id }) => {
     await getStravaCredentials();
     setConfirmButton({ modalAction: () => {}, buttonText: "Connect Strava" });
     setLoading(false);
-    console.log("ADDING EVENT LISTENER", Linking.addEventListener);
+    //console.log("ADDING EVENT LISTENER", Linking.addEventListener);
     //Linking.addEventListener("url", data => handleStravaRedirect(data));
     //Linking.getInitialURL().then(url => handleStravaRedirect(url));
     //BackHandler.exitApp();
@@ -87,7 +87,7 @@ const ChooseActivityEntry: React.FC<ChooseActivityEntryProps> = ({ id }) => {
           <>
             <ActivityEntrySelect activityRadioValue={activityRadioValue} setActivityRadioValue={setActivityRadioValue} />
             {/* <HeroInitiationChecklist crossedOut={[true, true, true]} /> */}
-            {activityRadioValue === "Strava" && <StravaConnectButton request={request} promptAsync={promptAsync} setHasFetchedStravaDetails={setHasFetchedStravaDetails} />}
+            {activityRadioValue === "Strava" && <StravaConnectButton request={getStravaCredentials} promptAsync={promptAsync} setHasFetchedStravaDetails={setHasFetchedStravaDetails} />}
           </>
         )}
         {loading && <LoadingInPane text="Fetching Client Credentials" />}
