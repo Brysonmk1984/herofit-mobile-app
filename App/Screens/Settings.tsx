@@ -9,7 +9,7 @@ import { deleteAccount } from "../api/account";
 import { GlobalStateContext } from "../store";
 import { MainDrawerProps } from "../common/types-navigator";
 import { isExistingHero } from "../common/typeGuards";
-import { DrawerIndicator } from "../Components/CustomComponents";
+import { DrawerIndicator, Header, Pane, Subheader } from "../Components/CustomComponents";
 import { clearLs } from "../common/helperFunctions";
 import useGlobalToast from "../common/hooks/useGlobalToast";
 
@@ -60,33 +60,19 @@ const Settings: React.FC<MainDrawerProps<"Settings">> = ({ navigation, route }) 
     }
   }
 
-  function signOut(): void {
-    clearJwtInLocalStorage();
-    dispatch({ type: "SET ISSIGNEDIN", payload: { isSignedIn: false } });
-  }
-
-  function myCB() {
-    console.log("works");
-  }
-
   return (
     <ScreenContainer screenName={route.name}>
-      <Button onPress={signOut}>Delete JWT</Button>
-      <Button onPress={() => clearLs("herofit-stravaActivities")}>Delete LS Activities</Button>
-      <Button variant="caution" onPress={() => createDeleteAlert()}>
-        Delete ACCOUNT
-      </Button>
-      <Button
-        onPress={() => {
-          dispatch({ type: "SET USER STATUS", payload: { userStatus: "new" } });
-          dispatch({ type: "SET ISSIGNEDIN", payload: { isSignedIn: false } });
-          return navigation.navigate("Auth", { screen: "SelectHero" });
-        }}
-      >
-        Select Hero
-      </Button>
-      <Button onPress={() => addToast("success", "message")}>BUTTON</Button>
-      <DrawerIndicator />
+      <View justifyContent="flex-start">
+        <DrawerIndicator />
+        <Header text="Settings" />
+        <Pane>
+          <Subheader fontSize="lg" text="Permanently remove your account" />
+          <Button onPress={() => clearLs("herofit-stravaActivities")}>Delete LS Activities</Button>
+          <Button variant="caution" onPress={() => createDeleteAlert()}>
+            Delete Account
+          </Button>
+        </Pane>
+      </View>
     </ScreenContainer>
   );
 };

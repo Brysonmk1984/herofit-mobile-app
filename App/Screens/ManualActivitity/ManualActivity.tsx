@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Button, Platform, useWindowDimensions } from "react-native";
-import { Center, Heading, Box, HStack, VStack, Text, ScrollView, FlatList, View, useTheme, Input, Pressable, Modal } from "native-base";
-import { ScreenContainer, ScreenActionButton, Header, Icon, Pane, Subheader, HelperText } from "../../Components/CustomComponents";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { Platform, useWindowDimensions } from "react-native";
+import { Center, Heading, Box, HStack, VStack, Text, ScrollView, FlatList, View, useTheme, Input, Pressable, Modal, Button } from "native-base";
+import { ScreenContainer, ScreenActionButton, Header, Icon, Pane, Subheader, HelperText, DrawerIndicator } from "../../Components/CustomComponents";
 import useModal from "../../common/hooks/useModal";
 import { AuthStackProps } from "../../common/types-navigator";
 import { GlobalStateContext } from "../../store";
@@ -16,6 +16,8 @@ import DurationModal from "./DurationModal";
 import { convertMilesToMeters, convertMilesHoursToMetersSeconds, convertDurationStringToSeconds, calculateOffSet } from "../../common/activityCalculations";
 import { roundNumberToTenthReturnNumber, roundNumberToThousandthReturnNumber } from "../../common/helperFunctions";
 import moment from "moment";
+import { PaneSupportText } from "../../Components/PaneSupportText";
+import StravaPane from "./StravaPane";
 
 const ManualActivity = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
   const windowHeight = useWindowDimensions().height;
@@ -27,12 +29,13 @@ const ManualActivity = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
   const [activity, setActivity] = useState(null);
   const initialDate = new Date();
   initialDate.setHours(initialDate.getHours() - 1);
-
   const [date, setDate] = useState<Date>(initialDate);
   const [duration, setDuration] = useState("0 min");
   const [distance, setDistance] = useState(0);
   const [speed, setSpeed] = useState(0);
   const { openModal } = useModal();
+  const { state } = useContext(GlobalStateContext);
+  const isStravaUser = state.user.stravaRefreshToken !== null;
 
   function resetForm() {
     setActivity(null);
@@ -142,33 +145,41 @@ const ManualActivity = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
   return (
     <ScreenContainer screenName={route.name}>
       <View justifyContent="flex-start">
-        <Center>
-          <Header text="Activity" />
-        </Center>
-        <Pane>
-          <Subheader fontSize="lg" text="Manually record a workout you've completed" />
-          {/* ALL INPUTS */}
-          <VStack space={2}>
-            {/* Activity Type Input */}
-            <PressableInput ml={2} mr={2} value={activityList.find(act => act.type === activity)?.alias} placeholder="Select Activity" action={() => refRBSheet.current.open()} />
+        <DrawerIndicator />
 
-            {/* Date - Time - Duration Input */}
-            <DateTimeDuration
-              setParentDate={setDate}
-              initialDate={initialDate}
-              render={() => {
-                return <PressableInput flex={1} ml={2} mr={2} action={() => openModal("DurationModal")} value={duration} />;
-              }}
-            />
-            <HStack>
-              {/* Distance Input */}
-              <PressableInput flex={1} ml={2} mr={2} action={() => openModal("DistanceModal")} value={`${distance} mi`} />
-              {/* Speed Input */}
-              <PressableInput flex={1} ml={2} mr={2} action={() => openModal("SpeedModal")} value={`${speed} mph`} />
-            </HStack>
-            {helperText && <HelperText type="error" text={helperText} />}
-          </VStack>
-        </Pane>
+        <Header text="Activity" />
+
+        <ScrollView flexShrink={0}>
+          <Pane mb={10} mt={5}>
+            <Subheader fontSize="lg" text="Manually record a workout you've completed" />
+            {/* ALL INPUTS */}
+            <VStack space={2}>
+              {/* Activity Type Input */}
+              <PressableInput ml={2} mr={2} value={activityList.find(act => act.type === activity)?.alias} placeholder="Select Activity" action={() => refRBSheet.current.open()} />
+
+              {/* Date - Time - Duration Input */}
+              <DateTimeDuration
+                setParentDate={setDate}
+                initialDate={initialDate}
+                render={() => {
+                  return <PressableInput flex={1} ml={2} mr={2} action={() => openModal("DurationModal")} value={duration} />;
+                }}
+              />
+              <HStack>
+                {/* Distance Input */}
+                <PressableInput flex={1} ml={2} mr={2} action={() => openModal("DistanceModal")} value={`${distance} mi`} />
+                {/* Speed Input */}
+                <PressableInput flex={1} ml={2} mr={2} action={() => openModal("SpeedModal")} value={`${speed} mph`} />
+              </HStack>
+              {helperText && <HelperText type="error" text={helperText} />}
+            </VStack>
+            <Button bgColor={!formIsValid ? "base.disabled" : "base.success"} _text={{ fontFamily: "heading", fontSize: "4xl", lineHeight: 45, color: !formIsValid ? "muted.500" : "base.white" }} mt={5} disabled={!formIsValid} onPress={() => handleSubmit(activity, date, duration, distance, speed)}>
+              APPLY TO HERO
+            </Button>
+          </Pane>
+
+          {isStravaUser && <StravaPane pop={() => navigation.push("App", { screen: "Home", params: { fetchStravaManually: true } })} />}
+        </ScrollView>
       </View>
 
       {/* HIDDEN MENU */}
@@ -205,8 +216,6 @@ const ManualActivity = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
 
       {/* Speed Wheel Selector Modal */}
       <SpeedModal id="SpeedModal" title="Speed" modalAction={setSpeed} speed={speed} />
-
-      <ScreenActionButton disabled={!formIsValid} text="Apply Activity to Hero" action={() => handleSubmit(activity, date, duration, distance, speed)} />
     </ScreenContainer>
   );
 };

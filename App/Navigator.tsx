@@ -8,6 +8,8 @@ import { DrawerIndicator } from "./Components/DrawerIndicator";
 import { AntDesign } from "@expo/vector-icons";
 import { Icon } from "native-base";
 import * as WebBrowser from "expo-web-browser";
+import { clearJwtInLocalStorage } from "./common/jwtModule";
+import useSignOut from "./common/hooks/useSignout";
 
 // ROOT First level Navigator, used to determine if the user should go through auth sequence of straight to the app
 // TS - Ben doesn't pass a generic here, but the docs do.
@@ -36,7 +38,7 @@ const AuthStackScreen = () => {
   );
 };
 
-function filterDrawerContent(props: DrawerContentComponentProps<DrawerContentOptions>) {
+function filterDrawerContent(props: DrawerContentComponentProps<DrawerContentOptions>, signOut: () => void) {
   const hiddenScreens = ["SpendQP", "ManualActivity", "AwaitingBattle", "BattleReport", "BattleReportDetail", "Profile"];
   const filteredProps = {
     ...props,
@@ -46,11 +48,13 @@ function filterDrawerContent(props: DrawerContentComponentProps<DrawerContentOpt
       routes: props.state.routes.filter(route => hiddenScreens.includes(route.name) === false),
     },
   };
+
   return (
     <DrawerContentScrollView {...filteredProps}>
       <DrawerItemList {...filteredProps} />
       <DrawerItem label="ItemWiki" onPress={() => WebBrowser.openBrowserAsync(`https://herofit.io/items/`)} />
       <DrawerItem label="Ranking" onPress={() => WebBrowser.openBrowserAsync(`https://herofit.io/ranking/`)} />
+      <DrawerItem label="Sign Out" onPress={() => signOut()} />
     </DrawerContentScrollView>
   );
 }
@@ -58,8 +62,10 @@ function filterDrawerContent(props: DrawerContentComponentProps<DrawerContentOpt
 // IN APP Second level Navigator, used for directing users who are already authorized
 const MainDrawer = createDrawerNavigator<MainDrawerParamList>();
 const DrawerScreen = () => {
+  const { signOut } = useSignOut();
+
   return (
-    <MainDrawer.Navigator drawerContent={props => filterDrawerContent(props)} drawerPosition="right" screenOptions={{ headerShown: false, ...baseScreenStyle }}>
+    <MainDrawer.Navigator drawerContent={props => filterDrawerContent(props, signOut)} drawerPosition="right" screenOptions={{ headerShown: false, ...baseScreenStyle }}>
       <MainDrawer.Screen options={{ drawerIcon: ({ focused, size }) => <Icon as={AntDesign} name="home" size={10} color="base.link" /> }} name="Home" component={Screens.Home} />
       <MainDrawer.Screen name="Adversaries" component={Screens.Adversaries} />
       <MainDrawer.Screen name="Feedback" component={Screens.Feedback} />

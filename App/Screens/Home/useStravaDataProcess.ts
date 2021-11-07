@@ -118,13 +118,37 @@ function _handleStravaActivities(hero: Hero, stravaActivities: any[], dateOfLate
 
 // IF Strava is the dataSrc method on user's account,
 // GET STRAVA ACTIVITIES TO FIGURE OUT IF THE USER HAS NEW UPGRADES TO ADD
-function useStravaDataProcess(): { newStravaActivities: Activity[] } {
+function useStravaDataProcess(): { newStravaActivities: Activity[]; getFreshStravaData: (manually?: boolean) => void } {
   const { state, dispatch } = useContext(GlobalStateContext);
   const [lsStrava, setLsStrava] = useState<any[] | undefined>();
   const [lsStravaCheckHappened, setLsStravaCheckHappened] = useState(false);
   const [newStravaActivities, setNewStravaActivities] = useState<Activity[]>([]);
   const hero = state.hero as Hero;
   const { addToast } = useGlobalToast();
+
+  async function getFreshStravaData(manually?: boolean): Promise<void> {
+    if (manually) {
+      setLsStrava([]);
+      setLsStravaCheckHappened(false);
+    }
+    try {
+      const accessToken = await _checkStravaToken(state.user, state, dispatch);
+      const activities = await getStravaActivityData(accessToken);
+
+      const formattedNewActivities = _handleStravaActivities(hero, activities, state.latestSavedActivityDate, state.user);
+      await setNewStravaActivities(formattedNewActivities);
+      // Setting LS to prevent repeated calls to strava server - Expires in 30 minutes
+      await setLsWithExpiry("herofit-stravaActivities", formattedNewActivities, 1800000);
+      if (manually && !formattedNewActivities?.length) {
+        addToast("info", `Couldn't find any new Strava activities...`);
+      }
+      return;
+    } catch (error) {
+      debugErrors(error, state.user);
+      addToast("error", `${error.status}: ${error.message}`);
+    }
+  }
+
   // Check if Strava User && get lsSaved Strava activities
   useEffect(() => {
     if (state.user?.dataSrcId) {
@@ -153,19 +177,7 @@ function useStravaDataProcess(): { newStravaActivities: Activity[] } {
           } else {
             //console.log("NO LS STRAVA DATA");
             // Otherwise, do Strava Check
-            try {
-              const accessToken = await _checkStravaToken(state.user, state, dispatch);
-              const activities = await getStravaActivityData(accessToken);
-
-              const formattedNewActivities = _handleStravaActivities(hero, activities, state.latestSavedActivityDate, state.user);
-
-              setNewStravaActivities(formattedNewActivities);
-              // Setting LS to prevent repeated calls to strava server - Expires in 30 minutes
-              setLsWithExpiry("herofit-stravaActivities", formattedNewActivities, 1800000);
-            } catch (error) {
-              debugErrors(error, state.user);
-              addToast("error", `${error.status}: ${error.message}`);
-            }
+            getFreshStravaData();
           }
         }
       })();
@@ -174,6 +186,7 @@ function useStravaDataProcess(): { newStravaActivities: Activity[] } {
 
   return {
     newStravaActivities,
+    getFreshStravaData,
   };
 }
 

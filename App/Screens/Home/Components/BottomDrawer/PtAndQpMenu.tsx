@@ -26,7 +26,7 @@ export const PtAndQpMenu: React.FC<PtAndQpMenuProps> = ({ photonTokens, qp, wind
       </View>
       {/* Right: QP Menu */}
 
-      <View alignSelf="center" style={[styles.trapezoid, styles.trapezoidRight, { width: windowWidth * 0.31 }]}>
+      <View zIndex={1001} elevation={1001} alignSelf="center" style={[styles.trapezoid, styles.trapezoidRight, { width: windowWidth * 0.31 }]}>
         <Pressable h={40} w={windowWidth * 0.31} alignItems="center" onPress={() => navigation.push("App", { screen: "SpendQP" })}>
           {qp ? (
             <View flexDirection="row">
@@ -67,11 +67,5 @@ const styles = StyleSheet.create({
     borderLeftWidth: 20,
     borderRightWidth: 0,
     right: 0,
-  },
-  bottomDrawer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#000",
   },
 });

@@ -16,6 +16,7 @@ type RootStackParamList = {
 type MainDrawerParamList = {
   Home: {
     newManualActivity?: Activity;
+    fetchStravaManually?: boolean;
   };
   Campaign: undefined;
   Inventory: undefined;
@@ -23,7 +24,9 @@ type MainDrawerParamList = {
   Settings: undefined;
   Loading: undefined;
   SpendQP: undefined;
-  ManualActivity: undefined;
+  ManualActivity: {
+    isStravaUser: boolean;
+  };
   AwaitingBattle: {
     foe: Foe;
     rewards: Item[] | null;

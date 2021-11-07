@@ -24,7 +24,7 @@ import * as Linking from "expo-linking";
 const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { openModal, closeModal } = useModal();
-  const { newStravaActivities } = useStravaDataProcess();
+  const { newStravaActivities, getFreshStravaData } = useStravaDataProcess();
   const [newActivities, setNewActivities] = useState<Activity[]>([]);
   const { addToast } = useGlobalToast();
   const { equippedSkin, equippedPet, equippedTitle } = useInventory(true);
@@ -87,6 +87,12 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
       openModal("ActivityUpgrade");
     }
   }, [route.params?.newManualActivity]);
+
+  useEffect(() => {
+    if (route.params?.fetchStravaManually) {
+      getFreshStravaData(true);
+    }
+  }, [route.params?.fetchStravaManually]);
 
   return (
     <ScreenContainer bg={<Background />} screenName={route.name}>
