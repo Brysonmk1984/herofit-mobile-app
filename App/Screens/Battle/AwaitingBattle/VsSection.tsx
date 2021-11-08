@@ -14,14 +14,18 @@ const VsSection: React.FC<VsSectionProps> = ({ height, handleNavigation }) => {
   const vsColors = ["transparent", "#ffffff", "transparent"];
 
   return (
-    <VStack zIndex={100} h={height * 0.45} w="100%" justifyContent="center" alignItems="center" position="absolute" top={height * 0.26}>
-      <LinearGradient colors={vsColors} style={styles.vsGradient} alignItems="center" />
+    <VStack zIndex={100} h={height * 0.45} w="100%" position="absolute" top={height * 0.3}>
       <Pressable onPress={() => handleNavigation()}>
-        <Box justifyContent="center" alignItems="center">
-          <Text style={styles.textShadow} mt={-10} mb={-5} fontSize={140} fontFamily="heading">
-            VS
-          </Text>
-          <CountdownTimer fontSize={30} hideType={true} type={"Battle"} />
+        <Box w="100%" justifyContent="center" alignItems="center">
+          <LinearGradient colors={vsColors} style={styles.vsGradient} alignItems="center" />
+          <Box justifyContent="center" alignItems="center">
+            <Text style={styles.textShadow} mt={0} fontSize={140} fontFamily="heading">
+              VS
+            </Text>
+            <Box mt={-35} mb={35}>
+              <CountdownTimer fontSize={40} hideType={true} type={"Battle"} />
+            </Box>
+          </Box>
         </Box>
       </Pressable>
     </VStack>

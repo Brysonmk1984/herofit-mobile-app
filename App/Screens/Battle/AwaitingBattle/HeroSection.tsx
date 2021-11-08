@@ -12,9 +12,10 @@ interface HeroSectionProps {
   width: number;
   rewards: Item[];
   setPressedItem: (item: Item) => void;
+  handleNavigation: () => void;
 }
 
-const HeroSection: React.FC<HeroSectionProps> = ({ height: deviceHeight, width: deviceWidth, rewards, setPressedItem }) => {
+const HeroSection: React.FC<HeroSectionProps> = ({ height: deviceHeight, width: deviceWidth, rewards, setPressedItem, handleNavigation }) => {
   const { state } = useContext(GlobalStateContext);
   const propsForHeroImage = (({ character, equipped, alias, status }) => ({ character, equipped, alias, skin: equippedSkin(equipped), status }))(state.hero);
   const heroColors = [state.hero.colors[0], "#ffffff"];
@@ -62,10 +63,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ height: deviceHeight, width: 
   }, []);
 
   return (
-    <Box flex={1}>
+    <Pressable flex={1} onPress={() => handleNavigation()}>
       <LinearGradient end={{ x: 0.5, y: 1 }} colors={heroColors} style={styles.heroGradient} />
-      <Animated.View position="absolute" left={-5} top={-35} zIndex={1} style={{ transform: [{ translateX: slideAnim }], opacity: opacityAnim }}>
-        <HeroImage width={deviceHeight * 0.5} height={deviceHeight * 0.5} {...propsForHeroImage} />
+      <Animated.View position="absolute" left={20} top={-15} zIndex={1} style={{ transform: [{ translateX: slideAnim }], opacity: opacityAnim }}>
+        <HeroImage width={deviceHeight * 0.4} height={deviceHeight * 0.4} {...propsForHeroImage} />
       </Animated.View>
       <VStack position="absolute" right={1} top={1}>
         <Text textAlign="right" fontSize={nameSize} fontFamily="heading">
@@ -76,7 +77,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ height: deviceHeight, width: 
         </Text>
         {rewards && renderRewards(rewards)}
       </VStack>
-    </Box>
+    </Pressable>
   );
 };
 

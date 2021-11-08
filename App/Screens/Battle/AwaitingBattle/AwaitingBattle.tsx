@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useWindowDimensions } from "react-native";
+import { Pressable, useWindowDimensions } from "react-native";
 import { MainDrawerProps } from "../../../common/types-navigator";
 import { ScreenContainer } from "../../../Components/CustomComponents";
 import VsSection from "./VsSection";
@@ -67,9 +67,10 @@ const AwaitingBattle: React.FC<MainDrawerProps<"AwaitingBattle">> = ({ navigatio
 
   return (
     <ScreenContainer screenName={route.name}>
-      <HeroSection rewards={rewards} height={height} width={width} setPressedItem={setPressedItem} />
-      <FoeSection foe={foe} height={height} width={width} character={character} />
+      <HeroSection rewards={rewards} height={height} width={width} setPressedItem={setPressedItem} handleNavigation={isInstant ? () => null : handleNavigation} />
+      <FoeSection foe={foe} height={height} width={width} character={character} handleNavigation={isInstant ? () => null : handleNavigation} />
       <VsSection height={height} handleNavigation={isInstant ? () => null : handleNavigation} />
+
       {pressedItem && <ItemDetail id="AwaitingBattleItemDetail" item={pressedItem} character={character} buttonText="OK" />}
     </ScreenContainer>
   );
