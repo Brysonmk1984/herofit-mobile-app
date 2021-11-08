@@ -1,9 +1,9 @@
-import React from "react";
+import React, { ReactChild } from "react";
 import { HStack, Box, Text } from "native-base";
 import Icon from "./Icon";
 
 interface PaneSupportTextProps {
-  children: string;
+  children: string | ReactChild;
   iconName: string;
   text: string;
   iconColor?: string;

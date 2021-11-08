@@ -18,8 +18,9 @@ import { checkDataSrcType, roundNumberToTenthReturnNumber, roundNumberToThousand
 import moment from "moment";
 import { PaneSupportText } from "../../Components/PaneSupportText";
 import StravaPane from "./StravaPane";
+import HistoryPane from "./HistoryPane";
 
-const Activity = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
+const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
   const windowHeight = useWindowDimensions().height;
   const refRBSheet = useRef({ open: () => null, close: () => null });
   const bottomDrawerHeight = windowHeight / 2;
@@ -177,6 +178,8 @@ const Activity = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
               APPLY TO HERO
             </Button>
           </Pane>
+
+          <HistoryPane navigation={navigation} isStravaUser={isStravaUser} />
 
           {isStravaUser && <StravaPane pop={() => navigation.push("App", { screen: "Home", params: { fetchStravaManually: true } })} />}
         </ScrollView>

@@ -1,6 +1,7 @@
 import moment from "moment";
+import { Icon } from "../Components/CustomComponents";
 import { thousandsFormat } from "./helperFunctions";
-import { Activity } from "./types";
+import { Activity, PrimaryElement } from "./types";
 
 // FOR SAVING TO DB
 function convertMilesToMeters(miles: number) {
@@ -48,7 +49,7 @@ function convertMetersSecondsToMilesHours(mps: number) {
 function convertSecondsToReadableTime(sec: number) {
   const hours = moment.utc(sec * 1000).hours();
   const minutes = moment.utc(sec * 1000).minutes();
-  const readableHours = hours ? `${hours} h` : ``;
+  const readableHours = hours ? `${hours} hr` : ``;
   const readableMin = minutes ? ` ${minutes} min` : ``;
   const comma = readableHours && readableMin ? `,` : ``;
   const readableTime = readableHours + comma + readableMin;
@@ -142,36 +143,36 @@ function checkForDistanceColumns(activityData: Activity[], includedColumns: Incl
 //   }
 // }
 
-// function determineElementIcon(type){
-//   switch(type){
-//     case 'Yoga':
-//     case 'Walk':
-//     case 'Elliptical':
-//       return <Icons.Air />
-//     case 'Hike':
-//     case 'WeightTraining':
-//     case 'Ride':
-//     case 'VirtualRide':
-//       return <Icons.Earth />
-//     case 'Run':
-//     case 'StairStepper':
-//     case 'Crossfit':
-//     case 'VirtualRun':
-//       return <Icons.Fire />
-//     case 'StandUpPaddling':
-//     case 'Swim':
-//     case 'Rowing':
-//     case 'Kayaking':
-//     case 'NordicSki':
-//     case 'AlpineSki':
-//     case 'BackcountrySki':
-//     case 'Snowboard':
-//     case 'Snowshoe':
-//       return <Icons.Water/>
-//     default:
-//       return <Icons.AllElements style={{"fontSize":".8em"}}/>
-//   }
-// }
+function determineElementFromActivity(type: string) {
+  switch (type) {
+    case "Yoga":
+    case "Walk":
+    case "Elliptical":
+      return "air";
+    case "Hike":
+    case "WeightTraining":
+    case "Ride":
+    case "VirtualRide":
+      return "earth";
+    case "Run":
+    case "StairStepper":
+    case "Crossfit":
+    case "VirtualRun":
+      return "fire";
+    case "StandUpPaddling":
+    case "Swim":
+    case "Rowing":
+    case "Kayaking":
+    case "NordicSki":
+    case "AlpineSki":
+    case "BackcountrySki":
+    case "Snowboard":
+    case "Snowshoe":
+      return "water";
+    default:
+      return "workout";
+  }
+}
 
 function calculateXPBonus(sec: number, isTimeAndHalfActivity: boolean) {
   const xp = isTimeAndHalfActivity ? (sec / 60) * 1.5 : sec / 60;
@@ -203,4 +204,4 @@ function calculateElementBonus(sec: number, allElements: boolean, isTimeAndHalfA
   return (Math.floor(10 * num) / 10).toString();
 }
 
-export { convertMilesToMeters, convertMilesHoursToMetersSeconds, convertDurationStringToSeconds, convertMetersToFeet, convertMetersToMiles, convertMetersSecondsToMilesHours, convertSecondsToReadableTime, calculateOffSet, checkForDistanceColumns, calculateXPBonus, calculatePowerBonus, calculateElementBonus };
+export { convertMilesToMeters, convertMilesHoursToMetersSeconds, convertDurationStringToSeconds, convertMetersToFeet, convertMetersToMiles, convertMetersSecondsToMilesHours, convertSecondsToReadableTime, calculateOffSet, checkForDistanceColumns, calculateXPBonus, calculatePowerBonus, calculateElementBonus, determineElementFromActivity };
