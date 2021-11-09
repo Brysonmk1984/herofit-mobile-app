@@ -68,7 +68,7 @@ export const GoToBattle: React.FC<GoToBattleProps> = ({ id, goTo }) => {
         setLoading(false);
         setTimeout(() => {
           closeModal("GoToBattle");
-          goTo("App", { screen: "AwaitingBattle", params: { foe, rewards, character: hero.character } });
+          goTo("AwaitingBattle", { foe, rewards, character: hero.character });
         }, 500);
       } catch (error) {
         error.message = "Unable to go to Battle, please try again later.";

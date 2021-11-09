@@ -1,11 +1,11 @@
 import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import herofitTheme from "./styles/herofitTheme";
 import * as Screens from "./Screens";
 import { AuthStackParamList } from "./common/types-navigator";
 
 // IN AUTH used for App Auth
-const AuthStack = createStackNavigator<AuthStackParamList>();
+const AuthStack = createNativeStackNavigator<AuthStackParamList>();
 const AuthStackScreen = () => {
   return (
     <AuthStack.Navigator screenOptions={{ headerShown: false, ...baseScreenStyle }}>
@@ -23,7 +23,7 @@ const AuthStackScreen = () => {
   );
 };
 
-const MainStack = createStackNavigator<AuthStackParamList>();
+const MainStack = createNativeStackNavigator<AuthStackParamList>();
 const MainStackScreen = () => {
   return (
     <MainStack.Navigator screenOptions={{ headerShown: false, ...baseScreenStyle }}>
