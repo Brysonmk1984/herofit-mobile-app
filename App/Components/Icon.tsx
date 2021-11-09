@@ -64,7 +64,7 @@ const InGameIcons = ({ iconName, size, color }: IconProps) => {
       return <Icon as={MaterialCommunityIcons} name="rowing" size={size} color={color} />;
     case "swimming":
     case "Swim":
-      return <Icon as={FontAwesome5} name="swimmer" size={size} color={color} />;
+      return <Icon as={FontAwesome5} name="swimmer" size={size - 1} color={color} />;
     case "kayaking":
     case "Kayaking":
       return <Icon as={FontAwesome5} name="water" size={size} color={color} />;
