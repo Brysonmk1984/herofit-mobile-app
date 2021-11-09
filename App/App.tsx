@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { LogBox, Dimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { NavigationContainer, useLinking } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { GlobalStateContext } from "./store";
 import RootStackScreen from "./Navigator";
@@ -18,19 +18,6 @@ LogBox.ignoreLogs(["Reanimated 2", "Remote debugger", "VirtualizedLists should n
 //LogBox.ignoreAllLogs(true);
 
 Logs.enableExpoCliLogging();
-
-const linking = {
-  prefixes: [Linking.makeUrl("/")],
-  config: {
-    screens: {
-      App: {
-        screens: {
-          Home: "home",
-        },
-      },
-    },
-  },
-};
 
 const height = Dimensions.get("window").height;
 const App: React.FC = () => {

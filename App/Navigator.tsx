@@ -39,19 +39,9 @@ const AuthStackScreen = () => {
 };
 
 function filterDrawerContent(props: DrawerContentComponentProps<DrawerContentOptions>, signOut: () => void) {
-  const hiddenScreens = ["SpendQP", "Activity", "AwaitingBattle", "BattleReport", "BattleReportDetail", "Profile"];
-  const filteredProps = {
-    ...props,
-    state: {
-      ...props.state,
-      routeNames: props.state.routeNames.filter((routeName: string) => hiddenScreens.includes(routeName) === false),
-      routes: props.state.routes.filter(route => hiddenScreens.includes(route.name) === false),
-    },
-  };
-
   return (
-    <DrawerContentScrollView {...filteredProps}>
-      <DrawerItemList {...filteredProps} />
+    <DrawerContentScrollView {...props}>
+      <DrawerItemList {...props} />
       <DrawerItem label="ItemWiki" onPress={() => WebBrowser.openBrowserAsync(`https://herofit.io/items/`)} />
       <DrawerItem label="Ranking" onPress={() => WebBrowser.openBrowserAsync(`https://herofit.io/ranking/`)} />
       <DrawerItem label="Sign Out" onPress={() => signOut()} />
@@ -65,16 +55,47 @@ const DrawerScreen = () => {
   const { signOut } = useSignOut();
 
   return (
-    <MainDrawer.Navigator drawerContent={props => filterDrawerContent(props, signOut)} drawerPosition="right" screenOptions={{ headerShown: false, ...baseScreenStyle }}>
+    <MainDrawer.Navigator drawerContent={props => filterDrawerContent(props, signOut)} screenOptions={{ headerShown: false, ...baseScreenStyle, drawerPosition: "right" }}>
       <MainDrawer.Screen options={{ drawerIcon: ({ focused, size }) => <Icon as={AntDesign} name="home" size={10} color="base.link" /> }} name="Home" component={Screens.Home} />
       <MainDrawer.Screen name="Adversaries" component={Screens.Adversaries} />
       <MainDrawer.Screen name="Feedback" component={Screens.Feedback} />
       <MainDrawer.Screen name="Settings" component={Screens.Settings} />
-      <MainDrawer.Screen name="SpendQP" component={Screens.SpendQP} options={{ title: "Quantum Points" }} />
-      <MainDrawer.Screen name="Activity" component={Screens.Activity} />
-      <MainDrawer.Screen name="AwaitingBattle" component={Screens.AwaitingBattle} />
-      <MainDrawer.Screen name="BattleReport" component={Screens.BattleReport} />
-      <MainDrawer.Screen name="BattleReportDetail" component={Screens.BattleReportDetail} />
+      <MainDrawer.Screen
+        name="SpendQP"
+        component={Screens.SpendQP}
+        options={{ title: "Quantum Points" }}
+        options={{
+          drawerItemStyle: { display: "none" },
+        }}
+      />
+      <MainDrawer.Screen
+        name="Activity"
+        component={Screens.Activity}
+        options={{
+          drawerItemStyle: { display: "none" },
+        }}
+      />
+      <MainDrawer.Screen
+        name="AwaitingBattle"
+        component={Screens.AwaitingBattle}
+        options={{
+          drawerItemStyle: { display: "none" },
+        }}
+      />
+      <MainDrawer.Screen
+        name="BattleReport"
+        component={Screens.BattleReport}
+        options={{
+          drawerItemStyle: { display: "none" },
+        }}
+      />
+      <MainDrawer.Screen
+        name="BattleReportDetail"
+        component={Screens.BattleReportDetail}
+        options={{
+          drawerItemStyle: { display: "none" },
+        }}
+      />
     </MainDrawer.Navigator>
   );
 };
