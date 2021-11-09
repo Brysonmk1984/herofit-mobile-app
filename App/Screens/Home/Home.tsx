@@ -104,7 +104,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   }, [route.params?.fetchStravaManually]);
 
   return (
-    <SideMenu onChange={isOpen => setDrawerIsOpen(isOpen)} isOpen={drawerIsOpen} menuPosition={"right"} menu={<SidebarMenu navigation={navigation} />} openMenuOffset={sideBarWidth}>
+    <SideMenu onChange={isOpen => setDrawerIsOpen(isOpen)} isOpen={drawerIsOpen} menuPosition={"right"} menu={<SidebarMenu navigation={navigation} setDrawerIsOpen={setDrawerIsOpen} />} openMenuOffset={sideBarWidth}>
       <ScreenContainer bg={<Background />} screenName={route.name}>
         {/* TOP SECTION */}
         <View>
