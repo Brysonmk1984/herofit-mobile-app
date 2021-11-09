@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 import { Center, Heading, Box, HStack, VStack, Text, ScrollView, FlatList, View, useTheme, Input, Pressable, Modal, Button } from "native-base";
-import { ScreenContainer, ScreenActionButton, Header, Icon, Pane, Subheader, HelperText, DrawerIndicator } from "../../Components/CustomComponents";
+import { ScreenContainer, ScreenActionButton, Header, Icon, Pane, Subheader, HelperText } from "../../Components/CustomComponents";
 import useModal from "../../common/hooks/useModal";
 import { AuthStackProps } from "../../common/types-navigator";
 import { GlobalStateContext } from "../../store";
@@ -146,10 +146,7 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
   return (
     <ScreenContainer screenName={route.name}>
       <View justifyContent="flex-start">
-        <DrawerIndicator />
-
         <Header text="Activity" />
-
         <ScrollView flexShrink={0}>
           <Pane mb={10} mt={5}>
             <Subheader fontSize="lg" text="Manually record a workout you've completed" />
@@ -181,7 +178,7 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
 
           <HistoryPane navigation={navigation} isStravaUser={isStravaUser} />
 
-          {isStravaUser && <StravaPane pop={() => navigation.push("App", { screen: "Home", params: { fetchStravaManually: true } })} />}
+          {isStravaUser && <StravaPane pop={() => navigation.navigate("Home", { fetchStravaManually: true })} />}
         </ScrollView>
       </View>
 

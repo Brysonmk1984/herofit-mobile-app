@@ -5,12 +5,12 @@ import Subheader from "../../Components/Subheader";
 import { GlobalStateContext } from "../../store";
 import { PaneSupportText } from "../../Components/PaneSupportText";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { MainDrawerParamList } from "../../common/types-navigator";
+import { MainStackParamList } from "../../common/types-navigator";
 import ActivityDetail from "./ActivityDetail";
 import ListHeaderComponent from "./ListHeaderComponent";
 
 interface HistoryPaneProps {
-  navigation: StackNavigationProp<MainDrawerParamList, "Activity">;
+  navigation: StackNavigationProp<MainStackParamList, "Activity">;
   isStravaUser: boolean;
 }
 
@@ -29,7 +29,7 @@ const HistoryPane: React.FC<HistoryPaneProps> = ({ navigation, isStravaUser }) =
           ) : (
             <HStack pt={5}>
               <Text color="primary.700">Manually add an activity above, or </Text>
-              <Link onPress={() => navigation.push("App", { screen: "Settings" })}>Connect Strava.</Link>
+              <Link onPress={() => navigation.push("Settings")}>Connect Strava.</Link>
             </HStack>
           )}
         </PaneSupportText>

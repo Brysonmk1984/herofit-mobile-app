@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ImageBackground, StyleSheet, useWindowDimensions } from "react-native";
 import { View, Text, useTheme } from "native-base";
-import { MainDrawerProps } from "../../../common/types-navigator";
+import { MainStackProps } from "../../../common/types-navigator";
 import { ScreenContainer } from "../../../Components/CustomComponents";
 import { updateBattleReportSeen } from "../../../api/battle";
 import { GlobalStateContext } from "../../../store";
@@ -13,7 +13,7 @@ import BottomSection from "./BottomSection";
 import ItemDetail from "../../Home/Components/BottomDrawer/HiddenInventory/Modals/ItemDetail";
 import useModal from "../../../common/hooks/useModal";
 
-const BattleReport: React.FC<MainDrawerProps<"BattleReport">> = ({ navigation, route }) => {
+const BattleReport: React.FC<MainStackProps<"BattleReport">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { height, width } = useWindowDimensions();
   const { id, avatar: hero, aStatus, foe, outcome, roundBreakdown, ptGain, xpGain, itemsAcquired } = route.params.battleReport;
@@ -68,7 +68,7 @@ const BattleReport: React.FC<MainDrawerProps<"BattleReport">> = ({ navigation, r
   function handleNavigateToDetails(br: BattleDetailOnly) {
     const battleReport = (({ outcome, scenario, roundBreakdown, avatar, bra, foe, brf, foeType, effects, updatedAt, seasonalBonusElement, effectProcs }): BattleDetailOnly => ({ outcome, scenario, roundBreakdown, avatar, bra, foe, brf, foeType, effects, updatedAt, seasonalBonusElement, effectProcs }))(br);
 
-    navigation.push("App", { screen: "BattleReportDetail", params: { battleReport, push: navigation.push("App") } });
+    navigation.push("BattleReportDetail", { battleReport, push: navigation.push("Home") });
   }
 
   useEffect(() => {

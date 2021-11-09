@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Image, Pressable, FlatList, SectionList, Box, Center, View, Text, Heading, VStack, FormControl, Input, Link, Button, IconButton, HStack, Divider, ScrollView } from "native-base";
 import ScreenContainer from "../../Components/ScreenContainer/ScreenContainer";
-import { MainDrawerParamList, MainDrawerProps } from "../../common/types-navigator";
-import { DrawerIndicator, Header, Icon } from "../../Components/CustomComponents";
+import { MainStackParamList, MainStackProps } from "../../common/types-navigator";
+import { Header, Icon } from "../../Components/CustomComponents";
 import { fetchBattlesWonOrDkoByAvatarID, getVillainList } from "../../api/battle";
 import debugErrors from "../../common/debugErrors";
 import useGlobalToast from "../../common/hooks/useGlobalToast";
@@ -20,7 +20,7 @@ const earthFoes = ["Rock Skipper", "Granite Golem", "Hulking Aggro Crag"];
 const waterFoes = ["Splash Artist", "Cyclonic Siren", "High Priestess of the Tides"];
 const airFoes = ["Gusty Rascal", "Wheezing Jinn", "Storming Oni"];
 
-const Adversaries: React.FC<MainDrawerProps<"Adversaries">> = ({ navigation, route }) => {
+const Adversaries: React.FC<MainStackProps<"Adversaries">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { openModal } = useModal();
   const { addToast } = useGlobalToast();
@@ -104,7 +104,6 @@ const Adversaries: React.FC<MainDrawerProps<"Adversaries">> = ({ navigation, rou
 
   return (
     <ScreenContainer screenName={route.name}>
-      <DrawerIndicator />
       <Header text="Adversaries" />
       <Center flex={3} bgColor="base.white">
         <AdversaryTabs activeTab={activeTab} setActiveTab={setActiveTab} />

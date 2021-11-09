@@ -6,23 +6,34 @@ import { Battle, BattleDetailOnly } from "./types-battle";
 /*
 REACT NAVIGATOR TYPES
 */
-
-// PARAM LISTS - If I pass props to the screens, they need to be added here
-type RootStackParamList = {
-  App: MainDrawerParamList;
-  Auth: AuthStackParamList;
+type AuthStackParamList = {
+  Splash: undefined;
+  SignIn: undefined;
+  ForgotPassword: undefined;
+  Register: NavigatorScreenParams<MainStackParamList["Home"]>;
+  AboutGame: undefined;
+  SelectHeroHowTo: undefined;
+  SelectHero: {
+    heroList: HeroChoice[];
+  };
+  HeroDetails: {
+    selectedHero: HeroChoice;
+  };
+  FinalizeHeroSelection: {
+    selectedHero: SelectedHero;
+    alias: CharacterAlias;
+    colors: [string, string];
+  };
+  SpendQP: {
+    hero: SelectedHero & { name: string };
+  };
 };
 
-type MainDrawerParamList = {
+type MainStackParamList = {
   Home: {
     newManualActivity?: Activity;
     fetchStravaManually?: boolean;
   };
-  Campaign: undefined;
-  Inventory: undefined;
-  Feedback: undefined;
-  Settings: undefined;
-  Loading: undefined;
   SpendQP: undefined;
   Activity: {
     isStravaUser: boolean;
@@ -41,33 +52,8 @@ type MainDrawerParamList = {
     push: () => void;
   };
   Adversaries: undefined;
-};
-
-type AuthStackParamList = {
-  Splash: undefined;
-  SignIn: undefined;
-  ForgotPassword: undefined;
-  Register: NavigatorScreenParams<MainDrawerParamList["Home"]>;
-  AboutGame: undefined;
-  SelectHeroHowTo: undefined;
-  SelectHero: {
-    heroList: HeroChoice[];
-  };
-  HeroDetails: {
-    selectedHero: HeroChoice;
-  };
-  FinalizeHeroSelection: {
-    selectedHero: SelectedHero;
-    alias: CharacterAlias;
-    colors: [string, string];
-  };
-  SpendQP: {
-    hero: SelectedHero & { name: string };
-  };
-  Home: {
-    userStatus?: UserStatus;
-    newManualActivity?: Activity;
-  };
+  Feedback: undefined;
+  Settings: undefined;
 };
 
 interface AuthStackProps<T extends keyof AuthStackParamList> {
@@ -75,14 +61,9 @@ interface AuthStackProps<T extends keyof AuthStackParamList> {
   route: RouteProp<AuthStackParamList, T>;
 }
 
-interface MainDrawerProps<T extends keyof MainDrawerParamList> {
-  navigation: StackNavigationProp<MainDrawerParamList, T>;
-  route: RouteProp<MainDrawerParamList, T>;
+interface MainStackProps<T extends keyof MainStackParamList> {
+  navigation: StackNavigationProp<MainStackParamList, T>;
+  route: RouteProp<MainStackParamList, T>;
 }
 
-interface RootStackProps<T extends keyof RootStackParamList> {
-  navigation: StackNavigationProp<RootStackParamList, T>;
-  route: RouteProp<RootStackParamList, T>;
-}
-
-export { AuthStackParamList, MainDrawerParamList, RootStackParamList, AuthStackProps, MainDrawerProps, RootStackProps, AuthAppCompositeProps };
+export { AuthStackParamList, MainStackParamList, AuthStackProps, MainStackProps };

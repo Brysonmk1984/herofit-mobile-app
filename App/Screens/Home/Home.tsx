@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Box, Button, View, Text } from "native-base";
+import { Box, Button, View, Text, Icon, VStack, Link } from "native-base";
 import ScreenContainer from "../../Components/ScreenContainer/ScreenContainer";
 import debugErrors from "../../common/debugErrors";
 import { GlobalStateContext } from "../../store";
-import { MainDrawerProps } from "../../common/types-navigator";
+import { MainStackProps } from "../../common/types-navigator";
 import useModal from "../../common/hooks/useModal";
 import { ChooseActivityEntry, SignupToSave, SignupFinished, ConfirmEmail, FeedbackChoice, ActivityUpgrade, GoToBattle } from "./Modals/Modals";
 import Background from "./Components/Background";
@@ -13,16 +13,18 @@ import { TopHud } from "./Components/TopHud/TopHud";
 import { PetImage } from "./Components/PetImage";
 import { DrawerIndicator } from "../../Components/CustomComponents";
 import { Activity, Hero } from "../../common/types";
-
 import { upgradeSequence } from "../../api/avatar";
 import buildGainsMessages from "./Components/gainsMessages";
 import useStravaDataProcess from "./useStravaDataProcess";
 import moment from "moment";
 import useGlobalToast from "../../common/hooks/useGlobalToast";
 import useInventory from "../../common/hooks/useInventory";
-import * as Linking from "expo-linking";
 import { clearLs } from "../../common/helperFunctions";
-const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
+import SideMenu from "react-native-side-menu-updated";
+import { Dimensions } from "react-native";
+import SidebarMenu from "./Components/SidebarMenu";
+
+const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { openModal, closeModal } = useModal();
   const { newStravaActivities, getFreshStravaData } = useStravaDataProcess();
@@ -30,8 +32,9 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   const { addToast } = useGlobalToast();
   const { equippedSkin, equippedPet, equippedTitle } = useInventory(true);
   const propsForHeroImage = (({ character, equipped, alias, status }) => ({ character, equipped, alias, skin: equippedSkin, status, floating: true }))(state.hero);
-
+  const sideBarWidth = Dimensions.get("window").width / 2;
   const hero = state.hero as Hero;
+  const [drawerIsOpen, setDrawerIsOpen] = useState(false);
 
   async function handleHeroUpgrade(activities: Activity[]) {
     const user = state.user;
@@ -101,35 +104,37 @@ const Home: React.FC<MainDrawerProps<"Home">> = ({ navigation, route }) => {
   }, [route.params?.fetchStravaManually]);
 
   return (
-    <ScreenContainer bg={<Background />} screenName={route.name}>
-      {/* TOP SECTION */}
-      <View>
-        <TopHud equippedTitle={equippedTitle} />
-        {state.isSignedIn && <DrawerIndicator />}
-      </View>
-      {/* HERO & PET */}
-      <View>
-        <Box position="absolute" bottom={100} left="50%" ml={-138}>
-          <HeroImage {...propsForHeroImage} />
-        </Box>
-        <Box position="absolute" right={0} bottom={95}>
-          {equippedPet && <PetImage pet={equippedPet} />}
-        </Box>
-      </View>
+    <SideMenu onChange={isOpen => setDrawerIsOpen(isOpen)} isOpen={drawerIsOpen} menuPosition={"right"} menu={<SidebarMenu navigation={navigation} />} openMenuOffset={sideBarWidth}>
+      <ScreenContainer bg={<Background />} screenName={route.name}>
+        {/* TOP SECTION */}
+        <View>
+          <TopHud equippedTitle={equippedTitle} />
+          {state.isSignedIn && <DrawerIndicator setDrawerIsOpen={setDrawerIsOpen} />}
+        </View>
+        {/* HERO & PET */}
+        <View>
+          <Box position="absolute" bottom={100} left="50%" ml={-138}>
+            <HeroImage {...propsForHeroImage} />
+          </Box>
+          <Box position="absolute" right={0} bottom={95}>
+            {equippedPet && <PetImage pet={equippedPet} />}
+          </Box>
+        </View>
 
-      {/* BOTTOM CONSOLE */}
-      <BottomDrawer hero={state.hero} newActivitiesAvailable={newActivities.length > 0 ? true : false} latestBattle={state.latestBattle} user={state.user} />
+        {/* BOTTOM CONSOLE */}
+        <BottomDrawer hero={state.hero} newActivitiesAvailable={newActivities.length > 0 ? true : false} latestBattle={state.latestBattle} user={state.user} />
 
-      {/* MODALS */}
-      <SignupToSave id="SignupToSave" modalAction={() => navigation.push("Register")} />
-      <ConfirmEmail id="ConfirmEmail" />
-      <ChooseActivityEntry id="ChooseActivityEntry" />
-      <FeedbackChoice id="FeedbackChoice" />
-      <SignupFinished id="SignupFinished" />
-      <GoToBattle id="GoToBattle" goTo={navigation.push} heroId={hero.id} />
+        {/* MODALS */}
+        <SignupToSave id="SignupToSave" modalAction={() => navigation.push("Register")} />
+        <ConfirmEmail id="ConfirmEmail" />
+        <ChooseActivityEntry id="ChooseActivityEntry" />
+        <FeedbackChoice id="FeedbackChoice" />
+        <SignupFinished id="SignupFinished" />
+        <GoToBattle id="GoToBattle" goTo={navigation.push} heroId={hero.id} />
 
-      {newActivities.length ? <ActivityUpgrade id="ActivityUpgrade" activities={newActivities} modalAction={() => handleHeroUpgrade(newActivities)} goBack={navigation.push} state={state} closeModal={closeModal} setNewActivities={setNewActivities} /> : null}
-    </ScreenContainer>
+        {newActivities.length ? <ActivityUpgrade id="ActivityUpgrade" activities={newActivities} modalAction={() => handleHeroUpgrade(newActivities)} goBack={navigation.push} state={state} closeModal={closeModal} setNewActivities={setNewActivities} /> : null}
+      </ScreenContainer>
+    </SideMenu>
   );
 };
 

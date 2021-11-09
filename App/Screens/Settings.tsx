@@ -7,9 +7,9 @@ import debugErrors, { createAppError } from "../common/debugErrors";
 import { Hero, User } from "../common/types";
 import { deleteAccount, disconnectStrava } from "../api/account";
 import { GlobalStateContext } from "../store";
-import { MainDrawerProps } from "../common/types-navigator";
+import { MainStackProps } from "../common/types-navigator";
 import { isExistingHero } from "../common/typeGuards";
-import { DrawerIndicator, Header, Pane, Subheader } from "../Components/CustomComponents";
+import { Header, Pane, Subheader } from "../Components/CustomComponents";
 import { checkDataSrcType, clearLs, createAlert } from "../common/helperFunctions";
 import useGlobalToast from "../common/hooks/useGlobalToast";
 import { PaneSupportText } from "../Components/PaneSupportText";
@@ -18,7 +18,7 @@ import { createManualDataSrcId, getStravaClientCredentials } from "../api/authen
 import useStravaConnect from "../common/hooks/useStravaConnect";
 import StravaConnectButton from "../Components/Buttons/StravaConnectButton";
 
-const Settings: React.FC<MainDrawerProps<"Settings">> = ({ navigation, route }) => {
+const Settings: React.FC<MainStackProps<"Settings">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { addToast } = useGlobalToast();
   const { hero, user } = state;
@@ -87,7 +87,6 @@ const Settings: React.FC<MainDrawerProps<"Settings">> = ({ navigation, route }) 
 
   return (
     <ScreenContainer screenName={route.name}>
-      <DrawerIndicator />
       <Header text="Settings" />
       <ScrollView>
         <Pane mt={5} mb={10}>

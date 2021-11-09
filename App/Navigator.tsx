@@ -1,24 +1,10 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { createDrawerNavigator, DrawerContentComponentProps, DrawerContentOptions, DrawerContentScrollView, DrawerItem, DrawerItemList } from "@react-navigation/drawer";
 import herofitTheme from "./styles/herofitTheme";
 import * as Screens from "./Screens";
-import { AuthStackParamList, MainDrawerParamList, RootStackParamList } from "./common/types-navigator";
-import { DrawerIndicator } from "./Components/DrawerIndicator";
-import { AntDesign } from "@expo/vector-icons";
-import { Icon } from "native-base";
-import * as WebBrowser from "expo-web-browser";
-import { clearJwtInLocalStorage } from "./common/jwtModule";
-import useSignOut from "./common/hooks/useSignout";
+import { AuthStackParamList } from "./common/types-navigator";
 
-// ROOT First level Navigator, used to determine if the user should go through auth sequence of straight to the app
-// TS - Ben doesn't pass a generic here, but the docs do.
-const RootStack = createStackNavigator<RootStackParamList>();
-const RootStackScreen = ({ isSignedIn }) => {
-  return <RootStack.Navigator screenOptions={{ headerShown: false, ...baseScreenStyle }}>{isSignedIn ? <RootStack.Screen name="App" component={DrawerScreen} /> : <RootStack.Screen name="Auth" component={AuthStackScreen} />}</RootStack.Navigator>;
-};
-
-// IN AUTH Second level Navigator, used for App Auth
+// IN AUTH used for App Auth
 const AuthStack = createStackNavigator<AuthStackParamList>();
 const AuthStackScreen = () => {
   return (
@@ -33,74 +19,30 @@ const AuthStackScreen = () => {
       <AuthStack.Screen name="HeroDetails" component={Screens.HeroDetails} options={{ title: "Hero Details" }} />
       <AuthStack.Screen name="FinalizeHeroSelection" component={Screens.FinalizeHeroSelection} options={{ title: "Finalize Hero Selection" }} />
       <AuthStack.Screen name="SpendQP" component={Screens.SpendQP} options={{ title: "Quantum Points" }} />
-      <MainDrawer.Screen name="Home" component={Screens.Home} />
     </AuthStack.Navigator>
   );
 };
 
-function filterDrawerContent(props: DrawerContentComponentProps<DrawerContentOptions>, signOut: () => void) {
+const MainStack = createStackNavigator<AuthStackParamList>();
+const MainStackScreen = () => {
   return (
-    <DrawerContentScrollView {...props}>
-      <DrawerItemList {...props} />
-      <DrawerItem label="ItemWiki" onPress={() => WebBrowser.openBrowserAsync(`https://herofit.io/items/`)} />
-      <DrawerItem label="Ranking" onPress={() => WebBrowser.openBrowserAsync(`https://herofit.io/ranking/`)} />
-      <DrawerItem label="Sign Out" onPress={() => signOut()} />
-    </DrawerContentScrollView>
-  );
-}
-
-// IN APP Second level Navigator, used for directing users who are already authorized
-const MainDrawer = createDrawerNavigator<MainDrawerParamList>();
-const DrawerScreen = () => {
-  const { signOut } = useSignOut();
-
-  return (
-    <MainDrawer.Navigator drawerContent={props => filterDrawerContent(props, signOut)} screenOptions={{ headerShown: false, ...baseScreenStyle, drawerPosition: "right" }}>
-      <MainDrawer.Screen options={{ drawerIcon: ({ focused, size }) => <Icon as={AntDesign} name="home" size={10} color="base.link" /> }} name="Home" component={Screens.Home} />
-      <MainDrawer.Screen name="Adversaries" component={Screens.Adversaries} />
-      <MainDrawer.Screen name="Feedback" component={Screens.Feedback} />
-      <MainDrawer.Screen name="Settings" component={Screens.Settings} />
-      <MainDrawer.Screen
-        name="SpendQP"
-        component={Screens.SpendQP}
-        options={{ title: "Quantum Points" }}
-        options={{
-          drawerItemStyle: { display: "none" },
-        }}
-      />
-      <MainDrawer.Screen
-        name="Activity"
-        component={Screens.Activity}
-        options={{
-          drawerItemStyle: { display: "none" },
-        }}
-      />
-      <MainDrawer.Screen
-        name="AwaitingBattle"
-        component={Screens.AwaitingBattle}
-        options={{
-          drawerItemStyle: { display: "none" },
-        }}
-      />
-      <MainDrawer.Screen
-        name="BattleReport"
-        component={Screens.BattleReport}
-        options={{
-          drawerItemStyle: { display: "none" },
-        }}
-      />
-      <MainDrawer.Screen
-        name="BattleReportDetail"
-        component={Screens.BattleReportDetail}
-        options={{
-          drawerItemStyle: { display: "none" },
-        }}
-      />
-    </MainDrawer.Navigator>
+    <MainStack.Navigator screenOptions={{ headerShown: false, ...baseScreenStyle }}>
+      {/* Accessed from the homescreen */}
+      <MainStack.Screen name="Home" component={Screens.Home} />
+      <MainStack.Screen name="SpendQP" component={Screens.SpendQP} options={{ title: "Quantum Points" }} />
+      <MainStack.Screen name="Activity" component={Screens.Activity} />
+      <MainStack.Screen name="AwaitingBattle" component={Screens.AwaitingBattle} />
+      <MainStack.Screen name="BattleReport" component={Screens.BattleReport} />
+      <MainStack.Screen name="BattleReportDetail" component={Screens.BattleReportDetail} />
+      {/* Accessed from the Sidebar */}
+      <MainStack.Screen name="Adversaries" component={Screens.Adversaries} />
+      <MainStack.Screen name="Feedback" component={Screens.Feedback} />
+      <MainStack.Screen name="Settings" component={Screens.Settings} />
+    </MainStack.Navigator>
   );
 };
 
-export default RootStackScreen;
+export { AuthStackScreen, MainStackScreen };
 
 /*
   STYLES

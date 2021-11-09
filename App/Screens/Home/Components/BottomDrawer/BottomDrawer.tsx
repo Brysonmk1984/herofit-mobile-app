@@ -51,7 +51,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
   async function handleFetchUpcomingBattle(isInstant = false) {
     try {
       const { foe, rewards } = await fetchUpcomingFoeAndRewards({ avatarID: id });
-      navigation.push("App", { screen: "AwaitingBattle", params: { foe, rewards, character, isInstant } });
+      navigation.push("AwaitingBattle", { foe, rewards, character, isInstant });
     } catch (error) {
       addToast("error", `${error.status}: ${error.message}`, "top");
       return debugErrors(error, user);
@@ -59,7 +59,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
   }
 
   function handleBattleReport() {
-    navigation.push("App", { screen: "BattleReport", params: { battleReport: latestBattle } });
+    navigation.push("BattleReport", { battleReport: latestBattle });
   }
 
   function handleEquipping(category: EquippableItemType, item?: Item, goToBattle?: boolean) {
@@ -160,7 +160,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
 
         <Box borderTopColor="primary.800" borderTopWidth={1} display="flex" flexDirection="row" bgColor="base.primary">
           <Box w="50%" p={2} borderRightWidth={1} borderRightColor="primary.800">
-            <Button bgColor={newActivitiesAvailable ? "base.highlight" : null} onPress={() => (newActivitiesAvailable ? openModal("ActivityUpgrade") : navigation.push("App", { screen: "Activity" }))} _text={{ fontFamily: "heading", fontSize: 30 }} borderRadius="0px">
+            <Button bgColor={newActivitiesAvailable ? "base.highlight" : null} onPress={() => (newActivitiesAvailable ? openModal("ActivityUpgrade") : navigation.push("Activity"))} _text={{ fontFamily: "heading", fontSize: 30 }} borderRadius="0px">
               Activity
             </Button>
           </Box>

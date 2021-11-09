@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FlatList, ImageBackground, Pressable, StyleSheet, useWindowDimensions } from "react-native";
 import { View, Text, useTheme, Box, Center, VStack, HStack, ScrollView } from "native-base";
-import { MainDrawerProps } from "../../../common/types-navigator";
+import { MainStackProps } from "../../../common/types-navigator";
 import { Header, Icon, ScreenActionButton, ScreenActionFixedWrapper, ScreenContainer, Subheader } from "../../../Components/CustomComponents";
 import { LinearGradient } from "expo-linear-gradient";
 import { determineScenario } from "../../../common/helperFunctions";
@@ -14,7 +14,7 @@ import { Swipeable } from "react-native-gesture-handler";
 import StatDisplay from "./StatDisplay";
 import RoundDisplay from "./RoundDisplay";
 
-const BattleReportDetail: React.FC<MainDrawerProps<"BattleReportDetail">> = ({ navigation, route }) => {
+const BattleReportDetail: React.FC<MainStackProps<"BattleReportDetail">> = ({ navigation, route }) => {
   const { height } = useWindowDimensions();
   const { outcome, scenario, roundBreakdown, avatar: hero, bra: brh, foe, brf, foeType, effects, updatedAt, seasonalBonusElement, effectProcs } = route.params.battleReport;
   const { colors } = useTheme();
@@ -26,7 +26,7 @@ const BattleReportDetail: React.FC<MainDrawerProps<"BattleReportDetail">> = ({ n
     if (showFirstScreen) {
       setShowFirstScreen(false);
     } else {
-      navigation.push("App");
+      navigation.push("Home");
     }
   }
 

@@ -9,7 +9,6 @@ import { GlobalStateContext } from "../../store";
 const Splash = ({ navigation, route }: AuthStackProps<"Splash">) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const deviceWidth = Dimensions.get("window").width;
-
   function handleGetStarted() {
     dispatch({ type: "SET USER STATUS", payload: { userStatus: "new" } });
     navigation.push("AboutGame");

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Pressable, useWindowDimensions } from "react-native";
-import { MainDrawerProps } from "../../../common/types-navigator";
+import { MainStackProps } from "../../../common/types-navigator";
 import { ScreenContainer } from "../../../Components/CustomComponents";
 import VsSection from "./VsSection";
 import HeroSection from "./HeroSection";
@@ -14,7 +14,7 @@ import { convertItemIdsToFullItems } from "../../../common/helperFunctions";
 import ItemDetail from "../../Home/Components/BottomDrawer/HiddenInventory/Modals/ItemDetail";
 import useModal from "../../../common/hooks/useModal";
 
-const AwaitingBattle: React.FC<MainDrawerProps<"AwaitingBattle">> = ({ navigation, route }) => {
+const AwaitingBattle: React.FC<MainStackProps<"AwaitingBattle">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { height, width } = useWindowDimensions();
   const { foe, rewards, character, isInstant } = route.params;
@@ -42,7 +42,7 @@ const AwaitingBattle: React.FC<MainDrawerProps<"AwaitingBattle">> = ({ navigatio
         updatedHero.equipped = equipped;
         dispatch({ type: "SET HERO", payload: { hero: updatedHero } });
         dispatch({ type: "UPDATE LATEST BATTLE", payload: { latestBattle } });
-        navigation.push("App", { screen: "BattleReport", params: { battleReport: latestBattle } });
+        navigation.push("BattleReport", { battleReport: latestBattle });
       } catch (error) {
         return debugErrors(error);
       }

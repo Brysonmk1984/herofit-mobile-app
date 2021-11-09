@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { GlobalStateContext } from "./store";
-import RootStackScreen from "./Navigator";
+import { AuthStackScreen, MainStackScreen } from "./Navigator";
 import { Loading } from "./Screens";
 import debugErrors from "./common/debugErrors";
 import fetchInitialData from "./common/fetchInitialData";
@@ -14,6 +14,7 @@ import { View } from "native-base";
 import useGlobalToast from "./common/hooks/useGlobalToast";
 import { Logs } from "expo";
 import * as Linking from "expo-linking";
+
 LogBox.ignoreLogs(["Reanimated 2", "Remote debugger", "VirtualizedLists should never be nested", 'Expected style "lineHeight: 24" to contain units', 'Expected style "lineHeight: 30" to contain units', 'Expected style "lineHeight: 40" to contain units', 'Expected style "lineHeight: 50" to contain units', 'Expected style "lineHeight: 85" to contain units', 'Expected style "lineHeight: 120" to contain units', "Please pass alt prop to Image component", "Non-serializable values were found in the navigation state", "When server rendering, you must wrap your application in an <SSRProvider> to ensure consistent ids are generated between the client and server.", "VirtualizedLists should never be nested inside plain ScrollViews with the same orientation because it can break windowing and other functionality - use another VirtualizedList-backed container instead."]);
 //LogBox.ignoreAllLogs(true);
 
@@ -105,15 +106,19 @@ const App: React.FC = () => {
   // perhaps isSignedIn is being set to false somewhere in app?
   //console.log(state.isLoading, !fontsLoaded, state.isSignedIn);
 
+  function determineNavigator(isSignedIn: boolean) {
+    return isSignedIn ? <MainStackScreen /> : <AuthStackScreen />;
+  }
+
   return (
     <NavigationContainer /*linking={linking}*/>
       <View style={{ height }}>
         {/* If app is loading -> state.isLoading === true
-          OR
-          If Font have not been loaded  -> fontLoaded === false
-          Show loading, otherwise show view
-        */}
-        {state.isLoading || !fontsLoaded ? <Loading /> : <RootStackScreen isSignedIn={state.isSignedIn} />}
+            OR
+            If Font have not been loaded  -> fontLoaded === false
+            Show loading, otherwise show view
+          */}
+        {state.isLoading || !fontsLoaded ? <Loading /> : determineNavigator(state.isSignedIn)}
       </View>
     </NavigationContainer>
   );
