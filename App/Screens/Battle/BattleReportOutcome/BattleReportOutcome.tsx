@@ -13,7 +13,7 @@ import BottomSection from "./BottomSection";
 import ItemDetail from "../../Home/Components/BottomDrawer/HiddenInventory/Modals/ItemDetail";
 import useModal from "../../../common/hooks/useModal";
 
-const BattleReport: React.FC<MainStackProps<"BattleReport">> = ({ navigation, route }) => {
+const BattleReportOutcome: React.FC<MainStackProps<"BattleReportOutcome">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { height, width } = useWindowDimensions();
   const { id, avatar: hero, aStatus, foe, outcome, roundBreakdown, ptGain, xpGain, itemsAcquired } = route.params.battleReport;
@@ -26,7 +26,7 @@ const BattleReport: React.FC<MainStackProps<"BattleReport">> = ({ navigation, ro
   const { openModal } = useModal();
 
   function renderSpecialStatus() {
-    const status = battleReport.aStatus;
+    const status = route.params.battleReport.aStatus;
     if (status !== "Knocked Out" || status !== "Recovering") {
       if (status === "Infected") {
         // Hard Coded 24hrs... too difficult to get actual value
@@ -65,24 +65,10 @@ const BattleReport: React.FC<MainStackProps<"BattleReport">> = ({ navigation, ro
     }
   }
 
-  function handleNavigateToDetails(br: BattleDetailOnly) {
-    const battleReport = (({ outcome, scenario, roundBreakdown, avatar, bra, foe, brf, foeType, effects, updatedAt, seasonalBonusElement, effectProcs }): BattleDetailOnly => ({ outcome, scenario, roundBreakdown, avatar, bra, foe, brf, foeType, effects, updatedAt, seasonalBonusElement, effectProcs }))(br);
-
-    navigation.push("BattleReportDetail", { battleReport, push: navigation.push("Home") });
-  }
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      handleNavigateToDetails(route.params.battleReport);
-    }, 4000);
-
-    return () => clearTimeout(timeout);
-  }, []);
-
-  useEffect(() => {
-    updateBattleReportSeen({ id });
-    dispatch({ type: "SEEN BATTLE REPORT", payload: { latestBattle: { ...route.params.battleReport, seenReport: true } } });
-  }, []);
+  // useEffect(() => {
+  //   updateBattleReportSeen({ id });
+  //   dispatch({ type: "SEEN BATTLE REPORT", payload: { latestBattle: { ...route.params.battleReport, seenReport: true } } });
+  // }, []);
 
   useEffect(() => {
     if (outcome === "Avatar Wins") {
@@ -110,17 +96,16 @@ const BattleReport: React.FC<MainStackProps<"BattleReport">> = ({ navigation, ro
     <ScreenContainer screenName={route.name} bgColor={outcome === "Avatar Wins" ? colors.base.highlight : colors.base.lowlight}>
       {top && bottom ? (
         <>
-          <TopSection height={height} {...specificProps(top, outcome, ptGain, xpGain, itemsAcquired)} setPressedItem={setPressedItem} />
-          <BottomSection height={height} {...specificProps(bottom, outcome, ptGain, xpGain, itemsAcquired)} setPressedItem={setPressedItem} />
-          <OutcomeSection height={height} push={() => handleNavigateToDetails(route.params.battleReport)} top={top} bottom={bottom} outcome={outcome} endRound={legacyBattle ? null : roundBreakdown.length} legacyBattle={legacyBattle} />
+          <TopSection height={height} {...specificProps(top, outcome, ptGain, xpGain, itemsAcquired)} />
+          <BottomSection height={height} {...specificProps(bottom, outcome, ptGain, xpGain, itemsAcquired)} />
+          <OutcomeSection height={height} top={top} bottom={bottom} outcome={outcome} endRound={legacyBattle ? null : roundBreakdown.length} legacyBattle={legacyBattle} />
         </>
       ) : null}
       <ImageBackground style={styles.backgroundImage} source={backgroundImage} resizeMode="stretch" opacity={0.6} />
-      {pressedItem && <ItemDetail id="BattleReportItemDetail" item={pressedItem} character={hero.character} buttonText="OK" modalAction={() => setPressedItem(null)} />}
     </ScreenContainer>
   );
 };
 
-export default BattleReport;
+export default BattleReportOutcome;
 
 const styles = StyleSheet.create({ backgroundImage: { position: "absolute", width: "100%", height: "100%", zIndex: 0 } });

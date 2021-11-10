@@ -88,7 +88,7 @@ const RoundDisplay: React.FC<RoundDisplayProps> = ({ battleReport }) => {
   }
 
   return (
-    <View pb={290}>
+    <View>
       <Box px={5} mb={-2} pb={-2}>
         <Subheader dividerColor="base.primary" text="Round - By - Round" />
       </Box>

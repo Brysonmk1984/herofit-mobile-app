@@ -18,11 +18,11 @@ import Feedback from "./Screens/Feedback/Feedback";
 import Settings from "./Screens/Settings";
 import Activity from "./Screens/Activity/Activity";
 import AwaitingBattle from "./Screens/Battle/AwaitingBattle/AwaitingBattle";
-import BattleReport from "./Screens/Battle/BattleReport/BattleReport";
+import BattleReportOutcome from "./Screens/Battle/BattleReportOutcome/BattleReportOutcome";
 import BattleReportDetail from "./Screens/Battle/BattleReportDetail/BattleReportDetail";
-
+import BattleReport from "./Screens/Battle/BattleReport";
 // MULTI-USE SCREENS
 import Loading from "./Screens/Loading/Loading";
 import SpendQP from "./Screens/Common/SpendQP";
 
-export { Splash, SignIn, Register, ForgotPassword, AboutGame, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection, Home, Adversaries, Feedback, Settings, Activity, AwaitingBattle, BattleReport, BattleReportDetail, Loading, SpendQP };
+export { Splash, SignIn, Register, ForgotPassword, AboutGame, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection, Home, Adversaries, Feedback, Settings, Activity, AwaitingBattle, BattleReportOutcome, BattleReportDetail, BattleReport, Loading, SpendQP };

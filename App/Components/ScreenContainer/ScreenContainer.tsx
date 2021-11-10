@@ -1,8 +1,9 @@
 import React from "react";
 import { StyleSheet, ImageBackground } from "react-native";
-import { Flex, View } from "native-base";
+import { Flex, View, Box, Pressable } from "native-base";
 import herofitTheme from "../../styles/herofitTheme";
 import { SafeAreaView } from "react-native-safe-area-context";
+import PressableWrapper from "./PressableWrapper";
 
 interface ScreenContainerProps {
   children: React.ReactNode;
@@ -10,6 +11,7 @@ interface ScreenContainerProps {
   bg?: string | React.ReactElement;
   bgColor?: string;
   hero?: string;
+  screenAction?: () => void;
 }
 
 function determineImageBackground({ type, name }: { type: string; name: string }) {
@@ -72,24 +74,26 @@ function determineImageBackground({ type, name }: { type: string; name: string }
   }
 }
 
-export default function ScreenContainer({ children, screenName, bg, bgColor, hero }: ScreenContainerProps) {
+export default function ScreenContainer({ children, screenName, bg, bgColor, hero, screenAction }: ScreenContainerProps) {
   let image = determineImageBackground({ type: "art", name: screenName });
 
   if (hero) {
     image = determineImageBackground({ type: "hero", name: hero });
   }
 
-  return (
-    <View style={[styles.wrapper, styles.absolute, bgColor ? { backgroundColor: bgColor } : null]}>
-      <SafeAreaView style={styles.container}>
-        <Flex flex={1} justify="space-between" zIndex={10} p={0} w={"100%"} mx="auto">
-          {typeof bg === "object" && bg}
-          {children}
-        </Flex>
-      </SafeAreaView>
+  function renderContent() {}
 
-      <ImageBackground source={image} style={[styles.image, { backgroundColor: typeof bg !== "object" ? bg : undefined }]} resizeMode="cover" />
-    </View>
+  return (
+    <PressableWrapper isPressable={typeof screenAction === "function"} wrapper={children => <Pressable onPress={() => screenAction()}>{children}</Pressable>}>
+      <View style={[styles.wrapper, styles.absolute, bgColor ? { backgroundColor: bgColor } : null]}>
+        <SafeAreaView style={styles.container}>
+          <Flex flex={1} justify="space-between" zIndex={10} p={0} w={"100%"} mx="auto">
+            {children}
+          </Flex>
+        </SafeAreaView>
+      </View>
+      {typeof bg === "object" ? bg : <ImageBackground source={image} style={[styles.image, { backgroundColor: undefined }]} resizeMode="cover" />}
+    </PressableWrapper>
   );
 }
 
@@ -106,13 +110,7 @@ const styles = StyleSheet.create({
     zIndex: 100,
     overflow: "hidden",
   },
-  absolute: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-  },
+  absolute: {},
   image: {
     justifyContent: "center",
     width: "107%",

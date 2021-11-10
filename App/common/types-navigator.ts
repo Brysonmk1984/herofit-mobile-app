@@ -44,12 +44,14 @@ type MainStackParamList = {
     character: CharacterName;
     isInstant: boolean;
   };
-  BattleReport: {
+  BattleReportOutcome: {
     battleReport: Battle | null;
   };
   BattleReportDetail: {
     battleReport: BattleDetailOnly;
-    push: () => void;
+  };
+  BattleReportRounds: {
+    battleReport: BattleDetailOnly;
   };
   Adversaries: undefined;
   Feedback: undefined;

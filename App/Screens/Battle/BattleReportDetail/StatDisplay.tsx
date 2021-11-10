@@ -140,7 +140,7 @@ const StatDisplay: React.FC<StatDisplayProps> = ({ battleReport }) => {
   }, []);
 
   return (
-    <View pb={125}>
+    <View>
       <ScrollView>
         {/* DATE */}
         {renderDate(updatedAt)}

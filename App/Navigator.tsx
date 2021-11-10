@@ -32,8 +32,9 @@ const MainStackScreen = () => {
       <MainStack.Screen name="SpendQP" component={Screens.SpendQP} options={{ title: "Quantum Points" }} />
       <MainStack.Screen name="Activity" component={Screens.Activity} />
       <MainStack.Screen name="AwaitingBattle" component={Screens.AwaitingBattle} />
-      <MainStack.Screen name="BattleReport" component={Screens.BattleReport} />
+      <MainStack.Screen name="BattleReportOutcome" component={Screens.BattleReportOutcome} />
       <MainStack.Screen name="BattleReportDetail" component={Screens.BattleReportDetail} />
+      <MainStack.Screen name="BattleReport" component={Screens.BattleReport} />
       {/* Accessed from the Sidebar */}
       <MainStack.Screen name="Adversaries" component={Screens.Adversaries} />
       <MainStack.Screen name="Feedback" component={Screens.Feedback} />
