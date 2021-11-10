@@ -1,22 +1,18 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ImageBackground, StyleSheet, useWindowDimensions } from "react-native";
 import { View, Text, useTheme } from "native-base";
 import { MainStackProps } from "../../../common/types-navigator";
 import { ScreenContainer } from "../../../Components/CustomComponents";
-import { updateBattleReportSeen } from "../../../api/battle";
-import { GlobalStateContext } from "../../../store";
 import OutcomeSection from "./OutcomeSection";
-import { BattleDetailOnly, BattleFoe, BattleOutcome } from "../../../common/types-battle";
+import { BattleFoe, BattleOutcome } from "../../../common/types-battle";
 import { Hero } from "../../../common/types";
 import TopSection from "./TopSection";
 import BottomSection from "./BottomSection";
-import ItemDetail from "../../Home/Components/BottomDrawer/HiddenInventory/Modals/ItemDetail";
 import useModal from "../../../common/hooks/useModal";
 
 const BattleReportOutcome: React.FC<MainStackProps<"BattleReportOutcome">> = ({ navigation, route }) => {
-  const { state, dispatch } = useContext(GlobalStateContext);
   const { height, width } = useWindowDimensions();
-  const { id, avatar: hero, aStatus, foe, outcome, roundBreakdown, ptGain, xpGain, itemsAcquired } = route.params.battleReport;
+  const { avatar: hero, foe, outcome, roundBreakdown, ptGain, xpGain, itemsAcquired } = route.params.battleReport;
   const backgroundImage = require("../../../../assets/images/backgrounds/battle-report-background.webp");
   const { colors } = useTheme();
   const [top, setTop] = useState(null);
@@ -64,11 +60,6 @@ const BattleReportOutcome: React.FC<MainStackProps<"BattleReportOutcome">> = ({ 
       };
     }
   }
-
-  // useEffect(() => {
-  //   updateBattleReportSeen({ id });
-  //   dispatch({ type: "SEEN BATTLE REPORT", payload: { latestBattle: { ...route.params.battleReport, seenReport: true } } });
-  // }, []);
 
   useEffect(() => {
     if (outcome === "Avatar Wins") {

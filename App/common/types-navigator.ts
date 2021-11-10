@@ -44,6 +44,9 @@ type MainStackParamList = {
     character: CharacterName;
     isInstant: boolean;
   };
+  BattleReport: {
+    battleReport: Battle | null;
+  };
   BattleReportOutcome: {
     battleReport: Battle | null;
   };

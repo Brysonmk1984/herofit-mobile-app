@@ -165,13 +165,9 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
             </Button>
           </Box>
           <Box w="50%" p={2}>
-            <Button bgColor={battleReportAvailable ? "base.highlight" : "base.success"} disabled={battleButtonDisabled} _text={{ fontFamily: "heading", fontSize: 30, color: battleButtonDisabled ? "base.disabledText" : "base.white" }} borderRadius={0} onPress={latestBattle && !latestBattle.seenReport ? handleBattleReport : goToBattle ? () => handleFetchUpcomingBattle(false) : () => openModal("GoToBattle")}>
+            <Button bgColor={battleReportAvailable ? "base.highlight" : null} disabled={battleButtonDisabled} _text={{ fontFamily: "heading", fontSize: 30, color: battleButtonDisabled ? "base.disabledText" : "base.white" }} borderRadius={0} onPress={latestBattle && !latestBattle.seenReport ? handleBattleReport : goToBattle ? () => handleFetchUpcomingBattle(false) : () => openModal("GoToBattle")}>
               {battleReportAvailable ? "Report" : "Battle"}
             </Button>
-
-            {/* <Button borderRadius={0} onPress={handleBattleReport}>
-              {battleReportAvailable ? "Report" : "Battle"}
-            </Button> */}
           </Box>
         </Box>
       </Box>

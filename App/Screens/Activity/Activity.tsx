@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Platform, useWindowDimensions } from "react-native";
+import { useWindowDimensions } from "react-native";
 import { Center, Heading, Box, HStack, VStack, Text, ScrollView, FlatList, View, useTheme, Input, Pressable, Modal, Button } from "native-base";
 import { ScreenContainer, ScreenActionButton, Header, Icon, Pane, Subheader, HelperText } from "../../Components/CustomComponents";
 import useModal from "../../common/hooks/useModal";
@@ -15,8 +15,6 @@ import DistanceModal from "./DistanceModal";
 import DurationModal from "./DurationModal";
 import { convertMilesToMeters, convertMilesHoursToMetersSeconds, convertDurationStringToSeconds, calculateOffSet } from "../../common/activityCalculations";
 import { checkDataSrcType, roundNumberToTenthReturnNumber, roundNumberToThousandthReturnNumber } from "../../common/helperFunctions";
-import moment from "moment";
-import { PaneSupportText } from "../../Components/PaneSupportText";
 import StravaPane from "./StravaPane";
 import HistoryPane from "./HistoryPane";
 
@@ -37,6 +35,8 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
   const { openModal } = useModal();
   const { state } = useContext(GlobalStateContext);
   const isStravaUser = "strava" === checkDataSrcType(state.user.dataSrcId);
+  // Used to speed up inital screen rendering
+  const [secondaryLoading, setSecondaryLoading] = useState(false);
 
   function resetForm() {
     setActivity(null);
@@ -143,6 +143,11 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
     checkIfFormIsValid();
   }, [activity, duration]);
 
+  // Initial Render was too slow, so now all less important components are rendered after page transition
+  useEffect(() => {
+    setSecondaryLoading(true);
+  }, []);
+
   return (
     <ScreenContainer screenName={route.name}>
       <View justifyContent="flex-start">
@@ -176,46 +181,48 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
             </Button>
           </Pane>
 
-          <HistoryPane navigation={navigation} isStravaUser={isStravaUser} />
+          {secondaryLoading && <HistoryPane navigation={navigation} isStravaUser={isStravaUser} />}
 
-          {isStravaUser && <StravaPane pop={() => navigation.navigate("Home", { fetchStravaManually: true })} />}
+          {isStravaUser && secondaryLoading && <StravaPane pop={() => navigation.navigate("Home", { fetchStravaManually: true })} />}
         </ScrollView>
       </View>
 
       {/* HIDDEN MENU */}
-      <Box position="absolute" bottom={0}>
-        <View flex={1} justifyContent="center" alignItems="center" bgColor="#000">
-          <RBSheet
-            ref={refRBSheet}
-            closeOnDragDown={true}
-            closeOnPressMask={false}
-            height={bottomDrawerHeight}
-            openDuration={750}
-            customStyles={{
-              wrapper: {
-                backgroundColor: "transparent",
-              },
-              container: {
-                backgroundColor: colors.base.primary,
-              },
-              draggableIcon: {
-                backgroundColor: "#f1c85b",
-              },
-            }}
-          >
-            <FlatList borderTopWidth={1} borderTopColor={"primary.500"} data={activityList} renderItem={({ item }) => renderActivityList(item)} keyExtractor={item => item.type} />
-          </RBSheet>
-        </View>
-      </Box>
+      {secondaryLoading && (
+        <Box position="absolute" bottom={0}>
+          <View flex={1} justifyContent="center" alignItems="center" bgColor="#000">
+            <RBSheet
+              ref={refRBSheet}
+              closeOnDragDown={true}
+              closeOnPressMask={false}
+              height={bottomDrawerHeight}
+              openDuration={750}
+              customStyles={{
+                wrapper: {
+                  backgroundColor: "transparent",
+                },
+                container: {
+                  backgroundColor: colors.base.primary,
+                },
+                draggableIcon: {
+                  backgroundColor: "#f1c85b",
+                },
+              }}
+            >
+              <FlatList borderTopWidth={1} borderTopColor={"primary.500"} data={activityList} renderItem={({ item }) => renderActivityList(item)} keyExtractor={item => item.type} />
+            </RBSheet>
+          </View>
+        </Box>
+      )}
 
       {/* Duration Wheel Selector Modal */}
-      <DurationModal id="DurationModal" title="Duration" modalAction={setDuration} duration={duration} />
+      {secondaryLoading && <DurationModal id="DurationModal" title="Duration" modalAction={setDuration} duration={duration} />}
 
       {/* Distance Wheel Selector Modal */}
-      <DistanceModal id="DistanceModal" title="Distance" modalAction={setDistance} distance={distance} />
+      {secondaryLoading && <DistanceModal id="DistanceModal" title="Distance" modalAction={setDistance} distance={distance} />}
 
       {/* Speed Wheel Selector Modal */}
-      <SpeedModal id="SpeedModal" title="Speed" modalAction={setSpeed} speed={speed} />
+      {secondaryLoading && <SpeedModal id="SpeedModal" title="Speed" modalAction={setSpeed} speed={speed} />}
     </ScreenContainer>
   );
 };
