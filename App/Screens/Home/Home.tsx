@@ -35,7 +35,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   const sideBarWidth = Dimensions.get("window").width / 2;
   const deviceHeight = Dimensions.get("window").height;
   const hero = state.hero as Hero;
-  const [drawerIsOpen, setDrawerIsOpen] = useState(false);
+  const [drawerIsOpen, setDrawerIsOpen] = useState<boolean>(false);
 
   async function handleHeroUpgrade(activities: Activity[]) {
     const user = state.user;
