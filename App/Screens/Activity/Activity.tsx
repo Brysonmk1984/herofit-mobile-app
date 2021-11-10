@@ -17,6 +17,7 @@ import { convertMilesToMeters, convertMilesHoursToMetersSeconds, convertDuration
 import { checkDataSrcType, roundNumberToTenthReturnNumber, roundNumberToThousandthReturnNumber } from "../../common/helperFunctions";
 import StravaPane from "./StravaPane";
 import HistoryPane from "./HistoryPane";
+import useDidMount from "../../common/hooks/useDidMount";
 
 const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
   const windowHeight = useWindowDimensions().height;
@@ -36,8 +37,7 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
   const { state } = useContext(GlobalStateContext);
   const isStravaUser = "strava" === checkDataSrcType(state.user.dataSrcId);
   // Used to speed up inital screen rendering
-  const [secondaryLoading, setSecondaryLoading] = useState(false);
-
+  const { mounted } = useDidMount();
   function resetForm() {
     setActivity(null);
     setDate(new Date());
@@ -143,11 +143,6 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
     checkIfFormIsValid();
   }, [activity, duration]);
 
-  // Initial Render was too slow, so now all less important components are rendered after page transition
-  useEffect(() => {
-    setSecondaryLoading(true);
-  }, []);
-
   return (
     <ScreenContainer screenName={route.name}>
       <View justifyContent="flex-start">
@@ -181,14 +176,14 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
             </Button>
           </Pane>
 
-          {secondaryLoading && <HistoryPane navigation={navigation} isStravaUser={isStravaUser} />}
+          {mounted && <HistoryPane navigation={navigation} isStravaUser={isStravaUser} />}
 
-          {isStravaUser && secondaryLoading && <StravaPane pop={() => navigation.navigate("Home", { fetchStravaManually: true })} />}
+          {isStravaUser && mounted && <StravaPane pop={() => navigation.navigate("Home", { fetchStravaManually: true })} />}
         </ScrollView>
       </View>
 
       {/* HIDDEN MENU */}
-      {secondaryLoading && (
+      {mounted && (
         <Box position="absolute" bottom={0}>
           <View flex={1} justifyContent="center" alignItems="center" bgColor="#000">
             <RBSheet
@@ -216,13 +211,13 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
       )}
 
       {/* Duration Wheel Selector Modal */}
-      {secondaryLoading && <DurationModal id="DurationModal" title="Duration" modalAction={setDuration} duration={duration} />}
+      {mounted && <DurationModal id="DurationModal" title="Duration" modalAction={setDuration} duration={duration} />}
 
       {/* Distance Wheel Selector Modal */}
-      {secondaryLoading && <DistanceModal id="DistanceModal" title="Distance" modalAction={setDistance} distance={distance} />}
+      {mounted && <DistanceModal id="DistanceModal" title="Distance" modalAction={setDistance} distance={distance} />}
 
       {/* Speed Wheel Selector Modal */}
-      {secondaryLoading && <SpeedModal id="SpeedModal" title="Speed" modalAction={setSpeed} speed={speed} />}
+      {mounted && <SpeedModal id="SpeedModal" title="Speed" modalAction={setSpeed} speed={speed} />}
     </ScreenContainer>
   );
 };
