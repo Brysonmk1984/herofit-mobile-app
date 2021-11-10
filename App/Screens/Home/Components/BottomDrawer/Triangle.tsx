@@ -1,10 +1,19 @@
 import React from "react";
-import { StyleSheet } from "react-native";
-import { Pressable, Button, Text, View } from "native-base";
+import { StyleSheet, Pressable } from "react-native";
+import { Button, Text, View } from "native-base";
 
 const Triangle = ({ action }) => {
   return (
-    <Pressable alignItems="center" style={styles.triangle} onPress={() => action()}>
+    <Pressable
+      style={({ pressed }) => [
+        styles.triangle,
+        {
+          borderBottomColor: pressed ? "#86efac" : "#356735",
+        },
+      ]}
+      alignItems="center"
+      onPress={() => action()}
+    >
       <View mt={5} style={[styles.triangle, styles.smallTriangle]}></View>
     </Pressable>
   );
@@ -23,7 +32,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 40,
     borderLeftColor: "transparent",
     borderRightColor: "transparent",
-    borderBottomColor: "#356735",
   },
   smallTriangle: {
     borderLeftWidth: 20,
