@@ -33,6 +33,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   const { equippedSkin, equippedPet, equippedTitle } = useInventory(true);
   const propsForHeroImage = (({ character, equipped, alias, status }) => ({ character, equipped, alias, skin: equippedSkin, status, floating: true }))(state.hero);
   const sideBarWidth = Dimensions.get("window").width / 2;
+  const deviceHeight = Dimensions.get("window").height;
   const hero = state.hero as Hero;
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
 
@@ -113,7 +114,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
         </View>
         {/* HERO & PET */}
         <View>
-          <Box position="absolute" bottom={100} left="50%" ml={-138}>
+          <Box position="absolute" bottom={deviceHeight * 0.2} left="50%" ml={-138}>
             <HeroImage {...propsForHeroImage} />
           </Box>
           <Box position="absolute" right={0} bottom={95}>
