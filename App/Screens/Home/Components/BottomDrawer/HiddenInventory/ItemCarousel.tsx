@@ -242,7 +242,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
       </View>
       {activeIndex !== null && (
         <View style={styles.carouselView}>
-          <Carousel ref={carousel} enableMomentum={true} firstItem={activeIndex} containerCustomStyle={styles.carouselContainer} onSnapToItem={index => _handleSelectedItem(index)} data={allItemsOfType} renderItem={_renderItem} sliderWidth={SLIDER_WIDTH} itemWidth={SLIDER_WIDTH * 0.28} inactiveSlideOpacity={1} inactiveSlideScale={0.6} />
+          <Carousel ref={carousel} firstItem={activeIndex} containerCustomStyle={styles.carouselContainer} onSnapToItem={index => _handleSelectedItem(index)} data={allItemsOfType} renderItem={_renderItem} sliderWidth={SLIDER_WIDTH} itemWidth={SLIDER_WIDTH * 0.28} inactiveSlideOpacity={1} inactiveSlideScale={0.6} />
         </View>
       )}
     </SafeAreaView>

@@ -12,9 +12,10 @@ interface HiddenInventoryProps {
   bottomDrawerHeight: number;
   activeTab: string;
   setActiveTab: (tab: TabType) => void;
+  setBottomDrawerOpen: (isOpen: boolean) => void;
 }
 
-const HiddenInventory: React.FC<HiddenInventoryProps> = ({ children, refRBSheet, bottomDrawerHeight, activeTab, setActiveTab }) => {
+const HiddenInventory: React.FC<HiddenInventoryProps> = ({ children, refRBSheet, bottomDrawerHeight, activeTab, setActiveTab, setBottomDrawerOpen }) => {
   const { colors } = useTheme();
 
   const tabColors: TabColors = {
@@ -31,6 +32,8 @@ const HiddenInventory: React.FC<HiddenInventoryProps> = ({ children, refRBSheet,
         closeOnDragDown={true}
         height={bottomDrawerHeight}
         openDuration={750}
+        onOpen={() => setBottomDrawerOpen(true)}
+        onClose={() => setBottomDrawerOpen(false)}
         customStyles={{
           wrapper: {
             backgroundColor: "transparent",

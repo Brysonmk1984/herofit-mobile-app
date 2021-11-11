@@ -7,18 +7,18 @@ import useSignOut from "../../../common/hooks/useSignout";
 
 interface SidebarMenuProps {
   navigation: StackNavigationProp<MainStackParamList, "Home">;
-  setDrawerIsOpen: (prev: boolean) => boolean;
+  setSideDrawerOpen: (prev: boolean) => boolean;
 }
 
-const SidebarMenu: React.FC<SidebarMenuProps> = ({ navigation, setDrawerIsOpen }) => {
+const SidebarMenu: React.FC<SidebarMenuProps> = ({ navigation, setSideDrawerOpen }) => {
   const { signOut } = useSignOut();
 
   function handleNavigation(cb: () => void) {
-    setDrawerIsOpen((prev: boolean) => !prev);
+    setSideDrawerOpen((prev: boolean) => !prev);
     cb();
   }
   return (
-    <VStack bgColor="base.primary" height="100%" justifyContent="space-between">
+    <VStack bgColor="base.primary" height="100%" justifyContent="space-between" borderLeftWidth="1" borderLeftColor="base.brand">
       <VStack space={1}>
         <Button variant="ghost" borderBottomColor="#40403e" borderBottomWidth="1" pl={3} mt={5} onPress={() => handleNavigation(() => navigation.push("Adversaries"))} fontSize="2xl" fontFamily="heading" _text={{ color: "primary.200" }} _pressed={{ _text: { color: "base.brand" }, bgColor: "base.primary" }}>
           Adversaries

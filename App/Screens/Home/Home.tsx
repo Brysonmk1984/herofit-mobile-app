@@ -35,7 +35,9 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   const sideBarWidth = Dimensions.get("window").width / 2;
   const deviceHeight = Dimensions.get("window").height;
   const hero = state.hero as Hero;
-  const [drawerIsOpen, setDrawerIsOpen] = useState<boolean>(false);
+  const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
+  // Used only to disable the sidebar when the bottom menu is active
+  const [bottomDrawerOpen, setBottomDrawerOpen] = useState(false);
 
   async function handleHeroUpgrade(activities: Activity[]) {
     const user = state.user;
@@ -105,12 +107,12 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   }, [route.params?.fetchStravaManually]);
 
   return (
-    <SideMenu bounceBackOnOverdraw={false} onChange={isOpen => setDrawerIsOpen(isOpen)} isOpen={drawerIsOpen} menuPosition={"right"} menu={<SidebarMenu navigation={navigation} setDrawerIsOpen={setDrawerIsOpen} />} openMenuOffset={sideBarWidth}>
+    <SideMenu disableGestures={bottomDrawerOpen} bounceBackOnOverdraw={false} onChange={isOpen => setSideDrawerOpen(isOpen)} isOpen={sideDrawerOpen} menuPosition={"right"} menu={<SidebarMenu navigation={navigation} setSideDrawerOpen={setSideDrawerOpen} />} openMenuOffset={sideBarWidth}>
       <ScreenContainer bg={<Background />} screenName={route.name}>
         {/* TOP SECTION */}
         <View>
           <TopHud equippedTitle={equippedTitle} />
-          {state.isSignedIn && <DrawerIndicator setDrawerIsOpen={setDrawerIsOpen} />}
+          {state.isSignedIn && <DrawerIndicator setSideDrawerOpen={setSideDrawerOpen} />}
         </View>
         {/* HERO & PET */}
         <View>
@@ -123,7 +125,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
         </View>
 
         {/* BOTTOM CONSOLE */}
-        <BottomDrawer hero={state.hero} newActivitiesAvailable={newActivities.length > 0 ? true : false} latestBattle={state.latestBattle} user={state.user} />
+        <BottomDrawer hero={state.hero} newActivitiesAvailable={newActivities.length > 0 ? true : false} latestBattle={state.latestBattle} user={state.user} setBottomDrawerOpen={setBottomDrawerOpen} />
 
         {/* MODALS */}
         <SignupToSave id="SignupToSave" modalAction={() => navigation.push("Register")} />

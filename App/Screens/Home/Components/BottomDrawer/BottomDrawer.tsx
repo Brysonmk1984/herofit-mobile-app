@@ -26,9 +26,10 @@ interface BottomDrawerProps {
   newActivitiesAvailable: boolean;
   latestBattle: Battle | null;
   user: User;
+  setBottomDrawerOpen: (isOpen: boolean) => void;
 }
 
-const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailable, latestBattle, user }) => {
+const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailable, latestBattle, user, setBottomDrawerOpen }) => {
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
   const bottomDrawerHeight = windowHeight / 2.25;
@@ -173,7 +174,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
       </Box>
       {pressedItem && <ItemDetail id="ItemDetail" item={pressedItem} character={character} {...determineItemModalProps(pressedItem)} />}
       {/* HIDDEN MENU */}
-      <HiddenInventory refRBSheet={refRBSheet} bottomDrawerHeight={bottomDrawerHeight} activeTab={activeTab} setActiveTab={setActiveTab}>
+      <HiddenInventory refRBSheet={refRBSheet} bottomDrawerHeight={bottomDrawerHeight} activeTab={activeTab} setActiveTab={setActiveTab} setBottomDrawerOpen={setBottomDrawerOpen}>
         {activeTab === "Consumables" && <ItemCarousel type="consumable" data={consumables} setPressedItem={setPressedItem} refRBSheet={refRBSheet} />}
         {activeTab === "Pets" && <ItemCarousel type="pet" data={pets} equipped={equippedPet} setPressedItem={setPressedItem} refRBSheet={refRBSheet} handleEquipping={handleEquipping} goToBattle={hero.goToBattle} />}
         {activeTab === "Costumes" && <ItemCarousel type="skin" data={skins} equipped={equippedSkin} character={hero.character} setPressedItem={setPressedItem} refRBSheet={refRBSheet} handleEquipping={handleEquipping} />}
