@@ -148,12 +148,12 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
   // }, []);
 
   return (
-    <Box position="absolute" bottom={0}>
+    <Box position="absolute" bottom={0} shadow={8}>
       {/* <LinearGradient colors={["transparent", "#FFFFF0"]} style={{ height: windowHeight * 0.22, width: "100%", position: "absolute", bottom: 0 }} /> */}
       {/* PT & QP */}
       <PtAndQpMenu photonTokens={photonTokens} qp={qp} windowWidth={windowWidth} openBottomDrawer={() => refRBSheet.current.open()} push={navigation.push} />
       {/* ACTIVITY & BATTLE */}
-      <Box shadow={8}>
+      <Box>
         <Box borderColor="base.brand" borderTopWidth={1} borderBottomWidth={1} display="flex" flexDirection="row" bgColor="base.primary">
           <Box w="50%" p={2} borderRightWidth={1} borderRightColor="base.brand">
             <Button bgColor={newActivitiesAvailable ? "base.highlight" : null} onPress={() => (newActivitiesAvailable ? openModal("ActivityUpgrade") : navigation.push("Activity"))} _text={{ fontFamily: "heading", fontSize: 30 }} borderRadius="0px">
