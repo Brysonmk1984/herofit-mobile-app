@@ -30,7 +30,7 @@ const PtAndQpMenu: React.FC<PtAndQpMenuProps> = ({ photonTokens, qp, openBottomD
                 </Text>
               </View>
             ) : (
-              <Text lineHeight={37} fontFamily="heading" color="primary.800" fontSize={30}>
+              <Text lineHeight={37} fontFamily="heading" color="primary.800" fontSize={32}>
                 Quantum
               </Text>
             )}
