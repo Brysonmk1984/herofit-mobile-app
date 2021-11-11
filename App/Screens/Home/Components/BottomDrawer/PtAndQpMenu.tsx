@@ -1,71 +1,59 @@
 import React from "react";
-import { StyleSheet } from "react-native";
-import { View, Box, Text, Image, Pressable } from "native-base";
+import { View, Box, Text, Image, HStack, Pressable } from "native-base";
+import Triangle from "./Triangle";
 import { thousandsFormat } from "../../../../common/helperFunctions";
-import { useNavigation } from "@react-navigation/native";
 
 interface PtAndQpMenuProps {
   photonTokens: number;
   qp: number;
-  windowWidth: number;
+  openBottomDrawer: () => void;
+  push: () => void;
 }
 
-export const PtAndQpMenu: React.FC<PtAndQpMenuProps> = ({ photonTokens, qp, windowWidth }) => {
-  const navigation = useNavigation();
-  //qp = 0;
+const PtAndQpMenu: React.FC<PtAndQpMenuProps> = ({ photonTokens, qp, openBottomDrawer, push }) => {
   return (
-    <View>
-      {/* Left: PT Menu */}
-      <View alignSelf="center" style={[styles.trapezoid, styles.trapezoidLeft, { width: windowWidth * 0.31 }]}>
-        <Box flexDirection="row" alignItems="center" position={"absolute"} ml={1}>
-          <Image size={35} source={require("../../../../../assets/images/misc/photon_stack.webp")} alt="Photon Tokens" />
-          <Text ml={3} mb={-2} fontSize={20} color="base.highlight">
-            {thousandsFormat(photonTokens)}
-          </Text>
-        </Box>
-      </View>
-      {/* Right: QP Menu */}
+    <>
+      <Pressable zIndex={100} elevation={100} position="absolute" left={-30} top={-26} onPress={() => push("SpendQP")}>
+        <Image size="75" source={require("../../../../../assets/images/misc/quantum_points.webp")} />
+      </Pressable>
 
-      <View zIndex={1001} elevation={1001} alignSelf="center" style={[styles.trapezoid, styles.trapezoidRight, { width: windowWidth * 0.31 }]}>
-        <Pressable h={40} w={windowWidth * 0.31} alignItems="center" onPress={() => navigation.push("SpendQP")}>
-          {qp ? (
-            <View flexDirection="row">
-              <Text lineHeight={40} fontFamily="heading" color="primary.800" fontSize={20}>
-                QP:
+      <Box shadow={8}>
+        <HStack h={33} borderColor="base.brand" borderTopWidth={1} zIndex={100} justifyContent="space-between">
+          <Pressable pl={43} backgroundColor="base.primaryAlt" flex={2.5} onPress={() => push("SpendQP")}>
+            {qp ? (
+              <View flexDirection="row">
+                <Text ml={0} lineHeight={37} fontFamily="heading" color="primary.800" fontSize={34}>
+                  QP
+                </Text>
+                <Text ml={2} lineHeight={37} fontFamily="heading" color="primary.800" fontSize={34}>
+                  {qp}
+                </Text>
+              </View>
+            ) : (
+              <Text lineHeight={37} fontFamily="heading" color="primary.800" fontSize={30}>
+                Quantum
               </Text>
-              <Text ml={2} lineHeight={40} fontFamily="heading" color="base.highlight" fontSize={25}>
-                {qp}
-              </Text>
-            </View>
-          ) : (
-            <Text lineHeight={40} fontFamily="heading" color="primary.800" fontSize={20}>
-              Quantum
-            </Text>
-          )}
-        </Pressable>
-      </View>
-    </View>
+            )}
+          </Pressable>
+          <Box zIndex="1001" position="absolute" left="50%" top={-38} marginLeft={-44}>
+            <Triangle action={openBottomDrawer} />
+          </Box>
+          <Pressable onPress={() => openBottomDrawer()} flex={2.5} backgroundColor="base.primaryAlt">
+            <Box pl={27}>
+              <View flexDirection="row">
+                <Text lineHeight={37} fontSize={34} fontFamily="heading" color="primary.800">
+                  {thousandsFormat(photonTokens)}
+                </Text>
+                <Text ml={2} lineHeight={37} fontFamily="heading" color="primary.800" fontSize={34}>
+                  PT
+                </Text>
+              </View>
+            </Box>
+            <Image position="absolute" right={-25} top={-42} size="75" source={require("../../../../../assets/images/misc/photon_stack.webp")} />
+          </Pressable>
+        </HStack>
+      </Box>
+    </>
   );
 };
-
-const styles = StyleSheet.create({
-  trapezoid: {
-    height: 0,
-    borderBottomWidth: 50,
-    borderBottomColor: "#242423",
-    borderLeftColor: "transparent",
-    borderRightColor: "transparent",
-    borderStyle: "solid",
-    position: "absolute",
-  },
-  trapezoidLeft: {
-    borderLeftWidth: 0,
-    borderRightWidth: 20,
-    left: 0,
-  },
-  trapezoidRight: {
-    borderLeftWidth: 20,
-    borderRightWidth: 0,
-    right: 0,
-  },
-});
+export default PtAndQpMenu;

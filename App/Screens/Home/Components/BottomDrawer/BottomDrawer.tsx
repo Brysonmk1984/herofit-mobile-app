@@ -1,11 +1,8 @@
 import React, { useRef, useState, useEffect, useContext } from "react";
 import { useWindowDimensions } from "react-native";
-import { View, Button, Box, useTheme, Text } from "native-base";
-import RBSheet from "react-native-raw-bottom-sheet";
-import Triangle from "./Triangle";
-import StatDisplay from "../../../../Components/StatDisplay";
+import { View, Button, Box, useTheme, Text, HStack, Image } from "native-base";
 import { useNavigation } from "@react-navigation/native";
-import { PtAndQpMenu } from "./PtAndQpMenu";
+import PtAndQpMenu from "./PtAndQpMenu";
 import useModal from "../../../../common/hooks/useModal";
 import { fetchUpcomingFoeAndRewards } from "../../../../api/battle";
 import useGlobalToast from "../../../../common/hooks/useGlobalToast";
@@ -19,7 +16,9 @@ import useInventory from "../../../../common/hooks/useInventory";
 import { isExistingHero } from "../../../../common/typeGuards";
 import ItemCarousel from "./HiddenInventory/ItemCarousel";
 import ItemDetail from "./HiddenInventory/Modals/ItemDetail";
+import Triangle from "./Triangle";
 import { consumeItemRequest } from "../../../../api/inventory";
+import RBSheet from "react-native-raw-bottom-sheet";
 
 interface BottomDrawerProps {
   hero: Hero | (HeroWithStats & DefaultHeroProperties);
@@ -150,17 +149,13 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
 
   return (
     <Box position="absolute" bottom={0}>
-      <LinearGradient colors={["transparent", "#FFFFF0"]} style={{ height: windowHeight * 0.22, width: "100%", position: "absolute", bottom: 0 }} />
+      {/* <LinearGradient colors={["transparent", "#FFFFF0"]} style={{ height: windowHeight * 0.22, width: "100%", position: "absolute", bottom: 0 }} /> */}
       {/* PT & QP */}
-      <PtAndQpMenu photonTokens={photonTokens} qp={qp} windowWidth={windowWidth} />
+      <PtAndQpMenu photonTokens={photonTokens} qp={qp} windowWidth={windowWidth} openBottomDrawer={() => refRBSheet.current.open()} push={navigation.push} />
       {/* ACTIVITY & BATTLE */}
-      <Box>
-        <Box alignItems="center">
-          <Triangle action={() => refRBSheet.current.open()} />
-        </Box>
-
-        <Box borderTopColor="primary.800" borderTopWidth={1} display="flex" flexDirection="row" bgColor="base.primary">
-          <Box w="50%" p={2} borderRightWidth={1} borderRightColor="primary.800">
+      <Box shadow={8}>
+        <Box borderColor="base.brand" borderTopWidth={1} borderBottomWidth={1} display="flex" flexDirection="row" bgColor="base.primary">
+          <Box w="50%" p={2} borderRightWidth={1} borderRightColor="base.brand">
             <Button bgColor={newActivitiesAvailable ? "base.highlight" : null} onPress={() => (newActivitiesAvailable ? openModal("ActivityUpgrade") : navigation.push("Activity"))} _text={{ fontFamily: "heading", fontSize: 30 }} borderRadius="0px">
               Activity
             </Button>

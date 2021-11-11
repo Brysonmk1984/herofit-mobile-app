@@ -119,7 +119,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
           <Box position="absolute" bottom={deviceHeight * 0.2} left="50%" ml={-138}>
             <HeroImage {...propsForHeroImage} />
           </Box>
-          <Box position="absolute" right={0} bottom={95}>
+          <Box position="absolute" right={6} bottom={105}>
             {equippedPet && <PetImage pet={equippedPet} />}
           </Box>
         </View>
