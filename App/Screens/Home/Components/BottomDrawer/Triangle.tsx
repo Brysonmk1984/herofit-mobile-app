@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   triangleBorder: {
     borderLeftWidth: 44,
     borderRightWidth: 44,
-    borderBottomWidth: 66,
+    borderBottomWidth: 68,
     borderBottomColor: "#d4af37",
   },
 });

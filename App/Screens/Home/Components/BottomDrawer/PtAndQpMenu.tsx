@@ -35,7 +35,7 @@ const PtAndQpMenu: React.FC<PtAndQpMenuProps> = ({ photonTokens, qp, openBottomD
               </Text>
             )}
           </Pressable>
-          <Box zIndex="1001" position="absolute" left="50%" top={-38} marginLeft={-44}>
+          <Box zIndex="1001" position="absolute" left="50%" top={-36} marginLeft={-44}>
             <Triangle action={openBottomDrawer} />
           </Box>
           <Pressable onPress={() => openBottomDrawer()} flex={2.5} backgroundColor="base.primaryAlt">

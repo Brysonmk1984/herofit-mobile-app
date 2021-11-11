@@ -52,7 +52,7 @@ export const HeroImage: React.FC<HeroImageProps> = ({ character, width = 275, he
   }
 
   // If status isn't passed in, skip this check
-  if (status && status !== "Rested") {
+  if (status && status !== "Rested" && status !== "Recovering") {
     // STATUS EFFECT = If Hero is under a status effect, return an image with the matching modified tint
     return _renderImage(status);
   } else if (isTint) {
