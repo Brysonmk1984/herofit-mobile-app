@@ -32,7 +32,7 @@ const Loading = () => {
         <VStack>
           <View w="100%">
             <Box textAlign="center" zIndex="1000">
-              <Text display={displayLoadingText ? "flex" : "none"} fontSize="lg" fontFamily="heading" color="base.brand">
+              <Text display={displayLoadingText ? "flex" : "none"} fontWeight="bold" color="base.brand">
                 Loading...
               </Text>
             </Box>
