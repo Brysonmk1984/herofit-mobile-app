@@ -148,25 +148,26 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
   // }, []);
 
   return (
-    <Box position="absolute" bottom={0} shadow={8}>
+    <Box position="absolute" zIndex={100} bottom={0} shadow={8}>
       {/* <LinearGradient colors={["transparent", "#FFFFF0"]} style={{ height: windowHeight * 0.22, width: "100%", position: "absolute", bottom: 0 }} /> */}
       {/* PT & QP */}
-      <PtAndQpMenu photonTokens={photonTokens} qp={qp} windowWidth={windowWidth} openBottomDrawer={() => refRBSheet.current.open()} push={navigation.push} />
       {/* ACTIVITY & BATTLE */}
-      <Box>
-        <Box borderColor="base.brand" borderTopWidth={1} borderBottomWidth={1} display="flex" flexDirection="row" bgColor="base.primary">
-          <Box w="50%" p={2} borderRightWidth={1} borderRightColor="base.brand">
-            <Button bgColor={newActivitiesAvailable ? "base.highlight" : null} onPress={() => (newActivitiesAvailable ? openModal("ActivityUpgrade") : navigation.push("Activity"))} _text={{ fontFamily: "heading", fontSize: 30 }} borderRadius="0px">
-              Activity
-            </Button>
-          </Box>
-          <Box w="50%" p={2}>
-            <Button bgColor={battleReportAvailable ? "base.highlight" : null} disabled={battleButtonDisabled} _text={{ fontFamily: "heading", fontSize: 30, color: battleButtonDisabled ? "base.disabledText" : "base.white" }} borderRadius={0} onPress={latestBattle && !latestBattle.seenReport ? handleBattleReport : goToBattle ? () => handleFetchUpcomingBattle(false) : () => openModal("GoToBattle")}>
-              {battleReportAvailable ? "Report" : "Battle"}
-            </Button>
-          </Box>
+
+      <Box shadow={8} zIndex={1} elevation={1} borderColor="base.brand" borderTopWidth={1} display="flex" flexDirection="row" bgColor="base.primaryAlt">
+        <Box w="50%" p={2} borderRightWidth={1} borderRightColor="base.brand">
+          <Button bgColor={newActivitiesAvailable ? "base.highlight" : null} onPress={() => (newActivitiesAvailable ? openModal("ActivityUpgrade") : navigation.push("Activity"))} _text={{ fontFamily: "heading", fontSize: 30 }} borderRadius="0px">
+            Activity
+          </Button>
+        </Box>
+        <Box w="50%" p={2}>
+          <Button bgColor={battleReportAvailable ? "base.highlight" : null} disabled={battleButtonDisabled} _text={{ fontFamily: "heading", fontSize: 30, color: battleButtonDisabled ? "base.disabledText" : "base.white" }} borderRadius={0} onPress={latestBattle && !latestBattle.seenReport ? handleBattleReport : goToBattle ? () => handleFetchUpcomingBattle(false) : () => openModal("GoToBattle")}>
+            {battleReportAvailable ? "Report" : "Battle"}
+          </Button>
         </Box>
       </Box>
+
+      <PtAndQpMenu photonTokens={photonTokens} qp={qp} windowWidth={windowWidth} openBottomDrawer={() => refRBSheet.current.open()} push={navigation.push} />
+
       {pressedItem && <ItemDetail id="ItemDetail" item={pressedItem} character={character} {...determineItemModalProps(pressedItem)} />}
       {/* HIDDEN MENU */}
       <HiddenInventory refRBSheet={refRBSheet} bottomDrawerHeight={bottomDrawerHeight} activeTab={activeTab} setActiveTab={setActiveTab} setBottomDrawerOpen={setBottomDrawerOpen}>

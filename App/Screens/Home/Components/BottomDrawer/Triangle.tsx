@@ -9,7 +9,7 @@ const Triangle = ({ action }) => {
         style={({ pressed }) => [
           styles.triangle,
           {
-            borderBottomColor: pressed ? "#86efac" : "#242423",
+            borderBottomColor: pressed ? "#2b2b2a" : "#242423",
             marginLeft: -44,
             marginTop: 2,
           },

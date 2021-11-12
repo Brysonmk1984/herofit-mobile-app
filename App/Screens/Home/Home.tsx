@@ -115,11 +115,11 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
           {state.isSignedIn && <DrawerIndicator setSideDrawerOpen={setSideDrawerOpen} />}
         </View>
         {/* HERO & PET */}
-        <View>
+        <View zIndex={110} elevation={110}>
           <Box position="absolute" bottom={deviceHeight * 0.2} left="50%" ml={-138}>
             <HeroImage {...propsForHeroImage} />
           </Box>
-          <Box position="absolute" right={6} bottom={105}>
+          <Box position="absolute" right={-5} bottom={100}>
             {equippedPet && <PetImage pet={equippedPet} />}
           </Box>
         </View>
