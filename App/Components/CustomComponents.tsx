@@ -9,6 +9,7 @@ import LoreText from "./LoreText";
 import StatDisplay from "./StatDisplay";
 import Icon from "./Icon";
 import LoadingInPane from "./LoadingInPane";
+import LoadingSpinner from "./LoadingSpinner";
 import DrawerIndicator from "./DrawerIndicator";
 
-export { ScreenContainer, Header, Subheader, ScreenActionButton, ScreenActionFixedWrapper, LoreText, Pane, HelperText, StatDisplay, Icon, LoadingInPane, DrawerIndicator };
+export { ScreenContainer, Header, Subheader, ScreenActionButton, ScreenActionFixedWrapper, LoreText, Pane, HelperText, StatDisplay, Icon, LoadingInPane, LoadingSpinner, DrawerIndicator };

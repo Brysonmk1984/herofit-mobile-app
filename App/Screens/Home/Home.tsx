@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Box, Button, View, Text, Icon, VStack, Link } from "native-base";
+import { Box, Button, View, Text, Icon, VStack, Link, Center } from "native-base";
 import ScreenContainer from "../../Components/ScreenContainer/ScreenContainer";
 import debugErrors from "../../common/debugErrors";
 import { GlobalStateContext } from "../../store";
@@ -11,7 +11,7 @@ import BottomDrawer from "./Components/BottomDrawer/BottomDrawer";
 import { HeroImage } from "../../Components/HeroImage/HeroImage";
 import { TopHud } from "./Components/TopHud/TopHud";
 import { PetImage } from "./Components/PetImage";
-import { DrawerIndicator } from "../../Components/CustomComponents";
+import { DrawerIndicator, LoadingInPane, LoadingSpinner } from "../../Components/CustomComponents";
 import { Activity, Hero } from "../../common/types";
 import { upgradeSequence } from "../../api/avatar";
 import buildGainsMessages from "./Components/gainsMessages";
@@ -23,6 +23,8 @@ import { clearLs } from "../../common/helperFunctions";
 import SideMenu from "react-native-side-menu-updated";
 import { Dimensions } from "react-native";
 import SidebarMenu from "./Components/SidebarMenu";
+import { reloadAsync } from "expo-updates";
+import GestureRecognizer, { swipeDirections } from "react-native-swipe-gestures";
 
 const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -36,6 +38,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   const deviceHeight = Dimensions.get("window").height;
   const hero = state.hero as Hero;
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
+  const [appIsReloading, setAppIsReloading] = useState(false);
   // Used only to disable the sidebar when the bottom menu is active
   const [bottomDrawerOpen, setBottomDrawerOpen] = useState(false);
 
@@ -68,6 +71,12 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
       addToast("error", error.message);
       debugErrors(error, user);
     }
+  }
+
+  // SWIPE DOWN - RELOAD APP
+  function handleReload() {
+    setAppIsReloading(true);
+    reloadAsync();
   }
 
   // Determine which modal should pop up
@@ -108,35 +117,40 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
 
   return (
     <SideMenu disableGestures={bottomDrawerOpen} bounceBackOnOverdraw={false} onChange={isOpen => setSideDrawerOpen(isOpen)} isOpen={sideDrawerOpen} menuPosition={"right"} menu={<SidebarMenu navigation={navigation} setSideDrawerOpen={setSideDrawerOpen} />} openMenuOffset={sideBarWidth}>
-      <ScreenContainer bg={<Background />} screenName={route.name}>
-        {/* TOP SECTION */}
-        <View>
-          <TopHud equippedTitle={equippedTitle} />
-          {state.isSignedIn && <DrawerIndicator setSideDrawerOpen={setSideDrawerOpen} />}
-        </View>
-        {/* HERO & PET */}
-        <View zIndex={110} elevation={110}>
-          <Box position="absolute" bottom={deviceHeight * 0.2} left="50%" ml={-138}>
-            <HeroImage {...propsForHeroImage} />
-          </Box>
-          <Box position="absolute" right={-5} bottom={100}>
-            {equippedPet && <PetImage pet={equippedPet} />}
-          </Box>
-        </View>
+      <GestureRecognizer onSwipeDown={state => handleReload()}>
+        <ScreenContainer bg={<Background />} screenName={route.name}>
+          {/* TOP SECTION */}
+          <View>
+            <TopHud equippedTitle={equippedTitle} />
+            {state.isSignedIn && <DrawerIndicator setSideDrawerOpen={setSideDrawerOpen} />}
+          </View>
+          {/* HERO & PET */}
+          <View zIndex={110} elevation={110}>
+            <Box position="absolute" bottom={deviceHeight * 0.2} left="50%" ml={-138}>
+              <HeroImage {...propsForHeroImage} />
+            </Box>
+            <Box position="absolute" right={-5} bottom={100}>
+              {equippedPet && <PetImage pet={equippedPet} />}
+            </Box>
+          </View>
 
-        {/* BOTTOM CONSOLE */}
-        <BottomDrawer hero={state.hero} newActivitiesAvailable={newActivities.length > 0 ? true : false} latestBattle={state.latestBattle} user={state.user} setBottomDrawerOpen={setBottomDrawerOpen} />
+          {/* BOTTOM CONSOLE */}
+          <BottomDrawer hero={state.hero} newActivitiesAvailable={newActivities.length > 0 ? true : false} latestBattle={state.latestBattle} user={state.user} setBottomDrawerOpen={setBottomDrawerOpen} />
 
-        {/* MODALS */}
-        <SignupToSave id="SignupToSave" modalAction={() => navigation.push("Register")} />
-        <ConfirmEmail id="ConfirmEmail" />
-        <ChooseActivityEntry id="ChooseActivityEntry" />
-        <FeedbackChoice id="FeedbackChoice" />
-        <SignupFinished id="SignupFinished" />
-        <GoToBattle id="GoToBattle" goTo={navigation.push} heroId={hero.id} />
+          {/* MODALS */}
+          <SignupToSave id="SignupToSave" modalAction={() => navigation.push("Register")} />
+          <ConfirmEmail id="ConfirmEmail" />
+          <ChooseActivityEntry id="ChooseActivityEntry" />
+          <FeedbackChoice id="FeedbackChoice" />
+          <SignupFinished id="SignupFinished" />
+          <GoToBattle id="GoToBattle" goTo={navigation.push} heroId={hero.id} />
 
-        {newActivities.length ? <ActivityUpgrade id="ActivityUpgrade" activities={newActivities} modalAction={() => handleHeroUpgrade(newActivities)} goBack={navigation.push} state={state} closeModal={closeModal} setNewActivities={setNewActivities} /> : null}
-      </ScreenContainer>
+          {newActivities.length ? <ActivityUpgrade id="ActivityUpgrade" activities={newActivities} modalAction={() => handleHeroUpgrade(newActivities)} goBack={navigation.push} state={state} closeModal={closeModal} setNewActivities={setNewActivities} /> : null}
+
+          {/* RELOADING IN PAGE */}
+          {appIsReloading && <LoadingSpinner color="base.brand" size="lg" />}
+        </ScreenContainer>
+      </GestureRecognizer>
     </SideMenu>
   );
 };
