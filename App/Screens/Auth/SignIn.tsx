@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, VStack, FormControl, Input, Link, Spinner, HStack } from "native-base";
+import { View, Text, VStack, FormControl, Input, Link, Spinner, HStack, Center } from "native-base";
 import { login } from "../../api/authentication";
 import { GlobalStateContext } from "../../store";
 import debugErrors from "../../common/debugErrors";
@@ -8,6 +8,8 @@ import { Header, ScreenContainer, ScreenActionButton, Pane, HelperText, LoadingI
 import { useDebouncedCallback } from "use-debounce";
 import { AuthStackProps } from "../../common/types-navigator";
 import useGlobalToast from "../../common/hooks/useGlobalToast";
+import * as WebBrowser from "expo-web-browser";
+import { PaneSupportText } from "../../Components/PaneSupportText";
 
 const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -17,6 +19,8 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
   const [formIsValid, setFormIsValid] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [showLegacyLink, setShowLegacyLink] = useState(false);
+
   const { addToast } = useGlobalToast();
   async function handleSignIn() {
     setLoading(true);
@@ -41,9 +45,13 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
       setLoading(false);
     } catch (error) {
       let message = debugErrors(error);
+      console.log("message", message);
       if (Array.isArray(error.debug)) {
         if (error.debug[0].msg === "Couldn't find a user with that email." || error.debug[0].msg === "Incorrect password, please try again.") {
           message = error.debug[0].msg;
+          // Force Users from Back before the new login system was built (JUNE 2020) to update via web login.
+        } else if (error.debug[0].oldUserMigration) {
+          setShowLegacyLink(true);
         }
       }
 
@@ -74,6 +82,17 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
     updateFunction(text);
     debounced();
   }
+
+  useEffect(() => {
+    let disableButtonTimeout;
+    if (showLegacyLink) {
+      disableButtonTimeout = setTimeout(() => {
+        setShowLegacyLink(false);
+      }, 20000);
+    }
+
+    return () => clearTimeout(disableButtonTimeout);
+  }, [showLegacyLink]);
 
   // TODO : need to cleanup ASYNC tasks
   useEffect(() => {}, []);
@@ -107,18 +126,30 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
             ) : (
               <>
                 {helperText && <HelperText type={formIsValid ? "success" : "error"} text={helperText} />}
-                <View alignItems="center">
-                  <Link onPress={() => navigation.push("ForgotPassword")} mt={1}>
-                    Forgot Password?
-                  </Link>
-                </View>
+
+                {showLegacyLink ? (
+                  <Center>
+                    <PaneSupportText iconName="caution" iconColor="base.caution" text={"Must Verify Account on HeroFit.io"}>
+                      We have upgraded out login system and because you have a legacy account, you must verify your account from our website.
+                    </PaneSupportText>
+                    <Link _text={{ fontSize: "3xl" }} onPress={() => navigation.push("ForgotPassword")} mt={1}>
+                      Verify Account
+                    </Link>
+                  </Center>
+                ) : (
+                  <Center>
+                    <Link _text={{ fontSize: "lg" }} onPress={() => navigation.push("ForgotPassword")} my={1}>
+                      Forgot Password?
+                    </Link>
+                  </Center>
+                )}
               </>
             )}
           </VStack>
         </Pane>
       </View>
 
-      <ScreenActionButton text="Let's Go!" disabled={formIsValid && !loading ? false : true} action={handleSignIn} />
+      <ScreenActionButton text="Let's Go!" disabled={!formIsValid || loading || showLegacyLink ? true : false} action={handleSignIn} />
     </ScreenContainer>
   );
 };

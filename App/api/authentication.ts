@@ -66,8 +66,8 @@ const resetPassword = async function (body: ResetPasswordParams) {
     });
 };
 
-// Only Meant for password reset
-const sendPasswordResetEmailVerification = async function (body: { email: string; isApp: true }) {
+// Meant for password reset, but also used for updating legacy accounts (pre may 2020), but this is handled through the web app
+const sendPasswordResetEmailVerification = async function (body: { email: string; isMobileApp: true }) {
   return axios
     .post(`${endpoint}auth/reset-password-confirm-email`, body, await axiosOptions())
     .then(({ data }) => {

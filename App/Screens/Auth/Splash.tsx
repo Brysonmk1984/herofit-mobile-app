@@ -5,6 +5,7 @@ import { AuthStackProps } from "../../common/types-navigator";
 import { Header, ScreenContainer } from "../../Components/CustomComponents";
 import herofitTheme from "../../styles/herofitTheme";
 import { GlobalStateContext } from "../../store";
+import * as Linking from "expo-linking";
 
 const Splash = ({ navigation, route }: AuthStackProps<"Splash">) => {
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -14,6 +15,21 @@ const Splash = ({ navigation, route }: AuthStackProps<"Splash">) => {
     dispatch({ type: "SET USER STATUS", payload: { userStatus: "new" } });
     navigation.push("AboutGame");
   }
+
+  // If a user returns to app, but at a later time and the app was closed, need to get initial URL and redirect as needed
+  Linking.getInitialURL().then(url => {
+    const verifyPassword = Linking.parse(url).queryParams?.verifyPassword;
+    if (verifyPassword) {
+      navigation.push("ForgotPassword", { verifyPassword });
+    }
+  });
+  // Shouldn't normally happen, but if a user already had app open and is on splash screen after redirect from email and website: capture URL and pass verifyPassword url param as screen parameter to forgot password
+  Linking.addEventListener("url", data => {
+    const verifyPassword = Linking.parse(data.url)?.queryParams.verifyPassword;
+    if (verifyPassword) {
+      navigation.push("ForgotPassword", { verifyPassword });
+    }
+  });
 
   React.useEffect(() => {
     const timeout = setTimeout(() => {

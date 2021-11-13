@@ -9,7 +9,9 @@ REACT NAVIGATOR TYPES
 type AuthStackParamList = {
   Splash: undefined;
   SignIn: undefined;
-  ForgotPassword: undefined;
+  ForgotPassword: {
+    verifyPassword?: string;
+  };
   Register: NavigatorScreenParams<MainStackParamList["Home"]>;
   AboutGame: undefined;
   SelectHeroHowTo: undefined;

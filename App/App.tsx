@@ -30,8 +30,6 @@ const App: React.FC = () => {
     "bebas-neue": require("../assets/fonts/BebasNeue-Regular.ttf"),
     oswald: require("../assets/fonts/Oswald-VariableFont_wght.ttf"),
     pathway: require("../assets/fonts/PathwayGothicOne-Regular.ttf"),
-    // 'pragatiNarrow-bold': require('../assets/fonts/PragatiNarrow-Bold.ttf'),
-    // 'pragatiNarrow': require('../assets/fonts/PragatiNarrow-Regular.ttf'),
     rochester: require("../assets/fonts/Rochester-Regular.ttf"),
     shadowsIntoLight: require("../assets/fonts/ShadowsIntoLight-Regular.ttf"),
   });
@@ -84,8 +82,6 @@ const App: React.FC = () => {
   //   },
   // };
 
-  //Linking.getInitialURL().then(url => console.log("Test=", url));
-  //Linking.addEventListener("url", data => console.log("EventListener=", data));
   // useEffect(() => {
   //   getInitialState()
   //     .then(state => {
@@ -95,7 +91,7 @@ const App: React.FC = () => {
 
   //       setIsReady(true);
   //     })
-  //     .catch((error) => console.log('ERROR', error););
+  //     .catch(error => console.log("ERROR", error));
   // }, [getInitialState]);
 
   /* 
