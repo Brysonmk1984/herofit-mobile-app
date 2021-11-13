@@ -93,10 +93,12 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
     appState.current = nextAppState;
     setAppStateVisible(appState.current);
   };
-
+  // Only add Foreground listener is active user
   useEffect(() => {
-    AppState.addEventListener("change", _handleAppStateChange);
-    return () => AppState.removeEventListener("change", _handleAppStateChange);
+    if (state.userStatus !== "new" && state.userStatus !== "unconfirmed" && state.user?.dataSrcId) {
+      AppState.addEventListener("change", _handleAppStateChange);
+      return () => AppState.removeEventListener("change", _handleAppStateChange);
+    }
   }, []);
 
   // Determine which modal should pop up
