@@ -75,8 +75,10 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
 
   // SWIPE DOWN - RELOAD APP
   function handleReload() {
-    setAppIsReloading(true);
-    reloadAsync();
+    if (!bottomDrawerOpen) {
+      setAppIsReloading(true);
+      reloadAsync();
+    }
   }
 
   // Determine which modal should pop up
@@ -117,40 +119,41 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
 
   return (
     <SideMenu disableGestures={bottomDrawerOpen} bounceBackOnOverdraw={false} onChange={isOpen => setSideDrawerOpen(isOpen)} isOpen={sideDrawerOpen} menuPosition={"right"} menu={<SidebarMenu navigation={navigation} setSideDrawerOpen={setSideDrawerOpen} />} openMenuOffset={sideBarWidth}>
-      <GestureRecognizer onSwipeDown={state => handleReload()}>
-        <ScreenContainer bg={<Background />} screenName={route.name}>
-          {/* TOP SECTION */}
-          <View>
-            <TopHud equippedTitle={equippedTitle} />
-            {state.isSignedIn && <DrawerIndicator setSideDrawerOpen={setSideDrawerOpen} />}
-          </View>
-          {/* HERO & PET */}
-          <View zIndex={110} elevation={110}>
-            <Box position="absolute" bottom={deviceHeight * 0.2} left="50%" ml={-138}>
-              <HeroImage {...propsForHeroImage} />
-            </Box>
-            <Box position="absolute" right={-5} bottom={100}>
-              {equippedPet && <PetImage pet={equippedPet} />}
-            </Box>
-          </View>
+      <ScreenContainer bg={<Background />} screenName={route.name}>
+        <View zIndex={110} elevation={110}>
+          <GestureRecognizer onSwipeDown={state => handleReload()}>
+            {/* TOP SECTION */}
+            <View>
+              <TopHud equippedTitle={equippedTitle} />
+              {state.isSignedIn && <DrawerIndicator setSideDrawerOpen={setSideDrawerOpen} />}
+            </View>
+            {/* HERO & PET */}
+            <View zIndex={110} elevation={110}>
+              <Box position="absolute" bottom={-(deviceHeight * 0.5)} left="50%" ml={-138}>
+                <HeroImage {...propsForHeroImage} />
+              </Box>
+              <Box position="absolute" right={-5} bottom={-(deviceHeight * 0.6)}>
+                {equippedPet && <PetImage pet={equippedPet} />}
+              </Box>
+            </View>
+          </GestureRecognizer>
+        </View>
+        {/* BOTTOM CONSOLE */}
+        <BottomDrawer hero={state.hero} newActivitiesAvailable={newActivities.length > 0 ? true : false} latestBattle={state.latestBattle} user={state.user} setBottomDrawerOpen={setBottomDrawerOpen} />
 
-          {/* BOTTOM CONSOLE */}
-          <BottomDrawer hero={state.hero} newActivitiesAvailable={newActivities.length > 0 ? true : false} latestBattle={state.latestBattle} user={state.user} setBottomDrawerOpen={setBottomDrawerOpen} />
+        {/* MODALS */}
+        <SignupToSave id="SignupToSave" modalAction={() => navigation.push("Register")} />
+        <ConfirmEmail id="ConfirmEmail" />
+        <ChooseActivityEntry id="ChooseActivityEntry" />
+        <FeedbackChoice id="FeedbackChoice" />
+        <SignupFinished id="SignupFinished" />
+        <GoToBattle id="GoToBattle" goTo={navigation.push} heroId={hero.id} />
 
-          {/* MODALS */}
-          <SignupToSave id="SignupToSave" modalAction={() => navigation.push("Register")} />
-          <ConfirmEmail id="ConfirmEmail" />
-          <ChooseActivityEntry id="ChooseActivityEntry" />
-          <FeedbackChoice id="FeedbackChoice" />
-          <SignupFinished id="SignupFinished" />
-          <GoToBattle id="GoToBattle" goTo={navigation.push} heroId={hero.id} />
+        {newActivities.length ? <ActivityUpgrade id="ActivityUpgrade" activities={newActivities} modalAction={() => handleHeroUpgrade(newActivities)} goBack={navigation.push} state={state} closeModal={closeModal} setNewActivities={setNewActivities} /> : null}
 
-          {newActivities.length ? <ActivityUpgrade id="ActivityUpgrade" activities={newActivities} modalAction={() => handleHeroUpgrade(newActivities)} goBack={navigation.push} state={state} closeModal={closeModal} setNewActivities={setNewActivities} /> : null}
-
-          {/* RELOADING IN PAGE */}
-          {appIsReloading && <LoadingSpinner color="base.brand" size="lg" />}
-        </ScreenContainer>
-      </GestureRecognizer>
+        {/* RELOADING IN PAGE */}
+        {appIsReloading && <LoadingSpinner color="base.brand" size="lg" />}
+      </ScreenContainer>
     </SideMenu>
   );
 };
