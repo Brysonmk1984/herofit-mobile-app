@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { Box, Button, View, Text, Icon, VStack, Link, Center } from "native-base";
 import ScreenContainer from "../../Components/ScreenContainer/ScreenContainer";
 import debugErrors from "../../common/debugErrors";
@@ -21,10 +21,11 @@ import useGlobalToast from "../../common/hooks/useGlobalToast";
 import useInventory from "../../common/hooks/useInventory";
 import { clearLs } from "../../common/helperFunctions";
 import SideMenu from "react-native-side-menu-updated";
-import { Dimensions } from "react-native";
+import { AppState, Dimensions } from "react-native";
 import SidebarMenu from "./Components/SidebarMenu";
 import { reloadAsync } from "expo-updates";
 import GestureRecognizer, { swipeDirections } from "react-native-swipe-gestures";
+import * as Linking from "expo-linking";
 
 const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -41,6 +42,9 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   const [appIsReloading, setAppIsReloading] = useState(false);
   // Used only to disable the sidebar when the bottom menu is active
   const [bottomDrawerOpen, setBottomDrawerOpen] = useState(false);
+  // detect app  in foreground
+  const appState = useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
   async function handleHeroUpgrade(activities: Activity[]) {
     const user = state.user;
@@ -80,6 +84,20 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
       reloadAsync();
     }
   }
+
+  // Handles detecting when the app comes back to the foreground
+  const _handleAppStateChange = nextAppState => {
+    if (appState.current.match(/inactive|background/) && nextAppState === "active") {
+      handleReload();
+    }
+    appState.current = nextAppState;
+    setAppStateVisible(appState.current);
+  };
+
+  useEffect(() => {
+    AppState.addEventListener("change", _handleAppStateChange);
+    return () => AppState.removeEventListener("change", _handleAppStateChange);
+  }, []);
 
   // Determine which modal should pop up
   useEffect(() => {
