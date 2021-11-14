@@ -1,18 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Heading, Box, View, Text, ScrollView, Link } from "native-base";
-import * as MailComposer from "expo-mail-composer";
+import { View, Text, ScrollView, Link } from "native-base";
 import { BasicModal } from "../../../Components/ModalTemplates/ModalTemplates";
 import { BodyContent } from "../../../Components/ModalTemplates/BasicModal/Content";
 import { GlobalStateContext } from "../../../store";
 import HeroInitiationChecklist from "./Components/HeroInitiationChecklist";
 import { resendEmailConfirmation } from "../../../api/authentication";
 import debugErrors from "../../../common/debugErrors";
-import { makeRedirectUri } from "expo-auth-session";
 import { LoadingInPane } from "../../../Components/CustomComponents";
 import { getUser } from "../../../api/user";
 import useModal from "../../../common/hooks/useModal";
 import useGlobalToast from "../../../common/hooks/useGlobalToast";
-import * as WebBrowser from "expo-web-browser";
 import { ModalActionHeader } from "../../../Components/ModalTemplates/ModalActionHeader";
 
 interface ConfirmEmailProps {
@@ -29,18 +26,6 @@ const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
   const [result, setResult] = useState(null);
 
   const { addToast } = useGlobalToast();
-  // const [request, response, promptAsync] = useAuthRequest(
-  //   {
-  //     redirectUri: makeRedirectUri({
-  //       // For usage in bare and standalone
-  //       // the "redirect" must match your "Authorization Callback Domain" in the Strava dev console.
-  //       //native: "your.app://redirect",
-  //       useProxy: false,
-  //       native: "herofit://test",
-  //     }),
-  //   },
-  //   discovery,
-  // );
 
   function resendEmailLink() {
     try {
@@ -77,27 +62,6 @@ const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
     }
   }
 
-  // async function openEmailApp() {
-  //   try {
-  //     await MailComposer.composeAsync({});
-  //   } catch (error) {
-  //     if (error.toString() === "Error: Mail services are not available. Make sure you're signed into the Mail app") {
-  //       return addToast("error", "Mail services are not available. Make sure you're signed into the Mail app");
-  //     }
-  //     return addToast("error", "Unable to use Phone's mail application, try verifying through a web browser.");
-  //   }
-  // }
-
-  // async function openWebBrowser() {
-  //   try {
-  //     let result = await WebBrowser.openBrowserAsync();
-  //     setResult(result);
-  //     console.log("RESULT=", result);
-  //   } catch (error) {
-  //     console.log("ERRRROR", error);
-  //   }
-  // }
-
   useEffect(() => {
     if (state.modalQueue[0] === id) {
       // Timeout is only to prevent the user from clicking the action button right away without checking email
@@ -119,13 +83,6 @@ const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
           </ScrollView>
         ) : (
           <View>
-            {/* <Link p={1} justifyContent={"center"} _text={{ fontSize: "2xl", textDecoration: "underline" }} onPress={openEmailApp} mt={1}>
-              Open Email App
-            </Link>
-            <Link mb={3} p={1} justifyContent={"center"} _text={{ fontSize: "2xl", textDecoration: "underline" }} onPress={openWebBrowser} mt={1}>
-              Open Web Browser
-            </Link> */}
-
             <Text textAlign="center" fontSize="xl" my={7}>
               Go ahead, we'll wait!
             </Text>
