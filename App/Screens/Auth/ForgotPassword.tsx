@@ -65,9 +65,7 @@ const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">)
 
   // If a user returns to app, capture URL and set state to value of verifyPassword
   Linking.addEventListener("url", data => {
-    console.log("EventListener=", data);
     const verifyPassword = Linking.parse(data.url)?.queryParams.verifyPassword;
-    console.log("VP!", verifyPassword);
     if (verifyPassword) {
       setVerifyPassword(verifyPassword);
     }
@@ -78,26 +76,6 @@ const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">)
       setVerifyPassword(route.params.verifyPassword);
     }
   }, [route.params?.verifyPassword]);
-
-  // useEffect(() => {
-  //   if (token) {
-  //     // When the user has returned to the screen from clicking on the app...
-  //     // Check to make sure the email, password, and new password are valid
-  //     if (email.includes("@")) {
-  //       if (password.length >= 8) {
-  //         if (passwordConfirm === password) {
-  //           return setFormIsValid(true);
-  //         }
-  //       }
-  //     }
-  //     return setFormIsValid(false);
-  //   } else {
-  //     // If user hasn't clicked link in email, only check email field
-  //     if (email.includes("@")) {
-  //       return setFormIsValid(true);
-  //     }
-  //   }
-  // }, [email, password, passwordConfirm]);
 
   const debounced = useDebouncedCallback(() => {
     if (email.includes("@")) {

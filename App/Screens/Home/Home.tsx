@@ -35,8 +35,14 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   const { addToast } = useGlobalToast();
   const { equippedSkin, equippedPet, equippedTitle } = useInventory(true);
   const propsForHeroImage = (({ character, equipped, alias, status }) => ({ character, equipped, alias, skin: equippedSkin, status, floating: true }))(state.hero);
-  const sideBarWidth = Dimensions.get("window").width / 2;
   const deviceHeight = Dimensions.get("window").height;
+  const deviceWidth = Dimensions.get("window").width;
+  const sideBarWidth = deviceWidth / 2;
+  const isLongPhone = deviceHeight > deviceWidth * 1.8;
+  const heroImagePosition = isLongPhone ? deviceHeight * 0.7 : deviceHeight * 0.5;
+  const petImagePosition = isLongPhone ? deviceHeight * 0.7 : deviceHeight * 0.6;
+  const heroImageSize = isLongPhone ? 375 : 275;
+  const bottomDrawerHeight = deviceHeight / 2.25;
   const hero = state.hero as Hero;
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
   const [appIsReloading, setAppIsReloading] = useState(false);
@@ -148,18 +154,18 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
               {state.isSignedIn && <DrawerIndicator setSideDrawerOpen={setSideDrawerOpen} />}
             </View>
             {/* HERO & PET */}
-            <View zIndex={110} elevation={110}>
-              <Box position="absolute" bottom={-(deviceHeight * 0.5)} left="50%" ml={-138}>
-                <HeroImage {...propsForHeroImage} />
-              </Box>
-              <Box position="absolute" right={-5} bottom={-(deviceHeight * 0.6)}>
-                {equippedPet && <PetImage pet={equippedPet} />}
+            <View h={heroImagePosition} zIndex={110}>
+              <Box position="absolute" bottom={0} left="50%" ml={-138}>
+                <HeroImage width={heroImageSize} height={heroImageSize} {...propsForHeroImage} />
               </Box>
             </View>
           </GestureRecognizer>
+          <Box position="absolute" zIndex={111} right={-5} top={petImagePosition}>
+            {equippedPet && <PetImage pet={equippedPet} />}
+          </Box>
         </View>
         {/* BOTTOM CONSOLE */}
-        <BottomDrawer hero={state.hero} newActivitiesAvailable={newActivities.length > 0 ? true : false} latestBattle={state.latestBattle} user={state.user} setBottomDrawerOpen={setBottomDrawerOpen} />
+        <BottomDrawer hero={state.hero} newActivitiesAvailable={newActivities.length > 0 ? true : false} latestBattle={state.latestBattle} user={state.user} setBottomDrawerOpen={setBottomDrawerOpen} bottomDrawerHeight={bottomDrawerHeight} deviceHeight={deviceHeight} />
 
         {/* MODALS */}
         <SignupToSave id="SignupToSave" modalAction={() => navigation.push("Register")} />

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Image, Pressable, FlatList, SectionList, Box, Center, View, Text, Heading, VStack, FormControl, Input, Link, Button, IconButton, HStack, Divider } from "native-base";
 import AnimatedLoader from "react-native-animated-loader";
 import ScreenContainer from "../../Components/ScreenContainer/ScreenContainer";
-import { Dimensions } from "react-native";
+import { Dimensions, Platform } from "react-native";
 const Loading = () => {
   const loaderSize = Dimensions.get("window").width * 1.2;
   const [displayLoadingText, setDisplayLoadingText] = useState(true);
@@ -32,7 +32,7 @@ const Loading = () => {
         <VStack>
           <View w="100%">
             <Box textAlign="center" zIndex="1000">
-              <Text display={displayLoadingText ? "flex" : "none"} fontFamily={"Arial"} color="base.brand">
+              <Text display={displayLoadingText ? "flex" : "none"} fontFamily={Platform.OS === "android" ? "Roboto" : "Arial"} color="base.brand">
                 Loading...
               </Text>
             </Box>

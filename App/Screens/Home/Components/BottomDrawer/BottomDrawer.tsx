@@ -26,12 +26,11 @@ interface BottomDrawerProps {
   latestBattle: Battle | null;
   user: User;
   setBottomDrawerOpen: (isOpen: boolean) => void;
+  bottomDrawerHeight: number;
+  deviceWidth: number;
 }
 
-const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailable, latestBattle, user, setBottomDrawerOpen }) => {
-  const windowWidth = useWindowDimensions().width;
-  const windowHeight = useWindowDimensions().height;
-  const bottomDrawerHeight = windowHeight / 2.25;
+const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailable, latestBattle, user, setBottomDrawerOpen, bottomDrawerHeight, deviceWidth }) => {
   const refRBSheet = useRef({ open: () => null });
 
   const navigation = useNavigation();
@@ -166,7 +165,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
         </Box>
       </Box>
 
-      <PtAndQpMenu photonTokens={photonTokens} qp={qp} windowWidth={windowWidth} openBottomDrawer={() => refRBSheet.current.open()} push={navigation.push} />
+      <PtAndQpMenu photonTokens={photonTokens} qp={qp} windowWidth={deviceWidth} openBottomDrawer={() => refRBSheet.current.open()} push={navigation.push} />
 
       {pressedItem && <ItemDetail id="ItemDetail" item={pressedItem} character={character} {...determineItemModalProps(pressedItem)} />}
       {/* HIDDEN MENU */}

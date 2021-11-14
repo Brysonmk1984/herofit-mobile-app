@@ -24,9 +24,9 @@ const BattleReport: React.FC<BattleReportProps> = ({ navigation, route }) => {
 
   function handleFirstAndLastSwipes(e) {
     if (currentPage === 4) {
-      navigation.popToTop();
+      navigation.navigate("Home");
     } else if (currentPage === 0) {
-      navigation.popToTop();
+      navigation.navigate("Home");
     }
   }
 
