@@ -6,6 +6,7 @@ import { ScreenContainer, Header, Subheader, ScreenActionButton, Pane, Icon, Sta
 import defaultStats from "../../common/defaultStats.json";
 import { AuthStackProps } from "../../common/types-navigator";
 import { HeroChoice } from "../../common/types";
+import PaneSupportText from "../../Components/PaneSupportText";
 
 // How To Select Screen
 export default function SelectHeroHowTo({ navigation, route }: AuthStackProps<"SelectHeroHowTo">) {
@@ -25,14 +26,9 @@ export default function SelectHeroHowTo({ navigation, route }: AuthStackProps<"S
 
   return (
     <ScreenContainer screenName={route.name}>
-      <ScrollView mb={5}>
-        <Header mb={3} text="One More Thing" />
-        <VStack mb={3}>
-          <Pane>
-            <Text textAlign="justify" fontSize="xs">
-              Heroes have slightly different starting stats. These values have only a small impact: ultimately your training and how you spend Quantum Points (Talent points) will dictate how your hero develops.
-            </Text>
-          </Pane>
+      <Header pt={3} pb={3} text="One More Thing" />
+      <ScrollView py={3}>
+        <VStack mb={30}>
           <Pane>
             <Subheader text="Base Stats" />
             <FlatList
@@ -47,9 +43,14 @@ export default function SelectHeroHowTo({ navigation, route }: AuthStackProps<"S
               }}
             />
           </Pane>
+          <Pane>
+            <Box p={2}>
+              <Text color="primary.700">Heroes have different starting elemental power, but these values have only a small impact. Ultimately your training and how you spend Quantum Points (Talent points) will dictate how your hero develops.</Text>
+            </Box>
+          </Pane>
         </VStack>
       </ScrollView>
-      <ScreenActionButton text="OK" action={() => navigation.push("SelectHero", { heroList })} />
+      <ScreenActionButton text="OK" action={() => navigation.push("SelectHero", { heroList })} includeBorder={true} />
     </ScreenContainer>
   );
 }

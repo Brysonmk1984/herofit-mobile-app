@@ -4,13 +4,13 @@ import Icon from "./Icon";
 
 interface PaneSupportTextProps {
   children: string | ReactChild;
-  iconName: string;
   text: string;
+  iconName?: string;
   iconColor?: string;
   textColor?: string;
 }
 
-export const PaneSupportText: React.FC<PaneSupportTextProps> = ({ children, iconName, text, iconColor = "base.primary", textColor = "base.primary" }) => {
+const PaneSupportText: React.FC<PaneSupportTextProps> = ({ children, text, iconName = "info", iconColor = "base.info", textColor = "base.primary" }) => {
   return (
     <Box alignItems="center">
       <HStack px={2} alignItems="center">
@@ -29,3 +29,5 @@ export const PaneSupportText: React.FC<PaneSupportTextProps> = ({ children, icon
     </Box>
   );
 };
+
+export default PaneSupportText;

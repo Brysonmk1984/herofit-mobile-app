@@ -3,7 +3,7 @@ import { Box, Button } from "native-base";
 import { clearLs } from "../../common/helperFunctions";
 import Pane from "../../Components/Pane";
 import Subheader from "../../Components/Subheader";
-import { PaneSupportText } from "../../Components/PaneSupportText";
+import PaneSupportText from "../../Components/PaneSupportText";
 import LoadingInPane from "../../Components/LoadingInPane";
 
 interface StravaPaneProps {

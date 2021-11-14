@@ -7,7 +7,7 @@ import { getHeroImage } from "../common/helperFunctions";
 const SLIDER_WIDTH = Dimensions.get("window").width;
 const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.65);
 const ITEM_HEIGHT = ITEM_WIDTH;
-
+console.log(ITEM_HEIGHT);
 export default function HeroCarousel({ heroList, setActiveHero, viewDetails }) {
   function _renderItem({ item, index }) {
     return (
@@ -31,14 +31,7 @@ export default function HeroCarousel({ heroList, setActiveHero, viewDetails }) {
 }
 
 const styles = StyleSheet.create({
-  carouselWrapper: {
-    elevation: Platform.OS === "android" ? 101 : 0,
-    position: "absolute",
-    left: 0,
-    top: 0,
-    zIndex: 1000,
-    marginTop: Dimensions.get("window").height * 0.17,
-  },
+  carouselWrapper: { height: ITEM_HEIGHT * 1.2 },
   carouselContainer: {},
   itemContainer: {
     width: ITEM_WIDTH,

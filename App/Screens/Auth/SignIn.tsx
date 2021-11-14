@@ -9,7 +9,7 @@ import { useDebouncedCallback } from "use-debounce";
 import { AuthStackProps } from "../../common/types-navigator";
 import useGlobalToast from "../../common/hooks/useGlobalToast";
 import * as WebBrowser from "expo-web-browser";
-import { PaneSupportText } from "../../Components/PaneSupportText";
+import PaneSupportText from "../../Components/PaneSupportText";
 
 const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
   const { state, dispatch } = useContext(GlobalStateContext);

@@ -12,7 +12,7 @@ import { isExistingHero } from "../common/typeGuards";
 import { Header, Pane, Subheader } from "../Components/CustomComponents";
 import { checkDataSrcType, clearLs, createAlert } from "../common/helperFunctions";
 import useGlobalToast from "../common/hooks/useGlobalToast";
-import { PaneSupportText } from "../Components/PaneSupportText";
+import PaneSupportText from "../Components/PaneSupportText";
 import { ScrollView } from "react-native-gesture-handler";
 import { createManualDataSrcId, getStravaClientCredentials } from "../api/authentication";
 import useStravaConnect from "../common/hooks/useStravaConnect";

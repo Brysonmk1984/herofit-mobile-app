@@ -10,24 +10,23 @@ import { HeroChoice } from "../../common/types";
 const SelectHero = ({ route, navigation }: AuthStackProps<"SelectHero">) => {
   const { heroList } = route.params;
   const [activeHero, setActiveHero] = useState(heroList[0]);
+  console.log("HL", activeHero);
 
-  // HeroCarousel is absolutely positioned and sits on top of the normal ScreenContainer
   return (
-    <Box w="100%" h="100%">
+    <ScreenContainer screenName={route.name}>
+      <Header text="Heroes" />
+
       <HeroCarousel heroList={heroList} setActiveHero={setActiveHero} viewDetails={(pressedHero: HeroChoice) => navigation.push("HeroDetails", { selectedHero: pressedHero })} />
-      <ScreenContainer screenName={route.name}>
-        <Header mb={Dimensions.get("window").height * 0.45} text="Heroes" />
-        <Pane>
-          <View justifyContent="center">
-            <Subheader mt={1} mb={0} text={activeHero.alias} />
-            <Text textAlign="center" fontSize="xl">
-              {activeHero.description}
-            </Text>
-          </View>
-        </Pane>
-        <ScreenActionButton text="View Details" action={() => navigation.push("HeroDetails", { selectedHero: activeHero })} />
-      </ScreenContainer>
-    </Box>
+      <Center mt={-50}>
+        <Text fontFamily="heading" fontSize="3xl" color="primary.900">
+          {activeHero.alias}
+        </Text>
+        <Text fontSize="xl" color="primary.800">
+          {activeHero.description}
+        </Text>
+      </Center>
+      <ScreenActionButton text="View Details" action={() => navigation.push("HeroDetails", { selectedHero: activeHero })} />
+    </ScreenContainer>
   );
 };
 

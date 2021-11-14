@@ -1,27 +1,22 @@
-[
-  {
-    "stat" : "Fire",
+{
+  "fire" : {
     "trait" : "Critical Strike",
     "description" : "Running, Crossfit, stairStepper"
   },
-  {
-    "stat" : "Earth",
+  "earth" : {
     "trait" : "Thorns Damage",
     "description" : "Biking, Weight Lifting, Hiking"
   },
-  {
-    "stat" : "Water",
+  "water" : {
     "trait" : "Vampiric Touch",
     "description" : "Rowing, Kayaking, Paddleboarding, Skiing, Snowboarding, snowshoeing, swimming"
   },
-  {
-    "stat" : "Air",
+  "air" : {
     "trait" : "Evasion",
     "description" : "Yoga, Walking, Elliptical"
   },
-  {
-    "stat" : "Other",
+  "other" : {
     "trait" : null,
     "description" : "All other workouts are split evenly among the four elements"
   }
-]
+}

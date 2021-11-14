@@ -14,7 +14,9 @@ type AuthStackParamList = {
   };
   Register: NavigatorScreenParams<MainStackParamList["Home"]>;
   AboutGame: undefined;
-  SelectHeroHowTo: undefined;
+  SelectHeroHowTo: {
+    heroList: HeroChoice[];
+  };
   SelectHero: {
     heroList: HeroChoice[];
   };

@@ -3,7 +3,7 @@ import { Box, Center, FlatList, HStack, Link, Text } from "native-base";
 import Pane from "../../Components/Pane";
 import Subheader from "../../Components/Subheader";
 import { GlobalStateContext } from "../../store";
-import { PaneSupportText } from "../../Components/PaneSupportText";
+import PaneSupportText from "../../Components/PaneSupportText";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { MainStackParamList } from "../../common/types-navigator";
 import ActivityDetail from "./ActivityDetail";

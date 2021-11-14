@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { Center, Heading, Text } from "native-base";
+import { Center, Box, Text } from "native-base";
 import herofitTheme from "../styles/herofitTheme";
 
 interface HeaderProps {
@@ -11,11 +11,13 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ text, mb = 0, color }) => {
   return (
-    <Center flex={0.2} flexBasis={90} mt={3} mb={mb} bgColor="base.lightTransparent">
-      <Text color={color} style={Styles.textShadow} fontFamily="heading" fontSize="5xl">
-        {text}
-      </Text>
-    </Center>
+    <Box flex={0.2} flexBasis={90} mt={3} mb={mb}>
+      <Center w="100%" h={100} bgColor="base.lightTransparent">
+        <Text color={color} style={Styles.textShadow} fontFamily="heading" fontSize="5xl">
+          {text}
+        </Text>
+      </Center>
+    </Box>
   );
 };
 
