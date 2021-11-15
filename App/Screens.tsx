@@ -9,7 +9,6 @@ import AboutGame from "./Screens/HeroSelection/AboutGame";
 import SelectHeroHowTo from "./Screens/HeroSelection/SelectHeroHowTo";
 import SelectHero from "./Screens/HeroSelection/SelectHero";
 import HeroDetails from "./Screens/HeroSelection/HeroDetails";
-import FinalizeHeroSelection from "./Screens/HeroSelection/FinalizeHeroSelection";
 
 // AUTHENTICATED SCREENS
 import Home from "./Screens/Home/Home";
@@ -25,4 +24,4 @@ import BattleReport from "./Screens/Battle/BattleReport";
 import Loading from "./Screens/Loading/Loading";
 import SpendQP from "./Screens/Common/SpendQP";
 
-export { Splash, SignIn, Register, ForgotPassword, AboutGame, SelectHeroHowTo, SelectHero, HeroDetails, FinalizeHeroSelection, Home, Adversaries, Feedback, Settings, Activity, AwaitingBattle, BattleReportOutcome, BattleReportDetail, BattleReport, Loading, SpendQP };
+export { Splash, SignIn, Register, ForgotPassword, AboutGame, SelectHeroHowTo, SelectHero, HeroDetails, Home, Adversaries, Feedback, Settings, Activity, AwaitingBattle, BattleReportOutcome, BattleReportDetail, BattleReport, Loading, SpendQP };

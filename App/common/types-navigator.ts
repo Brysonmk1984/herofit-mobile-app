@@ -23,11 +23,6 @@ type AuthStackParamList = {
   HeroDetails: {
     selectedHero: HeroChoice;
   };
-  FinalizeHeroSelection: {
-    selectedHero: SelectedHero;
-    alias: CharacterAlias;
-    colors: [string, string];
-  };
   SpendQP: {
     hero: SelectedHero & { name: string };
   };

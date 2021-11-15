@@ -302,7 +302,7 @@ interface HeroChoice {
   history: string;
 }
 
-// Hero object received going into FinalizeHeroSelection from HeroDetails
+// Hero object received going into from HeroDetails
 type SelectedHero = StartingElementalPower & { character: CharacterName };
 
 type SpiritFoe = "Wraith" | "Specter" | "Apparition" | "Banshee" | "Poltergeist" | "Phantasm" | "Shade" | "Phantom" | "Shadow-Self";
