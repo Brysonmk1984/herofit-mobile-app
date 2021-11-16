@@ -10,7 +10,6 @@ import { HeroChoice } from "../../common/types";
 const SelectHero = ({ route, navigation }: AuthStackProps<"SelectHero">) => {
   const { heroList } = route.params;
   const [activeHero, setActiveHero] = useState(heroList[0]);
-  console.log("HL", activeHero);
 
   return (
     <ScreenContainer screenName={route.name}>

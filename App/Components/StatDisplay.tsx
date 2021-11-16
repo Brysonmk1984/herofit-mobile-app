@@ -1,19 +1,7 @@
 import React from "react";
-import { Box, View, Text, HStack } from "native-base";
+import { Box, View, Text, HStack, VStack } from "native-base";
 import Icon from "./Icon";
 import { Stat } from "../common/types";
-
-interface StatDisplayProps {
-  stat: Stat;
-  value: number;
-  description?: string;
-  size?: "sm";
-  reversedColor?: boolean;
-  iconWatermark?: boolean;
-  reversedText?: boolean;
-  flex?: number;
-  statColor?: string;
-}
 
 type nativeBaseSizes = number | "xxs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl";
 
@@ -25,7 +13,20 @@ interface StatDisplaySizes {
   descriptionSize: nativeBaseSizes;
 }
 
-export default function StatDisplay({ stat, value, description, size, reversedText, iconWatermark, flex, statColor }: StatDisplayProps) {
+interface StatDisplayProps {
+  stat: Stat;
+  value: number;
+  description?: string;
+  size?: "sm";
+  reversedColor?: boolean;
+  iconWatermark?: boolean;
+  reversedText?: boolean;
+  flex?: number;
+  statColor?: string;
+  reverseOrder?: boolean;
+}
+
+export default function StatDisplay({ stat, value, description, size, reversedText, iconWatermark, flex, statColor, reverseOrder = false }: StatDisplayProps) {
   const elementNameLC = stat.toLowerCase() as Stat;
   const iconColor = reversedText ? "base.white" : `base.${elementNameLC}`;
   const numberColor = statColor ? statColor : reversedText ? "base.white" : null;
@@ -62,7 +63,7 @@ export default function StatDisplay({ stat, value, description, size, reversedTe
       );
     }
     return (
-      <View>
+      <View px={1}>
         <Icon iconName={stat} size={iconSize} color={iconColor} />
       </View>
     );
@@ -83,14 +84,18 @@ export default function StatDisplay({ stat, value, description, size, reversedTe
     }
 
     return (
-      <View alignItems="center">
-        <Text color={numberColor} fontFamily="heading" fontSize={value >= 100 ? statSize2 : statSize} textAlign="center" lineHeight={size === "sm" ? "40px" : "60px"}>
-          {value}
-        </Text>
-        <Text color={textColor} fontFamily="heading" fontSize={valueSize} lineHeight={size === "sm" ? 5 : 6}>
-          {stat}
-        </Text>
-      </View>
+      <VStack space={0} justifyContent="center">
+        <View alignItems="center">
+          <Text color={numberColor} fontFamily="heading" fontSize={value >= 100 ? statSize2 : statSize} textAlign="center" lineHeight={size === "sm" ? "40px" : "70px"}>
+            {value}
+          </Text>
+        </View>
+        <View mt={-4} alignItems="center">
+          <Text color={numberColor} fontFamily="heading" textAlign="center">
+            {stat}
+          </Text>
+        </View>
+      </VStack>
     );
   }
 
@@ -100,7 +105,7 @@ export default function StatDisplay({ stat, value, description, size, reversedTe
     }
     if (iconWatermark) {
       return (
-        <View alignItems={iconWatermark ? "flex-start" : "flex-end"} flex={4}>
+        <View alignItems={"flex-start"} flex={4}>
           <Text opacity={0.8} color={textColor} fontSize={descriptionSize}>
             {description}
           </Text>
@@ -108,7 +113,7 @@ export default function StatDisplay({ stat, value, description, size, reversedTe
       );
     }
     return (
-      <View alignItems={iconWatermark ? "flex-start" : "flex-end"} flex={4}>
+      <View alignItems={"center"} mt={-4}>
         <Text color={textColor} textAlign="justify" fontSize={descriptionSize}>
           {description}
         </Text>
@@ -116,12 +121,28 @@ export default function StatDisplay({ stat, value, description, size, reversedTe
     );
   }
 
+  function renderComponents(c1, c2, reversed: boolean) {
+    if (reversed) {
+      return (
+        <>
+          {c2}
+          {c1}
+        </>
+      );
+    }
+    return (
+      <>
+        {c1}
+        {c2}
+      </>
+    );
+  }
+
   return (
     <Box display="flex" flex={flex}>
-      <HStack space={2} alignItems="center" justifyContent="center">
-        {renderIcon(iconWatermark, elementNameLC)}
-        {renderNumberAndName(iconWatermark, elementNameLC)}
-        {renderDescription(iconWatermark, elementNameLC, description)}
+      <HStack space={0} alignItems="center" justifyContent="center">
+        {renderComponents(renderIcon(iconWatermark, elementNameLC), renderNumberAndName(iconWatermark, elementNameLC), reverseOrder)}
+        {description && renderDescription(iconWatermark, elementNameLC, description)}
       </HStack>
     </Box>
   );

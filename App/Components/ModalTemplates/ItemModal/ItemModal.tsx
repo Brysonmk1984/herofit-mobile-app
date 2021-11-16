@@ -3,7 +3,7 @@ import { Modal, Text, View, Box } from "native-base";
 import ModalCloseButton from "../ModalCloseButton";
 import ItemHeader from "./ItemHeader";
 import ItemDescription from "./ItemDescription";
-import { IActionHeader } from "../BasicModal/Content";
+import { IActionHeader } from "../ModalActionHeader";
 import useModal from "../../../common/hooks/useModal";
 import { CharacterName, Item, ItemWithOwnership } from "../../../common/types";
 import ItemModalActionButton from "./ItemModalActionButton";
@@ -20,7 +20,6 @@ interface ItemModalProps {
   modalAction?: () => void;
   item: Item | ItemWithOwnership;
   character?: CharacterName;
-  actionHeader?: IActionHeader;
   buttonText?: string;
   disabled?: boolean;
   preventClose?: boolean;

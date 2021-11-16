@@ -8,7 +8,7 @@ import ForgotPassword from "./Screens/Auth/ForgotPassword";
 import AboutGame from "./Screens/HeroSelection/AboutGame";
 import SelectHeroHowTo from "./Screens/HeroSelection/SelectHeroHowTo";
 import SelectHero from "./Screens/HeroSelection/SelectHero";
-import HeroDetails from "./Screens/HeroSelection/HeroDetails";
+import HeroDetails from "./Screens/HeroSelection/HeroDetails/HeroDetails";
 
 // AUTHENTICATED SCREENS
 import Home from "./Screens/Home/Home";

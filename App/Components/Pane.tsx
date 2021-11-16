@@ -6,16 +6,16 @@ interface PaneProps {
   children: React.ReactNode;
   mb?: number;
   mt?: number;
-  lore?: boolean;
+  variant?: string;
 }
 
 // interface IViewWithVariant extends React.ForwardRefExoticComponent<IViewProps & React.RefAttributes<unknown>> {
 //   variant : 'string'
 // }
 
-const Pane: React.FC<PaneProps> = ({ children, mb = 0, mt = 0, lore }) => {
+const Pane: React.FC<PaneProps> = ({ children, mb = 0, mt = 0, variant = "pane" }) => {
   return (
-    <View variant={lore ? "lorePane" : "pane"} mt={mt} px={2} mx={3} mb={mb}>
+    <View variant={variant} mt={mt} px={2} mx={3} mb={mb}>
       {children}
     </View>
   );
