@@ -145,6 +145,12 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
 
   useEffect(() => {}, []);
 
+  // useEffect(() => {
+  //   if (route.params?.newUser) {
+  //     dispatch({ type: "SET ISSIGNEDIN", payload: { isSignedIn: false } });
+  //   }
+  // }, [route.params?.newUser]);
+
   return (
     <SideMenu disableGestures={bottomDrawerOpen} bounceBackOnOverdraw={false} onChange={isOpen => setSideDrawerOpen(isOpen)} isOpen={sideDrawerOpen} menuPosition={"right"} menu={<SidebarMenu navigation={navigation} setSideDrawerOpen={setSideDrawerOpen} />} openMenuOffset={sideBarWidth}>
       <ScreenContainer bg={<Background />} screenName={route.name}>

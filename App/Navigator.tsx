@@ -15,10 +15,10 @@ const AuthStackScreen = () => {
       <AuthStack.Screen name="Register" component={Screens.Register} />
       <AuthStack.Screen name="ForgotPassword" component={Screens.ForgotPassword} />
       <AuthStack.Screen name="AboutGame" component={Screens.AboutGame} options={{ title: "The Game" }} />
-      <AuthStack.Screen name="SelectHeroHowTo" component={Screens.SelectHeroHowTo} options={{ title: "Select Hero" }} />
       <AuthStack.Screen name="SelectHero" component={Screens.SelectHero} options={{ title: "Select Hero" }} />
       <AuthStack.Screen name="HeroDetails" component={Screens.HeroDetails} options={{ title: "Hero Details" }} />
       <AuthStack.Screen name="SpendQP" component={Screens.SpendQP} options={{ title: "Quantum Points" }} />
+      <AuthStack.Screen name="Home" component={Screens.Home} />
     </AuthStack.Navigator>
   );
 };

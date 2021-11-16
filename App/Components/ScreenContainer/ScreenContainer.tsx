@@ -27,7 +27,7 @@ function determineImageBackground({ type, name }: { type: string; name: string }
       case "SelectHero":
         return require("../../../assets/images/backgrounds/hero-selection-background.webp");
       case "SpendQP":
-        return require("../../../assets/images/backgrounds/qp-background.webp");
+        return require("../../../assets/images/backgrounds/solar-warrior-background.webp");
       case "Activity":
         return require("../../../assets/images/backgrounds/natural-ninja-background.webp");
       case "AboutGame":

@@ -36,9 +36,15 @@ export default function SelectHeroHowTo({ navigation, route }: AuthStackProps<"S
               keyExtractor={(item, i) => i.toString()}
               renderItem={({ item }) => {
                 return (
-                  <Box py={2} my={2} borderBottomWidth={1} borderBottomColor="primary.300">
-                    <StatDisplay stat={item.stat} value={item.value} description={item.description} />
-                  </Box>
+                  <HStack py={2} my={2} borderBottomWidth={1} borderBottomColor="primary.300">
+                    <VStack flex={0.3}>
+                      <Text>{item.value}</Text>
+                      <Text>{item.stat}</Text>
+                    </VStack>
+                    <Box flex={1}>
+                      <Text>{item.description}</Text>
+                    </Box>
+                  </HStack>
                 );
               }}
             />

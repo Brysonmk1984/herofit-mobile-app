@@ -14,7 +14,7 @@ const PaneSupportText: React.FC<PaneSupportTextProps> = ({ children, text, iconN
   return (
     <Box alignItems="center">
       <HStack px={2} alignItems="center">
-        <Box flex={0.2}>
+        <Box flex={0.15}>
           <Icon iconName={iconName} size={7} color={iconColor} />
         </Box>
         <Box flex={1} flexShrink={1}>

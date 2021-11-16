@@ -44,6 +44,8 @@ export default function StatDisplay({ stat, value, description, size, reversedTe
     }
     if (iconWatermark) {
       iconSize = 120;
+      statSize = 60;
+      statSize2 = 60;
     }
     return {
       iconSize,
@@ -73,10 +75,10 @@ export default function StatDisplay({ stat, value, description, size, reversedTe
     if (iconWatermark) {
       return (
         <View flex={2} alignItems="center">
-          <Text color={numberColor} fontFamily="heading" fontSize={value >= 100 ? statSize2 : statSize} textAlign="center" lineHeight={size === "sm" ? "40px" : "60px"}>
+          <Text color={numberColor} fontFamily="heading" fontSize={value >= 100 ? statSize2 : statSize} textAlign="center" lineHeight={size === "sm" ? "60px" : "80px"}>
             {value}
           </Text>
-          <Text color={textColor} fontFamily="heading" fontSize={valueSize} lineHeight={size === "sm" ? 5 : 6}>
+          <Text textAlign="center" color={textColor} fontFamily="heading" fontSize={valueSize} mt={-5}>
             {stat}
           </Text>
         </View>

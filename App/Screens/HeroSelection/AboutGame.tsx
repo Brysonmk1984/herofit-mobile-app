@@ -3,9 +3,15 @@ import { FlatList, ScrollView, Box, View, Text, VStack, HStack, Heading, Divider
 import { ScreenContainer, Header, Subheader, ScreenActionButton, Pane, Icon } from "../../Components/CustomComponents";
 import aboutActivities from "../../common/aboutActivities.json";
 import { AuthStackProps } from "../../common/types-navigator";
+import { getHeroList } from "../../api/authentication";
+import debugErrors from "../../common/debugErrors";
+import PaneSupportText from "../../Components/PaneSupportText";
 
 // How To Select Screen
 export default function AboutGame({ navigation, route }: AuthStackProps<"AboutGame">) {
+  // Make API call to get hero data for the next screen
+  const [heroList, setHeroList] = useState<HeroChoice[] | []>([]);
+
   function renderHeader(stat: string, lcStat: string) {
     return (
       <Heading>
@@ -56,6 +62,17 @@ export default function AboutGame({ navigation, route }: AuthStackProps<"AboutGa
       </View>
     );
   }
+
+  useEffect(() => {
+    // Fetch list of Heroes from server so it's ready for the next screen
+    getHeroList()
+      .then(data => {
+        setHeroList(data);
+      })
+      .catch(error => {
+        return debugErrors(error);
+      });
+  }, []);
 
   return (
     <ScreenContainer screenName={route.name}>
@@ -157,10 +174,16 @@ export default function AboutGame({ navigation, route }: AuthStackProps<"AboutGa
               </Box>
             </VStack>
           </Pane>
+
+          <Pane>
+            <PaneSupportText iconName="info" iconColor="base.info" text="Heroes have different elemental power">
+              but these values have only a small impact. Ultimately your training and how you spend Quantum Points (Talent points) will dictate how your hero develops.
+            </PaneSupportText>
+          </Pane>
         </VStack>
       </ScrollView>
 
-      <ScreenActionButton text="OK" action={() => navigation.push("SelectHeroHowTo")} includeBorder={true} />
+      <ScreenActionButton text="OK" action={() => navigation.push("SelectHero", { heroList })} includeBorder={true} />
     </ScreenContainer>
   );
 }

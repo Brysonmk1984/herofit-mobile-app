@@ -13,6 +13,7 @@ import { isExistingHero, objectIsOfType } from "../../common/typeGuards";
 import useDidMount from "../../common/hooks/useDidMount";
 import { updateAvatarStats } from "../../api/avatar";
 import useGlobalToast from "../../common/hooks/useGlobalToast";
+import PaneSupportText from "../../Components/PaneSupportText";
 
 /*
   FOR TESTING SPENDQP PAGE
@@ -131,40 +132,39 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
   return (
     <ScreenContainer screenName={route.name}>
       <Header text={`Quantum Points [${qpState.qp}]`} />
-      {userStatus === "new" && (
-        <Center mt={0} mb={5}>
-          <Heading>
-            <Text color="primary.800" fontFamily="heading" fontSize="xl">
-              Stat points affect your battles and recovery
-            </Text>
-          </Heading>
-        </Center>
-      )}
-      <ScrollView>
-        <FlatList
-          data={qpAttributes.filter(item => item.stat !== "Aether")}
-          keyExtractor={(item, i) => i.toString()}
-          renderItem={({ item }) => {
-            const lcStatName = item.stat.toLowerCase();
-            const disabled = qpState.qp === 0;
-            return (
-              <Box borderRadius={10} bg={`base.${lcStatName}`} my={2} borderBottomWidth={1} borderBottomColor="primary.300" shadow={5}>
-                <HStack alignItems="center" space={0}>
-                  <View flex={4}>
-                    <StatDisplay iconWatermark reversedText={true} stat={item.stat} value={item.value} description={item.description} />
-                  </View>
 
-                  <Pressable disabled={disabled} ml={2} alignItems="center" justifyContent="center" h={100} borderTopRightRadius={10} borderBottomRightRadius={10} flex={1} bg="base.white" opacity={1} onPress={() => qpDispatch({ type: "INCREMENT VALUE", payload: { stat: lcStatName } })}>
-                    <Text textAlign="center" color={disabled ? "muted.200" : `base.${lcStatName}`} fontSize={65}>
-                      +
-                    </Text>
-                  </Pressable>
-                </HStack>
-              </Box>
-            );
-          }}
-        />
-      </ScrollView>
+      <FlatList
+        ListHeaderComponent={
+          userStatus === "new" && (
+            <Pane mt={5}>
+              <PaneSupportText iconName="info" iconColor="base.info" text="Stat points affect your battles and recovery">
+                But don't worry about picking the best stats; you can always reset your points later on with a Retrocausal Capsule
+              </PaneSupportText>
+            </Pane>
+          )
+        }
+        data={qpAttributes.filter(item => item.stat !== "Aether")}
+        keyExtractor={(item, i) => i.toString()}
+        renderItem={({ item }) => {
+          const lcStatName = item.stat.toLowerCase();
+          const disabled = qpState.qp === 0;
+          return (
+            <Box borderRadius={10} bg={`base.${lcStatName}`} m={3} shadow={5}>
+              <HStack alignItems="center" space={0}>
+                <View flex={4}>
+                  <StatDisplay iconWatermark reversedText={true} stat={item.stat} value={item.value} description={item.description} />
+                </View>
+
+                <Pressable disabled={disabled} ml={2} alignItems="center" justifyContent="center" h={100} borderTopRightRadius={7} borderBottomRightRadius={7} flex={1} bg="base.white" opacity={0.8} onPress={() => qpDispatch({ type: "INCREMENT VALUE", payload: { stat: lcStatName } })}>
+                  <Text textAlign="center" color={disabled ? "muted.200" : `base.${lcStatName}`} fontSize={65}>
+                    +
+                  </Text>
+                </Pressable>
+              </HStack>
+            </Box>
+          );
+        }}
+      />
 
       <ScreenActionButton text="Done" action={() => (existingHero ? navigation.pop() : _handleNewUserStatFinish())} />
     </ScreenContainer>
