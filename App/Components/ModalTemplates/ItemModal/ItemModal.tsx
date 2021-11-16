@@ -39,7 +39,6 @@ const ItemModal = function ({ children, id, modalOpen, modalAction, item, charac
   }
   return (
     <Modal isOpen={modalOpen} onClose={() => closeModal(id)} _backdrop={{ backgroundColor: "layout.modalBackdrop" }} closeOnOverlayClick={preventClose}>
-      {/* <Modal.Content> */}
       <ModalContent>
         <ItemHeader>
           <ModalHeaderImage bgColor="base.background">
@@ -59,7 +58,6 @@ const ItemModal = function ({ children, id, modalOpen, modalAction, item, charac
 
         {item.type === "codex" && item.owned ? null : buttonText && <ItemModalActionButton disabled={disabled} buttonText={buttonText} action={() => handleModalAction(id, modalAction)} bgColor={buttonText === "USE" || buttonText === "BUY" ? "base.caution" : "base.success"} />}
       </ModalContent>
-      {/* </Modal.Content> */}
     </Modal>
   );
 };

@@ -22,7 +22,7 @@ const ItemDetail: React.FC<ItemDetailProps> = ({ id, buttonText = "OK", modalAct
 
   function _renderEffect(effect: Effect) {
     return (
-      <Box px={5} mb={2}>
+      <Box px={5} mt={2} mb={5}>
         <HStack justifyContent="space-between">
           <Text fontFamily="heading" mt={1}>
             {effect.name}

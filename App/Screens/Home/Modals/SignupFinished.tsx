@@ -14,7 +14,7 @@ interface SignupFinishedProps {
 const SignupFinished: React.FC<SignupFinishedProps> = ({ id }) => {
   const { state } = useContext(GlobalStateContext);
   return (
-    <CharacterModal id={id} modalOpen={state.modalQueue[0] === id} speech="Promise you show great amounts of, my fledgling. Now Go do your exercises!" buttonText="OK, GREAT!">
+    <CharacterModal id={id} modalOpen={state.modalQueue[0] === id} speech="Promise you show great amounts of, my fledgling. Now go do your exercises!" buttonText="OK, GREAT!">
       <ModalActionHeader type="success" text="All Done!" />
       <BodyContent>
         <HeroInitiationChecklist crossedOut={[true, true, true, true]} />

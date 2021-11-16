@@ -29,8 +29,19 @@ const MainStackScreen = () => {
   return (
     <MainStack.Navigator screenOptions={{ headerShown: false, ...baseScreenStyle }}>
       {/* Accessed from the homescreen */}
-      <MainStack.Screen name="BattleReport" component={Screens.BattleReport} initialParams={{ battleReport: state.latestBattle }} />
-      <MainStack.Screen name="Home" component={Screens.Home} />
+
+      {state.latestBattle ? (
+        <>
+          <MainStack.Screen name="BattleReport" component={Screens.BattleReport} initialParams={{ battleReport: state.latestBattle }} />
+          <MainStack.Screen name="Home" component={Screens.Home} />
+        </>
+      ) : (
+        <>
+          <MainStack.Screen name="Home" component={Screens.Home} />
+          <MainStack.Screen name="BattleReport" component={Screens.BattleReport} />
+        </>
+      )}
+
       <MainStack.Screen name="SpendQP" component={Screens.SpendQP} options={{ title: "Quantum Points" }} />
       <MainStack.Screen name="Activity" component={Screens.Activity} />
       <MainStack.Screen name="AwaitingBattle" component={Screens.AwaitingBattle} />

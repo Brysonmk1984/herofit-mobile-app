@@ -7,11 +7,11 @@ interface BodyContentProps {
 }
 
 const BodyContent: React.FC<BodyContentProps> = ({ children }) => {
-  return (
-    <View flex={1} flexGrow={100}>
-      {children}
-    </View>
-  );
+  const deviceHeight = Dimensions.get("window").height;
+  const deviceWidth = Dimensions.get("window").width;
+  const isLongPhone = deviceHeight > deviceWidth * 1.8;
+  const isMedPhone = deviceHeight > deviceWidth * 1.7;
+  return <View maxHeight={isLongPhone ? "64%" : isMedPhone ? "54%" : "45%"}>{children}</View>;
 };
 
 export default BodyContent;
