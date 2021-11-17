@@ -85,7 +85,6 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
         borderBottomColor={"primary.500"}
         onPress={() => {
           setActivity(act.type);
-          refRBSheet.current.close();
         }}
         flexDirection="row"
       >
@@ -142,6 +141,12 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
   useEffect(() => {
     checkIfFormIsValid();
   }, [activity, duration]);
+
+  useEffect(() => {
+    if (activity) {
+      refRBSheet.current.close();
+    }
+  }, [activity]);
 
   return (
     <ScreenContainer screenName={route.name}>
@@ -202,7 +207,7 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
                 },
               }}
             >
-              <FlatList borderTopWidth={1} borderTopColor={"primary.500"} data={activityList} renderItem={({ item }) => renderActivityList(item)} keyExtractor={item => item.type} />
+              <FlatList borderTopWidth={1} borderTopColor={"primary.500"} data={activityList} renderItem={({ item }) => renderActivityList(item)} keyExtractor={(item, index) => index.toString()} />
             </RBSheet>
           </View>
         </Box>

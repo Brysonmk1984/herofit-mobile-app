@@ -1,29 +1,37 @@
-import React from "react";
-import { Box, View, Text } from "native-base";
-import { CountUp } from "use-count-up";
+import React, { useEffect } from "react";
+import { Box, View, Text, HStack } from "native-base";
+import { CountUp, useCountUp } from "use-count-up";
 
 interface XpTextProps {
   levelXp: number;
   levelXpRequired: number;
+  prevXpGained: number;
 }
 
-const XpText: React.FC<XpTextProps> = ({ levelXp, levelXpRequired }) => {
+const XpText: React.FC<XpTextProps> = ({ levelXp, levelXpRequired, prevXpGained }) => {
+  const { value, reset } = useCountUp({ isCounting: true, end: levelXp, duration: 5, start: prevXpGained });
+
+  useEffect(() => {
+    if (levelXp) {
+      reset();
+    }
+  }, [levelXp]);
   return (
     <View flexDirection="row">
-      <Box opacity={0.5} mr={1} mt={-2.5}>
-        <Text color="base.primary" fontSize="xl">
+      <HStack space={1} mt={-0.5}>
+        <Text mr={1} opacity={0.5} color="base.white" fontSize="xl">
           XP
         </Text>
-      </Box>
-      <Text fontSize="sm" fontFamily="heading">
-        <CountUp isCounting end={levelXp} duration={2} />
-      </Text>
-      <Text mt={-1.5} color="base.primary" fontSize="2xl" fontFamily="heading">
-        /
-      </Text>
-      <Text mt={-0.5} color="base.primary" fontSize="md" fontFamily="heading">
-        {levelXpRequired}
-      </Text>
+        <Text fontSize="lg" lineHeight="xl" fontFamily="heading" color="base.highlight">
+          {value}
+        </Text>
+        <Text lineHeight="sm" color="base.white" fontSize="2xl" fontFamily="heading">
+          /
+        </Text>
+        <Text lineHeight="lg" color="base.white" fontSize="xl" fontFamily="heading">
+          {levelXpRequired}
+        </Text>
+      </HStack>
     </View>
   );
 };

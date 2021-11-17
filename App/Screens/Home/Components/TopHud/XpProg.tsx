@@ -17,8 +17,10 @@ interface XpProgProps {
 const XpProg: React.FC<XpProgProps> = ({ windowWidth, xp, level, albedo, thisLevelStartXp, nextLevelStartXp }) => {
   const [xpGainedThisLevel, setXpGainedThisLevel] = useState(0);
   const [xpIndicator, setXpIndicator] = useState(0);
+  const prevXpGained = usePrevious(xpGainedThisLevel);
   const prevXpIndicator = usePrevious(xpIndicator);
-  const { value, reset } = useCountUp({ start: prevXpIndicator, isCounting: true, duration: 0.5, easing: "easeOutCubic", end: xpIndicator });
+
+  const { value, reset } = useCountUp({ start: prevXpIndicator, isCounting: true, duration: 5, easing: "easeOutCubic", end: xpIndicator });
 
   const levelXpRequired = nextLevelStartXp - thisLevelStartXp;
   // XP accumulated within current level
@@ -41,11 +43,11 @@ const XpProg: React.FC<XpProgProps> = ({ windowWidth, xp, level, albedo, thisLev
   }, [xpIndicator]);
 
   return (
-    <Box ml={7} width={windowWidth * 0.65}>
-      <Progress value={value as number} mt={-0.5} height="30px" borderRadius={25} borderWidth={2} />
-      <View flexDirection="row" position="absolute" right={3} top={1.5}>
-        <LevelText ml={windowWidth * 0.07} level={level} albedo={albedo} />
-        <XpText levelXp={xpGainedThisLevel} levelXpRequired={levelXpRequired} />
+    <Box ml={4} width={windowWidth * 0.7}>
+      <Progress value={value as number} colorScheme="xp" mt={-0.5} height="40px" borderRadius={25} borderWidth={2} />
+      <View flexDirection="row" position="absolute" right={2} top={1.5}>
+        <LevelText ml={windowWidth * 0.05} level={level} albedo={albedo} />
+        <XpText levelXp={xpGainedThisLevel} levelXpRequired={levelXpRequired} prevXpGained={prevXpGained} />
       </View>
     </Box>
   );

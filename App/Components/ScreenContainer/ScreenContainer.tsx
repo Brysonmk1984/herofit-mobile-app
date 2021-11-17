@@ -84,11 +84,11 @@ export default function ScreenContainer({ children, screenName, bg, bgColor, her
   return (
     <PressableWrapper isPressable={typeof screenAction === "function"} wrapper={children => <Pressable onPress={() => screenAction()}>{children}</Pressable>}>
       <View style={[styles.wrapper, styles.absolute, bgColor ? { backgroundColor: bgColor } : null]}>
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
           <Flex flex={1} justify="space-between" zIndex={10} p={0} w={"100%"} mx="auto">
             {children}
           </Flex>
-        </SafeAreaView>
+        </View>
       </View>
       {typeof bg === "object" ? bg : <ImageBackground source={image} style={[styles.image, { backgroundColor: undefined }]} resizeMode="cover" />}
     </PressableWrapper>
@@ -98,9 +98,9 @@ export default function ScreenContainer({ children, screenName, bg, bgColor, her
 const { background, white, black } = herofitTheme.colors.base;
 const styles = StyleSheet.create({
   wrapper: {
-    marginTop: -2,
     elevation: 100,
     zIndex: 100,
+    top: 0,
   },
   container: {
     height: "100%",

@@ -22,7 +22,7 @@ const PtAndQpMenu: React.FC<PtAndQpMenuProps> = ({ photonTokens, qp, openBottomD
                 <Text ml={0} lineHeight={40} fontFamily="heading" color="primary.800" fontSize={34}>
                   QP
                 </Text>
-                <Text ml={2} lineHeight={40} fontFamily="heading" color="primary.800" fontSize={34}>
+                <Text ml={2} lineHeight={40} fontFamily="heading" color="base.qp" fontSize={34}>
                   {qp}
                 </Text>
               </View>
@@ -31,7 +31,7 @@ const PtAndQpMenu: React.FC<PtAndQpMenuProps> = ({ photonTokens, qp, openBottomD
                 Quantum
               </Text>
             )}
-            <Image position="absolute" elevation={1001} left={-25} top={-32} size="75" source={require("../../../../../assets/images/misc/quantum_points.webp")} />
+            <Image position="absolute" elevation={1001} left={-25} top={-25} size={70} source={require("../../../../../assets/images/misc/quantum_points.webp")} />
           </Pressable>
           <Box zIndex={1001} elevation={1001} position="absolute" left="50%" top={-36} marginLeft={-44}>
             <Triangle action={openBottomDrawer} />
@@ -39,7 +39,7 @@ const PtAndQpMenu: React.FC<PtAndQpMenuProps> = ({ photonTokens, qp, openBottomD
           <Pressable elevation={1001} onPress={initialDisabledLinks ? null : () => openBottomDrawer()} flex={2.5} backgroundColor="base.primary">
             <Box pl={27}>
               <View flexDirection="row">
-                <Text lineHeight={40} fontSize={34} fontFamily="heading" color="primary.800">
+                <Text lineHeight={40} fontSize={34} fontFamily="heading" color="base.pt">
                   {thousandsFormat(photonTokens)}
                 </Text>
                 <Text ml={2} lineHeight={40} fontFamily="heading" color="primary.800" fontSize={34}>
@@ -47,7 +47,7 @@ const PtAndQpMenu: React.FC<PtAndQpMenuProps> = ({ photonTokens, qp, openBottomD
                 </Text>
               </View>
             </Box>
-            <Image position="absolute" elevation={1001} right={-20} top={-37} size="75" source={require("../../../../../assets/images/misc/photon_stack.webp")} />
+            <Image position="absolute" elevation={1001} right={-20} top={-35} size="75" source={require("../../../../../assets/images/misc/photon_stack.webp")} />
           </Pressable>
         </HStack>
       </Box>

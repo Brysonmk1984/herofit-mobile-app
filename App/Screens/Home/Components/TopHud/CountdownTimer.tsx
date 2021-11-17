@@ -57,7 +57,7 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({ type, hideType =
         <View flexDirection="row" mt={1}>
           {!hideType && (
             <Text mr={2} fontSize={fontSize} fontFamily="heading" color="base.white" opacity={0.6}>
-              Battle:
+              Battle
             </Text>
           )}
           <Text fontSize={fontSize} fontFamily="heading" color="base.caution">
@@ -75,7 +75,7 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({ type, hideType =
         <View flexDirection="row" mt={2}>
           {!hideType && (
             <Text fontSize={fontSize} mr={2} fontFamily="heading" color="base.white" opacity={0.6}>
-              Knocked Out:
+              Knocked Out
             </Text>
           )}
           <Text fontSize={fontSize} color="base.white" fontFamily="heading">
