@@ -40,7 +40,9 @@ const DateTimeDuration: React.FC<DateTimeDurationProps> = ({ render, setParentDa
   };
 
   useEffect(() => {
-    setParentDate(date);
+    if (date) {
+      setShow(false);
+    }
   }, [date]);
 
   return (
@@ -51,7 +53,7 @@ const DateTimeDuration: React.FC<DateTimeDurationProps> = ({ render, setParentDa
         {/* Rendering the Duration input */}
         {render()}
       </HStack>
-      {show && <DateTimePicker value={date} mode={mode} is24Hour={false} display="default" onChange={onDateTimeChange} />}
+      {show && <DateTimePicker display={Platform.OS === "ios" ? "spinner" : "default"} value={date} mode={mode} is24Hour={false} onChange={onDateTimeChange} />}
     </View>
   );
 };

@@ -145,42 +145,40 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
 
   return (
     <ScreenContainer screenName={route.name}>
-      <View justifyContent="flex-start">
-        <Header text="Activity" />
-        <ScrollView flexShrink={0}>
-          <Pane mb={10} mt={5}>
-            <Subheader fontSize="lg" text="Manually record a workout you've completed" />
-            {/* ALL INPUTS */}
-            <VStack space={2}>
-              {/* Activity Type Input */}
-              <PressableInput ml={2} mr={2} value={activityList.find(act => act.type === activity)?.alias} placeholder="Select Activity" action={() => refRBSheet.current.open()} />
+      <Header text="Activity" />
+      <ScrollView>
+        <Pane mb={10} mt={5}>
+          <Subheader fontSize="lg" text="Manually record a workout you've completed" />
+          {/* ALL INPUTS */}
+          <VStack space={2}>
+            {/* Activity Type Input */}
+            <PressableInput ml={2} mr={2} value={activityList.find(act => act.type === activity)?.alias} placeholder="Select Activity" action={() => refRBSheet.current.open()} />
 
-              {/* Date - Time - Duration Input */}
-              <DateTimeDuration
-                setParentDate={setDate}
-                initialDate={initialDate}
-                render={() => {
-                  return <PressableInput flex={1} ml={2} mr={2} action={() => openModal("DurationModal")} value={duration} />;
-                }}
-              />
-              <HStack>
-                {/* Distance Input */}
-                <PressableInput flex={1} ml={2} mr={2} action={() => openModal("DistanceModal")} value={`${distance} mi`} />
-                {/* Speed Input */}
-                <PressableInput flex={1} ml={2} mr={2} action={() => openModal("SpeedModal")} value={`${speed} mph`} />
-              </HStack>
-              {helperText && <HelperText type="error" text={helperText} />}
-            </VStack>
-            <Button bgColor={!formIsValid ? "base.disabled" : "base.success"} _text={{ fontFamily: "heading", fontSize: "4xl", lineHeight: 45, color: !formIsValid ? "muted.500" : "base.white" }} mt={5} disabled={!formIsValid} onPress={() => handleSubmit(activity, date, duration, distance, speed)}>
-              APPLY TO HERO
-            </Button>
-          </Pane>
+            {/* Date - Time - Duration Input */}
+            <DateTimeDuration
+              setParentDate={setDate}
+              initialDate={initialDate}
+              render={() => {
+                return <PressableInput flex={1} ml={2} mr={2} action={() => openModal("DurationModal")} value={duration} />;
+              }}
+            />
+            <HStack>
+              {/* Distance Input */}
+              <PressableInput flex={1} ml={2} mr={2} action={() => openModal("DistanceModal")} value={`${distance} mi`} />
+              {/* Speed Input */}
+              <PressableInput flex={1} ml={2} mr={2} action={() => openModal("SpeedModal")} value={`${speed} mph`} />
+            </HStack>
+            {helperText && <HelperText type="error" text={helperText} />}
+          </VStack>
+          <Button bgColor={!formIsValid ? "base.disabled" : "base.success"} _text={{ fontFamily: "heading", fontSize: "4xl", lineHeight: 45, color: !formIsValid ? "muted.500" : "base.white" }} mt={5} disabled={!formIsValid} onPress={() => handleSubmit(activity, date, duration, distance, speed)}>
+            APPLY TO HERO
+          </Button>
+        </Pane>
 
-          {mounted && <HistoryPane navigation={navigation} isStravaUser={isStravaUser} />}
+        {mounted && <HistoryPane navigation={navigation} isStravaUser={isStravaUser} />}
 
-          {isStravaUser && mounted && <StravaPane pop={() => navigation.navigate("Home", { fetchStravaManually: true })} />}
-        </ScrollView>
-      </View>
+        {isStravaUser && mounted && <StravaPane pop={() => navigation.navigate("Home", { fetchStravaManually: true })} />}
+      </ScrollView>
 
       {/* HIDDEN MENU */}
       {mounted && (
@@ -189,7 +187,7 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
             <RBSheet
               ref={refRBSheet}
               closeOnDragDown={true}
-              closeOnPressMask={false}
+              closeOnPressMask={true}
               height={bottomDrawerHeight}
               openDuration={750}
               customStyles={{

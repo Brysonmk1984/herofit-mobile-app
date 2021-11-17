@@ -74,7 +74,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
       messageArray.forEach((message: string, i: number) => {
         setTimeout(() => {
           addToast("success", message);
-        }, 1500 * i);
+        }, 3000 * i);
       });
     } catch (error) {
       error.message = "Couldn't upgrade hero, please try again later.";

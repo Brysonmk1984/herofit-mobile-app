@@ -60,6 +60,7 @@ const useGlobalToast = () => {
       (toastIdRef.current = toast.show({
         render: () => renderToast(type, message),
         placement,
+        duration: 2100,
       })),
   };
 };

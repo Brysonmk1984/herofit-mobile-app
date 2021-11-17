@@ -8,6 +8,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { MainStackParamList } from "../../common/types-navigator";
 import ActivityDetail from "./ActivityDetail";
 import ListHeaderComponent from "./ListHeaderComponent";
+import moment from "moment";
 
 interface HistoryPaneProps {
   navigation: StackNavigationProp<MainStackParamList, "Activity">;
@@ -17,7 +18,7 @@ interface HistoryPaneProps {
 const HistoryPane: React.FC<HistoryPaneProps> = ({ navigation, isStravaUser }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { latestSavedActivities } = state;
-  const orderedActivities = latestSavedActivities.reverse();
+  const orderedActivities = latestSavedActivities.sort((a, b) => (moment(a.activityDate).isAfter(moment(b.activityDate)) ? -1 : 1));
 
   return (
     <Pane mb={10}>
@@ -34,7 +35,7 @@ const HistoryPane: React.FC<HistoryPaneProps> = ({ navigation, isStravaUser }) =
           )}
         </PaneSupportText>
       )}
-      {orderedActivities.length && <FlatList ListHeaderComponent={() => <ListHeaderComponent />} data={orderedActivities} renderItem={item => <ActivityDetail activity={item.item} />} />}
+      {orderedActivities.length > 0 && <FlatList ListHeaderComponent={() => <ListHeaderComponent />} data={orderedActivities} renderItem={item => <ActivityDetail activity={item.item} />} />}
     </Pane>
   );
 };
