@@ -77,6 +77,12 @@ const ChooseActivityEntry: React.FC<ChooseActivityEntryProps> = ({ id }) => {
     }
   }, [stravaSuccess]);
 
+  // useEffect(()=>{
+  //   if(helperText){
+  //     addToast("");
+  //   }
+  // }, [helperText])
+
   return (
     <CharacterModal id={id} modalOpen={state.modalQueue[0] === id} speech="Now that you're a pupil in my Dojo?, we'll need to hold you accountable!" disabled={!activityRadioValue} modalAction={confirmButton.modalAction} buttonText={activityRadioValue === "Manual" ? confirmButton.buttonText : null}>
       <ModalActionHeader type="info" text="How will you log activities??" />
@@ -87,11 +93,11 @@ const ChooseActivityEntry: React.FC<ChooseActivityEntryProps> = ({ id }) => {
           <>
             <ActivityEntrySelect activityRadioValue={activityRadioValue} setActivityRadioValue={setActivityRadioValue} />
             {/* <HeroInitiationChecklist crossedOut={[true, true, true]} /> */}
+            {loading && <LoadingInPane text="Fetching Client Credentials" />}
+            {helperText && activityRadioValue === "Strava" && <HelperText type="error" fontSize="sm" text={helperText} />}
             {activityRadioValue === "Strava" && <StravaConnectButton request={getStravaCredentials} promptAsync={promptAsync} setHasFetchedStravaDetails={setHasFetchedStravaDetails} />}
           </>
         )}
-        {loading && <LoadingInPane text="Fetching Client Credentials" />}
-        {helperText && <HelperText type="error" fontSize="sm" text={helperText} />}
       </BodyContent>
     </CharacterModal>
   );

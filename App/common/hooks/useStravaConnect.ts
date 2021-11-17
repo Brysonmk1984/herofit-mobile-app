@@ -89,16 +89,18 @@ function useStravaConnect(): StravaConnectReturn {
   // When receiving an incoming user back from Strava redirect
   // save data to state
   function handleStravaRedirect(event) {
-    console.log("THE EVENT!!!", event);
     if (Constants.platform.ios) {
       WebBrowser.dismissBrowser();
     } else {
       Linking.removeEventListener("url", event);
     }
 
-    const data = Linking.parse(event.url);
-
-    setRedirectData(data);
+    if (event.url && event.params.scope.includes("read_all")) {
+      const data = Linking.parse(event.url);
+      setRedirectData(data);
+    } else {
+      addToast("error", "Must give HeroFit permission to access your Strava data if you want to use Strava, otherwise select 'Manual Mode'");
+    }
   }
 
   // Need to add the seconds until expiration to the now moment in seconds in order to get the expiredAt value for the access token

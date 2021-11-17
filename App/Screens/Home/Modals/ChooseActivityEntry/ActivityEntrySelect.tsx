@@ -15,7 +15,6 @@ export const ActivityEntrySelect: React.FC<ActivityEntrySelectProps> = ({ activi
           accessibilityLabel="Activity Entry Options"
           value={activityRadioValue}
           onChange={nextValue => {
-            console.log("NV", nextValue);
             setActivityRadioValue(nextValue);
           }}
           width={"100%"}
