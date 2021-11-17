@@ -90,7 +90,7 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
     const updatedHeroWithDefaults: HeroWithStats & DefaultHeroProperties = Object.assign(DEFAULT_HERO_PROPERTIES, updatedHero);
 
     dispatch({ type: "SET HERO", payload: { hero: updatedHeroWithDefaults } });
-    navigation.push("Home");
+    dispatch({ type: "SET INITIAL HOMESCREEN LOAD", payload: { initialHomescreenLoad: "Home" } });
   }
 
   useEffect(() => {
@@ -128,6 +128,14 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
       }
     }
   }, [mounted, qpState.qp]);
+
+  // If a user finished setting inital stats, redirect them to home
+  // These needs to happen after global state is updated
+  useEffect(() => {
+    if (state.initialHomescreenLoad === "Home") {
+      navigation.push("Home");
+    }
+  }, [state.initialHomescreenLoad]);
 
   return (
     <ScreenContainer screenName={route.name}>

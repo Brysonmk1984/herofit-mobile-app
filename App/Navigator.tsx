@@ -8,17 +8,28 @@ import { GlobalStateContext } from "./store";
 // IN AUTH used for App Auth
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
 const AuthStackScreen = () => {
+  const { state } = useContext(GlobalStateContext);
   return (
     <AuthStack.Navigator screenOptions={{ headerShown: false, ...baseScreenStyle }}>
-      <AuthStack.Screen name="Splash" component={Screens.Splash} />
+      {/* Load Register first if coming from homescreen via Signup process */}
+      {state.initialHomescreenLoad === "Register" ? (
+        <>
+          <AuthStack.Screen name="Register" component={Screens.Register} />
+          <AuthStack.Screen name="Splash" component={Screens.Splash} />
+        </>
+      ) : (
+        <>
+          <AuthStack.Screen name="Splash" component={Screens.Splash} />
+          <AuthStack.Screen name="Register" component={Screens.Register} />
+        </>
+      )}
+
       <AuthStack.Screen name="SignIn" component={Screens.SignIn} />
-      <AuthStack.Screen name="Register" component={Screens.Register} />
       <AuthStack.Screen name="ForgotPassword" component={Screens.ForgotPassword} />
       <AuthStack.Screen name="AboutGame" component={Screens.AboutGame} options={{ title: "The Game" }} />
       <AuthStack.Screen name="SelectHero" component={Screens.SelectHero} options={{ title: "Select Hero" }} />
       <AuthStack.Screen name="HeroDetails" component={Screens.HeroDetails} options={{ title: "Hero Details" }} />
       <AuthStack.Screen name="SpendQP" component={Screens.SpendQP} options={{ title: "Quantum Points" }} />
-      <AuthStack.Screen name="Home" component={Screens.Home} />
     </AuthStack.Navigator>
   );
 };
@@ -42,7 +53,7 @@ const MainStackScreen = () => {
         </>
       )}
 
-      <MainStack.Screen name="SpendQP" component={Screens.SpendQP} options={{ title: "Quantum Points" }} />
+      {state.initialHomescreenLoad !== "Home" && <MainStack.Screen name="SpendQP" component={Screens.SpendQP} options={{ title: "Quantum Points" }} />}
       <MainStack.Screen name="Activity" component={Screens.Activity} />
       <MainStack.Screen name="AwaitingBattle" component={Screens.AwaitingBattle} />
       <MainStack.Screen name="BattleReportOutcome" component={Screens.BattleReportOutcome} />

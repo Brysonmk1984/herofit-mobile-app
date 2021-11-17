@@ -20,8 +20,8 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [showLegacyLink, setShowLegacyLink] = useState(false);
-
   const { addToast } = useGlobalToast();
+
   async function handleSignIn() {
     setLoading(true);
     setHelperText(null);

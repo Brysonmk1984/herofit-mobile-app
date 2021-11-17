@@ -113,7 +113,7 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
       formDispatch({ type: "SET LOADING", loading: false });
 
       // changing isSignedIn will unmount the component; must be last
-      dispatch({ type: "SET ISSIGNEDIN", payload: { isSignedIn: true } });
+      dispatch({ type: "SET ISSIGNEDIN", payload: { isSignedIn: true, initialHomescreenLoad: null } });
     } catch (error) {
       // Error getting Avatar, should only happen if DB connection issues
       debugErrors(error, user);

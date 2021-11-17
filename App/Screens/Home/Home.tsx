@@ -109,7 +109,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
 
   // Determine which modal should pop up
   useEffect(() => {
-    //console.log("SU", state.userStatus, state.user);
+    console.log("SU", state.userStatus, state.user);
     if (state.userStatus === "new") {
       openModal("SignupToSave", 3000);
     } else if (state.userStatus === "unconfirmed") {
@@ -143,23 +143,15 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
     }
   }, [route.params?.fetchStravaManually]);
 
-  useEffect(() => {}, []);
-
-  // useEffect(() => {
-  //   if (route.params?.newUser) {
-  //     dispatch({ type: "SET ISSIGNEDIN", payload: { isSignedIn: false } });
-  //   }
-  // }, [route.params?.newUser]);
-
   return (
-    <SideMenu disableGestures={bottomDrawerOpen} bounceBackOnOverdraw={false} onChange={isOpen => setSideDrawerOpen(isOpen)} isOpen={sideDrawerOpen} menuPosition={"right"} menu={<SidebarMenu navigation={navigation} setSideDrawerOpen={setSideDrawerOpen} />} openMenuOffset={sideBarWidth}>
+    <SideMenu disableGestures={state.initialHomescreenLoad || bottomDrawerOpen} bounceBackOnOverdraw={false} onChange={isOpen => setSideDrawerOpen(isOpen)} isOpen={sideDrawerOpen} menuPosition={"right"} menu={<SidebarMenu navigation={navigation} setSideDrawerOpen={setSideDrawerOpen} />} openMenuOffset={sideBarWidth}>
       <ScreenContainer bg={<Background />} screenName={route.name}>
         <View zIndex={110} elevation={110}>
           <GestureRecognizer onSwipeDown={state => handleReload()}>
             {/* TOP SECTION */}
             <View>
               <TopHud equippedTitle={equippedTitle} />
-              {state.isSignedIn && <DrawerIndicator setSideDrawerOpen={setSideDrawerOpen} />}
+              {state.isSignedIn && !state.initialHomescreenLoad && <DrawerIndicator setSideDrawerOpen={setSideDrawerOpen} />}
             </View>
             {/* HERO & PET */}
             <View h={heroImagePosition} zIndex={110}>
@@ -173,10 +165,11 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
           </Box>
         </View>
         {/* BOTTOM CONSOLE */}
-        <BottomDrawer hero={state.hero} newActivitiesAvailable={newActivities.length > 0 ? true : false} latestBattle={state.latestBattle} user={state.user} setBottomDrawerOpen={setBottomDrawerOpen} bottomDrawerHeight={bottomDrawerHeight} deviceHeight={deviceHeight} />
+
+        <BottomDrawer hero={state.hero} newActivitiesAvailable={newActivities.length > 0 ? true : false} latestBattle={state.latestBattle} user={state.user} setBottomDrawerOpen={setBottomDrawerOpen} bottomDrawerHeight={bottomDrawerHeight} deviceHeight={deviceHeight} initialDisabledLinks={state.initialHomescreenLoad} />
 
         {/* MODALS */}
-        <SignupToSave id="SignupToSave" modalAction={() => navigation.push("Register")} />
+        <SignupToSave id="SignupToSave" modalAction={() => dispatch({ type: "SET INITIAL HOMESCREEN LOAD", payload: { initialHomescreenLoad: "Register" } })} />
         <ConfirmEmail id="ConfirmEmail" />
         <ChooseActivityEntry id="ChooseActivityEntry" />
         <FeedbackChoice id="FeedbackChoice" />

@@ -102,8 +102,8 @@ const App: React.FC = () => {
   // perhaps isSignedIn is being set to false somewhere in app?
   //console.log(state.isLoading, !fontsLoaded, state.isSignedIn);
 
-  function determineNavigator(isSignedIn: boolean) {
-    return isSignedIn ? <MainStackScreen /> : <AuthStackScreen />;
+  function determineNavigator(isSignedIn: boolean, initialHomescreenLoad: string) {
+    return isSignedIn || initialHomescreenLoad === "Home" ? <MainStackScreen /> : <AuthStackScreen />;
   }
 
   return (
@@ -114,7 +114,7 @@ const App: React.FC = () => {
             If Font have not been loaded  -> fontLoaded === false
             Show loading, otherwise show view
           */}
-        {state.isLoading || !fontsLoaded ? <Loading /> : determineNavigator(state.isSignedIn)}
+        {state.isLoading || !fontsLoaded ? <Loading /> : determineNavigator(state.isSignedIn, state.initialHomescreenLoad)}
       </View>
     </NavigationContainer>
   );

@@ -183,7 +183,7 @@ export default function AboutGame({ navigation, route }: AuthStackProps<"AboutGa
         </VStack>
       </ScrollView>
 
-      <ScreenActionButton text="OK" action={() => navigation.push("SelectHero", { heroList })} includeBorder={true} />
+      <ScreenActionButton text="OK" action={() => navigation.push("SelectHero", { heroList })} />
     </ScreenContainer>
   );
 }

@@ -1,7 +1,7 @@
 import React, { createContext, useReducer, Context, FC, ReactElement } from "react";
 import { InitialAppState, AppAction } from "./common/types";
 
-const initialState: InitialAppState = { isLoading: true, isSignedIn: false, userStatus: "new", user: null, hero: null, latestSavedActivities: [], latestSavedActivityDate: null, latestBattle: null, jwt: null, modalQueue: [], allGameItems: [], inventory: { pets: [], consumables: [], skins: [], titles: [], codices: [] }, equipped: { skin: null, pet: null, title: null } };
+const initialState: InitialAppState = { isLoading: true, isSignedIn: false, userStatus: "new", user: null, hero: null, latestSavedActivities: [], latestSavedActivityDate: null, latestBattle: null, jwt: null, modalQueue: [], allGameItems: [], inventory: { pets: [], consumables: [], skins: [], titles: [], codices: [] }, equipped: { skin: null, pet: null, title: null }, initialHomescreenLoad: null };
 
 type AppState = typeof initialState;
 
@@ -21,8 +21,12 @@ function appStateReducer(state: AppState, action: AppAction): AppState {
       return { ...state, ...existingUserInitData };
     }
     case "SET ISSIGNEDIN": {
-      const { isSignedIn } = action.payload;
-      return { ...state, isSignedIn };
+      const { isSignedIn, initialHomescreenLoad } = action.payload;
+      const updatedState = { ...state, isSignedIn };
+      if (typeof initialHomescreenLoad !== "undefined") {
+        updatedState.initialHomescreenLoad = initialHomescreenLoad;
+      }
+      return updatedState;
     }
     // Used to determine if User is "active" | "new" | "unconfirmed"
     case "SET USER STATUS": {
@@ -81,6 +85,11 @@ function appStateReducer(state: AppState, action: AppAction): AppState {
     case "UPDATE LATEST BATTLE": {
       const { latestBattle } = action.payload;
       return { ...state, latestBattle };
+    }
+    // Needed to switch Navigators when users are first going to Homescreen from SpendQP
+    case "SET INITIAL HOMESCREEN LOAD": {
+      const { initialHomescreenLoad } = action.payload;
+      return { ...state, initialHomescreenLoad };
     }
     default:
       throw new Error("In Store default, should not happen.");

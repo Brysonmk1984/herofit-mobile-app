@@ -54,7 +54,7 @@ function useStravaConnect(): StravaConnectReturn {
   const [clientSecret, setClientSecret] = useState(null);
   const [stravaSuccess, setStravaSuccess] = useState(false);
   const [helperText, setHelperText] = useState<string | null>(null);
-  const [data, loading, error] = useAxios(null, null, false, null);
+
   const { addToast } = useGlobalToast();
   // One-Time Strava Auth Request
   const [request, response, promptAsync] = AuthSession.useAuthRequest(
@@ -89,6 +89,7 @@ function useStravaConnect(): StravaConnectReturn {
   // When receiving an incoming user back from Strava redirect
   // save data to state
   function handleStravaRedirect(event) {
+    console.log("THE EVENT!!!", event);
     if (Constants.platform.ios) {
       WebBrowser.dismissBrowser();
     } else {

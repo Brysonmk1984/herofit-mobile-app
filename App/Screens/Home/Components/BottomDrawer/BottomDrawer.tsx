@@ -28,9 +28,10 @@ interface BottomDrawerProps {
   setBottomDrawerOpen: (isOpen: boolean) => void;
   bottomDrawerHeight: number;
   deviceWidth: number;
+  initialDisabledLinks: boolean;
 }
 
-const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailable, latestBattle, user, setBottomDrawerOpen, bottomDrawerHeight, deviceWidth }) => {
+const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailable, latestBattle, user, setBottomDrawerOpen, bottomDrawerHeight, deviceWidth, initialDisabledLinks }) => {
   const refRBSheet = useRef({ open: () => null });
 
   const navigation = useNavigation();
@@ -176,6 +177,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
         {activeTab === "Titles" && <ItemCarousel type="title" data={titles} equipped={equippedTitle} setPressedItem={setPressedItem} refRBSheet={refRBSheet} handleEquipping={handleEquipping} />}
         {activeTab === "Codex" && <ItemCarousel type="codex" data={codices} setPressedItem={setPressedItem} refRBSheet={refRBSheet} />}
       </HiddenInventory>
+      {initialDisabledLinks && <Box position="absolute" zIndex={100} bottom={0} height="100%" w="100%" bgColor="base.darkTransparent"></Box>}
     </Box>
   );
 };

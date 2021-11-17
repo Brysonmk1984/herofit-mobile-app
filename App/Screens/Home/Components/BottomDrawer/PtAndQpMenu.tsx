@@ -8,14 +8,15 @@ interface PtAndQpMenuProps {
   qp: number;
   openBottomDrawer: () => void;
   push: () => void;
+  initialDisabledLinks: boolean;
 }
 
-const PtAndQpMenu: React.FC<PtAndQpMenuProps> = ({ photonTokens, qp, openBottomDrawer, push }) => {
+const PtAndQpMenu: React.FC<PtAndQpMenuProps> = ({ photonTokens, qp, openBottomDrawer, push, initialDisabledLinks }) => {
   return (
     <>
       <Box zIndex={100} elevation={100}>
         <HStack h={39} borderColor="base.brand" borderTopWidth={1} justifyContent="space-between">
-          <Pressable pl={46} backgroundColor="base.primary" flex={2.5} onPress={() => push("SpendQP")}>
+          <Pressable pl={46} backgroundColor="base.primary" flex={2.5} onPress={initialDisabledLinks ? null : () => push("SpendQP")}>
             {qp ? (
               <View flexDirection="row">
                 <Text ml={0} lineHeight={40} fontFamily="heading" color="primary.800" fontSize={34}>
@@ -35,7 +36,7 @@ const PtAndQpMenu: React.FC<PtAndQpMenuProps> = ({ photonTokens, qp, openBottomD
           <Box zIndex={1001} elevation={1001} position="absolute" left="50%" top={-36} marginLeft={-44}>
             <Triangle action={openBottomDrawer} />
           </Box>
-          <Pressable elevation={1001} onPress={() => openBottomDrawer()} flex={2.5} backgroundColor="base.primary">
+          <Pressable elevation={1001} onPress={initialDisabledLinks ? null : () => openBottomDrawer()} flex={2.5} backgroundColor="base.primary">
             <Box pl={27}>
               <View flexDirection="row">
                 <Text lineHeight={40} fontSize={34} fontFamily="heading" color="primary.800">
