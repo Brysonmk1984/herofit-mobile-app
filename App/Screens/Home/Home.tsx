@@ -59,12 +59,11 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
       // INSERT ACTIVITIES, UPDATE USER TOTALS, BUF AVATAR
       const upgradeResults = await upgradeSequence({ email: user.email, activities, accountDate: user.createdAt, hasBeenUpgraded: state.hero.hasBeenUpgraded });
 
-      if (!upgradeResults.reachedLevel) {
-        setBackgroundAnimation("Level Up");
-        setTimeout(() => {
-          setBackgroundAnimation(null);
-        }, 1200);
-      }
+      // if (upgradeResults.reachedLevel) {
+
+      // }
+      setBackgroundAnimation("Activity Up");
+
       // combine returned avatar with existing equipped items... backend not fetching equipment here
       const heroEquipped = Object.assign({}, state.hero, upgradeResults.avatar, { equipped: state.hero.equipped });
 
@@ -152,7 +151,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
 
   return (
     <SideMenu disableGestures={state.initialHomescreenLoad || bottomDrawerOpen} bounceBackOnOverdraw={false} onChange={isOpen => setSideDrawerOpen(isOpen)} isOpen={sideDrawerOpen} menuPosition={"right"} menu={<SidebarMenu navigation={navigation} setSideDrawerOpen={setSideDrawerOpen} />} openMenuOffset={sideBarWidth}>
-      <ScreenContainer bg={<Background animation={backgroundAnimation} />} screenName={route.name}>
+      <ScreenContainer bg={<Background animation={backgroundAnimation} setBackgroundAnimation={setBackgroundAnimation} />} screenName={route.name}>
         <View zIndex={110} elevation={110}>
           <GestureRecognizer onSwipeDown={state => handleReload()}>
             {/* TOP SECTION */}

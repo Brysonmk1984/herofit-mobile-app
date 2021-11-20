@@ -13,14 +13,15 @@ const bg = {
 
 interface BackgroundProps {
   animation?: string;
+  setBackgroundAnimation?: (val: null) => void;
 }
 
-const Background: React.FC<BackgroundProps> = ({ animation }) => {
+const Background: React.FC<BackgroundProps> = ({ animation, setBackgroundAnimation }) => {
   const [animationBackground, setAnimationBackground] = useState(null);
   const { state, dispatch } = useContext(GlobalStateContext);
 
   function determineBackgroundAnimation(name: string) {
-    if (name === "Level Up") {
+    if (name === "Activity Up") {
       return require("../../../../assets/images/gifs/level-up.gif");
     }
   }
@@ -42,17 +43,18 @@ const Background: React.FC<BackgroundProps> = ({ animation }) => {
   const fadeIn = cb => {
     Animated.timing(opacityAnim, {
       toValue: 1,
-      duration: 1000,
+      duration: 500,
       useNativeDriver: true,
     }).start(() => cb());
   };
   const fadeOut = () => {
     Animated.timing(opacityAnim, {
       toValue: 0,
-      duration: 1000,
+      duration: 500,
       useNativeDriver: true,
     }).start(() => {
       setAnimationBackground(null);
+      setBackgroundAnimation(null);
     });
   };
 
