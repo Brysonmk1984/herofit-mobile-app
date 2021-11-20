@@ -3,13 +3,13 @@
     "name": "HeroFit",
     "slug" : "herofit",
     "owner":"brysonmk1984",
-    "version": "1.0.14",
+    "version": "1.0.15",
     "orientation": "portrait",
     "icon": "./assets/ios-logo-512.png",
     "scheme": "herofit",
     "splash": {
       "image": "./assets/images/backgrounds/splash-background-night.webp",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {
