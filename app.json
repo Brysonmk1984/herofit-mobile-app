@@ -8,7 +8,7 @@
     "icon": "./assets/ios-logo-512.png",
     "scheme": "herofit",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/images/backgrounds/splash-background-night.webp",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -20,8 +20,8 @@
     ],
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./assets/logo512.png",
+        "backgroundColor": "#d4af37"
       }
     },
     "ios": {

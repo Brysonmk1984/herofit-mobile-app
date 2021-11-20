@@ -2,7 +2,6 @@ import React from "react";
 import { StyleSheet, ImageBackground } from "react-native";
 import { Flex, View, Box, Pressable } from "native-base";
 import herofitTheme from "../../styles/herofitTheme";
-import { SafeAreaView } from "react-native-safe-area-context";
 import PressableWrapper from "./PressableWrapper";
 
 interface ScreenContainerProps {
@@ -12,6 +11,7 @@ interface ScreenContainerProps {
   bgColor?: string;
   hero?: string;
   screenAction?: () => void;
+  animation?: string;
 }
 
 function determineImageBackground({ type, name }: { type: string; name: string }) {
@@ -72,14 +72,12 @@ function determineImageBackground({ type, name }: { type: string; name: string }
   }
 }
 
-export default function ScreenContainer({ children, screenName, bg, bgColor, hero, screenAction }: ScreenContainerProps) {
+const ScreenContainer: React.FC<ScreenContainerProps> = ({ children, screenName, bg, bgColor, hero, screenAction }) => {
   let image = determineImageBackground({ type: "art", name: screenName });
 
   if (hero) {
     image = determineImageBackground({ type: "hero", name: hero });
   }
-
-  function renderContent() {}
 
   return (
     <PressableWrapper isPressable={typeof screenAction === "function"} wrapper={children => <Pressable onPress={() => screenAction()}>{children}</Pressable>}>
@@ -90,10 +88,12 @@ export default function ScreenContainer({ children, screenName, bg, bgColor, her
           </Flex>
         </View>
       </View>
-      {typeof bg === "object" ? bg : <ImageBackground source={image} style={[styles.image, { backgroundColor: undefined }]} resizeMode="cover" />}
+      {typeof bg === "object" ? bg : <ImageBackground source={image} style={[styles.image, { backgroundColor: typeof bg !== "object" ? bg : undefined }]} resizeMode="cover" />}
     </PressableWrapper>
   );
-}
+};
+
+export default ScreenContainer;
 
 const { background, white, black } = herofitTheme.colors.base;
 const styles = StyleSheet.create({

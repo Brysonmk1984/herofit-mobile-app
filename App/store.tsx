@@ -1,7 +1,7 @@
 import React, { createContext, useReducer, Context, FC, ReactElement } from "react";
 import { InitialAppState, AppAction } from "./common/types";
 
-const initialState: InitialAppState = { isLoading: true, isSignedIn: false, userStatus: "new", user: null, hero: null, latestSavedActivities: [], latestSavedActivityDate: null, latestBattle: null, jwt: null, modalQueue: [], allGameItems: [], inventory: { pets: [], consumables: [], skins: [], titles: [], codices: [] }, equipped: { skin: null, pet: null, title: null }, initialHomescreenLoad: null };
+const initialState: InitialAppState = { isLoading: true, isSignedIn: false, userStatus: "new", user: null, hero: null, latestSavedActivities: [], latestSavedActivityDate: null, latestBattle: null, jwt: null, modalQueue: [], allGameItems: [], inventory: { pets: [], consumables: [], skins: [], titles: [], codices: [] }, equipped: { skin: null, pet: null, title: null }, initialHomescreenLoad: null, background: null };
 
 type AppState = typeof initialState;
 
@@ -90,6 +90,10 @@ function appStateReducer(state: AppState, action: AppAction): AppState {
     case "SET INITIAL HOMESCREEN LOAD": {
       const { initialHomescreenLoad } = action.payload;
       return { ...state, initialHomescreenLoad };
+    }
+    case "SET BACKGROUND": {
+      const { background } = action.payload;
+      return { ...state, background };
     }
     default:
       throw new Error("In Store default, should not happen.");
