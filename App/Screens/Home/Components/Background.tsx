@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
-import { StyleSheet, ImageBackground } from "react-native";
+import { StyleSheet, ImageBackground, Animated } from "react-native";
 import { GlobalStateContext } from "../../../store";
 
 const bg = {
@@ -28,7 +28,7 @@ const Background: React.FC<BackgroundProps> = ({ animation }) => {
   function handleBackgroundSelection(sessionBackground: string) {
     if (typeof bg[sessionBackground] === "number") {
       // Images imported with the required method are numbers, so render them here
-      return <ImageBackground source={bg[sessionBackground]} style={styles.image} resizeMode="cover" />;
+      return <ImageBackground source={bg[sessionBackground]} style={styles.imageContainer} resizeMode="cover" />;
     } else if (Array.isArray(bg[sessionBackground])) {
       // Otherwise, render the gradient
       return <LinearGradient colors={bg[sessionBackground]} style={styles.background} />;
@@ -37,16 +37,30 @@ const Background: React.FC<BackgroundProps> = ({ animation }) => {
     }
   }
 
+  // Fading in and out of animated backgrounds
+  const opacityAnim = useRef(new Animated.Value(0)).current;
+  const fadeIn = cb => {
+    Animated.timing(opacityAnim, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start(() => cb());
+  };
+  const fadeOut = () => {
+    Animated.timing(opacityAnim, {
+      toValue: 0,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start(() => {
+      setAnimationBackground(null);
+    });
+  };
+
   // Trigger updating animated background state locally if animation (string) is passed in
   useEffect(() => {
     if (animation) {
       setAnimationBackground(determineBackgroundAnimation(animation));
-
-      const animationTimeout = setTimeout(() => {
-        setAnimationBackground(null);
-      }, 1200);
-
-      return () => clearTimeout(animationTimeout);
+      fadeIn(fadeOut);
     }
   }, [animation]);
 
@@ -56,7 +70,6 @@ const Background: React.FC<BackgroundProps> = ({ animation }) => {
       // Random background selection from the object at the top of the page
       const backgroundKeys = Object.keys(bg);
       const backgroundName = backgroundKeys[Math.floor(Math.random() * backgroundKeys.length)];
-      console.log("!!!!", backgroundName);
 
       dispatch({ type: "SET BACKGROUND", payload: { background: backgroundName } });
     }
@@ -65,7 +78,11 @@ const Background: React.FC<BackgroundProps> = ({ animation }) => {
   return (
     <>
       {state.background && handleBackgroundSelection(state.background)}
-      {animationBackground && <ImageBackground source={animationBackground} style={[styles.image, { backgroundColor: undefined }]} resizeMode="cover" />}
+      {animationBackground && (
+        <Animated.View style={[styles.imageContainer, { opacity: opacityAnim }]}>
+          <ImageBackground source={determineBackgroundAnimation(animation)} style={[styles.image, { backgroundColor: undefined }]} resizeMode="cover" />
+        </Animated.View>
+      )}
     </>
   );
 };
@@ -82,15 +99,20 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
   },
-  image: {
+  imageContainer: {
     justifyContent: "center",
-    width: "107%",
-    height: "107%",
+    width: "100%",
+    height: "100%",
     position: "absolute",
     left: 0,
     top: 0,
     zIndex: 0,
     elevation: 0,
     overflow: "hidden",
+  },
+  image: {
+    width: "100%",
+    height: "100%",
+    position: "absolute",
   },
 });
