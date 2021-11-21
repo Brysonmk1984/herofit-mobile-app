@@ -23,7 +23,7 @@ interface ChooseActivityEntryProps {
 const ChooseActivityEntry: React.FC<ChooseActivityEntryProps> = ({ id }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { openModal, closeModal } = useModal();
-  const { getStravaCredentials, handleStravaRedirect, request, promptAsync, stravaSuccess, helperText, setHasFetchedStravaDetails } = useStravaConnect();
+  const { clientId, request, promptAsync, stravaSuccess, helperText } = useStravaConnect();
   const [activityRadioValue, setActivityRadioValue] = useState(null);
   const [confirmButton, setConfirmButton] = useState({ modalAction: () => {}, buttonText: "Done" });
   const [loading, setLoading] = useState(false);
@@ -39,29 +39,12 @@ const ChooseActivityEntry: React.FC<ChooseActivityEntryProps> = ({ id }) => {
     }
   }
 
-  async function _handleStravaDetails() {
-    console.log(3);
-    setLoading(true);
-    // The Strava Client credentials are stores in the hook's state, and applied to the "Connect Strava" button
-    await getStravaCredentials();
-    setConfirmButton({ modalAction: () => {}, buttonText: "Connect Strava" });
-    setLoading(false);
-    //console.log("ADDING EVENT LISTENER", Linking.addEventListener);
-    //Linking.addEventListener("url", data => handleStravaRedirect(data));
-    //Linking.getInitialURL().then(url => handleStravaRedirect(url));
-    //BackHandler.exitApp();
-    //Linking.openURL("https://www.strava.com/oauth/mobile/authorize");
-  }
-
   // DEPENDING ON WHICH RADIO IS CLICKED, EITHER HANDLE STRAVA OR MANUAL DETAILS
   useEffect(() => {
     if (activityRadioValue) {
-      //let stravaLinkEventListener;
       if (activityRadioValue === "Strava") {
-        // Sets the state for all the strava details, then sets the event listener
-        _handleStravaDetails();
+        setConfirmButton({ modalAction: () => {}, buttonText: "Connect Strava" });
       } else if (activityRadioValue === "Manual") {
-        //Linking.removeEventListener("url", handleStravaRedirect);
         setConfirmButton({ modalAction: () => handleManualDetails(state.user.email), buttonText: "Done" });
       }
     }
@@ -77,12 +60,6 @@ const ChooseActivityEntry: React.FC<ChooseActivityEntryProps> = ({ id }) => {
     }
   }, [stravaSuccess]);
 
-  // useEffect(()=>{
-  //   if(helperText){
-  //     addToast("");
-  //   }
-  // }, [helperText])
-
   return (
     <CharacterModal id={id} modalOpen={state.modalQueue[0] === id} speech="Now that you're a pupil in my Dojo?, we'll need to hold you accountable!" disabled={!activityRadioValue} modalAction={confirmButton.modalAction} buttonText={activityRadioValue === "Manual" ? confirmButton.buttonText : null}>
       <ModalActionHeader type="info" text="How will you log activities??" />
@@ -94,8 +71,8 @@ const ChooseActivityEntry: React.FC<ChooseActivityEntryProps> = ({ id }) => {
             <ActivityEntrySelect activityRadioValue={activityRadioValue} setActivityRadioValue={setActivityRadioValue} />
             {/* <HeroInitiationChecklist crossedOut={[true, true, true]} /> */}
             {loading && <LoadingInPane text="Fetching Client Credentials" />}
-            {helperText && activityRadioValue === "Strava" && <HelperText type="error" fontSize="sm" text={helperText} />}
-            {activityRadioValue === "Strava" && <StravaConnectButton request={getStravaCredentials} promptAsync={promptAsync} setHasFetchedStravaDetails={setHasFetchedStravaDetails} />}
+            {helperText && activityRadioValue === "Strava" && <HelperText type="caution" fontSize="sm" text={helperText} />}
+            {activityRadioValue === "Strava" && <StravaConnectButton disable={!request || !clientId} promptAsync={promptAsync} />}
           </>
         )}
       </BodyContent>

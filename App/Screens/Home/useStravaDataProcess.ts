@@ -1,69 +1,33 @@
-import moment from "moment";
-import { useContext, useEffect, useState } from "react";
-import { getStravaClientCredentials, insertStravaCredentials } from "../../api/authentication";
-import { getNewAccessToken, getStravaActivityData, getStravaUserId } from "../../api/strava";
-
+import { Dispatch, useContext, useEffect, useState } from "react";
+import { stravaFetchAndUpdateAccessToken, getStravaActivityData } from "../../api/strava";
 import debugErrors from "../../common/debugErrors";
 import { determineDataSrcType, getLsWithExpiry, setLsWithExpiry } from "../../common/helperFunctions";
-import useDidMount from "../../common/hooks/useDidMount";
 import useGlobalToast from "../../common/hooks/useGlobalToast";
 import { isExistingHero } from "../../common/typeGuards";
-import { Activity, Hero, User } from "../../common/types";
+import { Activity, AppAction, Hero, InitialAppState, User } from "../../common/types";
 import { GlobalStateContext } from "../../store";
+import moment from "moment";
 
-async function _checkStravaToken(user: User, state, dispatch): Promise<string> {
+async function _checkStravaToken(user: User, state: InitialAppState, dispatch: React.Dispatch<AppAction>): Promise<string> {
   const accessTokenExpiration = user.stravaAccessTokenExpiration;
   const nowEpoch = moment().valueOf() / 1000;
 
   // CHECK IF access token is valid, if so, just resolve the promise and move on
   if (accessTokenExpiration > nowEpoch && user.stravaAccessToken) {
-    //console.log("TOKEN VALID, using existing access token");
+    console.log("TOKEN VALID, using existing access token");
     return user.stravaAccessToken;
   }
   console.log("TOKEN INVALID, refreshing access token");
 
   try {
     // OTHERWISE, we need to run the sequence to update the access token
-    // First, get Strava client Credentials from my server
-    const { clientId, clientSecret } = await getStravaClientCredentials();
-    const authData = { clientId, clientSecret, refreshToken: user.stravaRefreshToken };
-
-    const accessTokenData = await getNewAccessToken(authData);
-    const { access_token: stravaAccessToken, expires_at: stravaAccessTokenExpiration, refresh_token: stravaRefreshToken } = accessTokenData;
-    //console.log("STRAVA - ATD", accessTokenData);
-    let credentialsForDB = { email: user.email, stravaAccessToken, stravaAccessTokenExpiration, stravaRefreshToken };
-
-    interface UpdatedCredentialsForDB {
-      email: string;
-      stravaAccessToken: string;
-      stravaAccessTokenExpiration: string;
-      stravaRefreshToken: string;
-      dataSrcId: string;
-    }
-    let updatedCredentialsForDB: UpdatedCredentialsForDB | null;
-
-    // If we are already saving the dataSrcId, then just return the credentialsObj without fetching the strava account data
-    if (user.dataSrcId) {
-      updatedCredentialsForDB = Object.assign({}, credentialsForDB, { dataSrcId: user.dataSrcId });
-    } else {
-      // NEW - IF USER DATA DOES NOT INCLUDE A DATA SRC ID...
-      // FETCH USER INFO TO GET STRAVA ID, WHICH WILL ALSO BE SAVED TO DB
-
-      // Get Strava account info
-      const { id: dataSrcId } = await getStravaUserId(credentialsForDB.stravaAccessToken);
-
-      updatedCredentialsForDB = Object.assign({}, credentialsForDB, { dataSrcId });
-    }
-
-    // UPDATE DB with new strava credentials
-    const { user: userWithNewStravaCredentials } = await insertStravaCredentials(updatedCredentialsForDB);
-
-    // UPDATE STATE with new strava credentials
-    const updatedUser = Object.assign({}, user, userWithNewStravaCredentials);
-    dispatch({ type: "SET USER", payload: { user: updatedUser } });
+    // set updated user and return the access token to the parent function so it can fetch strava activities
+    const { user: updatedUser } = await stravaFetchAndUpdateAccessToken({ email: state.user.email });
+    dispatch({ type: "SET USER", payload: { user: updatedUser, isSignedIn: true } });
 
     return updatedUser.stravaAccessToken;
   } catch (error) {
+    console.log("GENERAL ERROR", error);
     // Couldn't retrieve strava credentials
     debugErrors(error, user);
     throw new Error(`${error.status}: ${error.message}`);
@@ -72,48 +36,43 @@ async function _checkStravaToken(user: User, state, dispatch): Promise<string> {
 
 // Combines the Data from the DB and Strava, and updates state and DB with combined data
 function _handleStravaActivities(hero: Hero, stravaActivities: any[], dateOfLatestSaved: string | null, user: User): Activity[] {
-  let newStravaActivities: any[];
+  let formattedActivities: any[] | undefined = stravaActivities.map(act => {
+    return {
+      id: act.id,
+      activityDate: act.start_date || act.activityDate,
+      type: act.type,
+      averageSpeed: act.average_speed ?? act.averageSpeed,
+      maxSpeed: act.max_speed ?? act.maxSpeed,
+      distance: act.distance,
+      duration: act.moving_time ?? act.duration,
+      elevationGain: act.total_elevation_gain || act.elevationGain,
+      source: "strava",
+    };
+  });
 
   // IF Existing User, only use activities after latest saved, or if none are saved, use it
   if (hero.hasBeenUpgraded) {
-    newStravaActivities = stravaActivities.filter(activity => {
-      return moment(activity.start_date).isAfter(dateOfLatestSaved) || dateOfLatestSaved === null;
+    return formattedActivities.filter(activity => {
+      return moment(activity.activityDate).isAfter(dateOfLatestSaved) || dateOfLatestSaved === null;
     });
-
+  } else if (!dateOfLatestSaved) {
     // If not a new user, but there is no saved activities, get everything after account creation AND 5 before.
     // This is for users who dont buff avatar right away.
-  } else {
     let accountDate = moment.utc(user.createdAt, "YYYY-MM-DD[T]HH:mm[Z]");
-    const afterArray = stravaActivities.filter(activity => {
-      let activityDate = moment.utc(activity.start_date, "YYYY-MM-DD[T]HH:mm[Z]");
+
+    const afterArray = formattedActivities.filter(activity => {
+      let activityDate = moment.utc(activity.activityDate, "YYYY-MM-DD[T]HH:mm[Z]");
       return activityDate.isAfter(accountDate);
     });
-    const beforeArray = stravaActivities.filter(activity => {
-      let activityDate = moment.utc(activity.start_date, "YYYY-MM-DD[T]HH:mm[Z]");
+    const beforeArray = formattedActivities.filter(activity => {
+      let activityDate = moment.utc(activity.activityDate, "YYYY-MM-DD[T]HH:mm[Z]");
       return activityDate.isBefore(accountDate);
     });
-    newStravaActivities = [...afterArray, ...beforeArray.slice(0, 5)];
-  }
-
-  // If there are any new activities, present user option to upgrade
-  if (newStravaActivities.length) {
-    const newFormatActivities = newStravaActivities.map(act => {
-      //console.log("ACT=", act);
-      // I'm confused... sometimes newStrava activities are in Strava format, but other times they're already converted to HeroFit format... Look into this
-      return {
-        id: act.id,
-        activityDate: act.start_date || act.activityDate,
-        type: act.type,
-        averageSpeed: act.average_speed ?? act.averageSpeed,
-        maxSpeed: act.max_speed ?? act.maxSpeed,
-        distance: act.distance,
-        duration: act.moving_time ?? act.duration,
-        elevationGain: act.total_elevation_gain || act.elevationGain,
-        source: "strava",
-      };
-    });
-
-    return newFormatActivities;
+    return [...afterArray, ...beforeArray.slice(0, 5)];
+  } else {
+    const error = new Error("User hasn't been upgraded AND there IS a latest saved activity... must be a bug");
+    debugErrors(error.toString(), user);
+    throw error;
   }
 }
 
@@ -134,6 +93,8 @@ function useStravaDataProcess(): { newStravaActivities: Activity[]; getFreshStra
     }
     try {
       const accessToken = await _checkStravaToken(state.user, state, dispatch);
+
+      console.log("MADE IT ALL THE WAY THROUGH, AT=", accessToken);
       const activities = await getStravaActivityData(accessToken);
 
       const formattedNewActivities = _handleStravaActivities(hero, activities, state.latestSavedActivityDate, state.user);
@@ -174,9 +135,8 @@ function useStravaDataProcess(): { newStravaActivities: Activity[]; getFreshStra
           // If there are locally saved strava activities, use cached version
           // This is to prevent too many requests against Strava API
           if (lsStrava) {
-            console.log("YES LS STRAVA DATA");
+            console.log("YES LS STRAVA DATA", state.latestSavedActivityDate, lsStrava);
             const formattedNewActivities = _handleStravaActivities(hero, lsStrava, state.latestSavedActivityDate, state.user);
-            //console.log("FNA=", formattedNewActivities);
             setNewStravaActivities(formattedNewActivities);
           } else {
             console.log("NO LS STRAVA DATA");

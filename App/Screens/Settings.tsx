@@ -1,10 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Alert } from "react-native";
-import { Image, Pressable, FlatList, SectionList, Box, Center, View, Text, Heading, VStack, FormControl, Input, Link, Button, IconButton, HStack, Divider, Toast } from "native-base";
+import React, { useContext } from "react";
+import { Button } from "native-base";
 import ScreenContainer from "../Components/ScreenContainer/ScreenContainer";
-import { clearJwtInLocalStorage } from "../common/jwtModule";
 import debugErrors, { createAppError } from "../common/debugErrors";
-import { Hero, User } from "../common/types";
+import { User } from "../common/types";
 import { deleteAccount, disconnectStrava } from "../api/account";
 import { GlobalStateContext } from "../store";
 import { MainStackProps } from "../common/types-navigator";
@@ -14,9 +12,10 @@ import { checkDataSrcType, clearLs, createAlert } from "../common/helperFunction
 import useGlobalToast from "../common/hooks/useGlobalToast";
 import PaneSupportText from "../Components/PaneSupportText";
 import { ScrollView } from "react-native-gesture-handler";
-import { createManualDataSrcId, getStravaClientCredentials } from "../api/authentication";
+import { createManualDataSrcId } from "../api/authentication";
 import useStravaConnect from "../common/hooks/useStravaConnect";
 import StravaConnectButton from "../Components/Buttons/StravaConnectButton";
+import * as WebBrowser from "expo-web-browser";
 
 const Settings: React.FC<MainStackProps<"Settings">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -24,7 +23,8 @@ const Settings: React.FC<MainStackProps<"Settings">> = ({ navigation, route }) =
   const { hero, user } = state;
   const isStravaUser = "strava" === checkDataSrcType(user.dataSrcId);
 
-  const { getStravaCredentials, handleStravaRedirect, request, promptAsync, stravaSuccess, helperText, setHasFetchedStravaDetails } = useStravaConnect();
+  //const { clientId, request, promptAsync } = useStravaConnect();
+  const { clientId, request, promptAsync, stravaSuccess, helperText } = useStravaConnect();
 
   function handleStravaDisconnection() {
     async function disconnect() {
@@ -70,21 +70,6 @@ const Settings: React.FC<MainStackProps<"Settings">> = ({ navigation, route }) =
     }
   }
 
-  //Fetch Strava client details ahead of time
-  useEffect(() => {
-    if (!isStravaUser) {
-      // The Strava Client credentials are stored in the state of the hook, and applied to the "Connect Strava" button
-      // Here we are fetching the credentials ahead of time in case they click the button
-      getStravaCredentials();
-    }
-  }, [isStravaUser]);
-
-  useEffect(() => {
-    if (stravaSuccess) {
-      addToast("success", "Strava Connection Successful!");
-    }
-  }, [stravaSuccess]);
-
   return (
     <ScreenContainer screenName={route.name}>
       <Header text="Settings" />
@@ -99,7 +84,9 @@ const Settings: React.FC<MainStackProps<"Settings">> = ({ navigation, route }) =
               Disconnect Strava
             </Button>
           ) : (
-            <StravaConnectButton request={getStravaCredentials} promptAsync={promptAsync} setHasFetchedStravaDetails={setHasFetchedStravaDetails} />
+            // TODO: Need to figure out why strava connect keeps crashing from settings page
+            <StravaConnectButton disable={true} promptAsync={promptAsync} />
+            // <StravaConnectButton disable={!request || !clientId} promptAsync={promptAsync} />
           )}
         </Pane>
         <Pane mb={10}>
