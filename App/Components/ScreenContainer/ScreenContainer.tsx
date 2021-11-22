@@ -74,7 +74,7 @@ function determineImageBackground({ type, name }: { type: string; name: string }
 
 const ScreenContainer: React.FC<ScreenContainerProps> = ({ children, screenName, bg, bgColor, hero, screenAction }) => {
   let image = determineImageBackground({ type: "art", name: screenName });
-
+  const extraPaddingScreens = ["Home", "BattleReport"];
   if (hero) {
     image = determineImageBackground({ type: "hero", name: hero });
   }
@@ -82,7 +82,7 @@ const ScreenContainer: React.FC<ScreenContainerProps> = ({ children, screenName,
   return (
     <PressableWrapper isPressable={typeof screenAction === "function"} wrapper={children => <Pressable onPress={() => screenAction()}>{children}</Pressable>}>
       <View style={[styles.wrapper, styles.absolute, bgColor ? { backgroundColor: bgColor } : null]}>
-        <View style={styles.container}>
+        <View style={[styles.container, { paddingTop: extraPaddingScreens.includes(screenName) ? 25 : 0 }]}>
           <Flex flex={1} justify="space-between" zIndex={10} p={0} w={"100%"} mx="auto">
             {children}
           </Flex>

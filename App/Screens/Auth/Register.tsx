@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState, useReducer, createRef } from "react";
 import { StyleSheet } from "react-native";
-import { ScrollView, NativeBaseProvider, Box, View, Text, Heading, VStack, FormControl, Input, Checkbox, Link, Button, Icon, IconButton, HStack, Divider } from "native-base";
+import { ScrollView, NativeBaseProvider, Box, View, Text, Heading, VStack, FormControl, Input, Checkbox, Link, Button, Icon, IconButton, HStack, Divider, Center } from "native-base";
 import { register } from "../../api/authentication";
 import { insertAvatar } from "../../api/avatar";
 import { GlobalStateContext } from "../../store";
@@ -11,6 +11,7 @@ import { AuthStackProps } from "../../common/types-navigator";
 import { User } from "../../common/types";
 import { instantiateUserTotals } from "../../api/user";
 import useGlobalToast from "../../common/hooks/useGlobalToast";
+import PaneActionButton from "../../Components/PaneActionButton";
 
 // prettier-ignore
 interface FormState { email: string; firstName: string; username: string; password: string; emailMarketingOptIn: boolean; helperText: string; formIsValid: boolean; loading: boolean }
@@ -168,12 +169,12 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
                 </Text>
               </HStack>
             </FormControl>
+            <PaneActionButton text="Let's Go!" disabled={!formState.formIsValid ? true : false} action={handleSignUp} />
             {/* Show Loading indicator or Helper Text */}
             {formState.loading ? <LoadingInPane text="Creating Account..." /> : formState.helperText ? <HelperText text={formState.helperText} type={formState.formIsValid ? "success" : "error"} /> : null}
           </VStack>
         </Pane>
       </ScrollView>
-      <ScreenActionButton text="Let's Go!" disabled={formState.formIsValid ? false : true} action={handleSignUp} />
     </ScreenContainer>
   );
 };

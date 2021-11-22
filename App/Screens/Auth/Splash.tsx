@@ -1,16 +1,18 @@
-import { Animated, Dimensions, ImageBackground, StyleSheet, View as RNView } from "react-native";
+import { Animated, ImageBackground, StyleSheet, View as RNView } from "react-native";
 import { View, Text, Center, Button, Link, Image } from "native-base";
-import React, { useContext, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import { AuthStackProps } from "../../common/types-navigator";
 import { Header, ScreenContainer } from "../../Components/CustomComponents";
 import herofitTheme from "../../styles/herofitTheme";
 import { GlobalStateContext } from "../../store";
 import * as Linking from "expo-linking";
+import useAspectRatio from "../../common/hooks/useAspectRatio";
 
 const Splash = ({ navigation, route }: AuthStackProps<"Splash">) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const [fadeAnim] = useState(new Animated.Value(0));
-  const deviceWidth = Dimensions.get("window").width;
+  const { deviceWidth } = useMemo(() => useAspectRatio(), []);
+
   function handleGetStarted() {
     dispatch({ type: "SET USER STATUS", payload: { userStatus: "new" } });
     navigation.push("AboutGame");

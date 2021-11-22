@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, VStack, FormControl, Input, Link } from "native-base";
+import { View, Text, VStack, FormControl, Input, Link, Button, Center } from "native-base";
 import { GlobalStateContext } from "../../store";
 import debugErrors from "../../common/debugErrors";
 import { Header, ScreenContainer, ScreenActionButton, Pane, HelperText, LoadingInPane } from "../../Components/CustomComponents";
@@ -10,6 +10,7 @@ import * as Linking from "expo-linking";
 import * as WebBrowser from "expo-web-browser";
 import Constants from "expo-constants";
 import useGlobalToast from "../../common/hooks/useGlobalToast";
+import PaneActionButton from "../../Components/PaneActionButton";
 
 const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">) => {
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -134,6 +135,7 @@ const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">)
                 <FormControl.Label>Confirm Password</FormControl.Label>
                 <Input onChangeText={text => handleInputChange(text, setPasswordConfirm)} value={passwordConfirm} secureTextEntry={true} autoCompleteType="password" textContentType="password" placeholder="Confirm Password" />
               </FormControl>
+              <PaneActionButton text="Update Password" disabled={!formIsValid || emailSent ? true : false} action={handleReset} />
               {helperText && <HelperText type={formIsValid ? "success" : "error"} text={helperText} />}
               {loading && <LoadingInPane text="Updating Password..." />}
               <View alignItems="center">
@@ -151,6 +153,7 @@ const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">)
                 <FormControl.Label>What's your sign up email?</FormControl.Label>
                 <Input onChangeText={text => handleInitialEmailChange(text, setEmail)} value={email} autoCompleteType="email" textContentType="emailAddress" placeholder="Enter Email" />
               </FormControl>
+              <PaneActionButton text="Confirm Email" disabled={!formIsValid || emailSent ? true : false} action={handleSendEmailConfirmation} />
               {helperText && <HelperText type={formIsValid ? "success" : "error"} text={helperText} />}
               {loading && <LoadingInPane text="SendingEmail..." />}
               <View alignItems="center">
@@ -163,7 +166,7 @@ const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">)
         )}
       </View>
 
-      <ScreenActionButton text={verifyPassword ? `Update Password` : "Confirm Email"} disabled={!formIsValid || emailSent ? true : false} action={verifyPassword ? handleReset : handleSendEmailConfirmation} />
+      {/* <ScreenActionButton text={verifyPassword ? `Update Password` : "Confirm Email"} disabled={!formIsValid || emailSent ? true : false} action={verifyPassword ? handleReset : handleSendEmailConfirmation} /> */}
     </ScreenContainer>
   );
 };

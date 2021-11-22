@@ -23,7 +23,6 @@ interface TopSectionProps {
 }
 
 const TopSection: React.FC<TopSectionProps> = ({ height: deviceHeight, outcome, contender, contenderType, xpGain, ptGain, itemsAcquired, character, setPressedItem }) => {
-  const { state } = useContext(GlobalStateContext);
   const opacityAnim = useRef(new Animated.Value(0)).current;
 
   function determinePropsForImage(contender: Hero | BattleFoe, contenderType: "hero" | "foe") {

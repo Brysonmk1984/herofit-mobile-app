@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef } from "react";
+import React, { useContext, useEffect, useState, useRef, useMemo } from "react";
 import { Box, Button, View, Text, Icon, VStack, Link, Center, Image } from "native-base";
 import ScreenContainer from "../../Components/ScreenContainer/ScreenContainer";
 import debugErrors from "../../common/debugErrors";
@@ -26,6 +26,7 @@ import SidebarMenu from "./Components/SidebarMenu";
 import { reloadAsync } from "expo-updates";
 import GestureRecognizer, { swipeDirections } from "react-native-swipe-gestures";
 import * as Linking from "expo-linking";
+import useAspectRatio from "../../common/hooks/useAspectRatio";
 
 const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -35,13 +36,13 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   const { addToast } = useGlobalToast();
   const { equippedSkin, equippedPet, equippedTitle } = useInventory(true);
   const propsForHeroImage = (({ character, equipped, alias, status }) => ({ character, equipped, alias, skin: equippedSkin, status, floating: true }))(state.hero);
-  const deviceHeight = Dimensions.get("window").height;
-  const deviceWidth = Dimensions.get("window").width;
+  const { deviceWidth, deviceHeight, deviceAspectType } = useMemo(() => useAspectRatio(), []);
   const sideBarWidth = deviceWidth / 2;
-  const isLongPhone = deviceHeight > deviceWidth * 1.8;
-  const heroImagePosition = isLongPhone ? deviceHeight * 0.7 : deviceHeight * 0.5;
-  const petImagePosition = isLongPhone ? deviceHeight * 0.75 : deviceHeight * 0.64;
-  const heroImageSize = isLongPhone ? 375 : 275;
+  const isLongPhone = deviceAspectType === "long";
+  const isMediumPhone = deviceAspectType === "medium";
+  const heroImagePosition = isLongPhone ? deviceHeight * 0.56 : isMediumPhone ? deviceHeight * 0.53 : deviceHeight * 0.52;
+  const petImagePosition = isLongPhone ? deviceHeight * 0.7 : isMediumPhone ? deviceHeight * 0.62 : deviceHeight * 0.58;
+  const heroImageSize = isLongPhone ? 375 : isMediumPhone ? 300 : 275;
   const bottomDrawerHeight = deviceHeight / 2.25;
   const hero = state.hero as Hero;
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
@@ -161,7 +162,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
             </View>
             {/* HERO & PET */}
             <View h={heroImagePosition} zIndex={110}>
-              <Box position="absolute" bottom={0} left="50%" ml={-138}>
+              <Box position="absolute" bottom={0} left="50%" ml={-(heroImageSize / 2)}>
                 <HeroImage width={heroImageSize} height={heroImageSize} {...propsForHeroImage} />
               </Box>
             </View>
@@ -172,7 +173,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
         </View>
         {/* BOTTOM CONSOLE */}
 
-        <BottomDrawer hero={state.hero} newActivitiesAvailable={newActivities.length > 0 ? true : false} latestBattle={state.latestBattle} user={state.user} setBottomDrawerOpen={setBottomDrawerOpen} bottomDrawerHeight={bottomDrawerHeight} deviceHeight={deviceHeight} initialDisabledLinks={state.initialHomescreenLoad} />
+        <BottomDrawer hero={state.hero} newActivitiesAvailable={newActivities.length > 0 ? true : false} latestBattle={state.latestBattle} user={state.user} setBottomDrawerOpen={setBottomDrawerOpen} bottomDrawerHeight={bottomDrawerHeight} initialDisabledLinks={state.initialHomescreenLoad} />
 
         {/* MODALS */}
         <SignupToSave id="SignupToSave" modalAction={() => dispatch({ type: "SET INITIAL HOMESCREEN LOAD", payload: { initialHomescreenLoad: "Register" } })} />

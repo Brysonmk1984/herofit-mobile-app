@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Dimensions, Animated } from "react-native";
+import { useState, useEffect, useRef, useMemo } from "react";
+import { Animated } from "react-native";
+import useAspectRatio from "./useAspectRatio";
 
 const useFloating = (float: boolean) => {
   const [floating, setFloating] = useState(float);
-  const deviceHeight = Dimensions.get("window").height;
+  const { deviceHeight } = useMemo(() => useAspectRatio(), []);
   const downHeight = deviceHeight * 1;
   const upHeight = deviceHeight * 1.1;
   let floatAnimation = useRef(new Animated.Value(deviceHeight)).current;

@@ -65,10 +65,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ height: deviceHeight, width: 
   return (
     <Pressable flex={1} onPress={() => handleNavigation()}>
       <LinearGradient end={{ x: 0.5, y: 1 }} colors={heroColors} style={styles.heroGradient} />
-      <Animated.View position="absolute" left={20} top={-15} zIndex={1} style={{ transform: [{ translateX: slideAnim }], opacity: opacityAnim }}>
+      <Animated.View position="absolute" left={20} top={25} zIndex={1} style={{ transform: [{ translateX: slideAnim }], opacity: opacityAnim }}>
         <HeroImage width={deviceHeight * 0.4} height={deviceHeight * 0.4} {...propsForHeroImage} />
       </Animated.View>
-      <VStack position="absolute" right={1} top={1}>
+      <VStack position="absolute" right={1} top={25}>
         <Text textAlign="right" fontSize={nameSize} fontFamily="heading">
           {state.hero.name}
         </Text>

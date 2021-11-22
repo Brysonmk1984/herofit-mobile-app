@@ -76,6 +76,10 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
       }
       const updatedHero: Hero = Object.assign({}, hero, { ...qpState }) as unknown as Hero;
       dispatch({ type: "SET HERO", payload: { hero: updatedHero } });
+
+      if (qpState.qp === 0) {
+        navigation.pop();
+      }
     } catch (error) {
       debugErrors(error, state.user);
       return addToast("error", error.message);
@@ -116,10 +120,6 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
       if (existingHero) {
         // After a stat is incremented on screen and in the spendQpReducer, save adjusted hero changes to DB
         _handleStatSave();
-        // If no more QP to spend, do redirect
-        if (qpState.qp === 0) {
-          navigation.pop();
-        }
       } else {
         // For new users, only save values to DB after all completed
         if (qpState.qp === 0) {

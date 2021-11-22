@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, VStack, FormControl, Input, Link, Spinner, HStack, Center } from "native-base";
+import { View, Text, VStack, FormControl, Input, Link, Spinner, HStack, Center, Button } from "native-base";
 import { login } from "../../api/authentication";
 import { GlobalStateContext } from "../../store";
 import debugErrors from "../../common/debugErrors";
@@ -10,6 +10,7 @@ import { AuthStackProps } from "../../common/types-navigator";
 import useGlobalToast from "../../common/hooks/useGlobalToast";
 import * as WebBrowser from "expo-web-browser";
 import PaneSupportText from "../../Components/PaneSupportText";
+import PaneActionButton from "../../Components/PaneActionButton";
 
 const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -101,7 +102,7 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
     <ScreenContainer screenName={route.name}>
       <View>
         <Header text="Sign In" />
-        <Pane>
+        <Pane mt={10}>
           <VStack space={6} mt={5}>
             <FormControl isRequired isInvalid={helperText === "Must be valid email address" ? true : false}>
               <Input onChangeText={text => handleInputChange(text, setEmail)} value={email} placeholder="Email" shadow={1} />
@@ -121,6 +122,7 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
                 }
               />
             </FormControl>
+            <PaneActionButton text="Let's Go!" disabled={!formIsValid || loading || showLegacyLink ? true : false} action={handleSignIn} />
             {loading ? (
               <LoadingInPane text="Signing In..." />
             ) : (
@@ -130,7 +132,7 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
                 {showLegacyLink ? (
                   <Center>
                     <PaneSupportText iconName="caution" iconColor="base.caution" text={"Must Verify Account on HeroFit.io"}>
-                      We have upgraded out login system and because you have a legacy account, you must verify your account from our website.
+                      We have upgraded our login system and because you have a legacy account, you must verify your account from our website.
                     </PaneSupportText>
                     <Link _text={{ fontSize: "3xl" }} onPress={() => navigation.push("ForgotPassword")} mt={1}>
                       Verify Account
@@ -148,8 +150,6 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
           </VStack>
         </Pane>
       </View>
-
-      <ScreenActionButton text="Let's Go!" disabled={!formIsValid || loading || showLegacyLink ? true : false} action={handleSignIn} />
     </ScreenContainer>
   );
 };
