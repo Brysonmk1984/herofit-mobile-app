@@ -38,7 +38,7 @@ const Background: React.FC<BackgroundProps> = ({ animation, setBackgroundAnimati
     } else if (Array.isArray(bg[sessionBackground])) {
       // Otherwise, render the gradient
       return (
-        <View style={[styles.background, { height: "100%", width: "100%" }]}>
+        <View style={[styles.background, { height: "100%", width: "100%", justifyContent: "flex-start" }]}>
           <LinearGradient colors={bg[sessionBackground]} style={{ height: "90%", width: "100%" }} />
         </View>
       );
@@ -80,7 +80,7 @@ const Background: React.FC<BackgroundProps> = ({ animation, setBackgroundAnimati
     if (!state.background) {
       // Random background selection from the object at the top of the page
       const backgroundKeys = Object.keys(bg);
-      const backgroundName = backgroundKeys[4];
+      const backgroundName = backgroundKeys[Math.floor(Math.random() * backgroundKeys.length)];
 
       dispatch({ type: "SET BACKGROUND", payload: { background: backgroundName } });
     }

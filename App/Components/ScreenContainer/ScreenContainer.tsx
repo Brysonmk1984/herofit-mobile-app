@@ -43,7 +43,7 @@ function determineImageBackground({ type, name }: { type: string; name: string }
       case "BattleReportDetail":
         return;
       default:
-        return require("../../../assets/images/backgrounds/adversaries-background.webp");
+        return;
     }
   } else if ((type = "hero")) {
     switch (name) {

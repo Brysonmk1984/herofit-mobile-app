@@ -156,7 +156,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
         <View zIndex={110} elevation={110}>
           <GestureRecognizer onSwipeDown={state => handleReload()}>
             {/* TOP SECTION */}
-            <View>
+            <View zIndex={110}>
               <TopHud equippedTitle={equippedTitle} />
               {state.isSignedIn && !state.initialHomescreenLoad && <DrawerIndicator setSideDrawerOpen={setSideDrawerOpen} />}
             </View>

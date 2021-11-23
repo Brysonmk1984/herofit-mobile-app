@@ -57,7 +57,7 @@ const Rewards: React.FC<RewardsProps> = ({ reversedText, topOrBottom, itemsAcqui
   return (
     <>
       {topOrBottom === "top" ? (
-        <VStack position="absolute" right={1} top={1} zIndex={1000}>
+        <VStack position="absolute" right={1} top={-20} zIndex={1000}>
           {renderRewards(itemsAcquired, reversedText)}
         </VStack>
       ) : (

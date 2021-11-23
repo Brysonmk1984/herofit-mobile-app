@@ -8,7 +8,7 @@ interface DrawerIndicatorProps {
 
 const DrawerIndicator: React.FC<DrawerIndicatorProps> = ({ setSideDrawerOpen }) => {
   return (
-    <Pressable onPress={() => setSideDrawerOpen(prev => !prev)} position="absolute" right={0} top={24} mt={2} zIndex={10}>
+    <Pressable onPress={() => setSideDrawerOpen(prev => !prev)} position="absolute" right={0} top={24} mt={2} elevation={111} zIndex={111}>
       <Box borderLeftRadius={"8px"} bgColor="base.highlight" px={1} py={2}>
         <Icon as={AntDesign} name="menufold" size={7} color="base.white" />
       </Box>

@@ -66,7 +66,7 @@ const AwaitingBattle: React.FC<MainStackProps<"AwaitingBattle">> = ({ navigation
   }, [pressedItem]);
 
   return (
-    <ScreenContainer screenName={route.name}>
+    <ScreenContainer bgColor="#2b2b2a" screenName={route.name}>
       <HeroSection rewards={rewards} height={height} width={width} setPressedItem={setPressedItem} handleNavigation={isInstant ? () => null : handleNavigation} />
       <FoeSection foe={foe} height={height} width={width} character={character} handleNavigation={isInstant ? () => null : handleNavigation} />
       <VsSection height={height} handleNavigation={isInstant ? () => null : handleNavigation} />

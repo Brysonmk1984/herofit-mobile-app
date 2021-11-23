@@ -49,7 +49,7 @@ const TopSection: React.FC<TopSectionProps> = ({ height: deviceHeight, outcome, 
 
   return (
     <Box flex={1}>
-      <Animated.View position="absolute" left={-95} top={-35} zIndex={1} style={{ opacity: opacityAnim }}>
+      <Animated.View position="absolute" left={-95} top={-15} zIndex={1} style={{ opacity: opacityAnim }}>
         {contenderType === "hero" ? <HeroImage {...determinePropsForImage(contender, contenderType)} /> : <FoeImage {...determinePropsForImage(contender, contenderType)} />}
       </Animated.View>
       <Rewards reversedText={outcome !== "Avatar Wins"} topOrBottom={"top"} itemsAcquired={itemsAcquired} ptGain={ptGain} xpGain={xpGain} setPressedItem={setPressedItem} />
