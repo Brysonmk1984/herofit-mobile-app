@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
-import { StyleSheet, ImageBackground, Animated } from "react-native";
+import { StyleSheet, ImageBackground, Animated, View } from "react-native";
 import { GlobalStateContext } from "../../../store";
+import { opacity } from "styled-system";
 
 const bg = {
   backgroundDawn: ["#ffbf61", "#fee3ba"],
@@ -29,10 +30,18 @@ const Background: React.FC<BackgroundProps> = ({ animation, setBackgroundAnimati
   function handleBackgroundSelection(sessionBackground: string) {
     if (typeof bg[sessionBackground] === "number") {
       // Images imported with the required method are numbers, so render them here
-      return <ImageBackground source={bg[sessionBackground]} style={styles.imageContainer} resizeMode="cover" />;
+      return (
+        <View style={[styles.imageContainer, { height: "100%", width: "100%", justifyContent: "flex-start" }]}>
+          <ImageBackground source={bg[sessionBackground]} style={{ height: "90%" }} resizeMode="cover" />
+        </View>
+      );
     } else if (Array.isArray(bg[sessionBackground])) {
       // Otherwise, render the gradient
-      return <LinearGradient colors={bg[sessionBackground]} style={styles.background} />;
+      return (
+        <View style={[styles.background, { height: "100%", width: "100%" }]}>
+          <LinearGradient colors={bg[sessionBackground]} style={{ height: "90%", width: "100%" }} />
+        </View>
+      );
     } else {
       throw new Error("Homescreen background Type must be a string or an array!");
     }
@@ -71,7 +80,7 @@ const Background: React.FC<BackgroundProps> = ({ animation, setBackgroundAnimati
     if (!state.background) {
       // Random background selection from the object at the top of the page
       const backgroundKeys = Object.keys(bg);
-      const backgroundName = backgroundKeys[Math.floor(Math.random() * backgroundKeys.length)];
+      const backgroundName = backgroundKeys[4];
 
       dispatch({ type: "SET BACKGROUND", payload: { background: backgroundName } });
     }
@@ -79,7 +88,7 @@ const Background: React.FC<BackgroundProps> = ({ animation, setBackgroundAnimati
 
   return (
     <>
-      {state.background && handleBackgroundSelection(state.background)}
+      {state.background ? handleBackgroundSelection(state.background) : <View style={styles.imageContainer}></View>}
       {animationBackground && (
         <Animated.View style={[styles.imageContainer, { opacity: opacityAnim }]}>
           <ImageBackground source={determineBackgroundAnimation(animation)} style={[styles.image, { backgroundColor: undefined }]} resizeMode="cover" />
@@ -100,17 +109,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: "100%",
     width: "100%",
+    backgroundColor: "#2b2b2a",
   },
   imageContainer: {
     justifyContent: "center",
     width: "100%",
-    height: "100%",
+    height: "90%",
     position: "absolute",
     left: 0,
     top: 0,
     zIndex: 0,
     elevation: 0,
     overflow: "hidden",
+    backgroundColor: "#2b2b2a",
   },
   image: {
     width: "100%",

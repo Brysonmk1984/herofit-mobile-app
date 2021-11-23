@@ -40,8 +40,8 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   const sideBarWidth = deviceWidth / 2;
   const isLongPhone = deviceAspectType === "long";
   const isMediumPhone = deviceAspectType === "medium";
-  const heroImagePosition = isLongPhone ? deviceHeight * 0.56 : isMediumPhone ? deviceHeight * 0.53 : deviceHeight * 0.52;
-  const petImagePosition = isLongPhone ? deviceHeight * 0.7 : isMediumPhone ? deviceHeight * 0.62 : deviceHeight * 0.58;
+  const heroImagePosition = isLongPhone ? deviceHeight * 0.52 : isMediumPhone ? deviceHeight * 0.53 : deviceHeight * 0.52;
+  const petImagePosition = isLongPhone ? deviceHeight * 0.58 : isMediumPhone ? deviceHeight * 0.56 : deviceHeight * 0.5;
   const heroImageSize = isLongPhone ? 375 : isMediumPhone ? 300 : 275;
   const bottomDrawerHeight = deviceHeight / 2.25;
   const hero = state.hero as Hero;

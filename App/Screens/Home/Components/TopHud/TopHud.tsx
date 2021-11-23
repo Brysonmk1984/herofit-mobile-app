@@ -31,7 +31,7 @@ export const TopHud: React.FC<TopHudProps> = ({ equippedTitle }) => {
   }, [mounted]);
 
   return (
-    <Box minHeight={windowHeight * 0.18} mt={41}>
+    <Box minHeight={windowHeight * 0.18}>
       {secondaryLoading && (
         <Box mt={3}>
           {/* LOGO */}

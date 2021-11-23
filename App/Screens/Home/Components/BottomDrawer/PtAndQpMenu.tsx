@@ -14,7 +14,7 @@ interface PtAndQpMenuProps {
 const PtAndQpMenu: React.FC<PtAndQpMenuProps> = ({ photonTokens, qp, openBottomDrawer, push, initialDisabledLinks }) => {
   return (
     <>
-      <Box zIndex={100} elevation={100}>
+      <Box zIndex={100} elevation={100} borderBottomColor="base.brand" borderBottomWidth={1}>
         <HStack h={39} borderColor="base.brand" borderTopWidth={1} justifyContent="space-between">
           <Pressable pl={46} backgroundColor="base.primary" flex={2.5} onPress={initialDisabledLinks ? null : () => push("SpendQP")}>
             {qp ? (

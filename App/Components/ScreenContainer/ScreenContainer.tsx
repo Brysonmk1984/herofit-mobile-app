@@ -3,6 +3,7 @@ import { StyleSheet, ImageBackground } from "react-native";
 import { Flex, View, Box, Pressable } from "native-base";
 import herofitTheme from "../../styles/herofitTheme";
 import PressableWrapper from "./PressableWrapper";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 interface ScreenContainerProps {
   children: React.ReactNode;
@@ -42,7 +43,7 @@ function determineImageBackground({ type, name }: { type: string; name: string }
       case "BattleReportDetail":
         return;
       default:
-        return require("../../../assets/images/backgrounds/hero-selection-background.webp");
+        return require("../../../assets/images/backgrounds/adversaries-background.webp");
     }
   } else if ((type = "hero")) {
     switch (name) {
@@ -81,13 +82,13 @@ const ScreenContainer: React.FC<ScreenContainerProps> = ({ children, screenName,
 
   return (
     <PressableWrapper isPressable={typeof screenAction === "function"} wrapper={children => <Pressable onPress={() => screenAction()}>{children}</Pressable>}>
-      <View style={[styles.wrapper, styles.absolute, bgColor ? { backgroundColor: bgColor } : null]}>
+      <SafeAreaView style={[styles.wrapper, styles.absolute, bgColor ? { backgroundColor: bgColor } : null]}>
         <View style={[styles.container, { paddingTop: extraPaddingScreens.includes(screenName) ? 25 : 0 }]}>
           <Flex flex={1} justify="space-between" zIndex={10} p={0} w={"100%"} mx="auto">
             {children}
           </Flex>
         </View>
-      </View>
+      </SafeAreaView>
       {typeof bg === "object" ? bg : <ImageBackground source={image} style={[styles.image, { backgroundColor: typeof bg !== "object" ? bg : undefined }]} resizeMode="cover" />}
     </PressableWrapper>
   );

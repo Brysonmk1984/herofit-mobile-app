@@ -18,9 +18,9 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ navigation, setSideDrawerOpen
     cb();
   }
   return (
-    <VStack bgColor="base.primary" height="100%" justifyContent="space-between" borderLeftWidth="1" borderLeftColor="base.brand">
-      <VStack space={1}>
-        <Button variant="ghost" borderBottomColor="#40403e" borderBottomWidth="1" pl={3} mt={5} onPress={() => handleNavigation(() => navigation.push("Adversaries"))} fontSize="2xl" fontFamily="heading" _text={{ color: "primary.200" }} _pressed={{ _text: { color: "base.brand" }, bgColor: "base.primary" }}>
+    <VStack bgColor="base.primary" height="100%" justifyContent="space-between" borderLeftWidth="1" borderLeftColor="base.brand" pb={5}>
+      <VStack space={1} pt={5}>
+        <Button variant="ghost" borderColor="#40403e" borderBottomWidth="1" borderTopWidth="1" pl={3} mt={5} onPress={() => handleNavigation(() => navigation.push("Adversaries"))} fontSize="2xl" fontFamily="heading" _text={{ color: "primary.200" }} _pressed={{ _text: { color: "base.brand" }, bgColor: "base.primary" }}>
           Adversaries
         </Button>
         <Button variant="ghost" borderBottomColor="#40403e" borderBottomWidth="1" pl={3} onPress={() => handleNavigation(() => navigation.push("Feedback"))} fontSize="2xl" fontFamily="heading" _text={{ color: "primary.200" }} _pressed={{ _text: { color: "base.brand" }, bgColor: "base.primary" }}>

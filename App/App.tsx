@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { LogBox, Dimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { NavigationContainer } from "@react-navigation/native";
+import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { GlobalStateContext } from "./store";
 import { AuthStackScreen, MainStackScreen } from "./Navigator";
@@ -105,9 +105,15 @@ const App: React.FC = () => {
   function determineNavigator(isSignedIn: boolean, initialHomescreenLoad: string) {
     return isSignedIn || initialHomescreenLoad === "Home" ? <MainStackScreen /> : <AuthStackScreen />;
   }
-
+  // const MyTheme = {
+  //   ...DefaultTheme,
+  //   colors: {
+  //     ...DefaultTheme.colors,
+  //     background: "#000",
+  //   },
+  // };
   return (
-    <NavigationContainer /*linking={linking}*/>
+    <NavigationContainer /* theme={MyTheme} linking={linking}*/>
       <View style={{ height }}>
         {/* If app is loading -> state.isLoading === true
             OR
