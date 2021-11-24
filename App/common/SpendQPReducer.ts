@@ -19,9 +19,10 @@ function spendQPReducer(state: Stats, action: Action): Stats {
     }
     case "INCREMENT VALUE": {
       const stat = payload.stat;
-      const qpCapitalized = `qp${capitalize(stat)}`;
+      const qpCapitalized = stat === "maxHealth" ? "qpHealth" : `qp${capitalize(stat)}`;
       if (state.qp - 1 >= 0) {
-        return { ...state, [stat]: state[stat] + 1, qp: state.qp - 1, [qpCapitalized]: state[qpCapitalized] + 1 };
+        const updatedState = { [stat]: state[stat] + 1, qp: state.qp - 1, [qpCapitalized]: state[qpCapitalized] + 1 };
+        return { ...state, ...updatedState };
       }
       return state;
     }

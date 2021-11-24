@@ -28,9 +28,9 @@ interface StatDisplayProps {
 
 export default function StatDisplay({ stat, value, description, size, reversedText, iconWatermark, flex, statColor, reverseOrder = false }: StatDisplayProps) {
   const elementNameLC = stat.toLowerCase() as Stat;
-  const iconColor = reversedText ? "base.white" : `base.${elementNameLC}`;
-  const numberColor = statColor ? statColor : reversedText ? "base.white" : null;
-  const textColor = reversedText ? "base.white" : null;
+  const iconColor = iconWatermark ? "base.primary" : reversedText ? "base.white" : `base.${elementNameLC}`;
+  const numberColor = statColor ? statColor : reversedText ? "base.white" : "base.primary";
+  const textColor = reversedText ? "base.white" : "base.primary";
 
   const { iconSize, valueSize, statSize, statSize2, descriptionSize } = ((): StatDisplaySizes => {
     let iconSize = 50,
@@ -43,7 +43,7 @@ export default function StatDisplay({ stat, value, description, size, reversedTe
       (iconSize = 30), (valueSize = "lg"), (statSize = 30), (statSize2 = 28), (descriptionSize = "xs");
     }
     if (iconWatermark) {
-      iconSize = 120;
+      iconSize = 140;
       statSize = 60;
       statSize2 = 60;
     }
@@ -58,9 +58,12 @@ export default function StatDisplay({ stat, value, description, size, reversedTe
 
   function renderIcon(iconWatermark: boolean, stat: Stat): React.ReactElement {
     if (iconWatermark) {
+      const darkBackgroundStats = ["armor", "health", "power", "recovery"];
       return (
-        <View position="absolute" left={"10%"} overflow="hidden" opacity={0.2}>
-          <Icon iconName={stat} size={iconSize} color={iconColor} />
+        <View position="absolute" left={"45%"} width="100%" height="100%" overflow="hidden" opacity={0.4}>
+          <Box mt={-2}>
+            <Icon iconName={stat} size={iconSize} color={darkBackgroundStats.includes(stat) ? "base.white" : iconColor} />
+          </Box>
         </View>
       );
     }
@@ -78,7 +81,7 @@ export default function StatDisplay({ stat, value, description, size, reversedTe
           <Text color={numberColor} fontFamily="heading" fontSize={value >= 100 ? statSize2 : statSize} textAlign="center" lineHeight={size === "sm" ? "60px" : "80px"}>
             {value}
           </Text>
-          <Text textAlign="center" color={textColor} fontFamily="heading" fontSize={valueSize} mt={-5}>
+          <Text textAlign="center" color={"base.highlight"} fontFamily="heading" fontSize={valueSize} mt={-5}>
             {stat}
           </Text>
         </View>

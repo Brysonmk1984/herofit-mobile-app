@@ -11,26 +11,26 @@ const AuthStack = createNativeStackNavigator<AuthStackParamList>();
 const AuthStackScreen = () => {
   const { state } = useContext(GlobalStateContext);
   return (
-    <AuthStack.Navigator screenOptions={{ headerShown: false, ...baseScreenStyle }}>
+    <AuthStack.Navigator screenOptions={{ headerShown: true, ...baseScreenStyle }}>
       {/* Load Register first if coming from homescreen via Signup process */}
       {state.initialHomescreenLoad === "Register" ? (
         <>
           <AuthStack.Screen name="Register" component={Screens.Register} />
-          <AuthStack.Screen name="Splash" component={Screens.Splash} />
+          <AuthStack.Screen name="Splash" component={Screens.Splash} options={{ headerShown: false }} />
         </>
       ) : (
         <>
-          <AuthStack.Screen name="Splash" component={Screens.Splash} />
-          <AuthStack.Screen name="Register" component={Screens.Register} />
+          <AuthStack.Screen name="Splash" component={Screens.Splash} options={{ headerShown: false }} />
+          <AuthStack.Screen name="Register" component={Screens.Register} options={{ headerShown: false }} />
         </>
       )}
 
-      <AuthStack.Screen name="SignIn" component={Screens.SignIn} />
-      <AuthStack.Screen name="ForgotPassword" component={Screens.ForgotPassword} />
-      <AuthStack.Screen name="AboutGame" component={Screens.AboutGame} options={{ title: "The Game" }} />
-      <AuthStack.Screen name="SelectHero" component={Screens.SelectHero} options={{ title: "Select Hero" }} />
-      <AuthStack.Screen name="HeroDetails" component={Screens.HeroDetails} options={{ title: "Hero Details" }} />
-      <AuthStack.Screen name="SpendQP" component={Screens.SpendQP} options={{ title: "Quantum Points" }} />
+      <AuthStack.Screen name="SignIn" component={Screens.SignIn} options={{ headerShown: false }} />
+      <AuthStack.Screen name="ForgotPassword" component={Screens.ForgotPassword} options={{ title: "" }} />
+      <AuthStack.Screen name="AboutGame" component={Screens.AboutGame} options={{ title: "" }} />
+      <AuthStack.Screen name="SelectHero" component={Screens.SelectHero} options={{ title: "" }} />
+      <AuthStack.Screen name="HeroDetails" component={Screens.HeroDetails} options={{ title: "" }} />
+      <AuthStack.Screen name="SpendQP" component={Screens.SpendQP} options={{ title: "" }} />
     </AuthStack.Navigator>
   );
 };
@@ -69,12 +69,18 @@ const MainStackScreen = () => {
               headerShown: false,
             }}
           />
-          <MainStack.Screen name="BattleReport" component={Screens.BattleReport} />
+          <MainStack.Screen
+            name="BattleReport"
+            component={Screens.BattleReport}
+            options={{
+              headerShown: false,
+            }}
+          />
         </>
       )}
 
-      {state.initialHomescreenLoad !== "Home" && <MainStack.Screen name="SpendQP" component={Screens.SpendQP} options={{ title: "Quantum Points" }} />}
-      <MainStack.Screen name="Activity" component={Screens.Activity} />
+      {state.initialHomescreenLoad !== "Home" && <MainStack.Screen name="SpendQP" component={Screens.SpendQP} options={{ title: "" }} />}
+      <MainStack.Screen name="Activity" component={Screens.Activity} options={{ title: "" }} />
       <MainStack.Screen
         name="AwaitingBattle"
         component={Screens.AwaitingBattle}
@@ -98,9 +104,9 @@ const MainStackScreen = () => {
       />
 
       {/* Accessed from the Sidebar */}
-      <MainStack.Screen name="Adversaries" component={Screens.Adversaries} />
-      <MainStack.Screen name="Feedback" component={Screens.Feedback} />
-      <MainStack.Screen name="Settings" component={Screens.Settings} />
+      <MainStack.Screen name="Adversaries" component={Screens.Adversaries} options={{ title: "" }} />
+      <MainStack.Screen name="Feedback" component={Screens.Feedback} options={{ title: "" }} />
+      <MainStack.Screen name="Settings" component={Screens.Settings} options={{ title: "" }} />
     </MainStack.Navigator>
   );
 };
