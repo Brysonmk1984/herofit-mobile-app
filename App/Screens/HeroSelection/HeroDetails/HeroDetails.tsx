@@ -72,10 +72,6 @@ const HeroDetails = ({ route, navigation }: AuthStackProps<"HeroDetails">) => {
       });
   }, [debouncedHeroName]);
 
-  useEffect(() => {
-    navigation.setOptions({ title: alias });
-  }, []);
-
   return (
     <ScreenContainer screenName={route.name} bg={colors[0]} hero={alias}>
       <Header text={alias} color={colors[1]} bgColor="base.transparent" />

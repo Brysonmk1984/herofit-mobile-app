@@ -11,11 +11,11 @@ const AuthStack = createNativeStackNavigator<AuthStackParamList>();
 const AuthStackScreen = () => {
   const { state } = useContext(GlobalStateContext);
   return (
-    <AuthStack.Navigator screenOptions={{ headerShown: true, ...baseScreenStyle }}>
+    <AuthStack.Navigator screenOptions={{ headerShown: true, headerTintColor: "#d4af37", ...baseScreenStyle }}>
       {/* Load Register first if coming from homescreen via Signup process */}
       {state.initialHomescreenLoad === "Register" ? (
         <>
-          <AuthStack.Screen name="Register" component={Screens.Register} />
+          <AuthStack.Screen name="Register" component={Screens.Register} options={{ title: "", headerStyle: { backgroundColor: "transparent" } }} />
           <AuthStack.Screen name="Splash" component={Screens.Splash} options={{ headerShown: false }} />
         </>
       ) : (
@@ -26,11 +26,11 @@ const AuthStackScreen = () => {
       )}
 
       <AuthStack.Screen name="SignIn" component={Screens.SignIn} options={{ headerShown: false }} />
-      <AuthStack.Screen name="ForgotPassword" component={Screens.ForgotPassword} options={{ title: "" }} />
-      <AuthStack.Screen name="AboutGame" component={Screens.AboutGame} options={{ title: "" }} />
-      <AuthStack.Screen name="SelectHero" component={Screens.SelectHero} options={{ title: "" }} />
-      <AuthStack.Screen name="HeroDetails" component={Screens.HeroDetails} options={{ title: "" }} />
-      <AuthStack.Screen name="SpendQP" component={Screens.SpendQP} options={{ title: "" }} />
+      <AuthStack.Screen name="ForgotPassword" component={Screens.ForgotPassword} options={{ title: "", headerStyle: { backgroundColor: "transparent" } }} />
+      <AuthStack.Screen name="AboutGame" component={Screens.AboutGame} options={{ title: "", headerStyle: { backgroundColor: "transparent" } }} />
+      <AuthStack.Screen name="SelectHero" component={Screens.SelectHero} options={{ title: "", headerStyle: { backgroundColor: "transparent" } }} />
+      <AuthStack.Screen name="HeroDetails" component={Screens.HeroDetails} options={{ title: "", headerStyle: { backgroundColor: "transparent" } }} />
+      <AuthStack.Screen name="SpendQP" component={Screens.SpendQP} options={{ title: "", headerStyle: { backgroundColor: "transparent" } }} />
     </AuthStack.Navigator>
   );
 };
@@ -39,7 +39,7 @@ const MainStack = createNativeStackNavigator<AuthStackParamList>();
 const MainStackScreen = () => {
   const { state } = useContext(GlobalStateContext);
   return (
-    <MainStack.Navigator screenOptions={{ headerShown: Constants.platform.ios ? true : false, headerTintColor: "#fff", ...baseScreenStyle }}>
+    <MainStack.Navigator screenOptions={{ headerShown: Constants.platform.ios ? true : false, headerTintColor: "#d4af37", ...baseScreenStyle }}>
       {/* Accessed from the homescreen */}
 
       {state.latestBattle ? (
@@ -124,7 +124,4 @@ const baseScreenStyle = {
     borderBottomColor: background,
   },
   headerTransparent: true,
-  headerStyle: {
-    backgroundColor: "#d4af37",
-  },
 };

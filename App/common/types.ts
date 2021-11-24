@@ -14,7 +14,7 @@ interface SetExistingUserInitDataAction {
 }
 interface SetIsSignedInAction {
   type: "SET ISSIGNEDIN";
-  payload: { isSignedIn: boolean };
+  payload: { isSignedIn: boolean; initialHomescreenLoad?: "Home" | "Register" | null };
 }
 interface SetUserStatusAction {
   type: "SET USER STATUS";
@@ -67,7 +67,7 @@ interface UpdateLatestBattleAction {
 }
 interface SetInitialHomescreenLoadAction {
   type: "SET INITIAL HOMESCREEN LOAD";
-  payload: { initialHomescreenLoad: boolean };
+  payload: { initialHomescreenLoad: "Home" | "Register" | null };
 }
 interface SetBackgroundAction {
   type: "SET BACKGROUND";
@@ -120,7 +120,7 @@ interface InitialAppState {
     pet: Item | null;
     title: Item | null;
   };
-  initialHomescreenLoad: boolean;
+  initialHomescreenLoad: "Home" | "Register" | null;
   background: string;
 }
 

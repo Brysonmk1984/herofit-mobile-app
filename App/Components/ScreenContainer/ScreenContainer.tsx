@@ -24,6 +24,7 @@ function determineImageBackground({ type, name }: { type: string; name: string }
       case "Register":
         return require("../../../assets/images/backgrounds/pets-background-2.webp");
       case "SelectHeroHowTo":
+      case "Settings":
         return require("../../../assets/images/backgrounds/repete-background.webp");
       case "SelectHero":
         return require("../../../assets/images/backgrounds/hero-selection-background.webp");
@@ -32,6 +33,7 @@ function determineImageBackground({ type, name }: { type: string; name: string }
       case "Activity":
         return require("../../../assets/images/backgrounds/natural-ninja-background.webp");
       case "AboutGame":
+      case "Feedback":
         return require("../../../assets/images/backgrounds/boulder-bro-background.webp");
       case "Splash":
         return require("../../../assets/images/backgrounds/splash-background-day.webp");
