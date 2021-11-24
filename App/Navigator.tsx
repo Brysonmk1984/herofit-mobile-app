@@ -4,6 +4,7 @@ import herofitTheme from "./styles/herofitTheme";
 import * as Screens from "./Screens";
 import { AuthStackParamList } from "./common/types-navigator";
 import { GlobalStateContext } from "./store";
+import Constants from "expo-constants";
 
 // IN AUTH used for App Auth
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
@@ -38,26 +39,63 @@ const MainStack = createNativeStackNavigator<AuthStackParamList>();
 const MainStackScreen = () => {
   const { state } = useContext(GlobalStateContext);
   return (
-    <MainStack.Navigator screenOptions={{ headerShown: false, ...baseScreenStyle }}>
+    <MainStack.Navigator screenOptions={{ headerShown: Constants.platform.ios ? true : false, headerTintColor: "#fff", ...baseScreenStyle }}>
       {/* Accessed from the homescreen */}
 
       {state.latestBattle ? (
         <>
-          <MainStack.Screen name="BattleReport" component={Screens.BattleReport} initialParams={{ battleReport: state.latestBattle }} />
-          <MainStack.Screen name="Home" component={Screens.Home} />
+          <MainStack.Screen
+            name="BattleReport"
+            component={Screens.BattleReport}
+            initialParams={{ battleReport: state.latestBattle }}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <MainStack.Screen
+            name="Home"
+            component={Screens.Home}
+            options={{
+              headerShown: false,
+            }}
+          />
         </>
       ) : (
         <>
-          <MainStack.Screen name="Home" component={Screens.Home} />
+          <MainStack.Screen
+            name="Home"
+            component={Screens.Home}
+            options={{
+              headerShown: false,
+            }}
+          />
           <MainStack.Screen name="BattleReport" component={Screens.BattleReport} />
         </>
       )}
 
       {state.initialHomescreenLoad !== "Home" && <MainStack.Screen name="SpendQP" component={Screens.SpendQP} options={{ title: "Quantum Points" }} />}
       <MainStack.Screen name="Activity" component={Screens.Activity} />
-      <MainStack.Screen name="AwaitingBattle" component={Screens.AwaitingBattle} />
-      <MainStack.Screen name="BattleReportOutcome" component={Screens.BattleReportOutcome} />
-      <MainStack.Screen name="BattleReportDetail" component={Screens.BattleReportDetail} />
+      <MainStack.Screen
+        name="AwaitingBattle"
+        component={Screens.AwaitingBattle}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <MainStack.Screen
+        name="BattleReportOutcome"
+        component={Screens.BattleReportOutcome}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <MainStack.Screen
+        name="BattleReportDetail"
+        component={Screens.BattleReportDetail}
+        options={{
+          headerShown: false,
+        }}
+      />
 
       {/* Accessed from the Sidebar */}
       <MainStack.Screen name="Adversaries" component={Screens.Adversaries} />
@@ -78,5 +116,9 @@ const baseScreenStyle = {
     backgroundColor: white,
     borderBottomWidth: 1,
     borderBottomColor: background,
+  },
+  headerTransparent: true,
+  headerStyle: {
+    backgroundColor: "#d4af37",
   },
 };

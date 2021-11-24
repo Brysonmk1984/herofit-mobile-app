@@ -12,7 +12,7 @@ const BattleReportDetail: React.FC<MainStackProps<"BattleReportDetail">> = ({ na
   return (
     <ScreenContainer screenName={route.name} bg={<SpiralBackground outcome={outcome} />}>
       <VStack>
-        <Header text={"Battle Report"} />
+        <Header text={"Battle Report"} extraPadding={false} />
         <RoundDisplay battleReport={route.params.battleReport} />
       </VStack>
     </ScreenContainer>

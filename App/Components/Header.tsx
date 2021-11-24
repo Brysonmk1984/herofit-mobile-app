@@ -2,17 +2,18 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { Center, Box, Text } from "native-base";
 import herofitTheme from "../styles/herofitTheme";
-
+import Constants from "expo-constants";
 interface HeaderProps {
   text: string;
   mb?: number;
   color?: string;
   bgColor?: string;
+  extraPadding?: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ text, mb = 0, color, bgColor }) => {
+const Header: React.FC<HeaderProps> = ({ text, mb = 0, color, bgColor, extraPadding = Constants.platform.ios ? true : false }) => {
   return (
-    <Box flex={0.2} flexBasis={90} mt={2} mb={mb}>
+    <Box flex={0.2} flexBasis={90} mt={extraPadding ? 10 : 2} mb={mb}>
       <Center w="100%" h={100} bgColor={bgColor}>
         <Text color={color} style={Styles.textShadow} fontFamily="heading" fontSize="5xl">
           {text}
