@@ -3,7 +3,7 @@
     "name": "HeroFit",
     "slug" : "herofit",
     "owner":"brysonmk1984",
-    "version": "1.0.16",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/ios-logo-512.png",
     "scheme": "herofit",
@@ -12,12 +12,26 @@
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
+    "plugins": ["sentry-expo"],
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "herofit",
+            "project": "HeroFit-Sentry",
+            "authToken": "da2016af30174727829c0cfa9e19bbc3815e7ec19d684e33b1f9826021348ecd"
+          }
+        }
+      ]
+    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [
       "**/*"
     ],
+    
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/logo512.png",
