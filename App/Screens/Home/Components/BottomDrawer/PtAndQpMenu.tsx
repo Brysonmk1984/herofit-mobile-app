@@ -18,11 +18,11 @@ const PtAndQpMenu: React.FC<PtAndQpMenuProps> = ({ photonTokens, qp, openBottomD
         <HStack h={39} borderColor="base.brand" borderTopWidth={1} justifyContent="space-between">
           <Pressable pl={46} backgroundColor="base.primary" flex={2.5} onPress={initialDisabledLinks ? null : () => push("SpendQP")}>
             {qp ? (
-              <View flexDirection="row">
+              <View flexDirection="row" justifyContent="flex-end">
                 <Text ml={0} lineHeight={40} fontFamily="heading" color="primary.800" fontSize={34}>
                   QP
                 </Text>
-                <Text ml={2} lineHeight={40} fontFamily="heading" color="base.qp" fontSize={34}>
+                <Text ml={2} mr={16} pr={2} lineHeight={40} fontFamily="heading" color="base.qp" fontSize={34}>
                   {qp}
                 </Text>
               </View>

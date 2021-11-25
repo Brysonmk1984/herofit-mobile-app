@@ -612,15 +612,17 @@ function determineItemTypeColor(serverItemType: ServerItemType) {
   }
 }
 
+// Determine what type of activity-entry the users is using based on their dataSrcId
+// This will need to be updated when new 3rd parties are added
 function checkDataSrcType(id: string) {
   if (id) {
-    if (id.length === 8) {
-      return "strava";
-    } else if (id.includes("hf-")) {
+    if (id.includes("hf-")) {
       return "herofit";
+    } else {
+      return "strava";
     }
   }
-  throw new Error("DataSrcId is unknown");
+  return null;
 }
 
 const createAlert = (title: string, message: string, cb: () => void) => {

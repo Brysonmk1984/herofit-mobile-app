@@ -60,10 +60,8 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
       // INSERT ACTIVITIES, UPDATE USER TOTALS, BUF AVATAR
       const upgradeResults = await upgradeSequence({ email: user.email, activities, accountDate: user.createdAt, hasBeenUpgraded: state.hero.hasBeenUpgraded });
 
-      // if (upgradeResults.reachedLevel) {
-
-      // }
-      setBackgroundAnimation("Activity Up");
+      // Set Background Animation
+      upgradeResults.reachedLevel ? setBackgroundAnimation("level-up") : setBackgroundAnimation("activity-up");
 
       // combine returned avatar with existing equipped items... backend not fetching equipment here
       const heroEquipped = Object.assign({}, state.hero, upgradeResults.avatar, { equipped: state.hero.equipped });

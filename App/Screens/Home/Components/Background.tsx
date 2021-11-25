@@ -22,7 +22,9 @@ const Background: React.FC<BackgroundProps> = ({ animation, setBackgroundAnimati
   const { state, dispatch } = useContext(GlobalStateContext);
 
   function determineBackgroundAnimation(name: string) {
-    if (name === "Activity Up") {
+    if (name === "activity-up") {
+      return require("../../../../assets/images/gifs/activity-up.gif");
+    } else if ("level-up") {
       return require("../../../../assets/images/gifs/level-up.gif");
     }
   }
@@ -49,17 +51,17 @@ const Background: React.FC<BackgroundProps> = ({ animation, setBackgroundAnimati
 
   // Fading in and out of animated backgrounds
   const opacityAnim = useRef(new Animated.Value(0)).current;
-  const fadeIn = cb => {
+  const fadeIn = (animation: string, cb: () => void) => {
     Animated.timing(opacityAnim, {
       toValue: 1,
-      duration: 500,
+      duration: animation === "level-up" ? 1000 : 500,
       useNativeDriver: true,
     }).start(() => cb());
   };
   const fadeOut = () => {
     Animated.timing(opacityAnim, {
       toValue: 0,
-      duration: 500,
+      duration: animation === "activity-up" ? 1000 : 500,
       useNativeDriver: true,
     }).start(() => {
       setAnimationBackground(null);
@@ -71,7 +73,7 @@ const Background: React.FC<BackgroundProps> = ({ animation, setBackgroundAnimati
   useEffect(() => {
     if (animation) {
       setAnimationBackground(determineBackgroundAnimation(animation));
-      fadeIn(fadeOut);
+      fadeIn(animation, fadeOut);
     }
   }, [animation]);
 
@@ -90,8 +92,8 @@ const Background: React.FC<BackgroundProps> = ({ animation, setBackgroundAnimati
     <>
       {state.background ? handleBackgroundSelection(state.background) : <View style={styles.imageContainer}></View>}
       {animationBackground && (
-        <Animated.View style={[styles.imageContainer, { opacity: opacityAnim }]}>
-          <ImageBackground source={determineBackgroundAnimation(animation)} style={[styles.image, { backgroundColor: undefined }]} resizeMode="cover" />
+        <Animated.View style={[styles.imageContainer, { opacity: opacityAnim, backgroundColor: "rgba(0,0,0,.4)" }]}>
+          <ImageBackground source={animationBackground} style={[styles.image, { backgroundColor: undefined }]} resizeMode="cover" />
         </Animated.View>
       )}
     </>

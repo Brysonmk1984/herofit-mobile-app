@@ -36,6 +36,7 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
   const { openModal } = useModal();
   const { state } = useContext(GlobalStateContext);
   const isStravaUser = "strava" === checkDataSrcType(state.user.dataSrcId);
+
   // Used to speed up inital screen rendering
   const { mounted } = useDidMount();
   function resetForm() {
