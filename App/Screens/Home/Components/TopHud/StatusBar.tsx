@@ -20,11 +20,11 @@ export default StatusBar;
 const styles = StyleSheet.create({
   trapezoid: {
     height: 0,
-    borderTopWidth: 36,
+    borderTopWidth: 30,
     borderTopColor: "#333633",
-    borderLeftWidth: 22,
+    borderLeftWidth: 20,
     borderLeftColor: "transparent",
-    borderRightWidth: 22,
+    borderRightWidth: 20,
     borderRightColor: "transparent",
     borderStyle: "solid",
   },

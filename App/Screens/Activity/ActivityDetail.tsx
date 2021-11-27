@@ -4,6 +4,7 @@ import { Activity } from "../../common/types";
 import moment from "moment";
 import { Icon } from "../../Components/CustomComponents";
 import { convertMilesToMeters, convertMilesHoursToMetersSeconds, convertDurationStringToSeconds, convertMetersToFeet, convertMetersToMiles, convertMetersSecondsToMilesHours, convertSecondsToReadableTime, calculateOffSet, checkForDistanceColumns, calculateXPBonus, calculatePowerBonus, calculateElementBonus, determineElementFromActivity } from "../../common/activityCalculations";
+import customIconActivityTypes from "../../common/customIconActivityTypes";
 
 interface ActivityDetailProps {
   activity: Activity;
@@ -11,8 +12,8 @@ interface ActivityDetailProps {
 
 const ActivityDetail: React.FC<ActivityDetailProps> = ({ activity }) => {
   const { type, activityDate, duration, distance, averageSpeed, maxSpeed, elevationGain, source } = activity;
-
   const actElement = determineElementFromActivity(type);
+
   function determineDate(date: string) {
     if (moment(date).isBefore(moment().subtract(7, "days"))) {
       return moment(date).format("DD/MM h:mm A");
@@ -25,7 +26,7 @@ const ActivityDetail: React.FC<ActivityDetailProps> = ({ activity }) => {
         {determineDate(activityDate)}
       </Text>
       <Text flex={1.5} alignItems="center">
-        <Icon iconName={type} size={6} color={`base.${actElement}`} />
+        <Icon iconName={type} size={customIconActivityTypes.includes(type) ? 21 : 6} color={`base.${actElement}`} />
       </Text>
       <Text flex={1} textAlign="right" alignSelf="center" fontSize="sm">
         {convertSecondsToReadableTime(duration)}

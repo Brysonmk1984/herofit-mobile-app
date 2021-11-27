@@ -18,6 +18,7 @@ interface HistoryPaneProps {
 const HistoryPane: React.FC<HistoryPaneProps> = ({ navigation, isStravaUser }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { latestSavedActivities } = state;
+
   const orderedActivities = latestSavedActivities.sort((a, b) => (moment(a.activityDate).isAfter(moment(b.activityDate)) ? -1 : 1));
 
   return (

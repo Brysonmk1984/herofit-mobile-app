@@ -18,6 +18,7 @@ import { checkDataSrcType, roundNumberToTenthReturnNumber, roundNumberToThousand
 import StravaPane from "./StravaPane";
 import HistoryPane from "./HistoryPane";
 import useDidMount from "../../common/hooks/useDidMount";
+import customIconActivityTypes from "../../common/customIconActivityTypes";
 
 const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
   const windowHeight = useWindowDimensions().height;
@@ -89,7 +90,7 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
         }}
         flexDirection="row"
       >
-        <Icon color={`base.${act.element}`} iconName={act.type} size={act.type === "Crossfit" ? 35 : 10} />
+        <Icon color={`base.${act.element}`} iconName={act.type} size={customIconActivityTypes.includes(act.type) ? 35 : 10} />
         <Text fontSize="sm" lineHeight={40} color="primary.100">
           {act.alias}
         </Text>

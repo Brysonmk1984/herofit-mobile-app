@@ -49,9 +49,9 @@ const InGameIcons = ({ iconName, size, color }: IconProps) => {
     case "StairStepper":
       return <Icon as={MaterialCommunityIcons} name="stairs" size={size} color={color} />;
     // Air
-    case "yoga":
-    case "Yoga":
-      return <Icon as={MaterialCommunityIcons} name="yoga" size={size} color={color} />;
+    // case "yoga":
+    // case "Yoga":
+    //   return <Icon as={MaterialCommunityIcons} name="yoga" size={size} color={color} />;
     case "walk":
     case "Walk":
       return <Icon as={MaterialCommunityIcons} name="walk" size={size} color={color} />;
@@ -87,9 +87,9 @@ const InGameIcons = ({ iconName, size, color }: IconProps) => {
     case "Ride":
     case "VirtualRide":
       return <Icon as={MaterialCommunityIcons} name="bike-fast" size={size} color={color} />;
-    case "weight-lifting":
-    case "WeightTraining":
-      return <Icon as={MaterialCommunityIcons} name="weight-lifter" size={size} color={color} />;
+    // case "weight-lifting":
+    // case "WeightTraining":
+    //   return <Icon as={MaterialCommunityIcons} name="weight-lifter" size={size} color={color} />;
     case "hiking":
     case "Hiking":
     case "Hike":
@@ -116,6 +116,7 @@ const InGameIcons = ({ iconName, size, color }: IconProps) => {
       const lcDashName = lowercaseDash(iconName);
       // Need to check if the item is a common item icon is common among multiple icons
       const nameIncludingMultiples = checkForMultipleItem(lcDashName);
+
       return <IcoMoon name={nameIncludingMultiples} size={size} color={getMatchingThemeColor(color, themeColors)} /> || <Icon as={FontAwesome} name="question-circle" size={size} color={color} />;
   }
 };
