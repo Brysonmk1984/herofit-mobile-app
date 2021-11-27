@@ -19,10 +19,10 @@ const XpText: React.FC<XpTextProps> = ({ levelXp, levelXpRequired, prevXpGained 
   return (
     <View flexDirection="row">
       <HStack space={1} mt={-0.5}>
-        <Text mr={1} opacity={0.5} color="base.white" fontSize="xl">
+        <Text mr={1} opacity={0.5} mt={-0.5} color="base.white" fontSize="xl">
           XP
         </Text>
-        <Text fontSize="lg" lineHeight="xl" fontFamily="heading" color="base.highlight">
+        <Text fontSize="xl" mt={-0.5} lineHeight="xl" fontFamily="heading" color="base.highlight">
           {value}
         </Text>
         <Text lineHeight="sm" color="base.white" fontSize="2xl" fontFamily="heading">

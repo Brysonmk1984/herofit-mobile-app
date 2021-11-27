@@ -15,11 +15,11 @@ const HeroTitle: React.FC<HeroTitleProps> = ({ title }) => {
   }
 
   return (
-    <Box mt={-10} ml={12} minHeight={25}>
+    <Box mt={-10} ml={-8} minHeight={25}>
       {title && (
-        <Box flexDirection="row" ml={2}>
+        <Box justifyContent="center" flexDirection="row" ml={2}>
           <Icon iconName={title.name} size={25} color={color} />
-          <Text ml={3} color={color}>
+          <Text ml={3} color={color} fontSize="lg">
             {title.name}
           </Text>
         </Box>
