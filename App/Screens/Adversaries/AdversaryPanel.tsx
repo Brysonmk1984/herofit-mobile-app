@@ -56,14 +56,10 @@ export const AdversaryPanel: React.FC<AdversaryPanelProps> = ({ foesDefeated, fo
               </Text>
             </Pressable>
           </Box>
-          <Box alignItems="flex-end" pb={5} pr={2}>
-            <Box maxWidth="60%">
-              <Text textAlign="right" fontFamily="heading" fontSize={foe.type.length > 19 ? 35 : 40}>
-                {(foe.levelRequirement || foe.itemSummonOnly) && (
-                  <Text>
-                    <Icon iconName="boss" size={35} color="base.default" />
-                  </Text>
-                )}
+          <Box alignItems="flex-end" justifyContent="flex-end" pb={5} pr={2}>
+            <Box maxWidth="60%" pt={2}>
+              <Text textAlign="right" fontFamily="heading" fontSize={foe.type.length > 18 ? 34 : 38} lineHeight={40} color={foe.class === "Titans" ? "base.white" : "base.primary"}>
+                {(foe.levelRequirement || foe.itemSummonOnly) && <Icon iconName="boss" size={35} color={foe.class === "Titans" ? "base.white" : "base.primary"} />}
                 {foe.type}
               </Text>
 
@@ -82,14 +78,10 @@ export const AdversaryPanel: React.FC<AdversaryPanelProps> = ({ foesDefeated, fo
               </Text>
             </Pressable>
           </Box>
-          <Box alignItems="flex-start" pl={2}>
-            <Box maxWidth="60%">
-              <Text fontFamily="heading" fontSize={foe.type.length > 19 ? 35 : 40}>
-                {(foe.levelRequirement || foe.itemSummonOnly) && (
-                  <Text>
-                    <Icon iconName="boss" size={35} color="base.default" />
-                  </Text>
-                )}
+          <Box alignItems="flex-start" justifyContent="flex-end" pl={2}>
+            <Box maxWidth="60%" pt={2}>
+              <Text fontFamily="heading" fontSize={foe.type.length > 18 ? 34 : 38} lineHeight={40} color={foe.class === "Titans" ? "base.white" : "base.primary"}>
+                {(foe.levelRequirement || foe.itemSummonOnly) && <Icon iconName="boss" size={35} color={foe.class === "Titans" ? "base.white" : "base.primary"} />}
                 {foe.type}
               </Text>
 

@@ -248,7 +248,8 @@ function _getBaseHeroImage(characterName: string): number {
     case "compost_creature":
       return require("../../assets/images/heroes/compost_creature/compost_creature.webp");
     default:
-      throw new Error("No matching image");
+      //throw new Error("No matching image");
+      console.error(`No Matching Image - ${lcName}`);
   }
 }
 
@@ -283,7 +284,8 @@ function getHeroImage(characterName: CharacterName, skin?: SkinName): number {
     case "compost_creature":
       return getCompostCreatureImage(lcSkin);
     default:
-      throw new Error("No matching image");
+      //throw new Error("No matching image");
+      console.error(`No Matching Image - ${lcSkin}`);
   }
 }
 
@@ -345,7 +347,8 @@ function getFoeImage(foeType: FoeType, heroCharacterName?: CharacterName): numbe
     case "guardian_of_the_depths":
       return require("../../assets/images/foes/titans/guardian_of_the_depths.webp");
     default:
-      throw new Error("No image by that foe type");
+      //throw new Error("No image by that foe type");
+      console.error("No image by that foe type");
   }
 }
 
@@ -383,8 +386,6 @@ function getPetImage(petName: string): number {
       return require("../../assets/images/items/pets/raven_of_omens.webp");
     case "spirit_hawk":
       return require("../../assets/images/items/pets/spirit_hawk.webp");
-    case "snowshoe_hare":
-      return require("../../assets/images/items/pets/snowshoe_hare.webp");
 
     case "splash_artist":
       return require("../../assets/images/foes/elementals/splash_artist.webp");
@@ -395,7 +396,7 @@ function getPetImage(petName: string): number {
     case "gusty_rascal":
       return require("../../assets/images/foes/elementals/gusty_rascal.webp");
     default:
-      throw new Error("No matching image");
+      console.error(`No Matching Image - ${lcName}`);
   }
 }
 
@@ -551,7 +552,7 @@ function getFoeColor(foeType: FoeType) {
     case "guardian_of_the_depths":
       return "#a13d2d";
     default:
-      throw new Error("Foe Color - No image by that foe type");
+      console.error("Foe Color - No image by that foe type");
   }
 }
 
@@ -612,7 +613,7 @@ function determineItemTypeColor(serverItemType: ServerItemType) {
     case "pet":
       return herofitTheme.colors.base[serverItemType];
     default:
-      throw new Error("Can't determine color, no matching item type!");
+      console.error("Foe Color - No image by that foe type");
   }
 }
 

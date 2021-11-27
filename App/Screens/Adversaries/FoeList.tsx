@@ -11,7 +11,7 @@ interface FoeListProps {
 const FoeList: React.FC<FoeListProps> = ({ foesDefeated, foes, textAlign, color }) => {
   function renderFoe({ item, index }) {
     return foesDefeated.includes(item) ? (
-      <Text opacity={0.5} key={`${item}-${index}`} color={color} textAlign={textAlign} textDecoration={"line-through"}>
+      <Text opacity={0.5} key={`${item}-${index}`} color={color} textAlign={textAlign} strikeThrough={true}>
         {item}
       </Text>
     ) : (
