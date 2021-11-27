@@ -10,7 +10,7 @@ interface ToggleLoadingAction {
 }
 interface SetExistingUserInitDataAction {
   type: "SET EXISTING USER INIT DATA";
-  payload: { user: User; hero: Hero; latestSavedActivities: Activity[]; latestSavedActivityDate: string | null; latestBattle: Battle; isSignedIn: boolean; allGameItems: Item[] };
+  payload: { user: User; hero: Hero; latestSavedActivities: Activity[]; latestSavedActivityDate: string | null; latestBattle: Battle; isSignedIn: boolean; allGameItems: Item[]; awardedItemMessage: string | null };
 }
 interface SetIsSignedInAction {
   type: "SET ISSIGNEDIN";
@@ -122,6 +122,7 @@ interface InitialAppState {
   };
   initialHomescreenLoad: "Home" | "Register" | null;
   background: string;
+  awardedItemMessage: string | null;
 }
 
 interface Store {

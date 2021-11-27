@@ -383,6 +383,8 @@ function getPetImage(petName: string): number {
       return require("../../assets/images/items/pets/raven_of_omens.webp");
     case "spirit_hawk":
       return require("../../assets/images/items/pets/spirit_hawk.webp");
+    case "snowshoe_hare":
+      return require("../../assets/images/items/pets/snowshoe_hare.webp");
 
     case "splash_artist":
       return require("../../assets/images/foes/elementals/splash_artist.webp");
@@ -458,6 +460,8 @@ function getColorFromClassName(className) {
     case "skin-apparition":
     case "skin-shade":
       return "#FFFFFF";
+    case "royal-purple":
+      return "#7851a9";
   }
 }
 

@@ -112,6 +112,13 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
     }
   }, []);
 
+  // Alert user if they received an item on login (from get-avatar)
+  useEffect(() => {
+    if (state.awardedItemMessage) {
+      addToast("success", state.awardedItemMessage, "bottom", 4000);
+    }
+  }, [state.awardedItemMessage]);
+
   // Determine which modal should pop up
   useEffect(() => {
     //console.log("SU", state.userStatus, state.user);

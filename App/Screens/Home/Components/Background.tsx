@@ -3,6 +3,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { StyleSheet, ImageBackground, Animated, View } from "react-native";
 import { GlobalStateContext } from "../../../store";
 import { opacity } from "styled-system";
+import LottieView from "lottie-react-native";
 
 const bg = {
   backgroundDawn: ["#ffbf61", "#fee3ba"],
@@ -23,9 +24,9 @@ const Background: React.FC<BackgroundProps> = ({ animation, setBackgroundAnimati
 
   function determineBackgroundAnimation(name: string) {
     if (name === "activity-up") {
-      return require("../../../../assets/images/gifs/activity-up.gif");
+      return require("../animations/activity-up.json");
     } else if ("level-up") {
-      return require("../../../../assets/images/gifs/level-up.gif");
+      return require("../animations/level-up.json");
     }
   }
 
@@ -92,8 +93,8 @@ const Background: React.FC<BackgroundProps> = ({ animation, setBackgroundAnimati
     <>
       {state.background ? handleBackgroundSelection(state.background) : <View style={styles.imageContainer}></View>}
       {animationBackground && (
-        <Animated.View style={[styles.imageContainer, { opacity: opacityAnim, backgroundColor: "rgba(0,0,0,.4)" }]}>
-          <ImageBackground source={animationBackground} style={[styles.image, { backgroundColor: undefined }]} resizeMode="cover" />
+        <Animated.View style={[styles.imageContainer, { opacity: opacityAnim, backgroundColor: "rgba(0,0,0,.7)" }]}>
+          <LottieView source={animationBackground} autoPlay loop={false} />
         </Animated.View>
       )}
     </>

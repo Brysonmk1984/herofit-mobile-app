@@ -108,11 +108,12 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
     dispatch({ type: "SET USER", payload: { user } });
 
     try {
-      const data = await insertAvatar({ avatar: state.hero, email: user.email, userId: user.id });
-      await instantiateUserTotals({ email: user.email, avatarId: data.avatarId });
-      dispatch({ type: "SET HERO", payload: { hero: Object.assign(state.hero, data.avatar) } });
+      const { avatar, avatarId, awardedItemMessage } = await insertAvatar({ avatar: state.hero, email: user.email, userId: user.id });
+      await instantiateUserTotals({ email: user.email, avatarId: avatarId });
+      dispatch({ type: "SET HERO", payload: { hero: Object.assign(state.hero, avatar) } });
       formDispatch({ type: "SET LOADING", loading: false });
-
+      // Display welcome message
+      awardedItemMessage ? addToast("success", `Welcome to HeroFit! ${awardedItemMessage}`) : addToast("success", `Welcome to HeroFit!`);
       // changing isSignedIn will unmount the component; must be last
       dispatch({ type: "SET ISSIGNEDIN", payload: { isSignedIn: true, initialHomescreenLoad: null } });
     } catch (error) {

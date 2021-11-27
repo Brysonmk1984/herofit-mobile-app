@@ -42,12 +42,12 @@ const upgradeSequence = async function (body) {
     });
 };
 
-const getAvatar = async function (body): Promise<{ hero: Hero }> {
+const getAvatar = async function (body): Promise<{ hero: Hero; awardedItemMessage: string | null }> {
   return axios
     .post(`${endpoint}avatar/get-avatar`, body, await axiosOptions())
     .then(({ data }) => {
-      const hero: Hero = data.data;
-      return { hero };
+      const { avatar: hero, awardedItemMessage }: { avatar: Hero; awardedItemMessage: string } = data.data;
+      return { hero, awardedItemMessage };
     })
     .catch(({ request, response }) => {
       throw handleHttpError(request, response);

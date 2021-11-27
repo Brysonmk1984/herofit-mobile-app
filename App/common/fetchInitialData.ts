@@ -18,13 +18,13 @@ async function fetchInitialData(token: string, dispatch: AppDispatch, state: Ini
     }
 
     // Fetch the user, avatar, and all game items
-    const [p1, p2, p3, p4, p5] = await Promise.all([getUser(), getAvatar({ email }), fetchAllGameItems(), fetchBattleReport({ owner: email }), getSavedActivities({ email, count: 10 })]);
+    const [p1, p2, p3, p4, p5] = await Promise.all([getUser(), getAvatar({ email, isMobileApp: true }), fetchAllGameItems(), fetchBattleReport({ owner: email }), getSavedActivities({ email, count: 10 })]);
     const user: User = p1.user;
     const hero: Hero = p2.hero;
+    const awardedItemMessage: string = p2.awardedItemMessage;
     const allGameItems: Item[] = p3.items.map(item => ({ ...item, itemID: item.id }));
     const latestBattle = p4.latestBattle;
     const { activities: latestSavedActivities, latestActivityDate: latestSavedActivityDate } = p5;
-    //console.log("LATEsT BATT", latestBattle);
 
     // Takes item instance IDs and assigns full items to the hero under 'equipped' property
     const equipped = convertItemIdsToFullItems(hero.equipped, allGameItems);
@@ -32,7 +32,7 @@ async function fetchInitialData(token: string, dispatch: AppDispatch, state: Ini
 
     const userStatus = user.active ? "active" : "unconfirmed";
 
-    dispatch({ type: "SET EXISTING USER INIT DATA", payload: { user, hero, latestBattle, isSignedIn: true, userStatus, latestSavedActivities, latestSavedActivityDate, allGameItems } });
+    dispatch({ type: "SET EXISTING USER INIT DATA", payload: { user, hero, latestBattle, isSignedIn: true, userStatus, latestSavedActivities, latestSavedActivityDate, allGameItems, awardedItemMessage } });
   } catch (error) {
     let message, alertType;
 

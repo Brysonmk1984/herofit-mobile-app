@@ -85,8 +85,8 @@ const Settings: React.FC<MainStackProps<"Settings">> = ({ navigation, route }) =
             </Button>
           ) : (
             // TODO: Need to figure out why strava connect keeps crashing from settings page
-            <StravaConnectButton disable={true} promptAsync={promptAsync} />
-            // <StravaConnectButton disable={!request || !clientId} promptAsync={promptAsync} />
+            //<StravaConnectButton disable={true} promptAsync={promptAsync} />
+            <StravaConnectButton disable={!request || !clientId} promptAsync={promptAsync} />
           )}
         </Pane>
         <Pane mb={10}>
