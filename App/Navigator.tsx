@@ -4,33 +4,48 @@ import herofitTheme from "./styles/herofitTheme";
 import * as Screens from "./Screens";
 import { AuthStackParamList } from "./common/types-navigator";
 import { GlobalStateContext } from "./store";
+import { Pressable, Text } from "native-base";
 import Constants from "expo-constants";
 
 // IN AUTH used for App Auth
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
 const AuthStackScreen = () => {
-  const { state } = useContext(GlobalStateContext);
+  const { state, dispatch } = useContext(GlobalStateContext);
   return (
     <AuthStack.Navigator screenOptions={{ headerShown: true, headerTintColor: "#d4af37", ...baseScreenStyle }}>
       {/* Load Register first if coming from homescreen via Signup process */}
       {state.initialHomescreenLoad === "Register" ? (
         <>
-          <AuthStack.Screen name="Register" component={Screens.Register} options={{ title: "", headerStyle: { backgroundColor: "transparent" } }} />
-          <AuthStack.Screen name="Splash" component={Screens.Splash} options={{ headerShown: false }} />
+          <AuthStack.Screen
+            name="Register"
+            component={Screens.Register}
+            options={{
+              title: "",
+              headerStyle: { backgroundColor: "transparent" },
+              headerLeft: () => (
+                <Pressable onPress={() => dispatch({ type: "SET INITIAL HOMESCREEN LOAD", payload: { initialHomescreenLoad: "Home" } })}>
+                  <Text color="#d4af37" fontSize="lg">
+                    &lt; Back
+                  </Text>
+                </Pressable>
+              ),
+            }}
+          />
+          <AuthStack.Screen name="Splash" component={Screens.Splash} />
         </>
       ) : (
         <>
           <AuthStack.Screen name="Splash" component={Screens.Splash} options={{ headerShown: false }} />
-          <AuthStack.Screen name="Register" component={Screens.Register} options={{ headerShown: false }} />
+          <AuthStack.Screen name="Register" component={Screens.Register} />
         </>
       )}
 
-      <AuthStack.Screen name="SignIn" component={Screens.SignIn} options={{ headerShown: false }} />
-      <AuthStack.Screen name="ForgotPassword" component={Screens.ForgotPassword} options={{ title: "", headerStyle: { backgroundColor: "transparent" } }} />
-      <AuthStack.Screen name="AboutGame" component={Screens.AboutGame} options={{ title: "", headerStyle: { backgroundColor: "transparent" } }} />
-      <AuthStack.Screen name="SelectHero" component={Screens.SelectHero} options={{ title: "", headerStyle: { backgroundColor: "transparent" } }} />
-      <AuthStack.Screen name="HeroDetails" component={Screens.HeroDetails} options={{ title: "", headerStyle: { backgroundColor: "transparent" } }} />
-      <AuthStack.Screen name="SpendQP" component={Screens.SpendQP} options={{ title: "", headerStyle: { backgroundColor: "transparent" } }} />
+      <AuthStack.Screen name="SignIn" component={Screens.SignIn} options={{ title: "", headerBackTitle: "Back" }} />
+      <AuthStack.Screen name="ForgotPassword" component={Screens.ForgotPassword} options={{ title: "", headerStyle: { backgroundColor: "transparent" }, headerBackTitle: "Back" }} />
+      <AuthStack.Screen name="AboutGame" component={Screens.AboutGame} options={{ title: "", headerStyle: { backgroundColor: "transparent" }, headerBackTitle: "Back" }} />
+      <AuthStack.Screen name="SelectHero" component={Screens.SelectHero} options={{ title: "", headerStyle: { backgroundColor: "transparent" }, headerBackTitle: "Back" }} />
+      <AuthStack.Screen name="HeroDetails" component={Screens.HeroDetails} options={{ title: "", headerStyle: { backgroundColor: "transparent" }, headerBackTitle: "Back" }} />
+      <AuthStack.Screen name="SpendQP" component={Screens.SpendQP} options={{ title: "", headerStyle: { backgroundColor: "transparent" }, headerBackTitle: "Back" }} />
     </AuthStack.Navigator>
   );
 };

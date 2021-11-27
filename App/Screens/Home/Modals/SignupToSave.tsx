@@ -13,9 +13,9 @@ interface SignupToSaveProps {
 
 // SIGNUP TO SAVE CHARACTER POPUP
 const SignupToSave: React.FC<SignupToSaveProps> = ({ id, modalAction }) => {
-  const { state } = useContext(GlobalStateContext);
+  const { state, dispatch } = useContext(GlobalStateContext);
   return (
-    <CharacterModal id={id} modalOpen={state.modalQueue[0] === id} speech="What's this? a new student? hmmm... I'll consider it. Tell me about yourself, drifter." modalAction={modalAction} buttonText="OK">
+    <CharacterModal id={id} modalOpen={state.modalQueue[0] === id} speech="What's this? a new student? hmmm... I'll consider it. Tell me about yourself, drifter." modalAction={modalAction} buttonText="OK" customOnCloseEvent={() => dispatch({ type: "SET INITIAL HOMESCREEN LOAD", payload: { initialHomescreenLoad: null } })}>
       <ModalActionHeader type="caution" text="Sign Up to Save your Hero" />
       <BodyContent>
         <HeroInitiationChecklist crossedOut={[true]} />

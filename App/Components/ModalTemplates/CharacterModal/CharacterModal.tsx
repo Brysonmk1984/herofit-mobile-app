@@ -19,6 +19,7 @@ interface ICharacterModal {
   buttonText?: string;
   disabled?: boolean;
   preventClose?: boolean;
+  customOnCloseEvent?: () => void;
 }
 
 function getCharacterImage(character) {
@@ -29,8 +30,13 @@ function getCharacterImage(character) {
   }
 }
 
-function CharacterModal({ children, id, modalOpen, modalAction, character = "Master Sensei Owl", speech, buttonText, disabled, preventClose }: ICharacterModal) {
+function CharacterModal({ children, id, modalOpen, modalAction, character = "Master Sensei Owl", speech, buttonText, disabled, preventClose, customOnCloseEvent }: ICharacterModal) {
   const { closeModal } = useModal();
+
+  function customClose() {
+    closeModal(id);
+    customOnCloseEvent();
+  }
 
   function handleModalAction(idToClose: string, modalAction: () => void) {
     if (modalAction) {
@@ -40,8 +46,9 @@ function CharacterModal({ children, id, modalOpen, modalAction, character = "Mas
       closeModal(idToClose);
     }
   }
+
   return (
-    <Modal isOpen={modalOpen} onClose={() => closeModal(id)} _backdrop={{ backgroundColor: "rgba(0,0,0,0)" }}>
+    <Modal isOpen={modalOpen} onClose={() => customClose(id)} _backdrop={{ backgroundColor: "rgba(0,0,0,0)" }}>
       <ModalContent>
         <CharacterHeader>
           <ModalHeaderImage zIndex={10}>
