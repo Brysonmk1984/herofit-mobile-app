@@ -49,8 +49,8 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
     if (item.name.includes(`NO `)) {
       return (
         <Box style={styles.itemImage}>
-          <Box justifyContent="center" position="absolute" w="100%" top="30%" ml={-1} zIndex="1000">
-            <Text textAlign="center" color={"primary.400"}>
+          <Box justifyContent="center" position="absolute" w="100%" top="31%" ml={-1} zIndex="1000">
+            <Text textAlign="center" color={"primary.400"} fontSize="lg">
               {item.name}
             </Text>
           </Box>
@@ -63,8 +63,8 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
         return (
           <Box style={styles.itemImage}>
             {!item.owned && (
-              <Box position="absolute" w="100%" top="35%" zIndex="1000">
-                <Text textAlign="center" color={item.ptCost ? "base.brand" : "primary.400"} ml={-2}>
+              <Box position="absolute" w="100%" top="33%" zIndex="1000">
+                <Text textAlign="center" color={item.ptCost ? "base.brand" : "primary.400"} fontSize="lg">
                   {item.ptCost ? thousandsFormat(item.ptCost) : "NOT FOR SALE"}
                 </Text>
               </Box>
@@ -83,8 +83,8 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
         return (
           <>
             {!item.owned && (
-              <Box position="absolute" w="100%" top="35%" zIndex="1000">
-                <Text textAlign="center" color={item.ptCost ? "base.brand" : "primary.400"} ml="2">
+              <Box position="absolute" w="100%" top="33%" zIndex="1000">
+                <Text textAlign="center" color={item.ptCost ? "base.brand" : "primary.400"} fontSize="lg">
                   {item.ptCost ? thousandsFormat(item.ptCost) : "NOT FOR SALE"}
                 </Text>
               </Box>
@@ -97,8 +97,8 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
         return (
           <Box position="absolute" alignSelf="center">
             {!item.owned && (
-              <Box position="absolute" w="100%" top="35%" zIndex="1000">
-                <Text textAlign="center" color={item.ptCost ? "base.brand" : "primary.400"} ml="2">
+              <Box position="absolute" w="100%" top="33%" zIndex="1000">
+                <Text textAlign="center" color={item.ptCost ? "base.brand" : "primary.400"} fontSize="lg">
                   {item.ptCost ? thousandsFormat(item.ptCost) : "NOT FOR SALE"}
                 </Text>
               </Box>
@@ -110,8 +110,8 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
         return (
           <Box style={styles.itemImage}>
             {!item.owned && (
-              <Box position="absolute" w="100%" top="35%" zIndex="1000">
-                <Text textAlign="center" color={item.ptCost ? "base.brand" : "primary.400"} ml="2">
+              <Box position="absolute" w="100%" top="33%" zIndex="1000">
+                <Text textAlign="center" color={item.ptCost ? "base.brand" : "primary.400"} fontSize="lg">
                   {item.ptCost ? thousandsFormat(item.ptCost) : "NOT FOR SALE"}
                 </Text>
               </Box>
@@ -123,8 +123,8 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
         return (
           <Box style={styles.itemImage}>
             {!item.owned && (
-              <Box position="absolute" w="100%" top="35%" zIndex="1000">
-                <Text textAlign="center" color={item.ptCost ? "base.brand" : "primary.400"} ml="2">
+              <Box position="absolute" w="100%" top="33%" zIndex="1000">
+                <Text textAlign="center" color={item.ptCost ? "base.brand" : "primary.400"} fontSize="lg">
                   {item.ptCost ? thousandsFormat(item.ptCost) : "NOT FOR SALE"}
                 </Text>
               </Box>
@@ -143,7 +143,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
 
   function _renderItem({ item, index }) {
     return (
-      <Pressable style={{ marginLeft: -4 }} onPress={() => _openModal(item, index)}>
+      <Pressable style={{ marginLeft: -4 }} onPress={() => _handleSelectedItem(index, item)}>
         {/* Background image */}
         <View bg={"base.primary"} style={[styles.itemContainer]}>
           <ImageBackground source={require("../../../../../../assets/images/layout/carousel-background.webp")} resizeMode="contain" style={styles.panelBackground} />
@@ -156,23 +156,26 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
     );
   }
 
-  const _delayedSelection = useDebouncedCallback((type: EquippableItemType, activeIndex?: number) => {
-    handleEquipping(type, activeIndex ? allItemsOfType[activeIndex] : null, goToBattle);
-  }, 750);
+  // const _delayedSelection = useDebouncedCallback((type: EquippableItemType, activeIndex?: number) => {
+  //   handleEquipping(type, activeIndex ? allItemsOfType[activeIndex] : null, goToBattle);
+  // }, 750);
 
-  function _handleSelectedItem(index: number) {
+  function _handleSelectedItem(index: number, item: Item) {
     setActiveIndex(index);
     const selectedItem = allItemsOfType[index];
     // Equipping item - only for equippable Item types
     if (_determineEquippableType(type)) {
       // AND must own item
       if (selectedItem.owned) {
-        _delayedSelection(type, index);
+        //_delayedSelection(type, index);
         // For unequipping
+        _openModal(item, index);
       } else if (selectedItem.name.includes("NO ")) {
-        _delayedSelection(type);
+        handleEquipping(type);
       }
       // Anything else doesn't get equipped (unowned items)
+    } else {
+      _openModal(item, index);
     }
   }
 
@@ -183,8 +186,8 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
 
     if (!item.name.includes("NO ")) {
       setPressedItem(item);
+      setTimeout(() => openModal("ItemDetail"), 100);
       refRBSheet.current.close();
-      openModal("ItemDetail");
     }
   }
 
@@ -236,13 +239,13 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
   return (
     <SafeAreaView style={styles.carouselWrapper}>
       <View>
-        <Text fontFamily="heading" color="base.highlight" fontSize="3xl" textAlign="center" mt={-7} mb={5}>
+        <Text fontFamily="heading" color="base.highlight" fontSize="3xl" textAlign="center" mb={1}>
           {allItemsOfType[activeIndex] && allItemsOfType[activeIndex].name}
         </Text>
       </View>
       {activeIndex !== null && (
         <View style={styles.carouselView}>
-          <Carousel ref={carousel} firstItem={activeIndex} containerCustomStyle={styles.carouselContainer} onSnapToItem={index => _handleSelectedItem(index)} data={allItemsOfType} renderItem={_renderItem} sliderWidth={SLIDER_WIDTH} itemWidth={SLIDER_WIDTH * 0.28} inactiveSlideOpacity={1} inactiveSlideScale={0.6} />
+          <Carousel ref={carousel} firstItem={activeIndex} containerCustomStyle={styles.carouselContainer} /*onSnapToItem={index => _handleSelectedItem(index)}*/ data={allItemsOfType} renderItem={_renderItem} sliderWidth={SLIDER_WIDTH} itemWidth={SLIDER_WIDTH * 0.28} inactiveSlideOpacity={1} inactiveSlideScale={0.6} />
         </View>
       )}
     </SafeAreaView>

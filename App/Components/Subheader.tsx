@@ -7,7 +7,7 @@ interface Subheader {
   mt?: number;
   color?: string;
   fontSize?: number | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
-  fontFamily?: "heading" | "body" | "handwriting" | "cursive";
+  fontFamily?: "heading" | "body" | "handwriting";
   dividerColor?: string;
 }
 

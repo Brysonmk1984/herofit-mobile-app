@@ -462,8 +462,17 @@ function getColorFromClassName(className) {
     case "skin-apparition":
     case "skin-shade":
       return "#FFFFFF";
-    case "royal-purple":
+    case "royal-purple-tint":
       return "#7851a9";
+    case "health-tint":
+      return "#A42420";
+    case "infected-tint":
+      return "#8da728";
+    case "pink-tint":
+      return "#9d174d";
+    default:
+      console.log(`no matching color for - ${className}, returning white`);
+      return "#fff";
   }
 }
 

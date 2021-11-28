@@ -43,7 +43,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   const heroImagePosition = isLongPhone ? deviceHeight * 0.52 : isMediumPhone ? deviceHeight * 0.53 : deviceHeight * 0.52;
   const petImagePosition = isLongPhone ? deviceHeight * 0.58 : isMediumPhone ? deviceHeight * 0.56 : deviceHeight * 0.5;
   const heroImageSize = isLongPhone ? 375 : isMediumPhone ? 300 : 275;
-  const bottomDrawerHeight = deviceHeight / 2.25;
+  const bottomDrawerHeight = isLongPhone ? deviceHeight / 2.7 : isMediumPhone ? deviceHeight / 2.6 : deviceHeight / 2.4;
   const hero = state.hero as Hero;
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
   const [appIsReloading, setAppIsReloading] = useState(false);

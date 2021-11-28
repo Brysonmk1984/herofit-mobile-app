@@ -7,6 +7,7 @@ import { ItemModal } from "../../../../../../Components/ModalTemplates/ModalTemp
 import BodyContent from "../../../../../../Components/ModalTemplates/ItemModal/BodyContent";
 import { capitalize } from "../../../../../../common/helperFunctions";
 import ItemLore from "../../../../../../Components/ModalTemplates/ItemModal/ItemLore";
+import Icon from "../../../../../../Components/Icon";
 
 interface ItemDetailProps {
   id: string;
@@ -22,15 +23,26 @@ const ItemDetail: React.FC<ItemDetailProps> = ({ id, buttonText = "OK", modalAct
 
   function _renderEffect(effect: Effect) {
     return (
-      <Box px={5} mt={2} mb={5}>
+      <Box px={3} mt={2} mb={3}>
         <HStack justifyContent="space-between">
-          <Text fontFamily="heading" mt={1}>
-            {effect.name}
+          <Text mt={1}>
+            <Text>
+              <Icon iconName="bullseye" size={16} color="primary.800" />
+              &nbsp;
+            </Text>
+            <Text fontFamily="heading" fontSize="lg">
+              {effect.name}
+            </Text>
           </Text>
-          <Text color="success.500">{capitalize(effect.type)}</Text>
+
+          <Text color="success.500" fontSize="md">
+            {capitalize(effect.type)}
+          </Text>
         </HStack>
 
-        <Text color="primary.500">{effect.description}</Text>
+        <Text color="primary.500" fontSize="md" ml={5}>
+          {effect.description}
+        </Text>
       </Box>
     );
   }
@@ -44,7 +56,7 @@ const ItemDetail: React.FC<ItemDetailProps> = ({ id, buttonText = "OK", modalAct
   return (
     <ItemModal id={id} modalOpen={state.modalQueue[0] === id} buttonText={buttonText} modalAction={modalAction} item={item} character={character}>
       <BodyContent>
-        <FlatList ListHeaderComponent={item.lore && <ItemLore lore={item.lore} numEffects={item.effects?.length ?? 0} fullCodex={item.type === "codex" && item.owned} />} data={item.effects} renderItem={({ item }) => _renderEffect(item)} keyExtractor={(item, i) => i.toString()} />
+        <FlatList ListHeaderComponent={item.lore && <ItemLore lore={item.lore} numEffects={item.effects?.length ?? 0} fullCodex={item.type === "codex" && item.owned} />} data={item.effects} renderItem={({ item }) => _renderEffect(item)} keyExtractor={(item, i) => i.toString()} contentContainerStyle={{ paddingBottom: 15 }} />
       </BodyContent>
     </ItemModal>
   );

@@ -30,8 +30,6 @@ const App: React.FC = () => {
     icomoon: require("../assets/fonts/icomoon.ttf"),
     "bebas-neue": require("../assets/fonts/BebasNeue-Regular.ttf"),
     oswald: require("../assets/fonts/Oswald-VariableFont_wght.ttf"),
-    pathway: require("../assets/fonts/PathwayGothicOne-Regular.ttf"),
-    rochester: require("../assets/fonts/Rochester-Regular.ttf"),
     shadowsIntoLight: require("../assets/fonts/ShadowsIntoLight-Regular.ttf"),
   });
 

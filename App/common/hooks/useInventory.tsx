@@ -101,9 +101,9 @@ export default function useInventory(makeInventoryRequest?: boolean): ServerInve
       const updatedEquipped = equipped;
       updatedEquipped[newItem.type] = equippedItem;
       dispatch({ type: "UPDATE EQUIPPED", payload: { equipped: updatedEquipped } });
-      addToast("success", `${equippedItem.name} Item has been equipped!`, "top");
+      addToast("success", `${equippedItem.name} Item has been equipped!`);
     } catch (error) {
-      addToast("error", `${error.status}: ${error.message}`, "top");
+      addToast("error", `${error.status}: ${error.message}`);
       return debugErrors(error, user);
     }
   }
@@ -114,9 +114,9 @@ export default function useInventory(makeInventoryRequest?: boolean): ServerInve
       const updatedEquipped = equipped;
       updatedEquipped[oldItem.type] = null;
       dispatch({ type: "UPDATE EQUIPPED", payload: { equipped: updatedEquipped } });
-      addToast("success", `${oldItem.name} has been unequipped!`, "top");
+      addToast("success", `${oldItem.name} has been unequipped!`);
     } catch (error) {
-      addToast("error", `${error.status}: ${error.message}`, "top");
+      addToast("error", `${error.status}: ${error.message}`);
       return debugErrors(error, user);
     }
   }
@@ -134,9 +134,9 @@ export default function useInventory(makeInventoryRequest?: boolean): ServerInve
 
         dispatch({ type: "UPDATE EQUIPPED", payload: { equipped: updatedEquipped } });
         //updateEquipped(equippedItem);
-        addToast("success", `${equippedItem.name} has been equipped!`, "top");
+        addToast("success", `${equippedItem.name} has been equipped!`);
       } catch (error) {
-        addToast("error", `${error.status}: ${error.message}`, "top");
+        addToast("error", `${error.status}: ${error.message}`);
         return debugErrors(error, user);
       }
     }

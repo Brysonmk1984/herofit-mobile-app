@@ -7,7 +7,7 @@ interface ModalContentProps {
 
 export const ModalContent: React.FC<ModalContentProps> = ({ children }) => {
   return (
-    <Box w="85%" maxHeight="80%" overflow="visible" bgColor="base.white">
+    <Box w="90%" maxHeight="90%" overflow="visible" bgColor="base.white">
       {children}
     </Box>
   );

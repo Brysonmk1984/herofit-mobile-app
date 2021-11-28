@@ -10,7 +10,7 @@ interface RoundDisplayProps {
 const RoundDisplay: React.FC<RoundDisplayProps> = ({ battleReport }) => {
   function renderAttackDamage(didCrit: boolean, damage: number) {
     return didCrit ? (
-      <Text mt={-0.5} fontSize="2xl" color="base.fire" fontWeight="bold" fontStyle="italic" textAlign="center" fontFamily="cursive">
+      <Text mt={-0.5} fontSize="2xl" color="base.fire" fontWeight="bold" fontStyle="italic" textAlign="center" fontFamily="handwriting">
         {damage}
       </Text>
     ) : (

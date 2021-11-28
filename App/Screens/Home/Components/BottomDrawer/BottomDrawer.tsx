@@ -7,7 +7,7 @@ import useModal from "../../../../common/hooks/useModal";
 import { fetchUpcomingFoeAndRewards } from "../../../../api/battle";
 import useGlobalToast from "../../../../common/hooks/useGlobalToast";
 import debugErrors from "../../../../common/debugErrors";
-import { CharacterName, DefaultHeroProperties, EquippableItemType, Hero, HeroStatus, HeroWithStats, Item, ItemWithOwnership, TabType, User } from "../../../../common/types";
+import { CharacterName, DefaultHeroProperties, EquippableItemType, Hero, HeroStatus, HeroWithStats, Item, ItemWithOwnership, ServerItemType, TabType, User } from "../../../../common/types";
 import { Battle } from "../../../../common/types-battle";
 import { LinearGradient } from "expo-linear-gradient";
 import { GlobalStateContext } from "../../../../store";
@@ -65,7 +65,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
     // Prevent item switching if awaiting battle
     // Only applies to pets for now
     if (goToBattle) {
-      return addToast("error", "Unable to switch pet's while waiting for battle!", "top");
+      return addToast("error", "Unable to switch pet's while waiting for battle!", "bottom");
     }
 
     const equippedOfType = { skin: equippedSkin, pet: equippedPet, title: equippedTitle };
@@ -124,6 +124,9 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
     } else if (!item.owned && item.ptCost) {
       // Modal Action is to Buy Item
       return { buttonText: "BUY", modalAction: () => handleBuying(item) };
+    } else if (item.owned && (item.type === "pet" || item.type === "title")) {
+      // Modal Action is to Buy Item
+      return { buttonText: "Equip", modalAction: () => handleEquipping(item.type as ServerItemType, item, hero.goToBattle) };
     }
   }
 

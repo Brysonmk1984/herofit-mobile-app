@@ -46,7 +46,7 @@ const DetailModal: React.FC<DetailModalProps> = ({ id, modalOpen, modalAction, c
         <BodyContent>
           <Box overflow="hidden" minHeight="100" mb={5}>
             <View zIndex={100} flexWrap="wrap" justifyContent="center" flexDirection="row" bgColor="base.background" py={2} mb={3}>
-              <Text mt={-1} pb={1} px={2} bgColor="base.background" fontFamily="cursive">
+              <Text mt={-1} pb={1} px={2} bgColor="base.background" fontFamily="handwriting">
                 {character.history}
               </Text>
               <Image position="absolute" bottom={-10} source={require("../../../../assets/images/layout/torn-paper.webp")} alt={null} />

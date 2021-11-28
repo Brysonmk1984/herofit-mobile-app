@@ -20,7 +20,7 @@ const HiddenInventory: React.FC<HiddenInventoryProps> = ({ children, refRBSheet,
 
   const tabColors: TabColors = {
     Consumables: ["#b91c1c", "red.700"],
-    Pets: ["#15803d", "green.700"],
+    Pets: ["#40E0D0", "#40E0D0"],
     Costumes: ["#7e22ce", "purple.700"],
     Titles: ["#f97316", "orange.500"],
     Codex: ["#9d174d", "pink.800"],
@@ -36,10 +36,10 @@ const HiddenInventory: React.FC<HiddenInventoryProps> = ({ children, refRBSheet,
         onClose={() => setBottomDrawerOpen(false)}
         customStyles={{
           wrapper: {
-            backgroundColor: "transparent",
+            backgroundColor: "rgba(0,0,0,.2)",
           },
           container: {
-            backgroundColor: colors.base.primary,
+            backgroundColor: "black",
           },
           draggableIcon: {
             backgroundColor: "#f1c85b",
