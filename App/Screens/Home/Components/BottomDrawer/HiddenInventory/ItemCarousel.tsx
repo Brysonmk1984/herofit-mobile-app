@@ -10,6 +10,7 @@ import useModal from "../../../../../common/hooks/useModal";
 import ItemImage from "../../../../../Components/ItemImage";
 import { useDebounce, useDebouncedCallback } from "use-debounce/lib";
 import { PetImage } from "../../PetImage";
+import { determineEquippableType } from "../../../../../common/typeGuards";
 
 interface ItemCarouselProps {
   type: ServerItemType;
@@ -35,11 +36,6 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
   const { openModal } = useModal();
   const carousel = useRef(null);
 
-  function _determineEquippableType(type: ServerItemType): type is EquippableItemType {
-    const equippableTypes = ["skin", "pet", "title"];
-    return equippableTypes.includes(type);
-  }
-
   function _getItemImage(item: ItemWithOwnership, type: ServerItemType) {
     const iconColor = item.class ? getColorFromClassName(item.class) : getColorFromItemName(item.name, true);
     const IMAGE_WIDTH = ITEM_IMAGE_WIDTH * 0.8;
@@ -63,7 +59,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
         return (
           <Box style={styles.itemImage}>
             {!item.owned && (
-              <Box position="absolute" w="100%" top="33%" zIndex="1000">
+              <Box position="absolute" w="100%" top="33%" zIndex="1000" justifyContent="center">
                 <Text textAlign="center" color={item.ptCost ? "base.brand" : "primary.400"} fontSize="lg">
                   {item.ptCost ? thousandsFormat(item.ptCost) : "NOT FOR SALE"}
                 </Text>
@@ -71,7 +67,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
             )}
             <ItemImage item={item} w={IMAGE_WIDTH} reverseIconDefaultColor={true} />
             {item.count && (
-              <Box position="absolute" bottom={4} right={3} borderRadius={4} h={8} w={8} bgColor="primary.800">
+              <Box position="absolute" bottom={4} right={1} borderRadius={4} h={8} w={8} bgColor="primary.900" borderColor="primary.500" borderWidth={1}>
                 <Text color="base.highlight" fontFamily="heading" textAlign="center" lineHeight={33} fontSize="2xl">
                   {item.count}
                 </Text>
@@ -143,9 +139,9 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
 
   function _renderItem({ item, index }) {
     return (
-      <Pressable style={{ marginLeft: -4 }} onPress={() => _handleSelectedItem(index, item)}>
+      <Pressable onPress={() => _handleSelectedItem(index)}>
         {/* Background image */}
-        <View bg={"base.primary"} style={[styles.itemContainer]}>
+        <View bg={"base.primaryAlt"} style={[styles.itemContainer, { overflow: "hidden" }]} borderColor="base.highlight" borderWidth={index === activeIndex ? 1 : 0}>
           <ImageBackground source={require("../../../../../../assets/images/layout/carousel-background.webp")} resizeMode="contain" style={styles.panelBackground} />
         </View>
         {/* Item image or icon */}
@@ -160,22 +156,19 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
   //   handleEquipping(type, activeIndex ? allItemsOfType[activeIndex] : null, goToBattle);
   // }, 750);
 
-  function _handleSelectedItem(index: number, item: Item) {
+  function _handleSnappedItem(index: number) {
+    setActiveIndex(index);
+  }
+
+  function _handleSelectedItem(index: number) {
     setActiveIndex(index);
     const selectedItem = allItemsOfType[index];
-    // Equipping item - only for equippable Item types
-    if (_determineEquippableType(type)) {
-      // AND must own item
-      if (selectedItem.owned) {
-        //_delayedSelection(type, index);
-        // For unequipping
-        _openModal(item, index);
-      } else if (selectedItem.name.includes("NO ")) {
-        handleEquipping(type);
-      }
+    if (selectedItem.name.includes("NO ")) {
+      handleEquipping(selectedItem.type);
+      refRBSheet.current.close();
       // Anything else doesn't get equipped (unowned items)
     } else {
-      _openModal(item, index);
+      _openModal(selectedItem, index);
     }
   }
 
@@ -224,7 +217,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
     const items = [...ownedItems, ...unownedItems];
 
     // Add item type for 'no item' for categories that are equippable
-    if (_determineEquippableType(type)) {
+    if (determineEquippableType(type)) {
       const name = type === "skin" ? "NO COSTUME" : `NO ${type.toUpperCase()}`;
       const nothingItem = { type, name } as ItemWithOwnership;
       items.unshift(nothingItem);
@@ -245,7 +238,7 @@ const ItemCarousel: React.FC<ItemCarouselProps> = ({ type, data, equipped, chara
       </View>
       {activeIndex !== null && (
         <View style={styles.carouselView}>
-          <Carousel ref={carousel} firstItem={activeIndex} containerCustomStyle={styles.carouselContainer} /*onSnapToItem={index => _handleSelectedItem(index)}*/ data={allItemsOfType} renderItem={_renderItem} sliderWidth={SLIDER_WIDTH} itemWidth={SLIDER_WIDTH * 0.28} inactiveSlideOpacity={1} inactiveSlideScale={0.6} />
+          <Carousel ref={carousel} firstItem={activeIndex} containerCustomStyle={styles.carouselContainer} onSnapToItem={index => _handleSnappedItem(index)} data={allItemsOfType} renderItem={_renderItem} sliderWidth={SLIDER_WIDTH} itemWidth={ITEM_WIDTH} inactiveSlideOpacity={1} inactiveSlideScale={0.6} />
         </View>
       )}
     </SafeAreaView>
@@ -256,22 +249,21 @@ export default ItemCarousel;
 
 const styles = StyleSheet.create({
   carouselWrapper: {
-    elevation: Platform.OS === "android" ? 101 : 0,
+    elevation: 101,
     position: "absolute",
     left: -10,
     bottom: 10,
     zIndex: 1000,
+    minHeight: ITEM_HEIGHT * 1.5,
+    overflow: "visible",
   },
-  carouselContainer: {},
+  carouselContainer: { overflow: "visible" },
   itemContainer: {
     width: ITEM_WIDTH,
     height: ITEM_HEIGHT,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 12,
-    overflow: "hidden",
-
-    marginBottom: 10,
   },
   panelBackground: {
     flex: 1,
@@ -279,15 +271,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     height: "100%",
-    overflow: "visible",
+    borderRadius: 12,
   },
   itemImage: {
     height: ITEM_IMAGE_HEIGHT,
     width: ITEM_IMAGE_WIDTH,
     position: "absolute",
     left: 0,
-    marginLeft: -7,
+    marginLeft: -11,
     opacity: 1,
+    overflow: "visible",
   },
-  carouselView: { flex: 1, flexDirection: "row", justifyContent: "center" },
+  carouselView: { flex: 1, flexDirection: "row", justifyContent: "center", overflow: "visible" },
 });

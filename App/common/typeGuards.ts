@@ -1,7 +1,7 @@
 // Takes in an object along with an array of property values
 // Returns a new object that has all property keys from the array assigned with
 
-import { Hero } from "./types";
+import { EquippableItemType, Hero, ServerItemType } from "./types";
 
 // corresponding property values from the objectInQuestion
 function _subsetObject<T, K>(objectInQuestion: T | object, propertyNames: K): T | object {
@@ -38,4 +38,9 @@ function isExistingHero(hero: unknown): hero is Hero {
   return hero.hasOwnProperty("id");
 }
 
-export { objectIsOfType, isExistingHero };
+function determineEquippableType(type: ServerItemType): type is EquippableItemType {
+  const equippableTypes = ["skin", "pet", "title"];
+  return equippableTypes.includes(type);
+}
+
+export { objectIsOfType, isExistingHero, determineEquippableType };

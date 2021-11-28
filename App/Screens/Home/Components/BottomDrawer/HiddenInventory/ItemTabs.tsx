@@ -21,7 +21,7 @@ const ItemTabs: React.FC<ItemTabsProps> = ({ activeTab, setActiveTab, tabColors 
   }
 
   return (
-    <View bgColor="base.primaryAlt" py={1}>
+    <View py={1}>
       <HStack justifyContent="space-between">
         {tabGroup === 0 ? (
           // Tab Group 0

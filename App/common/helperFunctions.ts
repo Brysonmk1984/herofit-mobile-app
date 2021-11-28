@@ -619,11 +619,12 @@ function determineItemTypeColor(serverItemType: ServerItemType) {
     case "codex":
     case "consumable":
     case "skin":
+    case "title":
     case "codex":
     case "pet":
       return herofitTheme.colors.base[serverItemType];
     default:
-      console.error("Foe Color - No image by that foe type");
+      console.error("Item Color - No image by that foe type");
   }
 }
 

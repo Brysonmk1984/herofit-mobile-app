@@ -157,8 +157,9 @@ export default function useInventory(makeInventoryRequest?: boolean): ServerInve
       try {
         (async () => {
           const inventory = await fetchAvatarInventory({ avatarID: hero.id });
+          //console.log("INVENTTORY=", inventory);
           const equipped = _determineEquippedItems(inventory);
-
+          //console.log("equipped=", equipped);
           dispatch({ type: "UPDATE INVENTORY", payload: { inventory } });
           dispatch({ type: "UPDATE EQUIPPED", payload: { equipped } });
         })();

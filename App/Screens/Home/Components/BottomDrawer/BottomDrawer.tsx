@@ -13,7 +13,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { GlobalStateContext } from "../../../../store";
 import HiddenInventory from "./HiddenInventory/HiddenInventory";
 import useInventory from "../../../../common/hooks/useInventory";
-import { isExistingHero } from "../../../../common/typeGuards";
+import { determineEquippableType, isExistingHero } from "../../../../common/typeGuards";
 import ItemCarousel from "./HiddenInventory/ItemCarousel";
 import ItemDetail from "./HiddenInventory/Modals/ItemDetail";
 import Triangle from "./Triangle";
@@ -124,7 +124,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
     } else if (!item.owned && item.ptCost) {
       // Modal Action is to Buy Item
       return { buttonText: "BUY", modalAction: () => handleBuying(item) };
-    } else if (item.owned && (item.type === "pet" || item.type === "title")) {
+    } else if (item.owned && determineEquippableType(item.type)) {
       // Modal Action is to Buy Item
       return { buttonText: "Equip", modalAction: () => handleEquipping(item.type as ServerItemType, item, hero.goToBattle) };
     }

@@ -35,7 +35,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   const [newActivities, setNewActivities] = useState<Activity[]>([]);
   const { addToast } = useGlobalToast();
   const { equippedSkin, equippedPet, equippedTitle } = useInventory(true);
-  const propsForHeroImage = (({ character, equipped, alias, status }) => ({ character, equipped, alias, skin: equippedSkin, status, floating: true }))(state.hero);
+  const propsForHeroImage = (({ character, equipped, alias, status }) => ({ character, equipped, alias, status, floating: true }))(state.hero);
   const { deviceWidth, deviceHeight, deviceAspectType } = useMemo(() => useAspectRatio(), []);
   const sideBarWidth = deviceWidth / 2;
   const isLongPhone = deviceAspectType === "long";
@@ -168,7 +168,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
             {/* HERO & PET */}
             <View h={heroImagePosition} zIndex={110}>
               <Box position="absolute" bottom={0} left="50%" ml={-(heroImageSize / 2)}>
-                <HeroImage width={heroImageSize} height={heroImageSize} {...propsForHeroImage} />
+                <HeroImage width={heroImageSize} height={heroImageSize} skin={equippedSkin} {...propsForHeroImage} />
               </Box>
             </View>
           </GestureRecognizer>
