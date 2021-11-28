@@ -13,7 +13,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ text, mb = 0, color, bgColor, extraPadding = Constants.platform.ios ? true : false }) => {
   return (
-    <Box flex={0.2} flexBasis={90} mt={extraPadding ? 10 : 2} mb={mb}>
+    <Box flex={0.2} flexBasis={90} mt={extraPadding ? 6 : 0} mb={mb}>
       <Center w="100%" h={100} bgColor={bgColor}>
         <Text color={color} style={Styles.textShadow} fontFamily="heading" fontSize="5xl">
           {text}

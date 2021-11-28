@@ -102,7 +102,7 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
     <ScreenContainer screenName={route.name}>
       <View>
         <Header text="Sign In" />
-        <Pane mt={10}>
+        <Pane>
           <VStack space={6} mt={5}>
             <FormControl isRequired isInvalid={helperText === "Must be valid email address" ? true : false}>
               <Input onChangeText={text => handleInputChange(text, setEmail)} value={email} placeholder="Email" shadow={1} />

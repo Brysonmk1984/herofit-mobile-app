@@ -47,6 +47,7 @@ const App: React.FC = () => {
           console.log("JWT EXISTS, but ERROR FETCHING DATA");
           addToast("error", "There was a problem fetching game data... Please try again later.");
           debugErrors(error);
+          dispatch({ type: "RESET DEFAULTS" });
         } finally {
           setTimeout(() => {
             dispatch({

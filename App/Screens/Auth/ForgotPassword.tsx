@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { Keyboard } from "react-native";
 import { View, Text, VStack, FormControl, Input, Link, Button, Center } from "native-base";
 import { GlobalStateContext } from "../../store";
 import debugErrors from "../../common/debugErrors";
@@ -48,6 +49,7 @@ const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">)
       return;
     }
     setEmailSent(true);
+    Keyboard.dismiss();
     try {
       await sendPasswordResetEmailVerification({ email, isMobileApp: true });
       setLoading(false);

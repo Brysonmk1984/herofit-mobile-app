@@ -35,7 +35,7 @@ function CharacterModal({ children, id, modalOpen, modalAction, character = "Mas
 
   function customClose() {
     closeModal(id);
-    customOnCloseEvent();
+    customOnCloseEvent && customOnCloseEvent();
   }
 
   function handleModalAction(idToClose: string, modalAction: () => void) {

@@ -34,17 +34,6 @@ async function fetchInitialData(token: string, dispatch: AppDispatch, state: Ini
 
     dispatch({ type: "SET EXISTING USER INIT DATA", payload: { user, hero, latestBattle, isSignedIn: true, userStatus, latestSavedActivities, latestSavedActivityDate, allGameItems, awardedItemMessage } });
   } catch (error) {
-    let message, alertType;
-
-    if (error.status === 401) {
-      // JWT has expired, just warn user so they can log in again
-      console.log("JWTexpired - Should immediately kick user out to login screen without going to homescreen first");
-    } else {
-      // Error unrelated to JWT, display error message
-      message = error.message;
-      debugErrors(error);
-    }
-    dispatch({ type: "RESET DEFAULTS" });
     throw error;
   }
 }
