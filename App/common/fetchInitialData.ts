@@ -18,7 +18,7 @@ async function fetchInitialData(token: string, dispatch: AppDispatch, state: Ini
     }
 
     // Fetch the user, avatar, and all game items
-    const [p1, p2, p3, p4, p5] = await Promise.all([getUser(), getAvatar({ email, isMobileApp: true }), fetchAllGameItems(), fetchBattleReport({ owner: email }), getSavedActivities({ email, count: 10 })]);
+    const [p1, p2, p3, p4, p5] = await Promise.all([getUser(), getAvatar({ email, isMobileApp: true }), fetchAllGameItems(), fetchBattleReport({ owner: email }), getSavedActivities({ email, count: 30 })]);
     const user: User = p1.user;
     const hero: Hero = p2.hero;
     const awardedItemMessage: string = p2.awardedItemMessage;

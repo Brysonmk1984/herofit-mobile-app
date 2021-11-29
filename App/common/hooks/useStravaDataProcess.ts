@@ -78,7 +78,7 @@ function _handleStravaActivities(hero: Hero, stravaActivities: any[], dateOfLate
 
 // IF Strava is the dataSrc method on user's account,
 // GET STRAVA ACTIVITIES TO FIGURE OUT IF THE USER HAS NEW UPGRADES TO ADD
-function useStravaDataProcess(): { newStravaActivities: Activity[]; getFreshStravaData: (manually?: boolean) => void } {
+function useStravaDataProcess(): { newStravaActivities: Activity[]; getFreshStravaData: (manually?: boolean) => void; resetNewStravaActivities: () => void } {
   const { state, dispatch } = useContext(GlobalStateContext);
   const [lsStrava, setLsStrava] = useState<any[] | undefined>();
   const [lsStravaCheckHappened, setLsStravaCheckHappened] = useState(false);
@@ -94,10 +94,11 @@ function useStravaDataProcess(): { newStravaActivities: Activity[]; getFreshStra
     try {
       const accessToken = await _checkStravaToken(state.user, state, dispatch);
 
-      console.log("MADE IT ALL THE WAY THROUGH, AT=", accessToken);
+      //console.log("MADE IT ALL THE WAY THROUGH, AT=", accessToken);
       const activities = await getStravaActivityData(accessToken);
 
       const formattedNewActivities = _handleStravaActivities(hero, activities, state.latestSavedActivityDate, state.user);
+
       await setNewStravaActivities(formattedNewActivities);
 
       // Setting LS to prevent repeated calls to strava server - Expires in 30 minutes
@@ -151,6 +152,7 @@ function useStravaDataProcess(): { newStravaActivities: Activity[]; getFreshStra
   return {
     newStravaActivities,
     getFreshStravaData,
+    resetNewStravaActivities: () => setNewStravaActivities([]),
   };
 }
 

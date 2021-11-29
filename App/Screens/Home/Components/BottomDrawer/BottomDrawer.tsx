@@ -118,7 +118,6 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
   }
 
   function determineItemModalProps(item: ItemWithOwnership) {
-    console.log("ITEM=", item, hero.restedEnough);
     if (item.type === "consumable" && item.owned) {
       // Modal Action is to Consume Item
       const consumableItemProps = { buttonText: "USE", modalAction: () => handleConsuming(item), disabled: false };

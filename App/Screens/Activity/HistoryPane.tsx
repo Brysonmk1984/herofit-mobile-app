@@ -19,7 +19,7 @@ const HistoryPane: React.FC<HistoryPaneProps> = ({ navigation, isStravaUser }) =
   const { state, dispatch } = useContext(GlobalStateContext);
   const { latestSavedActivities } = state;
 
-  const orderedActivities = latestSavedActivities.sort((a, b) => (moment(a.activityDate).isAfter(moment(b.activityDate)) ? -1 : 1));
+  const orderedActivities = latestSavedActivities.sort((a, b) => (moment(a.activityDate).isAfter(moment(b.activityDate)) ? -1 : 1)).slice(0, 10);
 
   return (
     <Pane mb={10}>

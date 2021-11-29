@@ -49,6 +49,11 @@ const Settings: React.FC<MainStackProps<"Settings">> = ({ navigation, route }) =
     createAlert("Disconnect Strava Account", "Your activities wont sync if you disconnect", disconnect);
   }
 
+  async function handleCacheClear() {
+    await clearLs("herofit-stravaActivities");
+    navigation.navigate("Home", { fetchStravaManually: true });
+  }
+
   function handleDeleteAccount() {
     // TODO: Delete immediately after account creation doesnt work, hero doesn't have ID
     const user: User = state.user;
@@ -94,7 +99,7 @@ const Settings: React.FC<MainStackProps<"Settings">> = ({ navigation, route }) =
         </Pane>
         <Pane mb={10}>
           <Subheader fontSize="xl" text="Delete activities cached on device" />
-          <Button _text={{ fontFamily: "heading", fontSize: "2xl" }} mt={5} onPress={() => clearLs("herofit-stravaActivities")}>
+          <Button _text={{ fontFamily: "heading", fontSize: "2xl" }} mt={5} onPress={handleCacheClear}>
             Delete Activity Cache
           </Button>
         </Pane>

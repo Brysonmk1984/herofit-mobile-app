@@ -15,7 +15,7 @@ import { DrawerIndicator, LoadingInPane, LoadingSpinner } from "../../Components
 import { Activity, Hero } from "../../common/types";
 import { upgradeSequence } from "../../api/avatar";
 import buildGainsMessages from "./Components/gainsMessages";
-import useStravaDataProcess from "./useStravaDataProcess";
+import useStravaDataProcess from "../../common/hooks/useStravaDataProcess";
 import moment from "moment";
 import useGlobalToast from "../../common/hooks/useGlobalToast";
 import useInventory from "../../common/hooks/useInventory";
@@ -31,7 +31,7 @@ import useAspectRatio from "../../common/hooks/useAspectRatio";
 const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { openModal, closeModal } = useModal();
-  const { newStravaActivities, getFreshStravaData } = useStravaDataProcess();
+  const { newStravaActivities, getFreshStravaData, resetNewStravaActivities } = useStravaDataProcess();
   const [newActivities, setNewActivities] = useState<Activity[]>([]);
   const { addToast } = useGlobalToast();
   const { equippedSkin, equippedPet, equippedTitle } = useInventory(true);
@@ -67,7 +67,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
       const heroEquipped = Object.assign({}, state.hero, upgradeResults.avatar, { equipped: state.hero.equipped });
 
       const maxDate = moment.max(activities.map(act => moment(act.activityDate)));
-
+      //console.log("max data", maxDate);
       dispatch({ type: "POST UPGRADE", payload: { hero: heroEquipped, latestSavedActivities: [...state.latestSavedActivities, ...upgradeResults.activities], latestSavedActivityDate: maxDate } });
       setNewActivities([]);
       clearLs("herofit-stravaActivities");
