@@ -35,7 +35,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   const [newActivities, setNewActivities] = useState<Activity[]>([]);
   const { addToast } = useGlobalToast();
   const { equippedSkin, equippedPet, equippedTitle } = useInventory(true);
-  const propsForHeroImage = (({ character, equipped, alias, status }) => ({ character, equipped, alias, status, floating: true }))(state.hero);
+  const propsForHeroImage = (({ character, equipped, alias }) => ({ character, equipped, alias }))(state.hero);
   const { deviceWidth, deviceHeight, deviceAspectType } = useMemo(() => useAspectRatio(), []);
   const sideBarWidth = deviceWidth / 2;
   const isLongPhone = deviceAspectType === "long";
@@ -43,7 +43,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   const heroImagePosition = isLongPhone ? deviceHeight * 0.52 : isMediumPhone ? deviceHeight * 0.53 : deviceHeight * 0.52;
   const petImagePosition = isLongPhone ? deviceHeight * 0.58 : isMediumPhone ? deviceHeight * 0.56 : deviceHeight * 0.5;
   const heroImageSize = isLongPhone ? 375 : isMediumPhone ? 300 : 275;
-  const bottomDrawerHeight = isLongPhone ? deviceHeight / 2.7 : isMediumPhone ? deviceHeight / 2.6 : deviceHeight / 2.4;
+  const bottomDrawerHeight = isLongPhone ? deviceHeight / 2.8 : isMediumPhone ? deviceHeight / 2.6 : deviceHeight / 2.4;
   const hero = state.hero as Hero;
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
   const [appIsReloading, setAppIsReloading] = useState(false);
@@ -127,6 +127,9 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
     } else if (state.userStatus === "unconfirmed") {
       openModal("ConfirmEmail", 6000);
     } else if (state.user === null || !state.user?.dataSrcId) {
+      // if (!route.params?.blockOpenFromSettingsPage) {
+
+      // }
       openModal("ChooseActivityEntry", 3000);
     }
   }, [state.userStatus, state.user, state.user?.dataSrcId]);
@@ -168,7 +171,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
             {/* HERO & PET */}
             <View h={heroImagePosition} zIndex={110}>
               <Box position="absolute" bottom={0} left="50%" ml={-(heroImageSize / 2)}>
-                <HeroImage width={heroImageSize} height={heroImageSize} skin={equippedSkin} {...propsForHeroImage} />
+                <HeroImage width={heroImageSize} height={heroImageSize} skin={equippedSkin} status={hero.status} floating={hero.status === "Knocked Out" ? false : true} {...propsForHeroImage} />
               </Box>
             </View>
           </GestureRecognizer>

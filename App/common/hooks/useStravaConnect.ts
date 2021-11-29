@@ -20,6 +20,7 @@ interface StravaConnectReturn {
   request: AuthSession.AuthRequest;
   promptAsync: (options?: AuthSession.AuthRequestPromptOptions) => Promise<AuthSession.AuthSessionResult>;
   stravaSuccess: boolean;
+  setStravaSuccess: (stravaSuccess: boolean) => void;
   helperText: string;
 }
 
@@ -106,6 +107,7 @@ function useStravaConnect(): StravaConnectReturn {
     request,
     promptAsync,
     stravaSuccess,
+    setStravaSuccess,
     helperText,
   };
 }

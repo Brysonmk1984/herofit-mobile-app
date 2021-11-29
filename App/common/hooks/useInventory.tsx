@@ -5,6 +5,7 @@ import { convertAorAn } from "../helperFunctions";
 import useGlobalToast from "./useGlobalToast";
 import { BattleInstantItem, Hero, Item, ServerInventoryCategories, ServerItemType } from "../types";
 import { GlobalStateContext } from "../../store";
+import { isBattleInstantItem } from "../typeGuards";
 
 interface EquippedItems {
   equippedPet: Item | null;
@@ -81,8 +82,7 @@ export default function useInventory(makeInventoryRequest?: boolean): ServerInve
       dispatch({ type: "SET HERO", payload: { hero: updatedHero } });
       addToast("success", `${heroObj.name} used ${convertAorAn(item.name)} ${item.name}.`);
 
-      const battleInstantItems: BattleInstantItem[] = ["Storm Crow Bone Chimes", "Smoldering Skull Torch", "Petrified Power Totem", "Wave-Swept Battle Conch", "Plague Token", "Obsidian Mirror"];
-      if (battleInstantItems.includes(item.name)) {
+      if (isBattleInstantItem(item.name)) {
         return { isBattleInstantItem: true };
       } else {
         return { isBattleInstantItem: false };

@@ -13,7 +13,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { GlobalStateContext } from "../../../../store";
 import HiddenInventory from "./HiddenInventory/HiddenInventory";
 import useInventory from "../../../../common/hooks/useInventory";
-import { determineEquippableType, isExistingHero } from "../../../../common/typeGuards";
+import { determineEquippableType, isBattleInstantItem, isExistingHero } from "../../../../common/typeGuards";
 import ItemCarousel from "./HiddenInventory/ItemCarousel";
 import ItemDetail from "./HiddenInventory/Modals/ItemDetail";
 import Triangle from "./Triangle";
@@ -118,9 +118,16 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
   }
 
   function determineItemModalProps(item: ItemWithOwnership) {
+    console.log("ITEM=", item, hero.restedEnough);
     if (item.type === "consumable" && item.owned) {
       // Modal Action is to Consume Item
-      return { buttonText: "USE", modalAction: () => handleConsuming(item) };
+      const consumableItemProps = { buttonText: "USE", modalAction: () => handleConsuming(item), disabled: false };
+      if (hero.status === "Knocked Out") {
+        consumableItemProps.disabled = true;
+      } else if (isBattleInstantItem(item.name) && !hero.restedEnough) {
+        consumableItemProps.disabled = true;
+      }
+      return consumableItemProps;
     } else if (!item.owned && item.ptCost) {
       // Modal Action is to Buy Item
       return { buttonText: "BUY", modalAction: () => handleBuying(item) };
@@ -157,12 +164,12 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
 
       <Box shadow={8} zIndex={1} elevation={1} borderColor="base.brand" borderTopWidth={1} display="flex" flexDirection="row" bgColor="base.primaryAlt">
         <Box w="50%" p={2} borderRightWidth={1} borderRightColor="base.brand">
-          <Button bgColor={newActivitiesAvailable ? "base.highlight" : null} onPress={() => (newActivitiesAvailable ? openModal("ActivityUpgrade") : navigation.push("Activity"))} _text={{ fontFamily: "heading", fontSize: 30 }} borderRadius="0px">
+          <Button bgColor={newActivitiesAvailable ? "base.highlight" : undefined} onPress={() => (newActivitiesAvailable ? openModal("ActivityUpgrade") : navigation.push("Activity"))} _text={{ fontFamily: "heading", fontSize: 30 }} borderRadius="0px">
             Activity
           </Button>
         </Box>
         <Box w="50%" p={2}>
-          <Button bgColor={battleReportAvailable ? "base.highlight" : null} disabled={battleButtonDisabled} _text={{ fontFamily: "heading", fontSize: 30, color: battleButtonDisabled ? "base.disabledText" : "base.white" }} borderRadius={0} onPress={latestBattle && !latestBattle.seenReport ? handleBattleReport : goToBattle ? () => handleFetchUpcomingBattle(false) : () => openModal("GoToBattle")}>
+          <Button bgColor={battleReportAvailable ? "base.highlight" : hero.status === "Knocked Out" ? "base.disabled" : undefined} disabled={battleButtonDisabled} _text={{ fontFamily: "heading", fontSize: 30, color: battleButtonDisabled ? "base.disabledText" : "base.white" }} borderRadius={0} onPress={latestBattle && !latestBattle.seenReport ? handleBattleReport : goToBattle ? () => handleFetchUpcomingBattle(false) : () => openModal("GoToBattle")}>
             {battleReportAvailable ? "Report" : "Battle"}
           </Button>
         </Box>

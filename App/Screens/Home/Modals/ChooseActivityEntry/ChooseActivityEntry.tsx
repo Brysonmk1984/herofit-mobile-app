@@ -23,7 +23,7 @@ interface ChooseActivityEntryProps {
 const ChooseActivityEntry: React.FC<ChooseActivityEntryProps> = ({ id }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { openModal, closeModal } = useModal();
-  const { clientId, request, promptAsync, stravaSuccess, helperText } = useStravaConnect();
+  const { clientId, request, promptAsync, stravaSuccess, setStravaSuccess, helperText } = useStravaConnect();
   const [activityRadioValue, setActivityRadioValue] = useState(null);
   const [confirmButton, setConfirmButton] = useState({ modalAction: () => {}, buttonText: "Done" });
   const [loading, setLoading] = useState(false);
@@ -54,6 +54,7 @@ const ChooseActivityEntry: React.FC<ChooseActivityEntryProps> = ({ id }) => {
   useEffect(() => {
     if (stravaSuccess) {
       closeModal("ChooseActivityEntry");
+      setStravaSuccess(false);
       setTimeout(() => {
         openModal("SignupFinished");
       }, 1500);

@@ -16,9 +16,10 @@ interface ItemDetailProps {
   buttonText?: "USE" | "BUY" | "OK";
   modalAction?: () => void;
   closeModal?: () => void;
+  disabled?: boolean;
 }
 
-const ItemDetail: React.FC<ItemDetailProps> = ({ id, buttonText = "OK", modalAction, closeModal, item, character }) => {
+const ItemDetail: React.FC<ItemDetailProps> = ({ id, buttonText = "OK", modalAction, closeModal, item, character, disabled }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
 
   function _renderEffect(effect: Effect) {
@@ -54,7 +55,7 @@ const ItemDetail: React.FC<ItemDetailProps> = ({ id, buttonText = "OK", modalAct
   }, [item]);
 
   return (
-    <ItemModal id={id} modalOpen={state.modalQueue[0] === id} buttonText={buttonText} modalAction={modalAction} item={item} character={character}>
+    <ItemModal id={id} modalOpen={state.modalQueue[0] === id} buttonText={buttonText} modalAction={modalAction} item={item} character={character} disabled={disabled}>
       <BodyContent>
         <FlatList ListHeaderComponent={item.lore && <ItemLore lore={item.lore} numEffects={item.effects?.length ?? 0} fullCodex={item.type === "codex" && item.owned} />} data={item.effects} renderItem={({ item }) => _renderEffect(item)} keyExtractor={(item, i) => i.toString()} contentContainerStyle={{ paddingBottom: 15 }} />
       </BodyContent>

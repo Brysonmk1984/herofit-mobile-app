@@ -3,7 +3,7 @@ import { Button } from "native-base";
 import ScreenContainer from "../Components/ScreenContainer/ScreenContainer";
 import debugErrors, { createAppError } from "../common/debugErrors";
 import { User } from "../common/types";
-import { deleteAccount, disconnectStrava } from "../api/account";
+import { deleteAccount, disconnectDataSrc } from "../api/account";
 import { GlobalStateContext } from "../store";
 import { MainStackProps } from "../common/types-navigator";
 import { isExistingHero } from "../common/typeGuards";
@@ -13,9 +13,7 @@ import useGlobalToast from "../common/hooks/useGlobalToast";
 import PaneSupportText from "../Components/PaneSupportText";
 import { ScrollView } from "react-native-gesture-handler";
 import { createManualDataSrcId } from "../api/authentication";
-import useStravaConnect from "../common/hooks/useStravaConnect";
-import StravaConnectButton from "../Components/Buttons/StravaConnectButton";
-import * as WebBrowser from "expo-web-browser";
+import { reloadAsync } from "expo-updates";
 
 const Settings: React.FC<MainStackProps<"Settings">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -23,14 +21,21 @@ const Settings: React.FC<MainStackProps<"Settings">> = ({ navigation, route }) =
   const { hero, user } = state;
   const isStravaUser = "strava" === checkDataSrcType(user.dataSrcId);
 
-  //const { clientId, request, promptAsync } = useStravaConnect();
-  const { clientId, request, promptAsync, stravaSuccess, helperText } = useStravaConnect();
+  async function handleDisconnection() {
+    try {
+      const { user: updatedUser } = await disconnectDataSrc({ email: user.email });
+      createAlert("Connecting Data Source", "HeroFit will reload and you can select Data Source settings from the Home Screen", reloadAsync);
+    } catch (error) {
+      debugErrors(error, user);
+      addToast("error", `Unable to delete account- ${error.message}`);
+    }
+  }
 
   function handleStravaDisconnection() {
     async function disconnect() {
       try {
         // First Disconnect
-        await disconnectStrava({ email: user.email });
+        await disconnectDataSrc({ email: user.email });
         // Then add new hf- datasrcid
         const { user: updatedUser } = await createManualDataSrcId({ email: user.email });
         dispatch({ type: "SET USER", payload: { user: updatedUser, isSignedIn: true } });
@@ -75,18 +80,16 @@ const Settings: React.FC<MainStackProps<"Settings">> = ({ navigation, route }) =
       <Header text="Settings" />
       <ScrollView>
         <Pane mt={5} mb={10}>
-          <Subheader fontSize="xl" text="Strava Settings" />
-          <PaneSupportText iconName="caution" iconColor="base.caution" text="Connect or Disconnect Strava Account.">
-            Disconnecting Strava won't impact your existing activities or Hero. This is useful if you want to assign your Strava account to another Hero.
+          <Subheader fontSize="xl" text="Activity Data Settings" />
+          <PaneSupportText iconName="caution" iconColor="base.caution" text="Connect or Disconnect Data Source">
+            {isStravaUser ? "Disconnecting Strava won't impact your existing activities or Hero. This is useful if you want to assign your Strava account to another Hero." : "Connect Strava to your HeroFit account or set account to Manual Entry Mode"}
           </PaneSupportText>
           {isStravaUser ? (
             <Button bgColor="base.strava" _text={{ fontFamily: "heading", fontSize: "2xl" }} mt={5} onPress={() => handleStravaDisconnection()}>
               Disconnect Strava
             </Button>
           ) : (
-            // TODO: Need to figure out why strava connect keeps crashing from settings page
-            //<StravaConnectButton disable={true} promptAsync={promptAsync} />
-            <StravaConnectButton disable={!request || !clientId} promptAsync={promptAsync} />
+            <Button onPress={handleDisconnection}>Connect Data Source</Button>
           )}
         </Pane>
         <Pane mb={10}>

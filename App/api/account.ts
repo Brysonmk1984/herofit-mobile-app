@@ -3,6 +3,7 @@ import axiosRetry from "axios-retry";
 import { axiosOptions, axiosDeleteConfig } from "./axiosDefaults";
 import handleHttpError from "./handleHttpError";
 import Constants from "expo-constants";
+import { User } from "../common/types";
 const endpoint: string = Constants.manifest.extra.HF_ENDPOINT;
 
 let axios = _axios.create();
@@ -40,15 +41,15 @@ const deleteAccount = async function (body): Promise<{ message: string }> {
 };
 
 // Delete Strava fields in user table for particular user
-const disconnectStrava = async function (body): Promise<void> {
+const disconnectDataSrc = async function (body): Promise<{ user: User }> {
   return axios
-    .post(`${endpoint}auth/disconnect-strava`, body, await axiosOptions())
+    .post(`${endpoint}auth/disconnect-data-src`, body, await axiosOptions())
     .then(({ data }) => {
-      return data;
+      return data.data;
     })
     .catch(({ request, response }) => {
       throw handleHttpError(request, response);
     });
 };
 
-export { updateAvatarName, updateOwnerUsername, deleteAccount, disconnectStrava };
+export { updateAvatarName, updateOwnerUsername, deleteAccount, disconnectDataSrc };

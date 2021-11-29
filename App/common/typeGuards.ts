@@ -1,7 +1,7 @@
 // Takes in an object along with an array of property values
 // Returns a new object that has all property keys from the array assigned with
 
-import { EquippableItemType, Hero, ServerItemType } from "./types";
+import { BattleInstantItem, EquippableItemType, Hero, Item, ServerItemType } from "./types";
 
 // corresponding property values from the objectInQuestion
 function _subsetObject<T, K>(objectInQuestion: T | object, propertyNames: K): T | object {
@@ -43,4 +43,9 @@ function determineEquippableType(type: ServerItemType): type is EquippableItemTy
   return equippableTypes.includes(type);
 }
 
-export { objectIsOfType, isExistingHero, determineEquippableType };
+function isBattleInstantItem(itemName): itemName is BattleInstantItem {
+  const battleInstantItems: BattleInstantItem[] = ["Storm Crow Bone Chimes", "Smoldering Skull Torch", "Petrified Power Totem", "Wave-Swept Battle Conch", "Plague Token", "Obsidian Mirror"];
+  return battleInstantItems.includes(itemName);
+}
+
+export { objectIsOfType, isExistingHero, determineEquippableType, isBattleInstantItem };
