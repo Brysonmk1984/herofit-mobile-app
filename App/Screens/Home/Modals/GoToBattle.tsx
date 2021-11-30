@@ -12,6 +12,7 @@ import { sendHeroToBattle } from "../../../api/battle";
 import { ModalActionHeader } from "../../../Components/ModalTemplates/ModalActionHeader";
 import * as WebBrowser from "expo-web-browser";
 import { HeroImage } from "../../../Components/HeroImage/HeroImage";
+import Icon from "../../../Components/Icon";
 
 interface GoToParams {
   foe: Foe;
@@ -92,13 +93,13 @@ export const GoToBattle: React.FC<GoToBattleProps> = ({ id, goTo, openBottomDraw
                 </Box>
               </HStack>
               <HStack space={5}>
-                <Image source={require("../../../../assets/images/misc/quantum_points.webp")} size={50} alt="Photon Tokens" />
+                <Image mt={2} source={require("../../../../assets/images/misc/quantum_points.webp")} size={50} alt="Photon Tokens" />
                 <Box flex={1}>
                   <Text fontSize="md">How you exercise, spend your QP, and which pet you use drastically affect your battles</Text>
                 </Box>
               </HStack>
               <HStack space={5}>
-                <HeroImage character={hero.character} status="Knocked Out" width={50} height={50} />
+                <Icon iconName="knockout" size={50} />
                 <Box flex={1}>
                   <Text fontSize="md">Losing will 'Knock Out' your hero and force a night off</Text>
                 </Box>

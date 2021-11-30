@@ -30,11 +30,11 @@ const IcoMoon = createIconSetFromIcoMoon(require("../../assets/custom-icons.json
 interface IconProps {
   iconName: string;
   size: number;
-  color: string;
+  color?: string;
 }
 
 // Returns the matching icon based on iconName prop
-const InGameIcons = ({ iconName, size, color }: IconProps) => {
+const InGameIcons = ({ iconName, size, color = "base.primary" }: IconProps) => {
   const { colors: themeColors } = useTheme();
   switch (iconName) {
     // ACTIVITIES
