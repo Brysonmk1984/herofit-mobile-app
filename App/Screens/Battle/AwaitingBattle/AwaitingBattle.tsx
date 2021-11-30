@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useMemo } from "react";
 import { Pressable, useWindowDimensions } from "react-native";
 import { MainStackProps } from "../../../common/types-navigator";
 import { ScreenContainer } from "../../../Components/CustomComponents";
@@ -13,10 +13,12 @@ import { Hero } from "../../../common/types";
 import { convertItemIdsToFullItems } from "../../../common/helperFunctions";
 import ItemDetail from "../../Home/Components/BottomDrawer/HiddenInventory/Modals/ItemDetail";
 import useModal from "../../../common/hooks/useModal";
+import useAspectRatio from "../../../common/hooks/useAspectRatio";
 
 const AwaitingBattle: React.FC<MainStackProps<"AwaitingBattle">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
-  const { height, width } = useWindowDimensions();
+  const { deviceWidth, deviceHeight, deviceAspectType } = useMemo(() => useAspectRatio(), []);
+
   const { foe, rewards, character, isInstant } = route.params;
   const hero = state.hero as Hero;
   const { allGameItems, latestBattle } = state;
@@ -66,10 +68,10 @@ const AwaitingBattle: React.FC<MainStackProps<"AwaitingBattle">> = ({ navigation
   }, [pressedItem]);
 
   return (
-    <ScreenContainer bgColor="#d4af37" screenName={route.name}>
-      <HeroSection rewards={rewards} height={height} width={width} setPressedItem={setPressedItem} handleNavigation={isInstant ? () => null : handleNavigation} />
-      <FoeSection foe={foe} height={height} width={width} character={character} handleNavigation={isInstant ? () => null : handleNavigation} />
-      <VsSection height={height} handleNavigation={isInstant ? () => null : handleNavigation} />
+    <ScreenContainer screenName={route.name}>
+      <HeroSection rewards={rewards} height={deviceHeight} width={deviceWidth} setPressedItem={setPressedItem} handleNavigation={isInstant ? () => null : handleNavigation} />
+      <FoeSection foe={foe} height={deviceHeight} width={deviceWidth} character={character} handleNavigation={isInstant ? () => null : handleNavigation} />
+      <VsSection isLongPhone={deviceAspectType === "long"} height={deviceHeight} handleNavigation={isInstant ? () => null : handleNavigation} />
 
       {pressedItem && <ItemDetail id="AwaitingBattleItemDetail" item={pressedItem} character={character} buttonText="OK" />}
     </ScreenContainer>

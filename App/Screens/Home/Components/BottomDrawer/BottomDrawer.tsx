@@ -66,7 +66,9 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
     // Prevent item switching if awaiting battle
     // Only applies to pets for now
     if (goToBattle) {
-      return addToast("error", "Unable to switch pet's while waiting for battle!", "bottom");
+      if (item.type === "pet") {
+        return addToast("error", "Unable to switch pet's while waiting for battle!", "bottom");
+      }
     }
 
     const equippedOfType = { skin: equippedSkin, pet: equippedPet, title: equippedTitle };

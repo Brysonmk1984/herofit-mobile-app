@@ -463,6 +463,7 @@ function getColorFromClassName(className) {
     case "skin-shade":
       return "#FFFFFF";
     case "royal-purple-tint":
+    case "wise-elder":
       return "#7851a9";
     case "health-tint":
       return "#A42420";

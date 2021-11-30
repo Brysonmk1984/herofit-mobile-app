@@ -6,6 +6,8 @@ import { HeroImage } from "../../../Components/HeroImage/HeroImage";
 import { capitalize, equippedSkin, getColorFromClassName, getColorFromItemName } from "../../../common/helperFunctions";
 import { GlobalStateContext } from "../../../store";
 import { Item } from "../../../common/types";
+import useInventory from "../../../common/hooks/useInventory";
+import HeroTitle from "../../../Components/HeroTitle";
 
 interface HeroSectionProps {
   height: number;
@@ -17,7 +19,8 @@ interface HeroSectionProps {
 
 const HeroSection: React.FC<HeroSectionProps> = ({ height: deviceHeight, width: deviceWidth, rewards, setPressedItem, handleNavigation }) => {
   const { state } = useContext(GlobalStateContext);
-  const propsForHeroImage = (({ character, equipped, alias, status }) => ({ character, equipped, alias, skin: equippedSkin(equipped), status }))(state.hero);
+  const { equippedSkin, equippedPet, equippedTitle } = useInventory(true);
+  const propsForHeroImage = (({ character, equipped, alias, status }) => ({ character, equipped, alias, status }))(state.hero);
   const heroColors = [state.hero.colors[0], "#ffffff"];
   const nameSize = state.hero.name.length > 10 ? 37 : state.hero.name.length > 6 ? 50 : 66;
   const endWidth = -75;
@@ -64,17 +67,17 @@ const HeroSection: React.FC<HeroSectionProps> = ({ height: deviceHeight, width: 
 
   return (
     <Pressable flex={1} onPress={() => handleNavigation()}>
-      <LinearGradient end={{ x: 0.5, y: 1 }} colors={heroColors} style={styles.heroGradient} />
-      <Animated.View position="absolute" left={20} top={25} zIndex={1} style={{ transform: [{ translateX: slideAnim }], opacity: opacityAnim }}>
-        <HeroImage width={deviceHeight * 0.4} height={deviceHeight * 0.4} {...propsForHeroImage} />
+      <LinearGradient start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }} colors={heroColors} style={styles.heroGradient} />
+      <Animated.View position="absolute" left={20} top={5} zIndex={1} style={{ transform: [{ translateX: slideAnim }], opacity: opacityAnim }}>
+        <HeroImage width={deviceHeight * 0.4} height={deviceHeight * 0.4} skin={equippedSkin} {...propsForHeroImage} />
       </Animated.View>
-      <VStack position="absolute" right={1} top={25}>
-        <Text textAlign="right" fontSize={nameSize} fontFamily="heading">
+      <VStack position="absolute" right={1} top={5} space={1}>
+        <HeroTitle title={equippedTitle} justifyContent="flex-end" />
+
+        <Text mt={-3} textAlign="right" fontSize={nameSize} fontFamily="heading">
           {state.hero.name}
         </Text>
-        <Text color="primary.800" mt={-8} textAlign="right" fontSize={27} fontFamily="heading">
-          {state.hero.alias}
-        </Text>
+
         {rewards && renderRewards(rewards)}
       </VStack>
     </Pressable>

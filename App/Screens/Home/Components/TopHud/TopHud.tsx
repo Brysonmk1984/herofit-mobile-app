@@ -3,7 +3,7 @@ import { Box, Image, View, Text } from "native-base";
 import XpProg from "./XpProg";
 import HealthProg from "./HealthProg";
 import { Dimensions } from "react-native";
-import HeroTitle from "./HeroTitle";
+import HeroTitle from "../../../../Components/HeroTitle";
 import { CountdownTimer } from "./CountdownTimer";
 import StatusBar from "./StatusBar";
 import { GlobalStateContext } from "../../../../store";
@@ -39,7 +39,7 @@ export const TopHud: React.FC<TopHudProps> = ({ equippedTitle }) => {
             <Image size={windowWidth * 0.32} source={require("../../../../../assets/images/misc/hf-logo.webp")} alt="HeroFit Logo" />
           </Box>
           <View ml={8} mt={0}>
-            <HeroTitle title={equippedTitle} />
+            <HeroTitle title={equippedTitle} mt={-10} ml={-8} />
             <HealthProg name={hero.name} windowWidth={windowWidth} health={hero.health} maxHealth={hero.maxHealth} />
             <XpProg level={hero.level} albedo={hero.albedo} windowWidth={windowWidth} xp={hero.activityXP + hero.battleXP} thisLevelStartXp={hero.thisLevelStartXp} nextLevelStartXp={hero.nextLevelStartXp} />
           </View>

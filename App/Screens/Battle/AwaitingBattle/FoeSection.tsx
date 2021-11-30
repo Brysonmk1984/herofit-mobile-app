@@ -42,18 +42,20 @@ const FoeSection: React.FC<FoeSectionProps> = ({ height: deviceHeight, width: de
 
   return (
     <Pressable flex={1} onPress={() => handleNavigation()}>
-      <LinearGradient end={{ x: 1, y: 0.5 }} colors={foeColors} style={styles.foeGradient} />
-      <Animated.View position="absolute" right={150} bottom={-25} zIndex={1} style={{ transform: [{ translateX: slideAnim }], opacity: opacityAnim }}>
+      <LinearGradient start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }} colors={foeColors} style={styles.foeGradient} />
+      <Animated.View position="absolute" right={130} bottom={-25} zIndex={1} style={{ transform: [{ translateX: slideAnim }], opacity: opacityAnim }}>
         <FoeImage width={deviceHeight * 0.35} height={deviceHeight * 0.35} foeType={foe.type} heroCharacterName={foe.type === "Shadow-Self" ? character : null} />
       </Animated.View>
       <VStack position="absolute" left={1} bottom={1}>
-        <Text fontSize={nameSize} fontFamily="heading">
-          {foe.name}
-        </Text>
-        <Text color="primary.800" mt={-8} fontSize={26} fontFamily="heading">
-          {foe.type}
-        </Text>
-        <HStack mt={-8}>
+        <Box>
+          <Text fontSize={nameSize} fontFamily="heading">
+            {foe.name}
+          </Text>
+          <Text mt={-5} color="primary.800" fontSize={26} fontFamily="heading">
+            {foe.type}
+          </Text>
+        </Box>
+        <HStack>
           <Text mr={1}>
             <Icon iconName="bullseye" size={16} color="primary.800" />
           </Text>
