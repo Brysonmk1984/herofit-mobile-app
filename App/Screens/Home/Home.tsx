@@ -53,6 +53,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   const appState = useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
   const [backgroundAnimation, setBackgroundAnimation] = useState(null);
+  const openBottomDrawerFromParent = useRef(null);
 
   async function handleHeroUpgrade(activities: Activity[]) {
     const user = state.user;
@@ -181,7 +182,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
         </View>
         {/* BOTTOM CONSOLE */}
 
-        <BottomDrawer hero={state.hero} newActivitiesAvailable={newActivities.length > 0 ? true : false} latestBattle={state.latestBattle} user={state.user} setBottomDrawerOpen={setBottomDrawerOpen} bottomDrawerHeight={bottomDrawerHeight} initialDisabledLinks={state.initialHomescreenLoad} />
+        <BottomDrawer hero={state.hero} newActivitiesAvailable={newActivities.length > 0 ? true : false} latestBattle={state.latestBattle} user={state.user} setBottomDrawerOpen={setBottomDrawerOpen} bottomDrawerHeight={bottomDrawerHeight} initialDisabledLinks={state.initialHomescreenLoad} openBottomDrawerFromParent={openBottomDrawerFromParent} />
 
         {/* MODALS */}
         <SignupToSave id="SignupToSave" modalAction={() => dispatch({ type: "SET INITIAL HOMESCREEN LOAD", payload: { initialHomescreenLoad: "Register" } })} />
@@ -189,7 +190,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
         <ChooseActivityEntry id="ChooseActivityEntry" />
         <FeedbackChoice id="FeedbackChoice" />
         <SignupFinished id="SignupFinished" />
-        <GoToBattle id="GoToBattle" goTo={navigation.push} heroId={hero.id} />
+        <GoToBattle id="GoToBattle" goTo={navigation.push} heroId={hero.id} openBottomDrawerFromParent={() => openBottomDrawerFromParent.current()} />
 
         {newActivities.length ? <ActivityUpgrade id="ActivityUpgrade" activities={newActivities} modalAction={() => handleHeroUpgrade(newActivities)} goBack={navigation.push} state={state} closeModal={closeModal} setNewActivities={setNewActivities} /> : null}
 

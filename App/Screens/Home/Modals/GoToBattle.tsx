@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Heading, Text, Box, View, Pressable, Link } from "native-base";
+import { Heading, Text, Box, View, Pressable, Link, HStack, VStack, Image } from "native-base";
 import { CharacterModal } from "../../../Components/ModalTemplates/ModalTemplates";
 import { BodyContent } from "../../../Components/ModalTemplates/BasicModal/Content";
 import { GlobalStateContext } from "../../../store";
@@ -11,6 +11,7 @@ import debugErrors from "../../../common/debugErrors";
 import { sendHeroToBattle } from "../../../api/battle";
 import { ModalActionHeader } from "../../../Components/ModalTemplates/ModalActionHeader";
 import * as WebBrowser from "expo-web-browser";
+import { HeroImage } from "../../../Components/HeroImage/HeroImage";
 
 interface GoToParams {
   foe: Foe;
@@ -20,9 +21,10 @@ interface GoToParams {
 interface GoToBattleProps {
   id: string;
   goTo: (navigator: string, options: { screen: string; params: GoToParams }) => void;
+  openBottomDrawerFromParent: (isOpen: boolean) => void;
 }
 
-export const GoToBattle: React.FC<GoToBattleProps> = ({ id, goTo }) => {
+export const GoToBattle: React.FC<GoToBattleProps> = ({ id, goTo, openBottomDrawerFromParent }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { openModal, closeModal } = useModal();
   const [loading, setLoading] = useState(false);
@@ -33,26 +35,17 @@ export const GoToBattle: React.FC<GoToBattleProps> = ({ id, goTo }) => {
   let goToBattleOwlAdvice,
     goToBattleActionHeader,
     goToBattleActionText,
-    goToBattleText,
     disabledButton = false;
 
-  if (userStatus === "unconfirmed") {
-    goToBattleOwlAdvice = `Hooo! You may think you're ready for battke, but you must do something for me first!`;
-    goToBattleActionHeader = "caution";
-    goToBattleActionText = "Action Required - Verify Account";
-    goToBattleText = "Before you can go to battle, you must verify your account by clicking the link sent to your email.";
-    disabledButton = true;
-  } else if (hero.restedEnough) {
+  if (hero.restedEnough) {
     goToBattleOwlAdvice = `The Dark Forces are ruthless adversaries with powerful abilities... attacking the mind and flesh! But I've trained you well, go get em!`;
     goToBattleActionHeader = "info";
     goToBattleActionText = "Battles happen automatically at 2 AM MST \n (for Europeans, that's 10 am CET)";
-    goToBattleText = "\u2022 Earn XP, Photon Tokens, & items depending on the outcome \n\n  \u2022 How you exercise, spend your QP, and which pet you use drastically affect your battles \n\n    \u2022 Losing will 'Knock Out' your hero and force a night off ";
     disabledButton = false;
   } else {
-    goToBattleOwlAdvice = `You are in no condition to battle the Dark Forces. Give your wounds time to heal, my young student.`;
+    goToBattleOwlAdvice = `HOO!! Look at you.. You are in no condition to battle the Dark Forces. Give your wounds time to heal, my young neonate.`;
     goToBattleActionHeader = "error";
     goToBattleActionText = "Health is too low!";
-    goToBattleText = `${hero.name} must have at least ${Math.ceil(hero.maxHealth * 0.8)} Health (80% recovered) before going to go to battle. Your current recovery rate is ${hero.healthRegenRate} health per hour. Heal faster with more Quantum Points in 'Recovery', or buy a Health Potion.`;
     disabledButton = true;
   }
 
@@ -80,14 +73,49 @@ export const GoToBattle: React.FC<GoToBattleProps> = ({ id, goTo }) => {
     }
   }
 
+  function handlePotionLink() {
+    closeModal("GoToBattle");
+    openBottomDrawerFromParent();
+  }
+
   return (
     <CharacterModal id={id} modalOpen={state.modalQueue[0] === id} speech={goToBattleOwlAdvice} buttonText="Go To Battle" disabled={disabledButton} modalAction={() => handleGoToBattle()}>
       <ModalActionHeader type={goToBattleActionHeader} text={goToBattleActionText} />
       <BodyContent>
-        <View px={3}>
-          <Text fontSize="md">{goToBattleText}</Text>
+        <View>
+          {hero.restedEnough ? (
+            <VStack>
+              <HStack space={5}>
+                <Image source={require("../../../../assets/images/misc/photon_stack.webp")} size={50} alt="Photon Tokens" />
+                <Box flex={1}>
+                  <Text fontSize="md">Earn Photon Tokens, XP & items depending on the outcome</Text>
+                </Box>
+              </HStack>
+              <HStack space={5}>
+                <Image source={require("../../../../assets/images/misc/quantum_points.webp")} size={50} alt="Photon Tokens" />
+                <Box flex={1}>
+                  <Text fontSize="md">How you exercise, spend your QP, and which pet you use drastically affect your battles</Text>
+                </Box>
+              </HStack>
+              <HStack space={5}>
+                <HeroImage character={hero.character} status="Knocked Out" width={50} height={50} />
+                <Box flex={1}>
+                  <Text fontSize="md">Losing will 'Knock Out' your hero and force a night off</Text>
+                </Box>
+              </HStack>
+            </VStack>
+          ) : (
+            <Text>
+              {hero.name} must have at least <Text color="base.highlight">{Math.ceil(hero.maxHealth * 0.8)}</Text> Health (80% recovered) before going to go to battle. Your current recovery rate is <Text color="base.highlight">{hero.healthRegenRate}</Text> health per hour. Heal faster with more Quantum Points in 'Recovery', or use a{" "}
+              <Link mb={-1} onPress={handlePotionLink}>
+                {" "}
+                Health Potion{" "}
+              </Link>
+              .
+            </Text>
+          )}
 
-          <Link onPress={() => WebBrowser.openBrowserAsync(`https://herofit.io/battles/`)} alignSelf="center" my={3} _text={{ fontSize: "xl" }}>
+          <Link onPress={() => WebBrowser.openBrowserAsync(`https://herofit.io/battles/`)} alignSelf="center" my={6} _text={{ fontSize: "xl" }}>
             Learn More
           </Link>
 

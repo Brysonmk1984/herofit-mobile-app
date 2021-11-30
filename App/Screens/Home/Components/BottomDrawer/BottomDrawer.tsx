@@ -28,9 +28,10 @@ interface BottomDrawerProps {
   setBottomDrawerOpen: (isOpen: boolean) => void;
   bottomDrawerHeight: number;
   initialDisabledLinks: boolean;
+  openBottomDrawerFromParent: React.MutableRefObject<any>;
 }
 
-const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailable, latestBattle, user, setBottomDrawerOpen, bottomDrawerHeight, initialDisabledLinks }) => {
+const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailable, latestBattle, user, setBottomDrawerOpen, bottomDrawerHeight, initialDisabledLinks, openBottomDrawerFromParent }) => {
   const refRBSheet = useRef({ open: () => null });
 
   const navigation = useNavigation();
@@ -149,6 +150,10 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
       }
     }
   }, [latestBattle]);
+
+  useEffect(() => {
+    openBottomDrawerFromParent.current = () => refRBSheet.current.open();
+  }, []);
 
   // TESTING
   // useEffect(() => {
