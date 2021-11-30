@@ -37,6 +37,7 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
   const { openModal } = useModal();
   const { state } = useContext(GlobalStateContext);
   const isStravaUser = "strava" === checkDataSrcType(state.user.dataSrcId);
+  const [showDateTimeWheel, setShowDateTimeWheel] = useState(false);
 
   // Used to speed up inital screen rendering
   const { mounted } = useDidMount();
@@ -140,6 +141,11 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
     });
   }
 
+  function handleModalOpening(modalName: string) {
+    setShowDateTimeWheel(false);
+    openModal(modalName);
+  }
+
   useEffect(() => {
     checkIfFormIsValid();
   }, [activity, duration]);
@@ -163,17 +169,18 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
 
             {/* Date - Time - Duration Input */}
             <DateTimeDuration
-              setParentDate={setDate}
               initialDate={initialDate}
+              setShowDateTimeWheel={setShowDateTimeWheel}
+              showDateTimeWheel={showDateTimeWheel}
               render={() => {
-                return <PressableInput flex={1} ml={2} mr={2} action={() => openModal("DurationModal")} value={duration} />;
+                return <PressableInput flex={1} ml={2} mr={2} action={() => handleModalOpening("DurationModal")} value={duration} />;
               }}
             />
             <HStack>
               {/* Distance Input */}
-              <PressableInput flex={1} ml={2} mr={2} action={() => openModal("DistanceModal")} value={`${distance} mi`} />
+              <PressableInput flex={1} ml={2} mr={2} action={() => handleModalOpening("DistanceModal")} value={`${distance} mi`} />
               {/* Speed Input */}
-              <PressableInput flex={1} ml={2} mr={2} action={() => openModal("SpeedModal")} value={`${speed} mph`} />
+              <PressableInput flex={1} ml={2} mr={2} action={() => handleModalOpening("SpeedModal")} value={`${speed} mph`} />
             </HStack>
             {helperText && <HelperText type="error" text={helperText} />}
           </VStack>

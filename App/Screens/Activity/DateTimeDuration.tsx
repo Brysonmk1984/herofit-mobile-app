@@ -1,22 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { Center, Box, HStack } from "native-base";
-import { Pressable, View, Button, Platform } from "react-native";
-import { onChange } from "react-native-reanimated";
+import { HStack } from "native-base";
+import { View, Platform } from "react-native";
 import PressableInput from "../../Components/PressableInput";
 import moment from "moment";
 
 interface DateTimeDurationProps {
   render: () => React.ReactChild;
-  setParentDate: (date: Date) => void;
   initialDate: Date;
+  showDateTimeWheel: boolean;
+  setShowDateTimeWheel: (showDateTimeWheel: boolean) => void;
 }
 
-const DateTimeDuration: React.FC<DateTimeDurationProps> = ({ render, setParentDate, initialDate }) => {
+const DateTimeDuration: React.FC<DateTimeDurationProps> = ({ render, initialDate, showDateTimeWheel, setShowDateTimeWheel }) => {
   //For both date & time
   const [date, setDate] = useState(initialDate);
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
+
+  const oneWeekAgo = moment().subtract(1, "week").toDate();
+  const tomorrow = moment().add(1, "day").toDate();
 
   const platform = Platform.OS;
 
@@ -29,6 +32,7 @@ const DateTimeDuration: React.FC<DateTimeDurationProps> = ({ render, setParentDa
   const showMode = (currentMode: "date" | "time") => {
     setShow(true);
     setMode(currentMode);
+    setShowDateTimeWheel(true);
   };
 
   const showDatepicker = () => {
@@ -39,11 +43,12 @@ const DateTimeDuration: React.FC<DateTimeDurationProps> = ({ render, setParentDa
     showMode("time");
   };
 
+  // Needed to control hiding the date time wheel from parent component when a user presses on one of the inputs besides Date / Time
   useEffect(() => {
-    if (date) {
+    if (showDateTimeWheel === false) {
       setShow(false);
     }
-  }, [date]);
+  }, [showDateTimeWheel]);
 
   return (
     <View>
@@ -53,7 +58,7 @@ const DateTimeDuration: React.FC<DateTimeDurationProps> = ({ render, setParentDa
         {/* Rendering the Duration input */}
         {render()}
       </HStack>
-      {show && <DateTimePicker display={Platform.OS === "ios" ? "spinner" : "default"} value={date} mode={mode} is24Hour={false} onChange={onDateTimeChange} />}
+      {show && <DateTimePicker minimumDate={oneWeekAgo} maximumDate={tomorrow} display={Platform.OS === "ios" ? "spinner" : "default"} value={date} mode={mode} is24Hour={false} onChange={onDateTimeChange} />}
     </View>
   );
 };

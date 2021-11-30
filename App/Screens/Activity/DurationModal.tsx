@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
+import { Alert } from "react-native";
 import { Text } from "native-base";
 import WheelSelectModal from "../../Components/ModalTemplates/WheelSelectModal/WheelSelectModal";
 import ScrollPicker from "react-native-wheel-scrollview-picker";
 import { GlobalStateContext } from "../../store";
 import useModal from "../../common/hooks/useModal";
+import { createAlert } from "../../common/helperFunctions";
 
 interface DurationModalProps {
   id: string;
@@ -18,6 +20,7 @@ const DurationModal: React.FC<DurationModalProps> = ({ id, title, modalAction, d
   const [minutes, setMinutes] = useState<number | undefined>(0);
   const [onChangeHoursCalled, setOnChangeHoursCalled] = useState(false);
   const [onChangeMinutesCalled, setOnChangeMinutesCalled] = useState(false);
+  const [hoursSelectedIndex, setHoursSelectedIndex] = useState(0);
   const { closeModal } = useModal();
 
   function handleModalAction() {
@@ -43,11 +46,38 @@ const DurationModal: React.FC<DurationModalProps> = ({ id, title, modalAction, d
     <WheelSelectModal id={id} modalOpen={state.modalQueue[0] === id} title={title} modalAction={handleModalAction}>
       <ScrollPicker
         dataSource={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50]}
-        selectedIndex={0}
+        selectedIndex={hoursSelectedIndex}
         renderItem={(data, index) => <Text>{data}</Text>}
         onValueChange={(data, selectedIndex) => {
-          setHours(data);
-          setOnChangeHoursCalled(true);
+          if (data > 4) {
+            Alert.alert(
+              "That's a long activity!",
+              `Are you sure you worked out for ${data} Hours?`,
+              [
+                {
+                  text: "Just Kidding!",
+                  style: "cancel",
+                  onPress: () => {
+                    setHoursSelectedIndex(0);
+                    setHours(0);
+                    setOnChangeHoursCalled(false);
+                    handleModalAction();
+                  },
+                },
+                {
+                  text: "Yep (flex)",
+                  onPress: () => {
+                    setHours(data);
+                    setOnChangeHoursCalled(true);
+                  },
+                },
+              ],
+              { cancelable: true },
+            );
+          } else {
+            setHours(data);
+            setOnChangeHoursCalled(true);
+          }
         }}
         wrapperHeight={120}
         wrapperWidth={30}
@@ -62,7 +92,6 @@ const DurationModal: React.FC<DurationModalProps> = ({ id, title, modalAction, d
         selectedIndex={0}
         renderItem={(data, index) => <Text>{data.toString() || "0"}</Text>}
         onValueChange={(data, selectedIndex) => {
-          console.log(data, typeof data);
           setMinutes(data);
           setOnChangeMinutesCalled(true);
         }}
