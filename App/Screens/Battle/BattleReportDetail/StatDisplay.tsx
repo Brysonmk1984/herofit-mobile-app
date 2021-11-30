@@ -90,23 +90,23 @@ const StatDisplay: React.FC<StatDisplayProps> = ({ battleReport }) => {
       .join("\n");
 
     return (
-      <HStack>
+      <HStack alignItems="center">
         {/* Effect - Hero */}
         <Box flex={3} px={1}>
           <Text fontSize="sm">{effectHero}</Text>
         </Box>
         {/* Stat - Hero */}
-        <Box flex={1} p={1} bgColor="base.highlightTransparent">
+        <Box flex={1} py={1} bgColor="base.highlightTransparent" borderLeftWidth={1}>
           <Text color={determineStatColor(hero[stat], brh[stat])} fontSize="2xl" fontFamily="heading" textAlign="center">
             {Math.floor(statHero)}
           </Text>
         </Box>
         {/* Stat */}
-        <Box alignItems="center" flex={1} py={1} bgColor="base.highlightTransparent">
+        <Box alignItems="center" py={1} h="100%" bgColor="base.highlightTransparent">
           <Icon iconName={stat} size={30} color={`base.${stat}`} />
         </Box>
         {/* Stat - Foe */}
-        <Box flex={1} p={1} bgColor="base.highlightTransparent">
+        <Box flex={1} py={1} bgColor="base.highlightTransparent" borderRightWidth={1}>
           <Text color={determineStatColor(foe[stat], brf[stat])} fontSize="2xl" fontFamily="heading" textAlign="center">
             {Math.floor(statFoe)}
           </Text>
@@ -125,7 +125,7 @@ const StatDisplay: React.FC<StatDisplayProps> = ({ battleReport }) => {
     const battleDate = moment(updatedAt);
     const isAfterChange = battleDate.isAfter("2021-10-14");
     return isAfterChange ? (
-      <Center>
+      <Center mb={2}>
         <Text fontSize={20} color="primary.800">
           {battleDate.format("MM-DD-YYYY")}
         </Text>
@@ -140,16 +140,12 @@ const StatDisplay: React.FC<StatDisplayProps> = ({ battleReport }) => {
   }, []);
 
   return (
-    <View>
+    <View mt={-8}>
       <ScrollView>
         {/* DATE */}
         {renderDate(updatedAt)}
-        {/* SCENARIO */}
-        <Center bgColor="base.highlightTransparent" borderTopWidth={1} borderBottomWidth={1}>
-          <Text fontSize={13}>Scenario: {determineScenario(scenario).type}</Text>
-        </Center>
         {/* NAMES */}
-        <HStack bgColor="base.highlightTransparent">
+        <HStack bgColor="base.highlightTransparent" borderTopWidth={1}>
           <Text fontSize={hero.name.length > 12 ? 30 : hero.name.length > 8 ? 35 : 40} flex="1" fontFamily="heading" textAlign="left" px={2} borderRightWidth={1}>
             {hero.name}
           </Text>
@@ -172,6 +168,10 @@ const StatDisplay: React.FC<StatDisplayProps> = ({ battleReport }) => {
         </HStack>
         {/* STATS */}
         <FlatList data={stats} renderItem={({ item }) => renderStatRows(item)} keyExtractor={(item, index) => index.toString()} />
+        {/* SCENARIO */}
+        <Center bgColor="base.highlightTransparent" py={1} borderTopWidth={1} borderBottomWidth={1}>
+          <Text fontSize={13}>Scenario: {determineScenario(scenario).type}</Text>
+        </Center>
         {postBattleEffects.length ? (
           <Center p={2} borderTopWidth={1}>
             <Text fontFamily="heading" fontSize={20}>

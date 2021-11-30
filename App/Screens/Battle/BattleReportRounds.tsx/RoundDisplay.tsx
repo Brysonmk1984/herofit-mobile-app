@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, ScrollView, Box, VStack, HStack, FlatList } from "native-base";
+import { View, Text, ScrollView, Box, VStack, HStack, FlatList, Center } from "native-base";
 import { BattleDetailOnly } from "../../../common/types-battle";
 import { Icon, Subheader } from "../../../Components/CustomComponents";
 
@@ -10,16 +10,20 @@ interface RoundDisplayProps {
 const RoundDisplay: React.FC<RoundDisplayProps> = ({ battleReport }) => {
   function renderAttackDamage(didCrit: boolean, damage: number) {
     return didCrit ? (
-      <Text mt={-0.5} fontSize="2xl" color="base.fire" fontWeight="bold" fontStyle="italic" textAlign="center" fontFamily="handwriting">
+      <Text mt={-2} fontSize="3xl" color="base.fire" fontWeight="bold" fontStyle="italic" textAlign="center" fontFamily="handwriting">
         {damage}
       </Text>
     ) : (
-      <Text textAlign="center">{damage}</Text>
+      <Text fontSize="md" lineHeight="2xl" textAlign="center">
+        {damage}
+      </Text>
     );
   }
 
   function renderRoundRow(round) {
     const { turn, aggressor, defender, elementalDamageDealt, physicalDamageDealt, physicalReduction, elementalReduction, elementalProcs, aggressorHealthLeft, defenderHealthLeft } = round;
+    const aHealthLeft = Math.floor(aggressorHealthLeft);
+    const dHealthLeft = Math.floor(defenderHealthLeft);
     const amountBlocked = physicalReduction + elementalReduction.total;
     const attackAmount = physicalDamageDealt + elementalDamageDealt.total + amountBlocked;
     const aggressorIsHero = aggressor === "Avatar";
@@ -30,16 +34,18 @@ const RoundDisplay: React.FC<RoundDisplayProps> = ({ battleReport }) => {
     const didThornsToFoe = elementalProcs.earth?.thornsDamageToAttacker > 0 && aggressor === "Foe";
 
     return (
-      <HStack bgColor={aggressorIsHero ? "base.highlightTransparent" : "transparent"}>
+      <HStack bgColor={aggressorIsHero ? "base.highlightMoreTransparent" : "transparent"}>
         <HStack flex={1}>
           <Text fontFamily="heading" fontSize="2xl" ml={1} mr={2}>
             {turn + 1}
           </Text>
-          <Text>{aggressor}</Text>
+          <Text fontSize="md" lineHeight="2xl">
+            {aggressor}
+          </Text>
         </HStack>
         <Box flex={1}>
           {didEvade ? (
-            <Text fontStyle="italic" fontSize="sm" pt={1} textAlign="center">
+            <Text fontFamily="handwriting" fontSize="lg" textAlign="center" lineHeight="2xl">
               Missed!
             </Text>
           ) : (
@@ -48,39 +54,47 @@ const RoundDisplay: React.FC<RoundDisplayProps> = ({ battleReport }) => {
         </Box>
         <Box flex={1}>
           {didEvade ? (
-            <Text textAlign="center" fontStyle="italic" color="base.air">
+            <Text fontFamily="handwriting" fontSize="lg" textAlign="center" color="base.air" lineHeight="2xl">
               Evaded
             </Text>
           ) : (
-            <Text textAlign="center">{amountBlocked}</Text>
+            <Text fontSize="md" textAlign="center" lineHeight="2xl">
+              {amountBlocked}
+            </Text>
           )}
         </Box>
         <Box flex={1}>
           {didHeal ? (
-            <Text color="base.water" fontWeight="bold" mt={0.5} textAlign="center">
+            <Text fontFamily="handwriting" fontSize="2xl" color="base.water" textAlign="center">
               {elementalProcs.water.amountHealed}
             </Text>
           ) : (
-            <Text textAlign="center">{0}</Text>
+            <Text fontSize="md" textAlign="center" lineHeight="2xl">
+              0
+            </Text>
           )}
         </Box>
         <HStack justifyContent="space-around" flex={0.5}>
           {didThornsToHero ? (
-            <Text textAlign="center" color="base.earth" fontWeight="bold" mt={0.5}>
-              {aggressor === "Avatar" ? aggressorHealthLeft : defenderHealthLeft}
+            <Text fontFamily="handwriting" textAlign="center" fontSize="xl" color="base.earth">
+              {aggressor === "Avatar" ? aHealthLeft : dHealthLeft}
             </Text>
           ) : (
-            <Text textAlign="center">{aggressor === "Avatar" ? aggressorHealthLeft : defenderHealthLeft}</Text>
+            <Text fontSize="md" textAlign="center" lineHeight="2xl">
+              {aggressor === "Avatar" ? aHealthLeft : dHealthLeft}
+            </Text>
           )}
         </HStack>
 
         <HStack justifyContent="space-around" flex={0.5}>
           {didThornsToFoe ? (
-            <Text textAlign="center" color="base.earth" fontWeight="bold" mt={0.5}>
-              {aggressor === "Foe" ? aggressorHealthLeft : defenderHealthLeft}
+            <Text fontFamily="handwriting" fontSize="xl" textAlign="center" color="base.earth" fontWeight="bold">
+              {aggressor === "Foe" ? aHealthLeft : dHealthLeft}
             </Text>
           ) : (
-            <Text textAlign="center">{aggressor === "Foe" ? aggressorHealthLeft : defenderHealthLeft}</Text>
+            <Text fontSize="md" textAlign="center" lineHeight="2xl">
+              {aggressor === "Foe" ? aHealthLeft : dHealthLeft}
+            </Text>
           )}
         </HStack>
       </HStack>
@@ -89,59 +103,63 @@ const RoundDisplay: React.FC<RoundDisplayProps> = ({ battleReport }) => {
 
   return (
     <View>
-      <Box px={5} mb={-2} pb={-2}>
-        <Subheader dividerColor="base.primary" text="Round - By - Round" />
+      <Box mt={-6} mb={2} pb={-2}>
+        <Center mb={2}>
+          <Text fontSize={20} color="primary.800">
+            Round - By - Round
+          </Text>
+        </Center>
       </Box>
       <ScrollView px={1}>
         {/* TABLE */}
-        <View borderBottomWidth={1} pb={5} mb={5}>
+        <View borderBottomWidth={1} mb={5}>
           {/* HEADER */}
-          <HStack borderBottomWidth={1}>
-            <VStack space={0.2} flex={1}>
-              <Text textAlign="center" fontFamily="heading">
+          <HStack bgColor="base.highlightTransparent" borderTopWidth={1} borderBottomWidth={1} pb={1}>
+            <VStack space={0} flex={1}>
+              <Text textAlign="center" fontFamily="heading" fontSize="lg">
                 Round
               </Text>
-              <Text textAlign="center" color="primary.700" fontSize="sm">
+              <Text textAlign="center" color="primary.700" fontSize="sm" mt={-1}>
                 attacker
               </Text>
             </VStack>
-            <VStack space={0.2} flex={1}>
-              <Text textAlign="center" fontFamily="heading">
+            <VStack space={0} flex={1}>
+              <Text textAlign="center" fontFamily="heading" fontSize="lg">
                 Attack
               </Text>
-              <Text textAlign="center" color="primary.700" fontSize="sm">
+              <Text textAlign="center" color="primary.700" fontSize="sm" mt={-1}>
                 attacker
               </Text>
             </VStack>
-            <VStack space={0.2} flex={1}>
-              <Text textAlign="center" fontFamily="heading">
+            <VStack space={0} flex={1}>
+              <Text textAlign="center" fontFamily="heading" fontSize="lg">
                 Blocked
               </Text>
-              <Text textAlign="center" color="primary.700" fontSize="sm">
+              <Text textAlign="center" color="primary.700" fontSize="sm" mt={-1}>
                 defender
               </Text>
             </VStack>
-            <VStack space={0.2} flex={1}>
-              <Text textAlign="center" fontFamily="heading">
+            <VStack space={0} flex={1}>
+              <Text textAlign="center" fontFamily="heading" fontSize="lg">
                 Healed
               </Text>
-              <Text textAlign="center" color="primary.700" fontSize="sm">
+              <Text textAlign="center" color="primary.700" fontSize="sm" mt={-1}>
                 attacker
               </Text>
             </VStack>
-            <VStack space={0.2} flex={0.5}>
-              <Text textAlign="center" fontFamily="heading">
+            <VStack space={0} flex={0.5}>
+              <Text textAlign="center" fontFamily="heading" fontSize="lg">
                 Life
               </Text>
-              <Text textAlign="center" color="primary.700" fontSize="sm">
+              <Text textAlign="center" color="primary.700" fontSize="sm" mt={-1}>
                 hero
               </Text>
             </VStack>
-            <VStack space={0.2} flex={0.5}>
-              <Text textAlign="center" fontFamily="heading">
+            <VStack space={0} flex={0.5}>
+              <Text textAlign="center" fontFamily="heading" fontSize="lg">
                 Life
               </Text>
-              <Text textAlign="center" color="primary.700" fontSize="sm">
+              <Text textAlign="center" color="primary.700" fontSize="sm" mt={-1}>
                 foe
               </Text>
             </VStack>
@@ -150,44 +168,34 @@ const RoundDisplay: React.FC<RoundDisplayProps> = ({ battleReport }) => {
           <FlatList data={battleReport.roundBreakdown} renderItem={({ item }) => renderRoundRow(item)} keyExtractor={(item, i) => i.toString()} />
         </View>
         {/* LEGEND */}
-        <Box>
-          <Text textAlign="center" fontFamily="heading" fontSize="lg" mb={3}>
-            Elemental Effects
-          </Text>
-          <HStack mb={3}>
-            <HStack justifyContent="flex-start" flex={1}>
-              <Icon iconName="fire" size={25} color="base.fire" />
-              <Text color="base.fire" mr={2} fontSize="lg" fontWeight="bold" fontStyle="italic">
-                Critical Strike
-              </Text>
-              <Icon iconName="critical_strike" size={25} color="base.fire" />
-            </HStack>
-            <HStack flex={1}>
-              <Icon iconName="earth" size={25} color="base.earth" />
 
-              <Text color="base.earth" ml={2} fontSize="md" fontWeight="bold">
-                Thorns Damage
-              </Text>
-              <Icon iconName="thorns_damage" size={25} color="base.earth" />
-            </HStack>
+        <HStack justifyContent="space-between" mb={3} flexWrap="wrap">
+          <HStack>
+            <Icon iconName="critical_strike" size={18} color="base.fire" />
+            <Text color="base.fire" fontSize="sm" fontWeight="bold" fontStyle="italic">
+              Critical Strike
+            </Text>
           </HStack>
           <HStack>
-            <HStack justifyContent="flex-start" flex={1}>
-              <Icon iconName="water" size={25} color="base.water" />
-              <Text color="base.water" mt={-1} mr={2} fontSize="md" fontWeight="bold">
-                Vampiric Touch
-              </Text>
-              <Icon iconName="vampiric_touch" size={25} color="base.water" />
-            </HStack>
-            <HStack flex={1}>
-              <Icon iconName="air" size={25} color="base.air" />
-              <Text color="base.air" mt={-1} ml={2} fontSize="md" fontStyle="italic">
-                Evasion
-              </Text>
-              <Icon iconName="evasion" size={25} color="base.air" />
-            </HStack>
+            <Icon iconName="thorns_damage" size={18} color="base.earth" />
+            <Text color="base.earth" fontSize="sm" fontWeight="bold">
+              Thorns Damage
+            </Text>
           </HStack>
-        </Box>
+
+          <HStack>
+            <Icon iconName="vampiric_touch" size={18} color="base.water" />
+            <Text color="base.water" fontSize="sm" fontWeight="bold">
+              Vampiric Touch
+            </Text>
+          </HStack>
+          <HStack>
+            <Icon iconName="evasion" size={18} color="base.air" />
+            <Text color="base.air" fontSize="sm" fontStyle="italic">
+              Evasion
+            </Text>
+          </HStack>
+        </HStack>
       </ScrollView>
     </View>
   );

@@ -14,17 +14,20 @@ import { Swipeable } from "react-native-gesture-handler";
 import StatDisplay from "./StatDisplay";
 import RoundDisplay from "../BattleReportRounds.tsx/RoundDisplay";
 import SpiralBackground from "../SpiralBackground";
+import SwipeForNextScreen from "../SwipeForNextScreen";
 
 const BattleReportDetail: React.FC<MainStackProps<"BattleReportDetail">> = ({ navigation, route }) => {
-  const { height } = useWindowDimensions();
-  const { outcome, scenario, roundBreakdown, avatar: hero, bra: brh, foe, brf, foeType, effects, updatedAt, seasonalBonusElement, effectProcs } = route.params.battleReport;
+  const { outcome } = route.params.battleReport;
 
   return (
     <ScreenContainer screenName={route.name} bg={<SpiralBackground outcome={outcome} />}>
-      <VStack>
-        <Header text={"Battle Report"} extraPadding={false} />
-        <StatDisplay battleReport={route.params.battleReport} />
-      </VStack>
+      <ScrollView>
+        <VStack>
+          <Header text={"Battle Report"} extraPadding={false} mt={-7} mb={-4} />
+          <StatDisplay battleReport={route.params.battleReport} />
+        </VStack>
+      </ScrollView>
+      <SwipeForNextScreen center={true} />
     </ScreenContainer>
   );
 };

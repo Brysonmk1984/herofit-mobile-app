@@ -5,16 +5,18 @@ import { MainStackProps } from "../../../common/types-navigator";
 import { Header, Icon, ScreenContainer, Subheader } from "../../../Components/CustomComponents";
 import RoundDisplay from "./RoundDisplay";
 import SpiralBackground from "../SpiralBackground";
+import SwipeForNextScreen from "../SwipeForNextScreen";
 
 const BattleReportDetail: React.FC<MainStackProps<"BattleReportDetail">> = ({ navigation, route }) => {
   const { outcome } = route.params.battleReport;
 
   return (
     <ScreenContainer screenName={route.name} bg={<SpiralBackground outcome={outcome} />}>
-      <VStack>
-        <Header text={"Battle Report"} extraPadding={false} />
+      <ScrollView>
+        <Header text={"Battle Report"} extraPadding={false} mt={-7} />
         <RoundDisplay battleReport={route.params.battleReport} />
-      </VStack>
+      </ScrollView>
+      <SwipeForNextScreen center={true} />
     </ScreenContainer>
   );
 };

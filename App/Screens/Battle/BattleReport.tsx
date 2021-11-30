@@ -30,10 +30,10 @@ const BattleReport: React.FC<BattleReportProps> = ({ navigation, route }) => {
     }
   }
 
-  // useEffect(() => {
-  //   updateBattleReportSeen({ id });
-  //   dispatch({ type: "SEEN BATTLE REPORT", payload: { latestBattle: { ...route.params.battleReport, seenReport: true } } });
-  // }, []);
+  useEffect(() => {
+    updateBattleReportSeen({ id });
+    dispatch({ type: "SEEN BATTLE REPORT", payload: { latestBattle: { ...route.params.battleReport, seenReport: true } } });
+  }, []);
 
   return (
     <PagerView style={styles.pagerView} initialPage={currentPage} onPageSelected={e => handleFinish(e)} onPageScrollStateChanged={e => handleFirstAndLastSwipes(e)} overdrag={true}>

@@ -9,6 +9,7 @@ import { BattleFoe, BattleOutcome } from "../../../common/types-battle";
 import Rewards from "./Rewards";
 import useInventory from "../../../common/hooks/useInventory";
 import Icon from "../../../Components/Icon";
+import SwipeForNextScreen from "../SwipeForNextScreen";
 
 interface BottomSectionProps {
   height: number;
@@ -57,20 +58,7 @@ const BottomSection: React.FC<BottomSectionProps> = ({ height: deviceHeight, out
         {contenderType === "hero" ? <HeroImage {...determinePropsForImage(contender, contenderType)} /> : <FoeImage {...determinePropsForImage(contender, contenderType)} />}
       </Animated.View>
       <Rewards reversedText={outcome !== "Avatar Wins"} topOrBottom={"bottom"} itemsAcquired={itemsAcquired} ptGain={ptGain} xpGain={xpGain} setPressedItem={setPressedItem} />
-      <Box position="absolute" zIndex="1000" bottom={2} left={5}>
-        <HStack>
-          <Text>Swipe for Next Screens</Text>
-          <Box
-            ml={4}
-            mt={-1.5}
-            style={{
-              transform: [{ rotateX: "-45deg" }, { rotateZ: "-45deg" }],
-            }}
-          >
-            <Icon iconName="bottom-right-3d-arrow" size={36} />
-          </Box>
-        </HStack>
-      </Box>
+      <SwipeForNextScreen position="absolute" />
     </Box>
   );
 };

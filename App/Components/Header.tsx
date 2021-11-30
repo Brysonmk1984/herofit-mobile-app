@@ -5,15 +5,16 @@ import herofitTheme from "../styles/herofitTheme";
 import Constants from "expo-constants";
 interface HeaderProps {
   text: string;
+  mt?: number;
   mb?: number;
   color?: string;
   bgColor?: string;
   extraPadding?: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ text, mb = 0, color, bgColor, extraPadding = Constants.platform.ios ? true : false }) => {
+const Header: React.FC<HeaderProps> = ({ text, mb = 0, mt, color, bgColor, extraPadding = Constants.platform.ios ? true : false }) => {
   return (
-    <Box flex={0.2} flexBasis={90} mt={extraPadding ? 6 : 0} mb={mb}>
+    <Box flex={0.2} flexBasis={90} mt={extraPadding ? 6 : 0} mb={mb} mt={mt}>
       <Center w="100%" h={100} bgColor={bgColor}>
         <Text color={color} style={Styles.textShadow} fontFamily="heading" fontSize="5xl">
           {text}
