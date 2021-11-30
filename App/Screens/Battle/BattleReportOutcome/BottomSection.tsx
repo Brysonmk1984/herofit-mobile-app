@@ -1,13 +1,14 @@
 import React, { useContext, useEffect, useRef } from "react";
-import { Box, VStack, Text, View } from "native-base";
+import { Box, VStack, Text, View, HStack } from "native-base";
 import { Animated, FlatList } from "react-native";
 import FoeImage from "../../../Components/FoeImage";
 import { HeroImage } from "../../../Components/HeroImage/HeroImage";
-import { capitalize, equippedSkin, getColorFromClassName, getColorFromItemName } from "../../../common/helperFunctions";
 import { GlobalStateContext } from "../../../store";
 import { CharacterName, Hero, Item } from "../../../common/types";
 import { BattleFoe, BattleOutcome } from "../../../common/types-battle";
 import Rewards from "./Rewards";
+import useInventory from "../../../common/hooks/useInventory";
+import Icon from "../../../Components/Icon";
 
 interface BottomSectionProps {
   height: number;
@@ -25,15 +26,16 @@ interface BottomSectionProps {
 const BottomSection: React.FC<BottomSectionProps> = ({ height: deviceHeight, outcome, contender, contenderType, xpGain, ptGain, itemsAcquired, character, setPressedItem }) => {
   const { state } = useContext(GlobalStateContext);
   const opacityAnim = useRef(new Animated.Value(0)).current;
+  const { equippedSkin } = useInventory(true);
 
   function determinePropsForImage(contender: Hero | BattleFoe, contenderType: "hero" | "foe") {
     if (contenderType === "hero") {
       const { character, equipped, alias } = contender as Hero;
-      return { width: deviceHeight * 0.5, height: deviceHeight * 0.5, character, alias, skin: equippedSkin(equipped) };
+      return { width: deviceHeight * 0.45, height: deviceHeight * 0.45, character, alias, skin: equippedSkin };
     } else {
       contender = contender as BattleFoe;
 
-      return { width: deviceHeight * 0.5, height: deviceHeight * 0.5, foeType: contender.type, heroCharacterName: contender.type === "Shadow-Self" ? character : null };
+      return { width: deviceHeight * 0.45, height: deviceHeight * 0.45, foeType: contender.type, heroCharacterName: contender.type === "Shadow-Self" ? character : null };
     }
   }
 
@@ -55,6 +57,20 @@ const BottomSection: React.FC<BottomSectionProps> = ({ height: deviceHeight, out
         {contenderType === "hero" ? <HeroImage {...determinePropsForImage(contender, contenderType)} /> : <FoeImage {...determinePropsForImage(contender, contenderType)} />}
       </Animated.View>
       <Rewards reversedText={outcome !== "Avatar Wins"} topOrBottom={"bottom"} itemsAcquired={itemsAcquired} ptGain={ptGain} xpGain={xpGain} setPressedItem={setPressedItem} />
+      <Box position="absolute" zIndex="1000" bottom={2} left={5}>
+        <HStack>
+          <Text>Swipe for Next Screens</Text>
+          <Box
+            ml={4}
+            mt={-1.5}
+            style={{
+              transform: [{ rotateX: "-45deg" }, { rotateZ: "-45deg" }],
+            }}
+          >
+            <Icon iconName="bottom-right-3d-arrow" size={36} />
+          </Box>
+        </HStack>
+      </Box>
     </Box>
   );
 };

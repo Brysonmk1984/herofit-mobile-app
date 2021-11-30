@@ -30,15 +30,18 @@ const BattleReport: React.FC<BattleReportProps> = ({ navigation, route }) => {
     }
   }
 
-  useEffect(() => {
-    updateBattleReportSeen({ id });
-    dispatch({ type: "SEEN BATTLE REPORT", payload: { latestBattle: { ...route.params.battleReport, seenReport: true } } });
-  }, []);
+  // useEffect(() => {
+  //   updateBattleReportSeen({ id });
+  //   dispatch({ type: "SEEN BATTLE REPORT", payload: { latestBattle: { ...route.params.battleReport, seenReport: true } } });
+  // }, []);
 
   return (
     <PagerView style={styles.pagerView} initialPage={currentPage} onPageSelected={e => handleFinish(e)} onPageScrollStateChanged={e => handleFirstAndLastSwipes(e)} overdrag={true}>
       <View key="1" bgColor="#000" alignItems="center">
         <Image size="80%" source={require("../../../assets/images/misc/hf-logo.webp")} alt="HeroFit Logo" resizeMode="contain" />
+        <Text fontFamily="heading" fontSize="5xl" mt={-16} color="base.primaryAlt">
+          - END -
+        </Text>
       </View>
 
       <View key="2">

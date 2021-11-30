@@ -85,6 +85,7 @@ const BattleReportOutcome: React.FC<MainStackProps<"BattleReportOutcome">> = ({ 
 
   return (
     <ScreenContainer screenName={route.name} bgColor={outcome === "Avatar Wins" ? colors.base.highlight : colors.base.lowlight}>
+      <ImageBackground style={styles.backgroundImage} source={backgroundImage} resizeMode="stretch" opacity={0.6} />
       {top && bottom ? (
         <>
           <TopSection height={height} {...specificProps(top, outcome, ptGain, xpGain, itemsAcquired)} />
@@ -92,7 +93,6 @@ const BattleReportOutcome: React.FC<MainStackProps<"BattleReportOutcome">> = ({ 
           <OutcomeSection height={height} top={top} bottom={bottom} outcome={outcome} endRound={legacyBattle ? null : roundBreakdown.length} legacyBattle={legacyBattle} />
         </>
       ) : null}
-      <ImageBackground style={styles.backgroundImage} source={backgroundImage} resizeMode="stretch" opacity={0.6} />
     </ScreenContainer>
   );
 };

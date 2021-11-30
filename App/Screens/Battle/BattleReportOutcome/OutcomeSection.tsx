@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { ImageBackground, StyleSheet } from "react-native";
 import { VStack, Text, Pressable, Box, Center } from "native-base";
 import { LinearGradient } from "expo-linear-gradient";
 import herofitTheme from "../../../styles/herofitTheme";
@@ -18,7 +18,6 @@ interface OutcomeSectionProps {
 }
 
 const OutcomeSection: React.FC<OutcomeSectionProps> = ({ height, push, top, bottom, outcome, endRound, legacyBattle = false }) => {
-  const gradient = ["transparent", "#ffffff", "transparent"];
   const topNameSize = determineNameSize(top.name.length);
   const bottomNameSize = determineNameSize(bottom.name.length);
 
@@ -30,13 +29,13 @@ const OutcomeSection: React.FC<OutcomeSectionProps> = ({ height, push, top, bott
     if (outcome === "Draw") {
       return (
         <Center>
-          <Text fontSize={topNameSize} fontFamily="heading">
+          <Text fontSize={topNameSize} lineHeight={topNameSize} fontFamily="heading">
             {top.name}
           </Text>
-          <Text style={styles.textShadow} fontSize={70} fontFamily="heading">
+          <Text style={styles.textShadow} fontSize={70} fontFamily="heading" lineHeight={90}>
             - draw -
           </Text>
-          <Text fontSize={bottomNameSize} fontFamily="heading">
+          <Text fontSize={bottomNameSize} lineHeight={bottomNameSize + 15} fontFamily="heading">
             {bottom.name}
           </Text>
         </Center>
@@ -44,13 +43,13 @@ const OutcomeSection: React.FC<OutcomeSectionProps> = ({ height, push, top, bott
     } else if (outcome === "Double KO") {
       return (
         <Center>
-          <Text fontSize={topNameSize} fontFamily="heading">
+          <Text fontSize={topNameSize} lineHeight={topNameSize} fontFamily="heading">
             {top.name}
           </Text>
-          <Text style={styles.textShadow} fontSize={70} fontFamily="heading">
+          <Text style={styles.textShadow} fontSize={70} fontFamily="heading" lineHeight={90}>
             - double KO -
           </Text>
-          <Text fontSize={bottomNameSize} fontFamily="heading">
+          <Text fontSize={bottomNameSize} lineHeight={bottomNameSize + 15} fontFamily="heading">
             {bottom.name}
           </Text>
         </Center>
@@ -59,13 +58,13 @@ const OutcomeSection: React.FC<OutcomeSectionProps> = ({ height, push, top, bott
 
     return (
       <Center>
-        <Text fontSize={topNameSize} fontFamily="heading">
+        <Text fontSize={topNameSize} lineHeight={topNameSize} fontFamily="heading">
           {top.name}
         </Text>
-        <Text style={styles.textShadow} fontSize={70} fontFamily="heading">
+        <Text style={styles.textShadow} fontSize={70} fontFamily="heading" lineHeight={90}>
           - defeats -
         </Text>
-        <Text fontSize={bottomNameSize} fontFamily="heading">
+        <Text fontSize={bottomNameSize} lineHeight={bottomNameSize + 15} fontFamily="heading">
           {bottom.name}
         </Text>
       </Center>
@@ -89,18 +88,24 @@ const OutcomeSection: React.FC<OutcomeSectionProps> = ({ height, push, top, bott
   }
 
   return (
-    <VStack zIndex={100} h={height * 0.45} w="100%" justifyContent="center" alignItems="center" position="absolute" top={height * 0.26}>
-      <LinearGradient colors={gradient} style={styles.vsGradient} alignItems="center" />
+    <VStack zIndex={100} h={height * 0.45} w="100%" position="absolute" left={0} top={height * 0.26}>
       <Pressable onPress={push}>
-        <Box justifyContent="center" alignItems="center">
-          {renderHeadline()}
-        </Box>
-        <Center>
-          <Text fontFamily="heading" color="base.white">
-            {" "}
-            {renderBattleResultPredicate(outcome, endRound, legacyBattle)}
-          </Text>
-        </Center>
+        <ImageBackground
+          style={{
+            width: "100%",
+            height: "120%",
+            marginTop: "-20%",
+          }}
+          source={require("../../../../assets/images/layout/battle-gradient.webp")}
+          resizeMode="cover"
+        >
+          <Center marginTop="20%">
+            <Box justifyContent="center">{renderHeadline()}</Box>
+            <Text fontFamily="heading" fontSize="xl" color="base.white">
+              {renderBattleResultPredicate(outcome, endRound, legacyBattle)}
+            </Text>
+          </Center>
+        </ImageBackground>
       </Pressable>
     </VStack>
   );
@@ -110,7 +115,6 @@ export default OutcomeSection;
 
 const { textShadowColor } = herofitTheme.colors.base;
 const styles = StyleSheet.create({
-  vsGradient: { height: "100%", width: "100%", position: "absolute" },
   textShadow: {
     textShadowColor: textShadowColor,
     textShadowOffset: { width: 0, height: 3 },
