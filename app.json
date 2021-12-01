@@ -3,7 +3,7 @@
     "name": "HeroFit",
     "slug" : "herofit",
     "owner":"brysonmk1984",
-    "version": "1.1.3",
+    "version": "1.1.4",
     "orientation": "portrait",
     "icon": "./assets/ios-logo-512.png",
     "scheme": "herofit",
