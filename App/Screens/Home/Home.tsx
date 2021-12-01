@@ -21,12 +21,13 @@ import useGlobalToast from "../../common/hooks/useGlobalToast";
 import useInventory from "../../common/hooks/useInventory";
 import { clearLs } from "../../common/helperFunctions";
 import SideMenu from "react-native-side-menu-updated";
-import { AppState, Dimensions } from "react-native";
+import { AppState, Dimensions, ImageBackground } from "react-native";
 import SidebarMenu from "./Components/SidebarMenu";
 import { reloadAsync } from "expo-updates";
 import GestureRecognizer, { swipeDirections } from "react-native-swipe-gestures";
 import * as Linking from "expo-linking";
 import useAspectRatio from "../../common/hooks/useAspectRatio";
+import LevelUpText from "./Components/LevelUpText";
 
 const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -53,6 +54,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   const appState = useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
   const [backgroundAnimation, setBackgroundAnimation] = useState(null);
+  const [leveledUp, setLeveledUp] = useState(false);
   const openBottomDrawerFromParent = useRef(null);
 
   async function handleHeroUpgrade(activities: Activity[]) {
@@ -62,7 +64,15 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
       const upgradeResults = await upgradeSequence({ email: user.email, activities, accountDate: user.createdAt, hasBeenUpgraded: state.hero.hasBeenUpgraded });
 
       // Set Background Animation
-      upgradeResults.reachedLevel ? setBackgroundAnimation("level-up") : setBackgroundAnimation("activity-up");
+      if (upgradeResults.reachedLevel) {
+        setBackgroundAnimation("level-up");
+        setLeveledUp(true);
+        setTimeout(() => {
+          setLeveledUp(false);
+        }, 3000);
+      } else {
+        setBackgroundAnimation("activity-up");
+      }
 
       // combine returned avatar with existing equipped items... backend not fetching equipment here
       const heroEquipped = Object.assign({}, state.hero, upgradeResults.avatar, { equipped: state.hero.equipped });
@@ -179,6 +189,8 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
           <Box position="absolute" zIndex={111} right={-5} top={petImagePosition}>
             {equippedPet && <PetImage pet={equippedPet} />}
           </Box>
+          {/* Used to display Leveled Up! message */}
+          {leveledUp && <LevelUpText deviceHeight={deviceHeight} />}
         </View>
         {/* BOTTOM CONSOLE */}
 

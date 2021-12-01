@@ -97,6 +97,11 @@ const Background: React.FC<BackgroundProps> = ({ animation, setBackgroundAnimati
           <LottieView source={animationBackground} autoPlay loop={false} />
         </Animated.View>
       )}
+      {/* {true && (
+        <Animated.View style={[styles.imageContainer, { opacity: 1, backgroundColor: "rgba(0,0,0,.7)" }]}>
+          <LottieView source={require("../animations/level-up.json")} autoPlay loop={true} />
+        </Animated.View>
+      )} */}
     </>
   );
 };
