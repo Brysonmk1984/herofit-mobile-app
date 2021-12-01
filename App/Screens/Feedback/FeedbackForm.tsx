@@ -75,22 +75,26 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ postSubmitAction }) => {
           <FormControl>
             <Select
               selectedValue={feedbackType}
-              minWidth={200}
               accessibilityLabel="Type of Feedback"
               onValueChange={itemValue => {
                 setFeedbackType(itemValue);
               }}
               _selectedItem={{
-                bg: "success.600",
+                bgColor: "success.600",
                 endIcon: <CheckIcon size={5} />,
+              }}
+              _item={{
+                bgColor: "primary.100",
+                width: "96%",
+                alignSelf: "center",
               }}
               mt={1}
             >
-              <Select.Item label="General Comment" value="General Comment" />
-              <Select.Item label="Bug Report" value="Bug Report" />
-              <Select.Item label="Question" value="Question" />
-              <Select.Item label="Feature Request" value="Feature Request" />
-              <Select.Item label="Other" value="Other" />
+              <Select.Item label="General Comment" value="General Comment" my={1} />
+              <Select.Item label="Bug Report" value="Bug Report" my={1} />
+              <Select.Item label="Question" value="Question" my={1} />
+              <Select.Item label="Feature Request" value="Feature Request" my={1} />
+              <Select.Item label="Other" value="Other" my={1} />
             </Select>
           </FormControl>
           <FormControl isRequired isInvalid={helperText === "Must be valid email address" ? true : false}>

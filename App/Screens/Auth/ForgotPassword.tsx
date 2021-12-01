@@ -27,10 +27,13 @@ const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">)
   const [verifyPassword, setVerifyPassword] = useState(null);
 
   async function handleReset() {
-    setLoading(true);
-    setHelperText(null);
-    setFormIsValid(false);
     try {
+      if (!formIsValid) {
+        throw new Error("Please complete the form.");
+      }
+      setLoading(true);
+      setHelperText(null);
+      setFormIsValid(false);
       await resetPassword({ email, token: verifyPassword, password });
       setLoading(false);
       addToast("success", "Password has been updated!");
@@ -40,7 +43,7 @@ const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">)
     } catch (error) {
       debugErrors(error);
       setLoading(false);
-      addToast("error", `${error.status}: ${error.message}`);
+      addToast("error", `${error.message}`);
     }
   }
 
@@ -51,6 +54,9 @@ const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">)
     setEmailSent(true);
     Keyboard.dismiss();
     try {
+      if (!formIsValid) {
+        throw new Error("Please complete the form.");
+      }
       await sendPasswordResetEmailVerification({ email, isMobileApp: true });
       setLoading(false);
       addToast("success", "Please check your email to verify account. Check your spam folder if the message is not in your inbox.");
@@ -58,7 +64,7 @@ const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">)
       setEmailSent(false);
       setLoading(false);
       debugErrors(error);
-      addToast("error", `${error.status}: ${error.message}`);
+      addToast("error", `${error.message}`);
     }
   }
 
@@ -155,7 +161,7 @@ const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">)
                 <FormControl.Label>What's your sign up email?</FormControl.Label>
                 <Input onChangeText={text => handleInitialEmailChange(text, setEmail)} value={email} autoCompleteType="email" textContentType="emailAddress" placeholder="Enter Email" />
               </FormControl>
-              <PaneActionButton text="Confirm Email" disabled={!formIsValid || emailSent ? true : false} action={handleSendEmailConfirmation} />
+              <PaneActionButton text="Confirm Email" disabled={emailSent ? true : false} action={handleSendEmailConfirmation} />
               {helperText && <HelperText type={formIsValid ? "success" : "error"} text={helperText} />}
               {loading && <LoadingInPane text="SendingEmail..." />}
               <View alignItems="center">

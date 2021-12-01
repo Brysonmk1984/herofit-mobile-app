@@ -46,7 +46,7 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
       setLoading(false);
     } catch (error) {
       let message = debugErrors(error);
-      console.log("message", message);
+
       if (Array.isArray(error.debug)) {
         if (error.debug[0].msg === "Couldn't find a user with that email." || error.debug[0].msg === "Incorrect password, please try again.") {
           message = error.debug[0].msg;
@@ -122,7 +122,7 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
                 }
               />
             </FormControl>
-            <PaneActionButton text="Let's Go!" disabled={!formIsValid || loading || showLegacyLink ? true : false} action={handleSignIn} />
+            <PaneActionButton text="Let's Go!" disabled={loading || showLegacyLink ? true : false} action={handleSignIn} />
             {loading ? (
               <LoadingInPane text="Signing In..." />
             ) : (
@@ -130,7 +130,7 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
                 {helperText && <HelperText type={formIsValid ? "success" : "error"} text={helperText} />}
 
                 {showLegacyLink ? (
-                  <Center>
+                  <Center mt={2}>
                     <PaneSupportText iconName="caution" iconColor="base.caution" text={"Must Verify Account on HeroFit.io"}>
                       We have upgraded our login system and because you have a legacy account, you must verify your account from our website.
                     </PaneSupportText>
@@ -139,7 +139,7 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
                     </Link>
                   </Center>
                 ) : (
-                  <Center>
+                  <Center mt={2}>
                     <Link _text={{ fontSize: "lg" }} onPress={() => navigation.push("ForgotPassword")} my={1}>
                       Forgot Password?
                     </Link>

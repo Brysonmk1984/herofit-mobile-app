@@ -51,7 +51,7 @@ function formReducer(state: FormState, action: FormAction): FormState {
           return { formIsValid: false, helperText: "Password must be at least 8 characters" };
         }
       } else {
-        return { formIsValid: false, helperText: "username is Required" };
+        return { formIsValid: false, helperText: "Username is required" };
       }
     } else {
       return { formIsValid: false, helperText: "Must be valid email address" };
@@ -125,9 +125,14 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
   }
 
   async function handleSignUp() {
-    const { email, firstName, username: username, password, emailMarketingOptIn } = formState;
-    formDispatch({ type: "SET LOADING", loading: true });
     try {
+      const { email, firstName, username: username, password, emailMarketingOptIn, formIsValid } = formState;
+      if (!formIsValid) {
+        throw new Error("Please complete the form.");
+      }
+
+      formDispatch({ type: "SET LOADING", loading: true });
+
       const data = await register({ email, firstName, username, password, emailMarketingOptIn, isMobileApp: true });
       const { user } = data;
       dispatch({ type: "SET USER STATUS", payload: { userStatus: "unconfirmed" } });
@@ -135,11 +140,12 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
       handlePostRegister(user);
     } catch (error) {
       formDispatch({ type: "SET LOADING", loading: false });
-      const backendErrorMessage = error.debug[0].msg;
-      if (backendErrorMessage === "That email is already in use. Have you already registered? Try logging in instead.") {
-        error.message = backendErrorMessage;
+      if (error.debug) {
+        addToast("error", error.debug[0].msg);
+      } else {
+        addToast("error", error.toString());
       }
-      addToast("error", error.message);
+
       debugErrors(error);
     }
   }
@@ -150,16 +156,16 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
       <ScrollView mb={5}>
         <Pane mb={3}>
           <VStack space={2} mt={0}>
-            <FormControl>
+            <FormControl isRequired isInvalid={formState.helperText === "Must be valid email address" ? true : false}>
               <Input onChangeText={email => formDispatch({ type: "EMAIL INPUT", email })} value={formState.email} placeholder="Email" />
             </FormControl>
-            <FormControl>
+            <FormControl isRequired isInvalid={formState.helperText === "Username is required" ? true : false}>
               <Input onChangeText={username => formDispatch({ type: "USERNAME INPUT", username })} value={formState.username} placeholder="Username" />
             </FormControl>
             <FormControl>
               <Input onChangeText={firstName => formDispatch({ type: "FIRST NAME INPUT", firstName })} value={formState.firstName} placeholder="First Name (Optional)" />
             </FormControl>
-            <FormControl>
+            <FormControl isRequired isInvalid={formState.helperText === "Password must be at least 8 characters" ? true : false}>
               <Input onChangeText={password => formDispatch({ type: "PASSWORD INPUT", password })} value={formState.password} secureTextEntry={true} autoCompleteType="password" textContentType="password" placeholder="Password" />
             </FormControl>
             <FormControl>
@@ -170,7 +176,7 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
                 </Text>
               </HStack>
             </FormControl>
-            <PaneActionButton text="Let's Go!" disabled={!formState.formIsValid ? true : false} action={handleSignUp} />
+            <PaneActionButton text="Let's Go!" action={handleSignUp} />
             {/* Show Loading indicator or Helper Text */}
             {formState.loading ? <LoadingInPane text="Creating Account..." /> : formState.helperText ? <HelperText text={formState.helperText} type={formState.formIsValid ? "success" : "error"} /> : null}
           </VStack>
