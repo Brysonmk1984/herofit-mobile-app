@@ -133,15 +133,15 @@ const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">)
             <VStack space={6} mt={5}>
               <FormControl isRequired isInvalid={helperText === "Password must be at least 8 characters" ? true : false}>
                 <FormControl.Label>Email</FormControl.Label>
-                <Input onChangeText={text => handleInputChange(text, setEmail)} value={email} autoCompleteType="email" textContentType="emailAddress" placeholder="Enter Email" />
+                <Input onChangeText={text => handleInputChange(text, setEmail)} value={email} autoCompleteType="email" textContentType="emailAddress" placeholder="Enter Email" autoCapitalize="none" />
               </FormControl>
               <FormControl isRequired isInvalid={helperText === "Password must be at least 8 characters" ? true : false}>
                 <FormControl.Label>New Password</FormControl.Label>
-                <Input onChangeText={text => handleInputChange(text, setPassword)} value={password} secureTextEntry={true} autoCompleteType="password" textContentType="password" placeholder="Enter Password" />
+                <Input onChangeText={text => handleInputChange(text, setPassword)} value={password} secureTextEntry={true} autoCompleteType="password" textContentType="password" placeholder="Enter Password" autoCapitalize="none" />
               </FormControl>
               <FormControl isRequired isInvalid={helperText === "Password must be at least 8 characters" ? true : false}>
                 <FormControl.Label>Confirm Password</FormControl.Label>
-                <Input onChangeText={text => handleInputChange(text, setPasswordConfirm)} value={passwordConfirm} secureTextEntry={true} autoCompleteType="password" textContentType="password" placeholder="Confirm Password" />
+                <Input onChangeText={text => handleInputChange(text, setPasswordConfirm)} value={passwordConfirm} secureTextEntry={true} autoCompleteType="password" textContentType="password" placeholder="Confirm Password" autoCapitalize="none" />
               </FormControl>
               <PaneActionButton text="Update Password" disabled={!formIsValid || emailSent ? true : false} action={handleReset} />
               {helperText && <HelperText type={formIsValid ? "success" : "error"} text={helperText} />}

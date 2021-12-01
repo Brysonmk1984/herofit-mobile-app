@@ -157,16 +157,16 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
         <Pane mb={3}>
           <VStack space={2} mt={0}>
             <FormControl isRequired isInvalid={formState.helperText === "Must be valid email address" ? true : false}>
-              <Input onChangeText={email => formDispatch({ type: "EMAIL INPUT", email })} value={formState.email} placeholder="Email" />
+              <Input onChangeText={email => formDispatch({ type: "EMAIL INPUT", email })} value={formState.email} placeholder="Email" autoCapitalize="none" />
             </FormControl>
             <FormControl isRequired isInvalid={formState.helperText === "Username is required" ? true : false}>
-              <Input onChangeText={username => formDispatch({ type: "USERNAME INPUT", username })} value={formState.username} placeholder="Username" />
+              <Input onChangeText={username => formDispatch({ type: "USERNAME INPUT", username })} value={formState.username} placeholder="Username" autoCapitalize="none" />
             </FormControl>
             <FormControl>
-              <Input onChangeText={firstName => formDispatch({ type: "FIRST NAME INPUT", firstName })} value={formState.firstName} placeholder="First Name (Optional)" />
+              <Input onChangeText={firstName => formDispatch({ type: "FIRST NAME INPUT", firstName })} value={formState.firstName} placeholder="First Name (Optional)" autoCapitalize="none" />
             </FormControl>
             <FormControl isRequired isInvalid={formState.helperText === "Password must be at least 8 characters" ? true : false}>
-              <Input onChangeText={password => formDispatch({ type: "PASSWORD INPUT", password })} value={formState.password} secureTextEntry={true} autoCompleteType="password" textContentType="password" placeholder="Password" />
+              <Input onChangeText={password => formDispatch({ type: "PASSWORD INPUT", password })} value={formState.password} secureTextEntry={true} autoCompleteType="password" textContentType="password" placeholder="Password" autoCapitalize="none" />
             </FormControl>
             <FormControl>
               <HStack my={2} px={0}>

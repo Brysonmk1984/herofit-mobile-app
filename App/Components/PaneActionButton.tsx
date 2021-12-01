@@ -3,7 +3,7 @@ import { Button, Center } from "native-base";
 
 interface PaneActionButtonProps {
   text: string;
-  disabled: boolean;
+  disabled?: boolean;
   action: () => void;
 }
 
