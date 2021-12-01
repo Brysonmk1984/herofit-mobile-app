@@ -295,6 +295,15 @@ interface StartingElementalPower {
   water: number;
   air: number;
 }
+interface AttrObj {
+  stat: Stat;
+  lcName: Lowercase<Stat>;
+  value: string;
+  description: string;
+  descriptionArray: string[];
+  type: string;
+  earnedBy: string;
+}
 
 type CharacterName = "Compost Creature" | "Wilhelm the Wild" | "Repete" | "Filtron Five" | "Solar Celeste" | "Empath Aurelia" | "Boulder Bro" | "Chrono Guy" | "Timber Terror" | "Natural Ninja";
 type CharacterAlias = "Compost Creature" | "Wildspeaker" | "Scavenger Robot" | "Filtron Five" | "Solar Warrior" | "Empath" | "Boulder Bro" | "Chrono Guy" | "Timber Terror" | "Natural Ninja";
@@ -371,4 +380,4 @@ type TabColors = {
 
 type ActionFeedbackType = "info" | "caution" | "error" | "success";
 
-export { Action, AppDispatch, InitialAppState, AppAction, Store, User, UserStatus, Activity, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, ItemWithOwnership, BattleInstantItem, ServerItemType, ServerInventoryCategories, EquippableItemType, Effect, Stat, PrimaryElement, EveryElement, HeroChoice, CharacterName, CharacterAlias, FoeAbility, FoeType, AllFoes, SkinLcUnderscoreName, SkinName, Tint, Foe, FoeClass, ZodiacSign, TabType, TabColors, ActionFeedbackType };
+export { Action, AppDispatch, InitialAppState, AppAction, Store, User, UserStatus, Activity, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, ItemWithOwnership, BattleInstantItem, ServerItemType, ServerInventoryCategories, EquippableItemType, Effect, Stat, PrimaryElement, EveryElement, AttrObj, HeroChoice, CharacterName, CharacterAlias, FoeAbility, FoeType, AllFoes, SkinLcUnderscoreName, SkinName, Tint, Foe, FoeClass, ZodiacSign, TabType, TabColors, ActionFeedbackType };

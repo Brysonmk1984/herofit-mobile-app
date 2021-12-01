@@ -6,17 +6,20 @@ import { Header, Icon, ScreenContainer, Subheader } from "../../../Components/Cu
 import RoundDisplay from "./RoundDisplay";
 import SpiralBackground from "../SpiralBackground";
 import SwipeForNextScreen from "../SwipeForNextScreen";
+import { Stat } from "../../../common/types";
+import AttributeDetail from "../../../Components/Modals/AttributeDetail";
 
-const BattleReportDetail: React.FC<MainStackProps<"BattleReportDetail">> = ({ navigation, route }) => {
-  const { outcome } = route.params.battleReport;
+const BattleReportDetail: React.FC<MainStackProps<"BattleReportDetail"> & { setSelectedAttribute: (attribute: Lowercase<Stat>, selectedAttribute: Lowercase<Stat> | null) => void }> = ({ navigation, route, selectedAttribute, setSelectedAttribute }) => {
+  const { battleReport } = route.params;
 
   return (
-    <ScreenContainer screenName={route.name} bg={<SpiralBackground outcome={outcome} />}>
+    <ScreenContainer screenName={route.name} bg={<SpiralBackground outcome={battleReport.outcome} />}>
       <ScrollView>
         <Header text={"Battle Report"} extraPadding={false} mt={-7} />
-        <RoundDisplay battleReport={route.params.battleReport} />
+        <RoundDisplay battleReport={route.params.battleReport} setSelectedAttribute={setSelectedAttribute} />
       </ScrollView>
       <SwipeForNextScreen center={true} />
+      {selectedAttribute && <AttributeDetail id="AttributeDetail" attribute={selectedAttribute} />}
     </ScreenContainer>
   );
 };

@@ -10,6 +10,7 @@ import { DetailModal } from "../../../Components/ModalTemplates/ModalTemplates";
 import useModal from "../../../common/hooks/useModal";
 import { GlobalStateContext } from "../../../store";
 import HeroDescription from "./Modals/HeroDescription";
+import AttributeDetail from "../../../Components/Modals/AttributeDetail";
 
 // Hero Details Screen
 const HeroDetails = ({ route, navigation }: AuthStackProps<"HeroDetails">) => {
@@ -20,6 +21,7 @@ const HeroDetails = ({ route, navigation }: AuthStackProps<"HeroDetails">) => {
   const [heroNameIsLegit, setHeroNameIsLegit] = useState(false);
   const [helperText, setHelperText] = useState(null);
   const [debouncedHeroName] = useDebounce(heroName, 500);
+  const [selectedAttribute, setSelectedAttribute] = useState(null);
   const { openModal } = useModal();
 
   function handleFinalizeHeroSelection() {
@@ -35,6 +37,12 @@ const HeroDetails = ({ route, navigation }: AuthStackProps<"HeroDetails">) => {
     console.log("NAMED HERO", namedSelectedHero);
     return navigation.push("SpendQP", { hero: namedSelectedHero });
   }
+
+  useEffect(() => {
+    if (selectedAttribute) {
+      openModal("AttributeDetail");
+    }
+  }, [selectedAttribute]);
 
   useEffect(() => {
     const name = debouncedHeroName;
@@ -79,13 +87,18 @@ const HeroDetails = ({ route, navigation }: AuthStackProps<"HeroDetails">) => {
         <HStack mb={0} justifyContent={"space-between"}>
           <Pane variant="transparent" mb={5}>
             <VStack mt={-3} mb={-3} space={0}>
-              <StatDisplay stat="Fire" value={fire} size="lg" />
-
-              <StatDisplay stat="Earth" value={earth} size="lg" reverseOrder={true} />
-
-              <StatDisplay stat="Water" value={water} size="lg" />
-
-              <StatDisplay stat="Air" value={air} size="lg" reverseOrder={true} />
+              <Pressable onPress={() => setSelectedAttribute("fire")}>
+                <StatDisplay stat="Fire" value={fire} size="lg" />
+              </Pressable>
+              <Pressable onPress={() => setSelectedAttribute("earth")}>
+                <StatDisplay stat="Earth" value={earth} size="lg" reverseOrder={true} />
+              </Pressable>
+              <Pressable onPress={() => setSelectedAttribute("water")}>
+                <StatDisplay stat="Water" value={water} size="lg" />
+              </Pressable>
+              <Pressable onPress={() => setSelectedAttribute("air")}>
+                <StatDisplay stat="Air" value={air} size="lg" reverseOrder={true} />
+              </Pressable>
             </VStack>
           </Pane>
           <Box>
@@ -108,6 +121,7 @@ const HeroDetails = ({ route, navigation }: AuthStackProps<"HeroDetails">) => {
       <ScreenActionButton text="Select" disabled={!heroNameIsLegit} action={handleFinalizeHeroSelection} />
 
       {state.modalQueue[0] === "HeroDescription" && <HeroDescription id="HeroDescription" character={route.params.selectedHero} />}
+      {selectedAttribute && <AttributeDetail id="AttributeDetail" attribute={selectedAttribute} />}
     </ScreenContainer>
   );
 };

@@ -1,47 +1,131 @@
 [
   {
     "stat" : "Power",
+    "lcName" : "power",
     "value" : "100",
-    "description" : "Primary source of Damage. Your opponent’s Armor value will reduce damage done."
+    "description" : "Primary source of Damage. Your opponent’s Armor value will reduce damage done.",
+    "descriptionArray" : [
+      "Primary source of damage",
+      "Your opponent’s Armor value will reduce damage done from your Power",
+      "Doesn't get reduced by adversaries elemental prowess in any way"
+    ],
+    "type" : "battle",
+    "earnedBy" : "Level Ups grant 5 automatically, or by spending Quantum Points"
   },
   {
     "stat" : "Health",
+    "lcName" : "health",
     "value" : "100",
-    "description" : "A Hero's life total. Physical & elemental reduces health in battle. If health drops to zero, the hero is 'Knocked Out'."
+    "description" : "A Hero's life total. Physical & elemental damage reduces health in battle. If health drops to zero, the hero is 'Knocked Out'.",
+    "descriptionArray" : [
+      "Life Total of a hero or foe",
+      "Physical & elemental damage reduces health in battle, round-by-round",
+      "If health drops to zero, the hero is 'Knocked Out'",
+      "Health is recovered by 'recovery' points over time or with a health potion",
+      "Health can only be recovered if your Hero is 'Recovering' (not Knocked Out)"
+    ],
+    "type" : "battle, passive",
+    "earnedBy" : "Level Ups grant 5 automatically, or by spending Quantum Points"
   },
   {
     "stat" : "Recovery",
+    "lcName" : "recovery",
     "value" : "5",
-    "description" : "Boosts Health Recovered per hour & chance to revive early from being 'Knocked Out'"
+    "description" : "Boosts Health Recovered per hour & chance to revive early from being 'Knocked Out'",
+    "descriptionArray" : [
+      "Boosts Health Recovered per hour",
+      "Chance to revive early from being 'Knocked Out' depending on how many points you have",
+      "Recovery effectiveness is subject to diminishing returns, spend QP wisely",
+      "Health pts recovered per hour = RECOVERY * (RECOVERY/(RECOVERY+55))",
+      "Chance for early revive per hour = (RECOVERY / (RECOVERY + 1055)) * 100"
+    ],
+    "type" : "passive",
+    "earnedBy" : "Spending Quantum Points"
   },
   {
     "stat" : "Armor",
+    "lcName" : "armor",
     "value" : "0",
-    "description" : "Reduces Physical Damage and is a counter to high Power adversaries."
+    "description" : "Reduces Physical Damage and is a counter to high Power adversaries.",
+    "descriptionArray" : [
+      "Reduces Physical damage",
+      "Counters to high Power adversaries",
+      "Has no effect against elemental prowess",
+      "Armor effectiveness is subject to diminishing returns, spend QP wisely"
+    ],
+    "type" : "battle",
+    "earnedBy" : "Spending Quantum Points"
   },
   {
     "stat" : "Fire",
+    "lcName" : "fire",
     "value" : "0",
-    "description" : "Critical Strike\nResistance to Fire\nBonus Damage to Air & Water\nReduced Damage to Earth"
+    "description" : "Critical Strike\nResistance to Fire\nBonus Damage to Air & Water\nReduced Damage to Earth",
+    "descriptionArray" : [
+      "Deals Fire damage",
+      "Increases chance of a Critical Strike - a very powerful attack that has a chance to occur every round",
+      "Bonus damage to Air & Water",
+      "Reduced damage to Earth",
+      "Resistance to Fire attacks"
+    ],
+    "type" : "battle",
+    "earnedBy" : "Running, Crossfit, or Stair Stepper activities, or by spending Quantum Points"
   },
   {
     "stat" : "Earth",
+    "lcName" : "earth",
     "value" : "0",
-    "description" : "Thorns Damage\nResistance to Earth\nBonus Damage to Air & Fire\nReduced Damage to Water"
+    "description" : "Thorns Damage\nResistance to Earth\nBonus Damage to Air & Fire\nReduced Damage to Water",
+    "descriptionArray" : [
+      "Deals Earth damage",
+      "Increases Thorns Damage - A % of damage taken is reflected back at an adversary every round",
+      "Bonus damage to Air & Fire",
+      "Reduced damage to Water",
+      "Resistance to Earth attacks"
+    ],
+    "type" : "battle",
+    "earnedBy" : "Cycling, Weight Lifting, or Hiking activities, or by spending Quantum Points"
   },
   {
     "stat" : "Water",
+    "lcName" : "water",
     "value" : "0",
-    "description" : "Vampiric Touch\nResistance to Water\nBonus Damage to Fire & Earth\nReduced Damage to Air"
+    "description" : "Vampiric Touch\nResistance to Water\nBonus Damage to Fire & Earth\nReduced Damage to Air",
+    "descriptionArray" : [
+      "Deals Water damage",
+      "Increases Vampiric Touch - A % of your attack damage heals you every round",
+      "Bonus damage to Fire & Earth",
+      "Reduced damage to Air",
+      "Resistance to Water attacks"
+    ],
+    "type" : "battle",
+    "earnedBy" : "Swimming, Rowing, Kayaking, Paddleboarding, Skiing, Snowboarding, or Snowshowing activities, or by spending Quantum Points"
   },
   {
     "stat" : "Air",
+    "lcName" : "air",
     "value" : "0",
-    "description" : "Evasion\nResistance to Air\nBonus Damage to Earth & Water\nReduced Damage to Fire"
+    "description" : "Evasion\nResistance to Air\nBonus Damage to Earth & Water\nReduced Damage to Fire",
+    "descriptionArray" : [
+      "Deals Air damage",
+      "Increases Evasion - A % chance to dodge an attack every round",
+      "Bonus damage to Earth & Water",
+      "Reduced damage to Fire",
+      "Resistance to Air attacks"
+    ],
+    "type" : "battle",
+    "earnedBy" : "Walking, Yoga, or Elliptical activities, or by spending Quantum Points"
   },
   {
     "stat" : "Aether",
+    "lcName" : "aether",
     "value" : "0",
-    "description" : "Temporal Distortion: \nChance to repeat an attacking round \nRecover health from physical activities"
+    "description" : "Temporal Distortion: \nChance to repeat an attacking round \nRecover health from physical activities",
+    "descriptionArray" : [
+      "Increases Temporal Distortion - A % chance to have a second consecutive attacking round",
+      "Recover health from physical activities every time hero upgrades",
+    ],
+    "type" : "battle, activity",
+    "earnedBy" : "Earn 5 per level after level 100, or by QP after level 100"
   }
 ]

@@ -1,6 +1,6 @@
 import { NavigatorScreenParams, RouteProp, CompositeScreenProps } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { HeroChoice, Hero, CharacterName, StartingElementalPower, CharacterAlias, SelectedHero, HeroWithStats, DefaultHeroProperties, UserStatus, Activity, Foe, Item } from "./types";
+import { HeroChoice, Hero, CharacterName, StartingElementalPower, CharacterAlias, SelectedHero, HeroWithStats, DefaultHeroProperties, UserStatus, Activity, Foe, Item, Stat } from "./types";
 import { Battle, BattleDetailOnly } from "./types-battle";
 
 /*

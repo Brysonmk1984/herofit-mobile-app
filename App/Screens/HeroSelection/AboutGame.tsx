@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, ScrollView, Box, View, Text, VStack, HStack, Heading, Divider } from "native-base";
+import { FlatList, ScrollView, Box, View, Text, VStack, HStack, Heading, Divider, Pressable } from "native-base";
 import { ScreenContainer, Header, Subheader, ScreenActionButton, Pane, Icon } from "../../Components/CustomComponents";
 import aboutActivities from "../../common/aboutActivities.json";
 import { AuthStackProps } from "../../common/types-navigator";
 import { getHeroList } from "../../api/authentication";
 import debugErrors from "../../common/debugErrors";
 import PaneSupportText from "../../Components/PaneSupportText";
+import AttributeDetail from "../../Components/Modals/AttributeDetail";
+import useModal from "../../common/hooks/useModal";
 
 // How To Select Screen
 export default function AboutGame({ navigation, route }: AuthStackProps<"AboutGame">) {
   // Make API call to get hero data for the next screen
   const [heroList, setHeroList] = useState<HeroChoice[] | []>([]);
-
+  const [selectedAttribute, setSelectedAttribute] = useState(null);
+  const { openModal } = useModal();
   function renderHeader(stat: string, lcStat: string) {
     return (
       <Heading>
@@ -62,6 +65,12 @@ export default function AboutGame({ navigation, route }: AuthStackProps<"AboutGa
       </View>
     );
   }
+
+  useEffect(() => {
+    if (selectedAttribute) {
+      openModal("AttributeDetail");
+    }
+  }, [selectedAttribute]);
 
   useEffect(() => {
     // Fetch list of Heroes from server so it's ready for the next screen
@@ -127,42 +136,52 @@ export default function AboutGame({ navigation, route }: AuthStackProps<"AboutGa
           <Pane>
             <Subheader text="Activities Matter" />
             <VStack space={6}>
-              <Box pb={7} borderBottomWidth={1} borderBottomColor="primary.50">
-                <Text textAlign="center" fontFamily="heading" fontSize="3xl" color="base.fire">
-                  FIRE
-                </Text>
-                <HStack p={2} space={2} alignItems="center" justifyContent="center">
-                  {renderDescription("fire", aboutActivities.fire)}
-                  {renderIcon("fire")}
-                </HStack>
-              </Box>
-              <Box pb={7} borderBottomWidth={1} borderBottomColor="primary.50">
-                <Text textAlign="center" fontFamily="heading" fontSize="3xl" color="base.earth">
-                  EARTH
-                </Text>
-                <HStack space={2} alignItems="center" justifyContent="center">
-                  {renderDescription("earth", aboutActivities.earth)}
-                  {renderIcon("earth")}
-                </HStack>
-              </Box>
-              <Box pb={7} borderBottomWidth={1} borderBottomColor="primary.50">
-                <Text textAlign="center" fontFamily="heading" fontSize="3xl" color="base.water">
-                  WATER
-                </Text>
-                <HStack space={2} alignItems="center" justifyContent="center">
-                  {renderDescription("water", aboutActivities.water)}
-                  {renderIcon("water")}
-                </HStack>
-              </Box>
-              <Box pb={7} borderBottomWidth={1} borderBottomColor="primary.50">
-                <Text textAlign="center" fontFamily="heading" fontSize="3xl" color="base.air">
-                  AIR
-                </Text>
-                <HStack space={2} alignItems="center" justifyContent="center">
-                  {renderDescription("air", aboutActivities.air)}
-                  {renderIcon("air")}
-                </HStack>
-              </Box>
+              <Pressable onPress={() => setSelectedAttribute("fire")}>
+                <Box pb={7} borderBottomWidth={1} borderBottomColor="primary.50">
+                  <Text textAlign="center" fontFamily="heading" fontSize="3xl" color="base.fire">
+                    FIRE
+                  </Text>
+
+                  <HStack p={2} space={2} alignItems="center" justifyContent="center">
+                    {renderDescription("fire", aboutActivities.fire)}
+                    {renderIcon("fire")}
+                  </HStack>
+                </Box>
+              </Pressable>
+              <Pressable onPress={() => setSelectedAttribute("earth")}>
+                <Box pb={7} borderBottomWidth={1} borderBottomColor="primary.50">
+                  <Text textAlign="center" fontFamily="heading" fontSize="3xl" color="base.earth">
+                    EARTH
+                  </Text>
+                  <HStack space={2} alignItems="center" justifyContent="center">
+                    {renderDescription("earth", aboutActivities.earth)}
+                    {renderIcon("earth")}
+                  </HStack>
+                </Box>
+              </Pressable>
+              <Pressable onPress={() => setSelectedAttribute("water")}>
+                <Box pb={7} borderBottomWidth={1} borderBottomColor="primary.50">
+                  <Text textAlign="center" fontFamily="heading" fontSize="3xl" color="base.water">
+                    WATER
+                  </Text>
+                  <HStack space={2} alignItems="center" justifyContent="center">
+                    {renderDescription("water", aboutActivities.water)}
+                    {renderIcon("water")}
+                  </HStack>
+                </Box>
+              </Pressable>
+              <Pressable onPress={() => setSelectedAttribute("air")}>
+                <Box pb={7} borderBottomWidth={1} borderBottomColor="primary.50">
+                  <Text textAlign="center" fontFamily="heading" fontSize="3xl" color="base.air">
+                    AIR
+                  </Text>
+                  <HStack space={2} alignItems="center" justifyContent="center">
+                    {renderDescription("air", aboutActivities.air)}
+                    {renderIcon("air")}
+                  </HStack>
+                </Box>
+              </Pressable>
+
               <Box>
                 <Text textAlign="center" fontFamily="heading" fontSize="3xl" color="primary.600">
                   OTHER
@@ -184,6 +203,7 @@ export default function AboutGame({ navigation, route }: AuthStackProps<"AboutGa
       </ScrollView>
 
       <ScreenActionButton text="OK" action={() => navigation.push("SelectHero", { heroList })} />
+      {selectedAttribute && <AttributeDetail id="AttributeDetail" attribute={selectedAttribute} />}
     </ScreenContainer>
   );
 }

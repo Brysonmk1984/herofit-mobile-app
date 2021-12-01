@@ -6,9 +6,11 @@ import { LinearGradient } from "expo-linear-gradient";
 import { determineScenario } from "../../../common/helperFunctions";
 import moment from "moment";
 import { BattleDetailOnly, BattleEffectProc, BattleReportStats, BattleSeasonalBonusElement } from "../../../common/types-battle";
+import { Stat } from "../../../common/types";
 
 interface StatDisplayProps {
   battleReport: BattleDetailOnly;
+  setSelectedAttribute: (attribute: Lowercase<Stat>) => void;
 }
 
 function determineScenarioBonusProc(scenario: number): BattleEffectProc {
@@ -65,7 +67,7 @@ function determineStatColor(base: number, battleTime: number) {
   return battleTime > base ? "base.success" : battleTime < base ? "base.error" : "base.primary";
 }
 
-const StatDisplay: React.FC<StatDisplayProps> = ({ battleReport }) => {
+const StatDisplay: React.FC<StatDisplayProps> = ({ battleReport, setSelectedAttribute }) => {
   const { height } = useWindowDimensions();
   const { outcome, scenario, roundBreakdown, avatar: hero, bra: brh, foe, brf, foeType, effects, updatedAt, seasonalBonusElement, effectProcs } = battleReport;
   const nonNullEffectProcs = effectProcs ?? [];
@@ -103,7 +105,9 @@ const StatDisplay: React.FC<StatDisplayProps> = ({ battleReport }) => {
         </Box>
         {/* Stat */}
         <Box alignItems="center" py={1} h="100%" bgColor="base.highlightTransparent">
-          <Icon iconName={stat} size={30} color={`base.${stat}`} />
+          <Pressable onPress={() => setSelectedAttribute(stat)}>
+            <Icon iconName={stat} size={30} color={`base.${stat}`} />
+          </Pressable>
         </Box>
         {/* Stat - Foe */}
         <Box flex={1} py={1} bgColor="base.highlightTransparent" borderRightWidth={1}>

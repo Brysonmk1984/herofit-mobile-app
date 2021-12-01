@@ -70,8 +70,9 @@ export default function useInventory(makeInventoryRequest?: boolean): ServerInve
 
   // CONSUME A CONSUMABLE ITEM
   async function consume(item: Item, heroObj: Hero): Promise<{ isBattleInstantItem: boolean }> {
+    const isBattleInstItem = isBattleInstantItem(item.name);
     try {
-      if (heroObj.goToBattle) {
+      if (heroObj.goToBattle && isBattleInstItem) {
         throw new Error("Hero is already queued for a battle!");
       }
       const { consumables, avatar: hero } = await consumeItemRequest({ id: item.id, email: heroObj.owner, avatarID: heroObj.id, effects: item.effects });
@@ -82,7 +83,7 @@ export default function useInventory(makeInventoryRequest?: boolean): ServerInve
       dispatch({ type: "SET HERO", payload: { hero: updatedHero } });
       addToast("success", `${heroObj.name} used ${convertAorAn(item.name)} ${item.name}.`);
 
-      if (isBattleInstantItem(item.name)) {
+      if (isBattleInstItem) {
         return { isBattleInstantItem: true };
       } else {
         return { isBattleInstantItem: false };

@@ -1,13 +1,15 @@
 import React from "react";
-import { View, Text, ScrollView, Box, VStack, HStack, FlatList, Center } from "native-base";
+import { View, Text, ScrollView, Box, VStack, HStack, FlatList, Center, Pressable } from "native-base";
 import { BattleDetailOnly } from "../../../common/types-battle";
 import { Icon, Subheader } from "../../../Components/CustomComponents";
+import { Stat } from "../../../common/types";
 
 interface RoundDisplayProps {
   battleReport: BattleDetailOnly;
+  setSelectedAttribute: (attribute: Lowercase<Stat>) => void;
 }
 
-const RoundDisplay: React.FC<RoundDisplayProps> = ({ battleReport }) => {
+const RoundDisplay: React.FC<RoundDisplayProps> = ({ battleReport, setSelectedAttribute }) => {
   function renderAttackDamage(didCrit: boolean, damage: number) {
     return didCrit ? (
       <Text mt={-2} fontSize="3xl" color="base.fire" fontWeight="bold" fontStyle="italic" textAlign="center" fontFamily="handwriting">
@@ -170,31 +172,38 @@ const RoundDisplay: React.FC<RoundDisplayProps> = ({ battleReport }) => {
         {/* LEGEND */}
 
         <HStack justifyContent="space-between" mb={3} flexWrap="wrap">
-          <HStack>
-            <Icon iconName="critical_strike" size={18} color="base.fire" />
-            <Text color="base.fire" fontSize="sm" fontWeight="bold" fontStyle="italic">
-              Critical Strike
-            </Text>
-          </HStack>
-          <HStack>
-            <Icon iconName="thorns_damage" size={18} color="base.earth" />
-            <Text color="base.earth" fontSize="sm" fontWeight="bold">
-              Thorns Damage
-            </Text>
-          </HStack>
-
-          <HStack>
-            <Icon iconName="vampiric_touch" size={18} color="base.water" />
-            <Text color="base.water" fontSize="sm" fontWeight="bold">
-              Vampiric Touch
-            </Text>
-          </HStack>
-          <HStack>
-            <Icon iconName="evasion" size={18} color="base.air" />
-            <Text color="base.air" fontSize="sm" fontStyle="italic">
-              Evasion
-            </Text>
-          </HStack>
+          <Pressable onPress={() => setSelectedAttribute("fire")}>
+            <HStack>
+              <Icon iconName="critical_strike" size={18} color="base.fire" />
+              <Text color="base.fire" fontSize="sm" fontWeight="bold" fontStyle="italic">
+                Critical Strike
+              </Text>
+            </HStack>
+          </Pressable>
+          <Pressable onPress={() => setSelectedAttribute("earth")}>
+            <HStack>
+              <Icon iconName="thorns_damage" size={18} color="base.earth" />
+              <Text color="base.earth" fontSize="sm" fontWeight="bold">
+                Thorns Damage
+              </Text>
+            </HStack>
+          </Pressable>
+          <Pressable onPress={() => setSelectedAttribute("water")}>
+            <HStack>
+              <Icon iconName="vampiric_touch" size={18} color="base.water" />
+              <Text color="base.water" fontSize="sm" fontWeight="bold">
+                Vampiric Touch
+              </Text>
+            </HStack>
+          </Pressable>
+          <Pressable onPress={() => setSelectedAttribute("air")}>
+            <HStack>
+              <Icon iconName="evasion" size={18} color="base.air" />
+              <Text color="base.air" fontSize="sm" fontStyle="italic">
+                Evasion
+              </Text>
+            </HStack>
+          </Pressable>
         </HStack>
       </ScrollView>
     </View>
