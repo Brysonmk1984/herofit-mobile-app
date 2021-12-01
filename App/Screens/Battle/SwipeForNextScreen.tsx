@@ -3,16 +3,14 @@ import React from "react";
 import Icon from "../../Components/Icon";
 
 interface SwipeForNextScreenProps {
-  position?: "relative" | "absolute";
-  center?: boolean;
+  reversedText?: boolean;
 }
 
-const SwipeForNextScreen: React.FC<SwipeForNextScreenProps> = ({ position = "relative", center }) => {
-  const left = center ? 24 : 2;
+const SwipeForNextScreen: React.FC<SwipeForNextScreenProps> = ({ reversedText }) => {
   return (
-    <Box position={position} bottom={1} left={left} mt={5}>
+    <Box position="absolute" bottom={1} left={24} mt={5}>
       <HStack>
-        <Text>Swipe for Next Screen</Text>
+        <Text color={reversedText ? "base.brand" : "base.primary"}>Swipe for Next Screen</Text>
         <Box
           ml={6}
           mt={-1.5}
@@ -20,7 +18,7 @@ const SwipeForNextScreen: React.FC<SwipeForNextScreenProps> = ({ position = "rel
             transform: [{ rotateX: "-45deg" }, { rotateZ: "-45deg" }],
           }}
         >
-          <Icon iconName="bottom-right-3d-arrow" size={36} />
+          <Icon iconName="bottom-right-3d-arrow" size={36} color={reversedText ? "base.brand" : "base.primary"} />
         </Box>
       </HStack>
     </Box>

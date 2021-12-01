@@ -58,7 +58,7 @@ const BottomSection: React.FC<BottomSectionProps> = ({ height: deviceHeight, out
         {contenderType === "hero" ? <HeroImage {...determinePropsForImage(contender, contenderType)} /> : <FoeImage {...determinePropsForImage(contender, contenderType)} />}
       </Animated.View>
       <Rewards reversedText={outcome !== "Avatar Wins"} topOrBottom={"bottom"} itemsAcquired={itemsAcquired} ptGain={ptGain} xpGain={xpGain} setPressedItem={setPressedItem} />
-      <SwipeForNextScreen position="absolute" />
+      <SwipeForNextScreen reversedText={outcome === "Avatar Wins"} />
     </Box>
   );
 };

@@ -23,6 +23,7 @@ const HeroDetails = ({ route, navigation }: AuthStackProps<"HeroDetails">) => {
   const [debouncedHeroName] = useDebounce(heroName, 500);
   const [selectedAttribute, setSelectedAttribute] = useState(null);
   const { openModal } = useModal();
+  const darkBackgrounds = ["Chrono Guy", "Empath", "Natural Ninja", "Timber Terror", "Wildspeaker"];
 
   function handleFinalizeHeroSelection() {
     const namedSelectedHero: SelectedHero & { name: string } = {
@@ -88,16 +89,16 @@ const HeroDetails = ({ route, navigation }: AuthStackProps<"HeroDetails">) => {
           <Pane variant="transparent" mb={5}>
             <VStack mt={-3} mb={-3} space={0}>
               <Pressable onPress={() => setSelectedAttribute("fire")}>
-                <StatDisplay stat="Fire" value={fire} size="lg" />
+                <StatDisplay stat="Fire" value={fire} size="lg" reversedText={darkBackgrounds.includes(alias)} />
               </Pressable>
               <Pressable onPress={() => setSelectedAttribute("earth")}>
-                <StatDisplay stat="Earth" value={earth} size="lg" reverseOrder={true} />
+                <StatDisplay stat="Earth" value={earth} size="lg" reverseOrder={true} reversedText={darkBackgrounds.includes(alias)} />
               </Pressable>
               <Pressable onPress={() => setSelectedAttribute("water")}>
-                <StatDisplay stat="Water" value={water} size="lg" />
+                <StatDisplay stat="Water" value={water} size="lg" reversedText={darkBackgrounds.includes(alias)} />
               </Pressable>
               <Pressable onPress={() => setSelectedAttribute("air")}>
-                <StatDisplay stat="Air" value={air} size="lg" reverseOrder={true} />
+                <StatDisplay stat="Air" value={air} size="lg" reverseOrder={true} reversedText={darkBackgrounds.includes(alias)} />
               </Pressable>
             </VStack>
           </Pane>

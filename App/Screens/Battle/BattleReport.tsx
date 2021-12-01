@@ -10,13 +10,14 @@ import { GlobalStateContext } from "../../store";
 import useDidMount from "../../common/hooks/useDidMount";
 import useModal from "../../common/hooks/useModal";
 import AttributeDetail from "../../Components/Modals/AttributeDetail";
+import SwipeForNextScreen from "./SwipeForNextScreen";
 
 interface BattleReportProps {}
 
 const BattleReport: React.FC<BattleReportProps> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { id } = route.params.battleReport;
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
   const { mounted } = useDidMount();
   const [selectedAttribute, setSelectedAttribute] = useState(null);
   const { openModal } = useModal();
@@ -25,10 +26,8 @@ const BattleReport: React.FC<BattleReportProps> = ({ navigation, route }) => {
     setCurrentPage(e.nativeEvent.position);
   }
 
-  function handleFirstAndLastSwipes(e) {
+  function handleLastSwipe(e) {
     if (currentPage === 4) {
-      navigation.navigate("Home");
-    } else if (currentPage === 0) {
       navigation.navigate("Home");
     }
   }
@@ -39,23 +38,22 @@ const BattleReport: React.FC<BattleReportProps> = ({ navigation, route }) => {
     }
   }, [selectedAttribute]);
 
-  // useEffect(() => {
-  //   updateBattleReportSeen({ id });
-  //   dispatch({ type: "SEEN BATTLE REPORT", payload: { latestBattle: { ...route.params.battleReport, seenReport: true } } });
-  // }, []);
+  useEffect(() => {
+    updateBattleReportSeen({ id });
+    dispatch({ type: "SEEN BATTLE REPORT", payload: { latestBattle: { ...route.params.battleReport, seenReport: true } } });
+  }, []);
 
   return (
-    <PagerView style={styles.pagerView} initialPage={currentPage} onPageSelected={e => handleFinish(e)} onPageScrollStateChanged={e => handleFirstAndLastSwipes(e)} overdrag={true}>
+    <PagerView style={styles.pagerView} initialPage={currentPage} onPageSelected={e => handleFinish(e)} onPageScrollStateChanged={e => handleLastSwipe(e)} overdrag={true}>
       <View key="1" bgColor="#000" alignItems="center">
         <Image size="80%" source={require("../../../assets/images/misc/hf-logo.webp")} alt="HeroFit Logo" resizeMode="contain" />
-        <Text fontFamily="heading" fontSize="5xl" mt={-16} color="base.primaryAlt">
-          - END -
+        <Text fontFamily="heading" fontSize="5xl" mt={-20} color="base.brand">
+          Battle Report
         </Text>
+        <SwipeForNextScreen reversedText={true} />
       </View>
 
-      <View key="2">
-        <BattleReportOutcome navigation={navigation} route={route} />
-      </View>
+      <View key="2">{mounted && <BattleReportOutcome navigation={navigation} route={route} />}</View>
       <View key="3">{mounted && <BattleReportDetail navigation={navigation} route={route} selectedAttribute={selectedAttribute} setSelectedAttribute={setSelectedAttribute} />}</View>
       <View key="4">{mounted && <BattleReportRounds navigation={navigation} route={route} selectedAttribute={selectedAttribute} setSelectedAttribute={setSelectedAttribute} />}</View>
       <View key="5" bgColor="#000" alignItems="center">

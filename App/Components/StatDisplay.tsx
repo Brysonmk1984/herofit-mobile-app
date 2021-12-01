@@ -28,7 +28,7 @@ interface StatDisplayProps {
 
 export default function StatDisplay({ stat, value, description, size, reversedText, iconWatermark, flex, statColor, reverseOrder = false }: StatDisplayProps) {
   const elementNameLC = stat.toLowerCase() as Stat;
-  const iconColor = iconWatermark ? "base.primary" : reversedText ? "base.white" : `base.${elementNameLC}`;
+  const iconColor = iconWatermark ? "base.primary" : `base.${elementNameLC}`;
   const numberColor = statColor ? statColor : reversedText ? "base.white" : "base.primary";
   const textColor = reversedText ? "base.white" : "base.primary";
 
