@@ -25,8 +25,10 @@ const Background: React.FC<BackgroundProps> = ({ animation, setBackgroundAnimati
   function determineBackgroundAnimation(name: string) {
     if (name === "activity-up") {
       return require("../animations/activity-up.json");
-    } else if ("level-up") {
+    } else if (name === "level-up") {
       return require("../animations/level-up.json");
+    } else if (name === "health-up") {
+      return require("../../../../assets/images/backgrounds/health-potion-background.webp");
     }
   }
 
@@ -94,14 +96,9 @@ const Background: React.FC<BackgroundProps> = ({ animation, setBackgroundAnimati
       {state.background ? handleBackgroundSelection(state.background) : <View style={styles.imageContainer}></View>}
       {animationBackground && (
         <Animated.View style={[styles.imageContainer, { opacity: opacityAnim, backgroundColor: "rgba(0,0,0,.7)" }]}>
-          <LottieView source={animationBackground} autoPlay loop={false} />
+          <>{animation === "health-up" ? <ImageBackground source={animationBackground} style={{ width: "100%", height: "100%" }} resizeMode="cover" /> : <LottieView source={animationBackground} autoPlay loop={false} />}</>
         </Animated.View>
       )}
-      {/* {true && (
-        <Animated.View style={[styles.imageContainer, { opacity: 1, backgroundColor: "rgba(0,0,0,.7)" }]}>
-          <LottieView source={require("../animations/level-up.json")} autoPlay loop={true} />
-        </Animated.View>
-      )} */}
     </>
   );
 };

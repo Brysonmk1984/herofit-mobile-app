@@ -51,7 +51,7 @@ const Settings: React.FC<MainStackProps<"Settings">> = ({ navigation, route }) =
 
   async function handleCacheClear() {
     await clearLs("herofit-stravaActivities");
-    navigation.navigate("Home", { fetchStravaManually: true });
+    navigation.navigate("Home", { fetchStravaManually: isStravaUser ? true : false });
   }
 
   function handleDeleteAccount() {

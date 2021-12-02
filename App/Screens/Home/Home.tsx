@@ -194,7 +194,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
         </View>
         {/* BOTTOM CONSOLE */}
 
-        <BottomDrawer hero={state.hero} newActivitiesAvailable={newActivities.length > 0 ? true : false} latestBattle={state.latestBattle} user={state.user} setBottomDrawerOpen={setBottomDrawerOpen} bottomDrawerHeight={bottomDrawerHeight} initialDisabledLinks={state.initialHomescreenLoad} openBottomDrawerFromParent={openBottomDrawerFromParent} />
+        <BottomDrawer hero={state.hero} newActivitiesAvailable={newActivities.length > 0 ? true : false} latestBattle={state.latestBattle} user={state.user} setBottomDrawerOpen={setBottomDrawerOpen} bottomDrawerHeight={bottomDrawerHeight} initialDisabledLinks={state.initialHomescreenLoad} openBottomDrawerFromParent={openBottomDrawerFromParent} setBackgroundAnimation={setBackgroundAnimation} />
 
         {/* MODALS */}
         <SignupToSave id="SignupToSave" modalAction={() => dispatch({ type: "SET INITIAL HOMESCREEN LOAD", payload: { initialHomescreenLoad: "Register" } })} />

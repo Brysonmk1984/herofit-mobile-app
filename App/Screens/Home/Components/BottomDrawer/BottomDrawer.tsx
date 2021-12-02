@@ -29,9 +29,10 @@ interface BottomDrawerProps {
   bottomDrawerHeight: number;
   initialDisabledLinks: boolean;
   openBottomDrawerFromParent: React.MutableRefObject<any>;
+  setBackgroundAnimation: (backgroundAnimation: string) => void;
 }
 
-const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailable, latestBattle, user, setBottomDrawerOpen, bottomDrawerHeight, initialDisabledLinks, openBottomDrawerFromParent }) => {
+const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailable, latestBattle, user, setBottomDrawerOpen, bottomDrawerHeight, initialDisabledLinks, openBottomDrawerFromParent, setBackgroundAnimation }) => {
   const refRBSheet = useRef({ open: () => null });
 
   const navigation = useNavigation();
@@ -106,6 +107,8 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
       // Instantiate Battle, open Awaiting Battle Screen
       if (isBattleInstantItem) {
         handleFetchUpcomingBattle(true);
+      } else if (item.name === "Health Potion") {
+        setBackgroundAnimation("health-up");
       }
     } catch (error) {
       addToast("error", `${error.message}`);
