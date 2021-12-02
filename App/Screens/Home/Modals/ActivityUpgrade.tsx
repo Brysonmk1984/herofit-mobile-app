@@ -3,11 +3,12 @@ import { AppState, FlatList, useWindowDimensions } from "react-native";
 import { Text, Box, ScrollView, Link } from "native-base";
 import { CharacterModal } from "../../../Components/ModalTemplates/ModalTemplates";
 import { BodyContent } from "../../../Components/ModalTemplates/BasicModal/Content";
-import { convertSecondsToReadableTime } from "../../../common/activityCalculations";
+import { convertSecondsToReadableTime, determineElementFromActivity } from "../../../common/activityCalculations";
 
 import moment from "moment";
 import { Activity } from "../../../common/types";
 import { ModalActionHeader } from "../../../Components/ModalTemplates/ModalActionHeader";
+import Icon from "../../../Components/Icon";
 
 interface ActivityUpgradeProps {
   id: string;
@@ -22,15 +23,19 @@ interface ActivityUpgradeProps {
 const ActivityUpgrade: React.FC<ActivityUpgradeProps> = ({ id, activities, modalAction, state, goBack, closeModal, setNewActivities }) => {
   const windowHeight = useWindowDimensions().height;
   function renderListItem({ activityDate, type, duration }) {
+    const color = `base.${determineElementFromActivity(type)}`;
     return (
-      <Box justifyContent="center" flexDirection="row">
-        <Text fontFamily="heading" color="primary.500">
-          {`\u2022 ${moment(activityDate).format("MM/DD - hh:mm a")}`}:
+      <Box mt={3} justifyContent="center" flexDirection="row">
+        <Icon iconName={type} size={25} color={color} />
+        <Text pl={2} fontFamily="heading" color="primary.500" fontSize="lg">
+          {`${moment(activityDate).format("MM/DD - hh:mm a")}`}:
         </Text>
-        <Text px={3} fontFamily="heading" color="base.highlight">
+        <Text px={2} fontFamily="heading" fontSize="lg">
+          {convertSecondsToReadableTime(duration)}
+        </Text>
+        <Text fontFamily="heading" color={color} fontSize="lg">
           {type}
         </Text>
-        <Text fontFamily="heading">{convertSecondsToReadableTime(duration)}</Text>
       </Box>
     );
   }
@@ -46,14 +51,11 @@ const ActivityUpgrade: React.FC<ActivityUpgradeProps> = ({ id, activities, modal
       <ModalActionHeader type="info" text="You've been working out!" />
       <BodyContent>
         <ScrollView maxHeight={windowHeight * 0.3}>
-          <Text mb={3} textAlign="center">
-            Apply these activities to {state.hero.name}?
-          </Text>
           <FlatList data={activities} renderItem={({ item }) => renderListItem(item)} keyExtractor={(item, index) => item.id?.toString() || index.toString()} />
         </ScrollView>
 
         {activities.length === 1 && activities[0].source === "herofit" && (
-          <Link justifyContent="center" onPress={handleBackToActivities} mt={4} mb={2}>
+          <Link justifyContent="center" onPress={handleBackToActivities} mt={8} mb={4}>
             Back to Activity
           </Link>
         )}

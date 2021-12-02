@@ -105,6 +105,8 @@ function useStravaDataProcess(): { newStravaActivities: Activity[]; getFreshStra
       await setLsWithExpiry("herofit-stravaActivities", formattedNewActivities, 1800000);
       if (manually && !formattedNewActivities?.length) {
         addToast("info", `Couldn't find any new Strava activities...`);
+      } else if (formattedNewActivities?.length) {
+        addToast("success", `Strava Activities Found!`);
       }
       return;
     } catch (error) {
