@@ -8,6 +8,7 @@ type AppState = typeof initialState;
 const GlobalStateContext = createContext<{ state: AppState; dispatch: React.Dispatch<AppAction> }>({ state: initialState, dispatch: () => {} });
 
 function appStateReducer(state: AppState, action: AppAction): AppState {
+  console.log("IN REDUCTER");
   switch (action.type) {
     case "TOGGLE LOADING": {
       const { isLoading } = action.payload;

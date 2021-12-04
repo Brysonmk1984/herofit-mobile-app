@@ -11,8 +11,9 @@ import Constants from "expo-constants";
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
 const AuthStackScreen = () => {
   const { state, dispatch } = useContext(GlobalStateContext);
+  const showHeader = Constants.platform.ios ? true : false;
   return (
-    <AuthStack.Navigator screenOptions={{ headerShown: true, headerTintColor: "#d4af37", ...baseScreenStyle }}>
+    <AuthStack.Navigator screenOptions={{ headerShown: showHeader, headerTintColor: "#d4af37", ...baseScreenStyle }}>
       {/* Load Register first if coming from homescreen via Signup process */}
       {state.initialHomescreenLoad === "Register" ? (
         <>
@@ -53,8 +54,9 @@ const AuthStackScreen = () => {
 const MainStack = createNativeStackNavigator<AuthStackParamList>();
 const MainStackScreen = () => {
   const { state } = useContext(GlobalStateContext);
+  const showHeader = Constants.platform.ios ? true : false;
   return (
-    <MainStack.Navigator screenOptions={{ headerShown: Constants.platform.ios ? true : false, headerTintColor: "#d4af37", ...baseScreenStyle }}>
+    <MainStack.Navigator screenOptions={{ headerShown: showHeader, headerTintColor: "#d4af37", ...baseScreenStyle }}>
       {/* Accessed from the homescreen */}
 
       {state.latestBattle ? (

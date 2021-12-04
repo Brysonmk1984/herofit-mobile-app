@@ -3,9 +3,10 @@
   "scripts": {
     "dev": "env-cmd -f .env.development expo start",
     "dev:clear": "env-cmd -f .env.development expo start -c",
-    "build:android": "env-cmd -f .env.production expo build:android -t apk",
+    "build:android": "env-cmd -f .env.production expo build:android -t aab",
     "build:ios": "env-cmd -f .env.production expo build:ios -t archive",
     "build:web": "env-cmd -f .env.production expo build:web",
+    "upload:android" :  "expo upload:android",
     "eject": "expo eject",
     "test": "jest --verbose",
     "test:watch": "jest --watch --verbose",

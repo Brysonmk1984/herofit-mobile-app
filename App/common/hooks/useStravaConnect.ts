@@ -82,7 +82,8 @@ function useStravaConnect(): StravaConnectReturn {
         } catch (error) {
           debugErrors(error);
           setHelperText(null);
-          addToast("error", error.message);
+          const errorMessage = error?.debug[0]?.msg === "SequelizeUniqueConstraintError: Validation error" ? "Strava account is already in use, can't use twice!" : error.message;
+          addToast("error", errorMessage);
         }
       })();
     } else {

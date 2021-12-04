@@ -47,8 +47,9 @@ function convertMetersSecondsToMilesHours(mps: number) {
 }
 
 function convertSecondsToReadableTime(sec: number) {
-  const hours = moment.utc(sec * 1000).hours();
-  const minutes = moment.utc(sec * 1000).minutes();
+  const hours = Math.floor(sec / 3600);
+  const minutes = Math.floor((sec % 3600) / 60);
+
   const readableHours = hours ? `${hours} hr` : ``;
   const readableMin = minutes ? ` ${minutes} min` : ``;
   const comma = readableHours && readableMin ? `,` : ``;

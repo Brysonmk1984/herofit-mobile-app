@@ -9,9 +9,7 @@ const useHeroImage = (character: CharacterName, skin?: SkinName): { heroImage: n
 
   // When the skin changes (only from switching in inventory), set new skin to state
   useEffect(() => {
-    if (skin) {
-      setCostumeImage(getHeroImage(character, skin));
-    }
+    setCostumeImage(getHeroImage(character, skin));
   }, [skin]);
 
   return { heroImage: costumeImage };

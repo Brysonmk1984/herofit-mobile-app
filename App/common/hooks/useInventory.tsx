@@ -236,5 +236,6 @@ export default function useInventory(makeInventoryRequest?: boolean): ServerInve
     equipUnequip,
     buy,
     consume,
+    // utility methods
   };
 }

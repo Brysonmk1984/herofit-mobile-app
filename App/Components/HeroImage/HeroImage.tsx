@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Center, Image } from "native-base";
 import useHeroImage from "../../common/hooks/useHeroImage";
 import { CharacterName, CharacterAlias, HeroStatus, SkinName, Item } from "../../common/types";
@@ -15,9 +15,9 @@ interface HeroImageProps {
 }
 
 export const HeroImage: React.FC<HeroImageProps> = ({ character, width = 275, height = 275, skin, status, floating = false }) => {
-  const skinName = skin?.name as SkinName;
+  const [skinName, setSkinName] = useState(skin?.name);
+  const [isTint, setIsTint] = useState(null);
   const { heroImage } = useHeroImage(character, skinName);
-  const isTint = skinName?.includes("Tint") ?? false;
 
   function determineImage(imageMod: SkinName | HeroStatus) {
     if (floating) {
@@ -50,6 +50,16 @@ export const HeroImage: React.FC<HeroImageProps> = ({ character, width = 275, he
       </Center>
     );
   }
+
+  useEffect(() => {
+    if (skin) {
+      setSkinName(skin.name);
+      setIsTint(skin.name.includes("Tint") ?? false);
+    } else {
+      setSkinName(null);
+      setIsTint(false);
+    }
+  }, [skin]);
 
   // If status isn't passed in, skip this check
   if (status && status !== "Rested" && status !== "Recovering") {

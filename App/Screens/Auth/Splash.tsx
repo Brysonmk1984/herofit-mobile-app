@@ -1,6 +1,6 @@
 import { Animated, ImageBackground, Platform, StyleSheet, View as RNView } from "react-native";
 import { View, Text, Center, Button, Link, Image } from "native-base";
-import React, { useContext, useMemo, useState } from "react";
+import React, { useEffect, useContext, useMemo, useState } from "react";
 import { AuthStackProps } from "../../common/types-navigator";
 import { Header, ScreenContainer } from "../../Components/CustomComponents";
 import herofitTheme from "../../styles/herofitTheme";
@@ -18,22 +18,22 @@ const Splash = ({ navigation, route }: AuthStackProps<"Splash">) => {
     navigation.push("AboutGame");
   }
 
-  // If a user returns to app, but at a later time and the app was closed, need to get initial URL and redirect as needed
-  Linking.getInitialURL().then(url => {
-    const verifyPassword = Linking.parse(url).queryParams?.verifyPassword;
-    if (verifyPassword) {
-      navigation.push("ForgotPassword", { verifyPassword });
-    }
-  });
-  // Shouldn't normally happen, but if a user already had app open and is on splash screen after redirect from email and website: capture URL and pass verifyPassword url param as screen parameter to forgot password
-  Linking.addEventListener("url", data => {
-    const verifyPassword = Linking.parse(data.url)?.queryParams.verifyPassword;
-    if (verifyPassword) {
-      navigation.push("ForgotPassword", { verifyPassword });
-    }
-  });
+  // // If a user returns to app, but at a later time and the app was closed, need to get initial URL and redirect as needed
+  // Linking.getInitialURL().then(url => {
+  //   const verifyPassword = Linking.parse(url).queryParams?.verifyPassword;
+  //   if (verifyPassword) {
+  //     navigation.push("ForgotPassword", { verifyPassword });
+  //   }
+  // });
+  // // Shouldn't normally happen, but if a user already had app open and is on splash screen after redirect from email and website: capture URL and pass verifyPassword url param as screen parameter to forgot password
+  // Linking.addEventListener("url", data => {
+  //   const verifyPassword = Linking.parse(data.url)?.queryParams.verifyPassword;
+  //   if (verifyPassword) {
+  //     navigation.push("ForgotPassword", { verifyPassword });
+  //   }
+  // });
 
-  React.useEffect(() => {
+  useEffect(() => {
     const timeout = setTimeout(() => {
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -44,6 +44,11 @@ const Splash = ({ navigation, route }: AuthStackProps<"Splash">) => {
 
     return () => clearTimeout(timeout);
   }, [fadeAnim]);
+
+  useEffect(() => {
+    console.log("DO TH RESET");
+    dispatch({ type: "RESET DEFAULTS" });
+  }, []);
 
   return (
     <ScreenContainer screenName={route.name} safeAreaContainer={false}>

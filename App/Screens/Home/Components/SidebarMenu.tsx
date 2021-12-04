@@ -8,9 +8,10 @@ import useSignOut from "../../../common/hooks/useSignout";
 interface SidebarMenuProps {
   navigation: StackNavigationProp<MainStackParamList, "Home">;
   setSideDrawerOpen: (prev: boolean) => boolean;
+  heroName: string;
 }
 
-const SidebarMenu: React.FC<SidebarMenuProps> = ({ navigation, setSideDrawerOpen }) => {
+const SidebarMenu: React.FC<SidebarMenuProps> = ({ navigation, setSideDrawerOpen, heroName }) => {
   const { signOut } = useSignOut();
 
   function handleNavigation(cb: () => void) {
@@ -34,6 +35,9 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ navigation, setSideDrawerOpen
         </Button>
         <Button variant="ghost" borderBottomColor="#40403e" borderBottomWidth="1" pl={3} onPress={() => handleNavigation(() => WebBrowser.openBrowserAsync(`https://herofit.io/ranking/`))} fontSize="2xl" fontFamily="heading" _text={{ color: "primary.200" }} _pressed={{ _text: { color: "base.brand" }, bgColor: "base.primary" }}>
           Ranking
+        </Button>
+        <Button variant="ghost" borderBottomColor="#40403e" borderBottomWidth="1" pl={3} onPress={() => handleNavigation(() => WebBrowser.openBrowserAsync(`https://herofit.io/users/${encodeURI(heroName)}`))} fontSize="2xl" fontFamily="heading" _text={{ color: "primary.200" }} _pressed={{ _text: { color: "base.brand" }, bgColor: "base.primary" }}>
+          Profile
         </Button>
         <Button variant="ghost" borderBottomColor="#40403e" borderBottomWidth="1" pl={3} onPress={() => handleNavigation(() => signOut())} fontSize="2xl" fontFamily="heading" _text={{ color: "primary.200" }} _pressed={{ _text: { color: "base.brand" }, bgColor: "base.primary" }}>
           Sign Out

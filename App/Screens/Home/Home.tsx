@@ -36,7 +36,6 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   const [newActivities, setNewActivities] = useState<Activity[]>([]);
   const { addToast } = useGlobalToast();
   const { equippedSkin, equippedPet, equippedTitle } = useInventory(true);
-  const propsForHeroImage = (({ character, equipped, alias }) => ({ character, equipped, alias }))(state.hero);
   const { deviceWidth, deviceHeight, deviceAspectType } = useMemo(() => useAspectRatio(), []);
   const sideBarWidth = deviceWidth / 2;
   const isLongPhone = deviceAspectType === "long";
@@ -108,21 +107,21 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   }
 
   // Handles detecting when the app comes back to the foreground
-  // const _handleAppStateChange = nextAppState => {
-  //   if (appState.current.match(/inactive|background/) && nextAppState === "active") {
-  //     handleReload();
-  //   }
-  //   appState.current = nextAppState;
-  //   setAppStateVisible(appState.current);
-  // };
+  const _handleAppStateChange = nextAppState => {
+    if (appState.current.match(/inactive|background/) && nextAppState === "active") {
+      handleReload();
+    }
+    appState.current = nextAppState;
+    setAppStateVisible(appState.current);
+  };
 
   // Only add Foreground listener is active user
-  // useEffect(() => {
-  //   if (state.userStatus !== "new" && state.userStatus !== "unconfirmed" && state.user?.dataSrcId) {
-  //     AppState.addEventListener("change", _handleAppStateChange);
-  //     return () => AppState.removeEventListener("change", _handleAppStateChange);
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (state.userStatus !== "new" && state.userStatus !== "unconfirmed" && state.user?.dataSrcId) {
+      AppState.addEventListener("change", _handleAppStateChange);
+      return () => AppState.removeEventListener("change", _handleAppStateChange);
+    }
+  }, []);
 
   // Alert user if they received an item on login (from get-avatar)
   useEffect(() => {
@@ -163,6 +162,13 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
     }
   }, [route.params?.newManualActivity]);
 
+  // CLEAR ACTIVITIES IN STATE
+  useEffect(() => {
+    if (route.params?.clearActivities) {
+      setNewActivities([]);
+    }
+  }, [route.params?.clearActivities]);
+
   // STRAVA MANUALLY FETCHED - User Clicked the button to manually fetch data from the Manual page
   useEffect(() => {
     if (route.params?.fetchStravaManually) {
@@ -171,7 +177,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   }, [route.params?.fetchStravaManually]);
 
   return (
-    <SideMenu disableGestures={(Boolean(state.initialHomescreenLoad) ?? false) || bottomDrawerOpen} bounceBackOnOverdraw={false} onChange={isOpen => setSideDrawerOpen(isOpen)} isOpen={sideDrawerOpen} menuPosition={"right"} menu={<SidebarMenu navigation={navigation} setSideDrawerOpen={setSideDrawerOpen} />} openMenuOffset={sideBarWidth}>
+    <SideMenu disableGestures={(Boolean(state.initialHomescreenLoad) ?? false) || bottomDrawerOpen} bounceBackOnOverdraw={false} onChange={isOpen => setSideDrawerOpen(isOpen)} isOpen={sideDrawerOpen} menuPosition={"right"} menu={<SidebarMenu navigation={navigation} setSideDrawerOpen={setSideDrawerOpen} heroName={hero.name} />} openMenuOffset={sideBarWidth}>
       <ScreenContainer bg={<Background animation={backgroundAnimation} setBackgroundAnimation={setBackgroundAnimation} />} screenName={route.name}>
         <View zIndex={110} elevation={110}>
           <GestureRecognizer onSwipeDown={state => handleReload()}>
@@ -183,7 +189,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
             {/* HERO & PET */}
             <View h={heroImagePosition} zIndex={110}>
               <Box position="absolute" bottom={0} left="50%" ml={-(heroImageSize / 2)}>
-                <HeroImage width={heroImageSize} height={heroImageSize} skin={equippedSkin} status={hero.status} floating={hero.status === "Knocked Out" ? false : true} {...propsForHeroImage} />
+                <HeroImage width={heroImageSize} height={heroImageSize} skin={equippedSkin} status={hero.status} floating={hero.status === "Knocked Out" ? false : true} character={hero.character} equipped={hero.equipped} alias={hero.alias} />
               </Box>
             </View>
           </GestureRecognizer>

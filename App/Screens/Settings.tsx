@@ -41,6 +41,7 @@ const Settings: React.FC<MainStackProps<"Settings">> = ({ navigation, route }) =
         dispatch({ type: "SET USER", payload: { user: updatedUser, isSignedIn: true } });
         addToast("success", `Your Strava credentials have been removed from HeroFit`);
         clearLs("herofit-stravaActivities");
+        navigation.navigate("Home", { clearActivities: true });
       } catch (error) {
         debugErrors(error, user);
         addToast("error", `Unable to delete account- ${error.message}`);
@@ -51,7 +52,7 @@ const Settings: React.FC<MainStackProps<"Settings">> = ({ navigation, route }) =
 
   async function handleCacheClear() {
     await clearLs("herofit-stravaActivities");
-    navigation.navigate("Home", { fetchStravaManually: isStravaUser ? true : false });
+    navigation.navigate("Home", { clearActivities: true, fetchStravaManually: isStravaUser ? true : false });
   }
 
   function handleDeleteAccount() {
@@ -102,6 +103,11 @@ const Settings: React.FC<MainStackProps<"Settings">> = ({ navigation, route }) =
           <Button _text={{ fontFamily: "heading", fontSize: "2xl" }} mt={5} onPress={handleCacheClear}>
             Delete Activity Cache
           </Button>
+          {__DEV__ && (
+            <Button _text={{ fontFamily: "heading", fontSize: "2xl" }} mt={5} onPress={() => clearLs("herofit-stravaActivities")}>
+              Del Act Cache no refetch
+            </Button>
+          )}
         </Pane>
         <Pane mb={10}>
           <Subheader fontSize="xl" text="Permanently delete your account" />
