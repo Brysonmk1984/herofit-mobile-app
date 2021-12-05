@@ -63,7 +63,6 @@ const Settings: React.FC<MainStackProps<"Settings">> = ({ navigation, route }) =
         .then(async data => {
           addToast("success", "Account has been deleted. We hope to see you again!");
           dispatch({ type: "SET ISSIGNEDIN", payload: { isSignedIn: false } });
-          console.log("NOWW resetting defaults");
 
           setTimeout(() => {
             dispatch({ type: "RESET DEFAULTS" });
@@ -79,6 +78,23 @@ const Settings: React.FC<MainStackProps<"Settings">> = ({ navigation, route }) =
       debugErrors(error, user, dispatch);
       addToast("error", "Problem Deleting Hero, please try again later");
     }
+  }
+
+  function deleteAllCache() {
+    clearLs("herofit-stravaActivities");
+    clearLs("herofit-jwt");
+  }
+
+  function se1() {
+    try {
+      throw new Error("TEST THROW ERROR");
+    } catch (error) {
+      console.log("error");
+    }
+  }
+
+  function se2() {
+    console.log(cake.icecream);
   }
 
   return (
@@ -109,6 +125,24 @@ const Settings: React.FC<MainStackProps<"Settings">> = ({ navigation, route }) =
             </Button>
           )}
         </Pane>
+        <Pane mb={10}>
+          <Subheader fontSize="xl" text="Dev test - don't use" />
+          <Button _text={{ fontFamily: "heading", fontSize: "2xl" }} mt={5} onPress={se1}>
+            Sentry test error
+          </Button>
+          <Button _text={{ fontFamily: "heading", fontSize: "2xl" }} mt={5} onPress={se2}>
+            Sentry test error 2
+          </Button>
+        </Pane>
+
+        {__DEV__ && (
+          <Pane mb={10}>
+            <Subheader fontSize="xl" text="Delete ALL cache" />
+            <Button _text={{ fontFamily: "heading", fontSize: "2xl" }} mt={5} onPress={deleteAllCache}>
+              Delete all cache
+            </Button>
+          </Pane>
+        )}
         <Pane mb={10}>
           <Subheader fontSize="xl" text="Permanently delete your account" />
           <Button variant="caution" onPress={() => createAlert("Delete Account", "WARNING: This is non-reversible!", handleDeleteAccount)} _text={{ fontFamily: "heading", fontSize: "2xl" }}>

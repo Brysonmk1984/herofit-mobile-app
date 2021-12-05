@@ -44,23 +44,22 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ postSubmitAction }) => {
     debounced();
   }
 
-  function _handleFormAction() {
+  function _resetForm() {
     setHelperText(null);
     setEmail(null);
     setFeedbackType("General Comment");
     setMessage(null);
     setFormIsValid(false);
-    _handleSubmit({ email, feedbackType, message });
   }
 
   // // Handle submit of form: send form data to back end, which handles sending the email logic
   async function _handleSubmit(body: { email: string; feedbackType: string; message: string }) {
     const { email, feedbackType, message } = body;
     const accountInfo = { username: state.user.username, firstName: state.user.firstName, email: state.user.email };
-
     try {
       await emailContactForm({ email, feedbackType, message, accountInfo });
       addToast("success", "Message sent! We will get back to you shortly!");
+      _resetForm();
     } catch (error) {
       // Error sending Form Message
       const errorMessage = debugErrors(error, state.user);
@@ -106,7 +105,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ postSubmitAction }) => {
             <TextArea textAlignVertical="top" justifyContent="flex-start" placeholder="Enter Message" totalLines={5} onChangeText={text => _handleInputChange(text, setMessage)} value={message} />
           </FormControl>
           {helperText && <HelperText type={formIsValid ? "success" : "error"} text={helperText} />}
-          <Button disabled={!formIsValid} onPress={() => _handleFormAction()}>
+          <Button disabled={!formIsValid} onPress={() => _handleSubmit({ email, feedbackType, message })}>
             Send Feedback
           </Button>
         </VStack>

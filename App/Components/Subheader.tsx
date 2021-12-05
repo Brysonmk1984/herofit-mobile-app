@@ -11,7 +11,7 @@ interface Subheader {
   dividerColor?: string;
 }
 
-export default function Subheader({ text, mt = 3, mb = 3, color, fontSize = "3xl", fontFamily = "heading", dividerColor = "base.white" }: Subheader) {
+export default function Subheader({ text, mt = 3, mb = 3, color, fontSize = "3xl", fontFamily = "heading", dividerColor = "base.brand" }: Subheader) {
   return (
     <Center mt={mt} mb={mb}>
       <Heading>

@@ -39,7 +39,11 @@ interface SetLoadingAction {
   type: "SET LOADING";
   loading: boolean;
 }
-type FormAction = EmailInputAction | FirstNameInputAction | UsernameInputAction | PasswordInputAction | EmailMarketingOptInToggleAction | SetLoadingAction;
+interface SetHelperTextAction {
+  type: "SET HELPER TEXT";
+  helperText: string | null;
+}
+type FormAction = EmailInputAction | FirstNameInputAction | UsernameInputAction | PasswordInputAction | EmailMarketingOptInToggleAction | SetLoadingAction | SetHelperTextAction;
 
 function formReducer(state: FormState, action: FormAction): FormState {
   function checkValidForm({ email, username, password }) {
@@ -84,6 +88,9 @@ function formReducer(state: FormState, action: FormAction): FormState {
     case "SET LOADING": {
       return { ...state, loading: action.loading };
     }
+    case "SET HELPER TEXT": {
+      return { ...state, helperText: action.helperText };
+    }
     default:
       throw new Error("No Matching Action");
   }
@@ -121,6 +128,7 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
       debugErrors(error, user);
       addToast("error", `${error.status}: ${error.message}`);
       formDispatch({ type: "SET LOADING", loading: false });
+      formDispatch({ type: "SET HELPER TEXT", helperText: null });
     }
   }
 

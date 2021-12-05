@@ -75,7 +75,7 @@ export default {
     },
     Divider: {
       baseStyle: {
-        bg: "base.white",
+        bg: "base.brand",
       },
       variants: {
         subheaderDivider: {
@@ -116,15 +116,13 @@ export default {
     View: {
       variants: {
         pane: {
-          bg: `primary.200`,
+          bg: `primary.50`,
           padding: 3,
           shadow: 5,
           marginLeft: 2,
           marginRight: 2,
-          borderTopColor: "base.white",
-          borderTopWidth: 1,
-          borderRightColor: "base.white",
-          borderRightWidth: 1,
+          borderColor: "base.brand",
+          borderWidth: 1,
         },
         transparent: {
           padding: 0,

@@ -11,6 +11,7 @@ import useGlobalToast from "../../common/hooks/useGlobalToast";
 import * as WebBrowser from "expo-web-browser";
 import PaneSupportText from "../../Components/PaneSupportText";
 import PaneActionButton from "../../Components/PaneActionButton";
+import { Keyboard } from "react-native";
 
 const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -118,7 +119,8 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
                 placeholder="Password"
                 onSubmitEditing={() =>
                   setTimeout(() => {
-                    handleSignIn(), 1000;
+                    Keyboard.dismiss();
+                    handleSignIn(), 500;
                   })
                 }
               />
