@@ -38,7 +38,8 @@
         "backgroundColor": "#d4af37"
       },
       "package": "com.herofitllc.herofit",
-      "permissions": []
+      "permissions": [],
+      "versionCode": 2,
     },
     "ios": {
     "bundleIdentifier": "com.herofitllc.herofit",

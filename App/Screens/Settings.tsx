@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Button } from "native-base";
+import { Button, Text } from "native-base";
 import ScreenContainer from "../Components/ScreenContainer/ScreenContainer";
 import debugErrors, { createAppError } from "../common/debugErrors";
 import { User } from "../common/types";
@@ -52,7 +52,8 @@ const Settings: React.FC<MainStackProps<"Settings">> = ({ navigation, route }) =
 
   async function handleCacheClear() {
     await clearLs("herofit-stravaActivities");
-    navigation.navigate("Home", { clearActivities: true, fetchStravaManually: isStravaUser ? true : false });
+    addToast("success", `Local activity Data Cleared`);
+    //navigation.navigate("Home", { clearActivities: true, fetchStravaManually: isStravaUser ? true : false });
   }
 
   function handleDeleteAccount() {
@@ -85,18 +86,6 @@ const Settings: React.FC<MainStackProps<"Settings">> = ({ navigation, route }) =
     clearLs("herofit-jwt");
   }
 
-  function se1() {
-    try {
-      throw new Error("TEST THROW ERROR");
-    } catch (error) {
-      console.log("error");
-    }
-  }
-
-  function se2() {
-    console.log(cake.icecream);
-  }
-
   return (
     <ScreenContainer screenName={route.name}>
       <Header text="Settings" />
@@ -115,7 +104,10 @@ const Settings: React.FC<MainStackProps<"Settings">> = ({ navigation, route }) =
           )}
         </Pane>
         <Pane mb={10}>
-          <Subheader fontSize="xl" text="Delete activities cached on device" />
+          <Subheader fontSize="xl" text="Delete activities cached on this device" />
+          <Text color="primary.700" textAlign="center">
+            This won't effect activities already applied to your Hero
+          </Text>
           <Button _text={{ fontFamily: "heading", fontSize: "2xl" }} mt={5} onPress={handleCacheClear}>
             Delete Activity Cache
           </Button>
@@ -124,15 +116,6 @@ const Settings: React.FC<MainStackProps<"Settings">> = ({ navigation, route }) =
               Del Act Cache no refetch
             </Button>
           )}
-        </Pane>
-        <Pane mb={10}>
-          <Subheader fontSize="xl" text="Dev test - don't use" />
-          <Button _text={{ fontFamily: "heading", fontSize: "2xl" }} mt={5} onPress={se1}>
-            Sentry test error
-          </Button>
-          <Button _text={{ fontFamily: "heading", fontSize: "2xl" }} mt={5} onPress={se2}>
-            Sentry test error 2
-          </Button>
         </Pane>
 
         {__DEV__ && (

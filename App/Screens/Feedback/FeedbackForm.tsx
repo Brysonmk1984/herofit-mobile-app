@@ -7,6 +7,7 @@ import debugErrors from "../../common/debugErrors";
 import { emailContactForm } from "../../api/email";
 import { GlobalStateContext } from "../../store";
 import useGlobalToast from "../../common/hooks/useGlobalToast";
+import LoadingInPane from "../../Components/LoadingInPane";
 
 interface FeedbackFormProps {
   postSubmitAction?: (data?: any) => void;
@@ -19,6 +20,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ postSubmitAction }) => {
   const [message, setMessage] = useState(null);
   const [helperText, setHelperText] = useState<string | null>(null);
   const [formIsValid, setFormIsValid] = useState(false);
+  const [isSending, setIsSending] = useState(false);
   const { addToast } = useGlobalToast();
 
   const debounced = useDebouncedCallback(() => {
@@ -46,16 +48,17 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ postSubmitAction }) => {
 
   function _resetForm() {
     setHelperText(null);
-    setEmail(null);
     setFeedbackType("General Comment");
     setMessage(null);
     setFormIsValid(false);
+    setIsSending(false);
   }
 
   // // Handle submit of form: send form data to back end, which handles sending the email logic
   async function _handleSubmit(body: { email: string; feedbackType: string; message: string }) {
     const { email, feedbackType, message } = body;
     const accountInfo = { username: state.user.username, firstName: state.user.firstName, email: state.user.email };
+    setIsSending(true);
     try {
       await emailContactForm({ email, feedbackType, message, accountInfo });
       addToast("success", "Message sent! We will get back to you shortly!");
@@ -63,6 +66,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ postSubmitAction }) => {
     } catch (error) {
       // Error sending Form Message
       const errorMessage = debugErrors(error, state.user);
+      setIsSending(false);
       addToast("error", errorMessage);
     }
   }
@@ -105,7 +109,8 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ postSubmitAction }) => {
             <TextArea textAlignVertical="top" justifyContent="flex-start" placeholder="Enter Message" totalLines={5} onChangeText={text => _handleInputChange(text, setMessage)} value={message} />
           </FormControl>
           {helperText && <HelperText type={formIsValid ? "success" : "error"} text={helperText} />}
-          <Button disabled={!formIsValid} onPress={() => _handleSubmit({ email, feedbackType, message })}>
+          {isSending && <LoadingInPane text="Sending Feedback" />}
+          <Button disabled={!formIsValid || isSending} onPress={() => _handleSubmit({ email, feedbackType, message })}>
             Send Feedback
           </Button>
         </VStack>

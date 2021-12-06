@@ -27,7 +27,7 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
   async function handleSignIn() {
     setLoading(true);
     setHelperText(null);
-
+    Keyboard.dismiss();
     try {
       if (!formIsValid) {
         throw new Error("Please complete the form.");
@@ -38,9 +38,13 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
 
       // User hasn't confirmed email yet
       if (!user.active) {
-        addToast("caution", "Please Confirm your Email by Clicking the link in the message sent after registration.");
+        addToast("caution", "Please Confirm your Email by Clicking the link in the message sent after registration.", null, 20000);
         dispatch({ type: "SET USER", payload: { user, isSignedIn: false } });
-        return setLoading(false);
+        setLoading(false);
+        if (!user.emailCode) {
+          return setShowLegacyLink(true);
+        }
+        return;
       }
 
       await fetchInitialData(null, dispatch, state, user.email);

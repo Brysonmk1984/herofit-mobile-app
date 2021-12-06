@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Keyboard } from "react-native";
-import { View, Text, VStack, FormControl, Input, Link, Button, Center } from "native-base";
+import { View, Text, VStack, FormControl, Input, Link, Button, Center, Divider, Box } from "native-base";
 import { GlobalStateContext } from "../../store";
 import debugErrors from "../../common/debugErrors";
 import { Header, ScreenContainer, ScreenActionButton, Pane, HelperText, LoadingInPane } from "../../Components/CustomComponents";
@@ -14,7 +14,6 @@ import useGlobalToast from "../../common/hooks/useGlobalToast";
 import PaneActionButton from "../../Components/PaneActionButton";
 
 const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">) => {
-  const { state, dispatch } = useContext(GlobalStateContext);
   const { addToast } = useGlobalToast();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,8 +22,10 @@ const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">)
   const [formIsValid, setFormIsValid] = useState(false);
   const [helperText, setHelperText] = useState(null);
   const [emailSent, setEmailSent] = useState(false);
-  // the URL param that's emailed to user and redirected through website
+  // The URL param that's emailed to user and redirected through website
+  // Also used to control whether form is in state 1 or 2
   const [verifyPassword, setVerifyPassword] = useState(null);
+  const [resendSent, setResendSent] = useState(false);
 
   async function handleReset() {
     try {
@@ -47,9 +48,11 @@ const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">)
     }
   }
 
-  async function handleSendEmailConfirmation() {
-    if (emailSent) {
+  async function handleSendEmailConfirmation(sendAgain = false) {
+    if (!sendAgain && emailSent) {
       return;
+    } else if (sendAgain) {
+      setResendSent(false);
     }
     setEmailSent(true);
     Keyboard.dismiss();
@@ -67,10 +70,6 @@ const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">)
       addToast("error", `${error.message}`);
     }
   }
-
-  // TODO AFTER STANDALONE APP
-  // Finishing implementing Redirect from clicking email back to app
-  function handleForgotPasswordRedirect() {}
 
   // If a user returns to app, capture URL and set state to value of verifyPassword
   Linking.addEventListener("url", data => {
@@ -131,7 +130,7 @@ const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">)
           // Show Password inputs
           <Pane>
             <VStack space={6} mt={5}>
-              <FormControl isRequired isInvalid={helperText === "Password must be at least 8 characters" ? true : false}>
+              <FormControl isDisabled isRequired isInvalid={helperText === "Password must be at least 8 characters" ? true : false}>
                 <FormControl.Label>Email</FormControl.Label>
                 <Input onChangeText={text => handleInputChange(text, setEmail)} value={email} autoCompleteType="email" textContentType="emailAddress" placeholder="Enter Email" autoCapitalize="none" />
               </FormControl>
@@ -143,7 +142,7 @@ const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">)
                 <FormControl.Label>Confirm Password</FormControl.Label>
                 <Input onChangeText={text => handleInputChange(text, setPasswordConfirm)} value={passwordConfirm} secureTextEntry={true} autoCompleteType="password" textContentType="password" placeholder="Confirm Password" autoCapitalize="none" />
               </FormControl>
-              <PaneActionButton text="Update Password" disabled={!formIsValid || emailSent ? true : false} action={handleReset} />
+              <PaneActionButton text="Update Password" disabled={!formIsValid ? true : false} action={handleReset} />
               {helperText && <HelperText type={formIsValid ? "success" : "error"} text={helperText} />}
               {loading && <LoadingInPane text="Updating Password..." />}
               <View alignItems="center">
@@ -159,12 +158,23 @@ const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">)
             <VStack space={6} mt={5}>
               <FormControl isRequired isInvalid={helperText === "Password must be at least 8 characters" ? true : false}>
                 <FormControl.Label>What's your sign up email?</FormControl.Label>
-                <Input onChangeText={text => handleInitialEmailChange(text, setEmail)} value={email} autoCompleteType="email" textContentType="emailAddress" placeholder="Enter Email" />
+                <Input onChangeText={text => handleInitialEmailChange(text, setEmail)} value={email} autoCompleteType="email" textContentType="emailAddress" placeholder="Enter Email" autoCapitalize="none" />
               </FormControl>
-              <PaneActionButton text="Confirm Email" disabled={emailSent ? true : false} action={handleSendEmailConfirmation} />
+              <PaneActionButton disabled={emailSent} text="Confirm Email" disabled={emailSent ? true : false} action={handleSendEmailConfirmation} />
               {helperText && <HelperText type={formIsValid ? "success" : "error"} text={helperText} />}
               {loading && <LoadingInPane text="SendingEmail..." />}
               <View alignItems="center">
+                {emailSent && resendSent && (
+                  <>
+                    <Box pb={3}>
+                      <Link _text={{ fontSize: "lg" }} onPress={() => handleSendEmailConfirmation(true)} my={1}>
+                        Resend Confirmation Email
+                      </Link>
+                    </Box>
+                    <Divider mb={2} />
+                  </>
+                )}
+
                 <Link _text={{ fontSize: "lg" }} onPress={() => navigation.push("SignIn")} my={1}>
                   Back To Sign In
                 </Link>
@@ -173,8 +183,6 @@ const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">)
           </Pane>
         )}
       </View>
-
-      {/* <ScreenActionButton text={verifyPassword ? `Update Password` : "Confirm Email"} disabled={!formIsValid || emailSent ? true : false} action={verifyPassword ? handleReset : handleSendEmailConfirmation} /> */}
     </ScreenContainer>
   );
 };
