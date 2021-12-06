@@ -55,10 +55,10 @@ const BattleReport: React.FC<BattleReportProps> = ({ navigation, route }) => {
     }
   }, [selectedAttribute]);
 
-  // useEffect(() => {
-  //   updateBattleReportSeen({ id });
-  //   dispatch({ type: "SEEN BATTLE REPORT", payload: { latestBattle: { ...route.params.battleReport, seenReport: true } } });
-  // }, []);
+  useEffect(() => {
+    updateBattleReportSeen({ id });
+    dispatch({ type: "SEEN BATTLE REPORT", payload: { latestBattle: { ...route.params.battleReport, seenReport: true } } });
+  }, []);
 
   useEffect(() => {
     if (mounted) {
