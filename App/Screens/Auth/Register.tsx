@@ -82,7 +82,6 @@ function formReducer(state: FormState, action: FormAction): FormState {
       return { ...updatedState, formIsValid, helperText };
     }
     case "EMAIL MARKETING OPT IN TOGGLE": {
-      console.log("LOOK", action.emailMarketingOptIn);
       return { ...state, emailMarketingOptIn: action.emailMarketingOptIn };
     }
     case "SET LOADING": {

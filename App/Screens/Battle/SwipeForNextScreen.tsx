@@ -8,8 +8,17 @@ interface SwipeForNextScreenProps {
 
 const SwipeForNextScreen: React.FC<SwipeForNextScreenProps> = ({ reversedText }) => {
   return (
-    <Box position="absolute" bottom={1} left={24} mt={5}>
+    <Box position="absolute" bottom={1} left="50%" ml={-118} mt={5}>
       <HStack>
+        <Box
+          mr={6}
+          mt={-1.5}
+          style={{
+            transform: [{ rotateX: "135deg" }, { rotateZ: "135deg" }],
+          }}
+        >
+          <Icon iconName="bottom-right-3d-arrow" size={36} color={reversedText ? "base.brand" : "base.primary"} />
+        </Box>
         <Text color={reversedText ? "base.brand" : "base.primary"}>Swipe for Next Screen</Text>
         <Box
           ml={6}

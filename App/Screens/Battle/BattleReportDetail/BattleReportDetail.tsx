@@ -19,7 +19,7 @@ const BattleReportDetail: React.FC<MainStackProps<"BattleReportDetail"> & { setS
           <StatDisplay battleReport={route.params.battleReport} setSelectedAttribute={setSelectedAttribute} />
         </VStack>
       </ScrollView>
-      <SwipeForNextScreen center={true} />
+      <SwipeForNextScreen reversedText={battleReport.outcome !== "Avatar Wins"} center={true} />
       {selectedAttribute && <AttributeDetail id="AttributeDetail" attribute={selectedAttribute} />}
     </ScreenContainer>
   );

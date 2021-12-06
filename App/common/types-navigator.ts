@@ -30,6 +30,7 @@ type MainStackParamList = {
     newManualActivity?: Activity;
     fetchStravaManually?: boolean;
     clearActivities?: boolean;
+    postBattleReportAwards?: string[];
   };
   SpendQP: undefined;
   Activity: {

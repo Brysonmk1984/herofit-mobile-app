@@ -107,7 +107,7 @@ const RoundDisplay: React.FC<RoundDisplayProps> = ({ battleReport, setSelectedAt
     <View>
       <Box mt={-6} mb={2} pb={-2}>
         <Center mb={2}>
-          <Text fontSize={20} color="primary.800">
+          <Text fontSize={20} color={battleReport.outcome === "Avatar Wins" ? "primary.800" : "primary.200"}>
             Round - By - Round
           </Text>
         </Center>

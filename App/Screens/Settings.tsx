@@ -111,11 +111,6 @@ const Settings: React.FC<MainStackProps<"Settings">> = ({ navigation, route }) =
           <Button _text={{ fontFamily: "heading", fontSize: "2xl" }} mt={5} onPress={handleCacheClear}>
             Delete Activity Cache
           </Button>
-          {__DEV__ && (
-            <Button _text={{ fontFamily: "heading", fontSize: "2xl" }} mt={5} onPress={() => clearLs("herofit-stravaActivities")}>
-              Del Act Cache no refetch
-            </Button>
-          )}
         </Pane>
 
         {__DEV__ && (

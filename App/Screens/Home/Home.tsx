@@ -176,6 +176,19 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
     }
   }, [route.params?.fetchStravaManually]);
 
+  useEffect(() => {
+    const awards = route.params?.postBattleReportAwards;
+    if (awards && awards.length) {
+      setTimeout(() => {
+        awards.forEach((award: string, i: number) => {
+          setTimeout(() => {
+            addToast("success", award);
+          }, 3000 * i);
+        });
+      }, 3000);
+    }
+  }, [route.params?.postBattleReportAwards]);
+
   return (
     <SideMenu disableGestures={(Boolean(state.initialHomescreenLoad) ?? false) || bottomDrawerOpen} bounceBackOnOverdraw={false} onChange={isOpen => setSideDrawerOpen(isOpen)} isOpen={sideDrawerOpen} menuPosition={"right"} menu={<SidebarMenu navigation={navigation} setSideDrawerOpen={setSideDrawerOpen} heroName={hero.name} />} openMenuOffset={sideBarWidth}>
       <ScreenContainer bg={<Background animation={backgroundAnimation} setBackgroundAnimation={setBackgroundAnimation} />} screenName={route.name}>

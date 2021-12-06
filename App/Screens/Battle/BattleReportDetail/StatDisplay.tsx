@@ -7,6 +7,7 @@ import { determineScenario } from "../../../common/helperFunctions";
 import moment from "moment";
 import { BattleDetailOnly, BattleEffectProc, BattleReportStats, BattleSeasonalBonusElement } from "../../../common/types-battle";
 import { Stat } from "../../../common/types";
+import useAspectRatio from "../../../common/hooks/useAspectRatio";
 
 interface StatDisplayProps {
   battleReport: BattleDetailOnly;
@@ -68,7 +69,7 @@ function determineStatColor(base: number, battleTime: number) {
 }
 
 const StatDisplay: React.FC<StatDisplayProps> = ({ battleReport, setSelectedAttribute }) => {
-  const { height } = useWindowDimensions();
+  const { deviceAspectType } = useAspectRatio();
   const { outcome, scenario, roundBreakdown, avatar: hero, bra: brh, foe, brf, foeType, effects, updatedAt, seasonalBonusElement, effectProcs } = battleReport;
   const nonNullEffectProcs = effectProcs ?? [];
   const gradient = ["transparent", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "transparent"];
@@ -130,7 +131,7 @@ const StatDisplay: React.FC<StatDisplayProps> = ({ battleReport, setSelectedAttr
     const isAfterChange = battleDate.isAfter("2021-10-14");
     return isAfterChange ? (
       <Center mb={2}>
-        <Text fontSize={20} color="primary.800">
+        <Text fontSize={20} color={battleReport.outcome === "Avatar Wins" ? "primary.800" : "primary.200"}>
           {battleDate.format("MM-DD-YYYY")}
         </Text>
       </Center>
@@ -147,7 +148,7 @@ const StatDisplay: React.FC<StatDisplayProps> = ({ battleReport, setSelectedAttr
     <View mt={-8}>
       <ScrollView>
         {/* DATE */}
-        {renderDate(updatedAt)}
+        {deviceAspectType !== "short" && renderDate(updatedAt)}
         {/* NAMES */}
         <HStack bgColor="base.highlightTransparent" borderTopWidth={1}>
           <Text fontSize={hero.name.length > 12 ? 30 : hero.name.length > 8 ? 35 : 40} flex="1" fontFamily="heading" textAlign="left" px={2} borderRightWidth={1}>

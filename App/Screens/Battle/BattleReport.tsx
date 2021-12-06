@@ -11,12 +11,13 @@ import useDidMount from "../../common/hooks/useDidMount";
 import useModal from "../../common/hooks/useModal";
 import AttributeDetail from "../../Components/Modals/AttributeDetail";
 import SwipeForNextScreen from "./SwipeForNextScreen";
+import { capitalize } from "../../common/helperFunctions";
 
 interface BattleReportProps {}
 
 const BattleReport: React.FC<BattleReportProps> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
-  const { id } = route.params.battleReport;
+  const { ptGain, xpGain, itemsAcquired } = route.params.battleReport;
   const [currentPage, setCurrentPage] = useState(0);
   const { mounted } = useDidMount();
   const [loadRemainder, setLoadRemainder] = useState(false);
@@ -29,7 +30,22 @@ const BattleReport: React.FC<BattleReportProps> = ({ navigation, route }) => {
 
   function handleLastSwipe(e) {
     if (currentPage === 4) {
-      navigation.navigate("Home");
+      // Rewards are now displayed on the homescreen after the battle
+      const itemsGainedFromBattle = itemsAcquired
+        ? itemsAcquired.map(item => {
+            return `Earned the ${capitalize(item.name)} ${item.type === "skin" ? "Costume" : item.type}`;
+          })
+        : [];
+
+      const ptXpAquired = [];
+      if (xpGain > 0) {
+        ptXpAquired.push(`Gained ${xpGain} XP`);
+      }
+      if (ptGain > 0) {
+        ptXpAquired.push(`Gained ${ptGain} Photon Tokens`);
+      }
+      const postBattleReportAwards = [...itemsGainedFromBattle, ...ptXpAquired];
+      navigation.navigate("Home", { postBattleReportAwards });
     }
   }
 
@@ -39,10 +55,10 @@ const BattleReport: React.FC<BattleReportProps> = ({ navigation, route }) => {
     }
   }, [selectedAttribute]);
 
-  useEffect(() => {
-    updateBattleReportSeen({ id });
-    dispatch({ type: "SEEN BATTLE REPORT", payload: { latestBattle: { ...route.params.battleReport, seenReport: true } } });
-  }, []);
+  // useEffect(() => {
+  //   updateBattleReportSeen({ id });
+  //   dispatch({ type: "SEEN BATTLE REPORT", payload: { latestBattle: { ...route.params.battleReport, seenReport: true } } });
+  // }, []);
 
   useEffect(() => {
     if (mounted) {

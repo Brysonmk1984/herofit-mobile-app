@@ -168,7 +168,7 @@ export default {
       highlight: "#f1c85b",
       highlightTransparent: "rgba(255,255,240, .6)",
       highlightMoreTransparent: "rgba(255,255,240, .4)",
-      lowlight: "#1d0e29",
+      lowlight: "#452162",
       brand: "#d4af37",
       strava: "#FC4C02",
       fire: "#e25822",

@@ -18,7 +18,7 @@ const BattleReportDetail: React.FC<MainStackProps<"BattleReportDetail"> & { setS
         <Header text={"Battle Report"} extraPadding={false} mt={-7} />
         <RoundDisplay battleReport={route.params.battleReport} setSelectedAttribute={setSelectedAttribute} />
       </ScrollView>
-      <SwipeForNextScreen center={true} />
+      <SwipeForNextScreen reversedText={battleReport.outcome !== "Avatar Wins"} center={true} />
       {selectedAttribute && <AttributeDetail id="AttributeDetail" attribute={selectedAttribute} />}
     </ScreenContainer>
   );

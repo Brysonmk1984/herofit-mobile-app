@@ -52,7 +52,7 @@ const TopSection: React.FC<TopSectionProps> = ({ height: deviceHeight, outcome, 
       <Animated.View position="absolute" left={-95} top={-25} zIndex={1} style={{ opacity: opacityAnim }}>
         {contenderType === "hero" ? <HeroImage width={deviceHeight * 0.3} height={deviceHeight * 0.3} skin={equippedSkin} {...determinePropsForImage(contender, contenderType)} /> : <FoeImage {...determinePropsForImage(contender, contenderType)} />}
       </Animated.View>
-      <Rewards reversedText={outcome !== "Avatar Wins"} topOrBottom={"top"} itemsAcquired={itemsAcquired} ptGain={ptGain} xpGain={xpGain} setPressedItem={setPressedItem} />
+      {/* <Rewards reversedText={outcome !== "Avatar Wins"} topOrBottom={"top"} itemsAcquired={itemsAcquired} ptGain={ptGain} xpGain={xpGain} setPressedItem={setPressedItem} /> */}
     </Box>
   );
 };
