@@ -10,7 +10,7 @@ interface StatusBarProps {
 const StatusBar: React.FC<StatusBarProps> = ({ children, windowWidth }) => {
   return (
     <View ml={-4} alignSelf="center" style={[styles.trapezoid, { width: windowWidth * 0.55 }]}>
-      <Box mt={-9}>{children}</Box>
+      <Box mt={-8}>{children}</Box>
     </View>
   );
 };
@@ -20,7 +20,7 @@ export default StatusBar;
 const styles = StyleSheet.create({
   trapezoid: {
     height: 0,
-    borderTopWidth: 30,
+    borderTopWidth: 28,
     borderTopColor: "#333633",
     borderLeftWidth: 20,
     borderLeftColor: "transparent",

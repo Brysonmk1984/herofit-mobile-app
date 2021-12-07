@@ -50,7 +50,7 @@ export const TopHud: React.FC<TopHudProps> = ({ equippedTitle }) => {
               ) : hero.goToBattle ? (
                 <CountdownTimer fontSize={20} type={"Battle"} />
               ) : (
-                <Box flexDirection="row" mt={1.5}>
+                <Box flexDirection="row" mt={1}>
                   <Text fontSize={20} fontFamily="heading" color="base.white" opacity=".5">
                     Status
                   </Text>

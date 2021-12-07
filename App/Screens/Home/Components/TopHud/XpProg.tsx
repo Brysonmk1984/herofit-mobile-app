@@ -46,7 +46,7 @@ const XpProg: React.FC<XpProgProps> = ({ windowWidth, xp, level, albedo, thisLev
     <Box ml={4} width={windowWidth * 0.7}>
       <Progress value={value as number} colorScheme="xp" mt={-0.5} height="32px" borderRadius={25} borderWidth={2} />
       <View flexDirection="row" position="absolute" right={2} top={0.5}>
-        <LevelText ml={windowWidth * 0.07} level={level} albedo={albedo} />
+        <LevelText ml={windowWidth * 0.09} level={level} albedo={albedo} />
         <XpText levelXp={xpGainedThisLevel} levelXpRequired={levelXpRequired} prevXpGained={prevXpGained} />
       </View>
     </Box>
