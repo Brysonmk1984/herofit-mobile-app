@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, View, Text, HStack, VStack } from "native-base";
+import { Box, View, Text, HStack, VStack, Pressable, Button } from "native-base";
 import Icon from "./Icon";
 import { Stat } from "../common/types";
 
@@ -24,9 +24,10 @@ interface StatDisplayProps {
   flex?: number;
   statColor?: string;
   reverseOrder?: boolean;
+  setSelectedAttribute?: (attr: Stat) => void;
 }
 
-export default function StatDisplay({ stat, value, description, size, reversedText, iconWatermark, flex, statColor, reverseOrder = false }: StatDisplayProps) {
+export default function StatDisplay({ stat, value, description, size, reversedText, iconWatermark, flex, statColor, reverseOrder = false, setSelectedAttribute }: StatDisplayProps) {
   const elementNameLC = stat.toLowerCase() as Stat;
   const iconColor = iconWatermark ? "base.primary" : `base.${elementNameLC}`;
   const numberColor = statColor ? statColor : reversedText ? "base.white" : "base.primary";
@@ -37,10 +38,10 @@ export default function StatDisplay({ stat, value, description, size, reversedTe
       valueSize: nativeBaseSizes = "2xl",
       statSize = 50,
       statSize2 = 35,
-      descriptionSize: nativeBaseSizes = "sm";
+      descriptionSize: nativeBaseSizes = "xl";
 
     if (size === "sm") {
-      (iconSize = 30), (valueSize = "lg"), (statSize = 30), (statSize2 = 28), (descriptionSize = "xs");
+      (iconSize = 30), (valueSize = "lg"), (statSize = 30), (statSize2 = 28), (descriptionSize = "md");
     }
     if (iconWatermark) {
       iconSize = 140;
@@ -110,11 +111,14 @@ export default function StatDisplay({ stat, value, description, size, reversedTe
     }
     if (iconWatermark) {
       return (
-        <View alignItems={"flex-start"} flex={4}>
-          <Text opacity={0.8} color={textColor} fontSize={descriptionSize}>
+        <VStack justifyContent="center" alignItems={"center"} flex={4}>
+          <Text textAlign="center" color={"base.highlight"} fontSize={descriptionSize} fontFamily="heading">
             {description}
           </Text>
-        </View>
+          <Button mt={-8} variant="ghost" onPress={() => setSelectedAttribute(stat)} _text={{ color: "base.white", underline: true, fontFamily: "body", fontSize: "md" }} _pressed={{ bgColor: "transparent", _text: { color: "base.highlight" } }}>
+            More Details
+          </Button>
+        </VStack>
       );
     }
     return (

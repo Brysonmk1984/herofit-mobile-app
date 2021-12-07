@@ -299,6 +299,7 @@ interface AttrObj {
   stat: Stat;
   lcName: Lowercase<Stat>;
   value: string;
+  descriptionShort: string;
   description: string;
   descriptionArray: string[];
   type: string;

@@ -173,12 +173,12 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
 
       <Box shadow={8} zIndex={1} elevation={1} borderColor="base.brand" borderTopWidth={1} display="flex" flexDirection="row" bgColor="base.primaryAlt">
         <Box w="50%" p={2} borderRightWidth={1} borderRightColor="base.brand">
-          <Button bgColor={newActivitiesAvailable ? "base.highlight" : undefined} onPress={() => (newActivitiesAvailable ? openModal("ActivityUpgrade") : navigation.push("Activity"))} _text={{ fontFamily: "heading", fontSize: 30 }} borderRadius="0px">
+          <Button py={2} bgColor={newActivitiesAvailable ? "base.highlight" : undefined} onPress={() => (newActivitiesAvailable ? openModal("ActivityUpgrade") : navigation.push("Activity"))} _text={{ fontFamily: "heading", fontSize: 27 }} borderRadius="0px">
             Activity
           </Button>
         </Box>
         <Box w="50%" p={2}>
-          <Button bgColor={battleReportAvailable ? "base.highlight" : hero.status === "Knocked Out" ? "base.disabled" : undefined} disabled={battleButtonDisabled} _text={{ fontFamily: "heading", fontSize: 30, color: battleButtonDisabled ? "base.disabledText" : "base.white" }} borderRadius={0} onPress={latestBattle && !latestBattle.seenReport ? handleBattleReport : goToBattle ? () => handleFetchUpcomingBattle(false) : () => openModal("GoToBattle")}>
+          <Button py={2} bgColor={battleReportAvailable ? "base.highlight" : hero.status === "Knocked Out" ? "base.disabled" : undefined} disabled={battleButtonDisabled} _text={{ fontFamily: "heading", fontSize: 27, color: battleButtonDisabled ? "base.disabledText" : "base.white" }} borderRadius={0} onPress={latestBattle && !latestBattle.seenReport ? handleBattleReport : goToBattle ? () => handleFetchUpcomingBattle(false) : () => openModal("GoToBattle")}>
             {battleReportAvailable ? "Report" : "Battle"}
           </Button>
         </Box>

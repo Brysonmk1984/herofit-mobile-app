@@ -56,7 +56,7 @@ const BattleReport: React.FC<BattleReportProps> = ({ navigation, route }) => {
   }, [selectedAttribute]);
 
   useEffect(() => {
-    updateBattleReportSeen({ id });
+    updateBattleReportSeen({ id: route.params.battleReport.id });
     dispatch({ type: "SEEN BATTLE REPORT", payload: { latestBattle: { ...route.params.battleReport, seenReport: true } } });
   }, []);
 

@@ -16,25 +16,8 @@ import { updateAvatarStats } from "../../api/avatar";
 import useGlobalToast from "../../common/hooks/useGlobalToast";
 import PaneSupportText from "../../Components/PaneSupportText";
 import usePrevious from "../../common/hooks/usePrevious";
-
-/*
-  FOR TESTING SPENDQP PAGE
-*/
-// const mockHero = {
-//   "character": "Chrono Guy",
-//   "alias": "Chrono Guy",
-//   "description": "Time Traveling Renegade",
-//   "history": "This enigmatic time traveler has been appearing with increasing frequency as the world has descended into chaos. While he has explained publicly that he's from two thousand years in the future and here to 'maintain the timeline of order', it's unclear what his exact motives are, who he works for and what the implications are of his very existence.",
-//   "image": "../../../assets/images/heroes/chrono_guy/chrono_guy.webp",
-//   "fire": 0,
-//   "earth": 0,
-//   "water": 0,
-//   "air": 10,
-//   "colors": [
-//       "#4B4B4B",
-//       "#E25926"
-//   ]
-// }
+import AttributeDetail from "../../Components/Modals/AttributeDetail";
+import useModal from "../../common/hooks/useModal";
 
 const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
   // Global State
@@ -45,6 +28,9 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
   const userStatus = state.userStatus;
   const existingHero = isExistingHero(hero);
   const { addToast } = useGlobalToast();
+  const { openModal } = useModal();
+  // Used for more detail modal only
+  const [selectedAttribute, setSelectedAttribute] = useState(null);
 
   let initialState: Stats = (() => {
     if (existingHero) {
@@ -63,7 +49,7 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
     return {
       stat: attr,
       value: attr === "Health" ? qpState["maxHealth"] : qpState[lcAttr],
-      description: defaultStats.find(item => item.stat === attr).description,
+      descriptionShort: defaultStats.find(item => item.stat === attr).descriptionShort,
     };
   });
 
@@ -137,6 +123,12 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
     }
   }, [mounted, qpState.qp, prevQp]);
 
+  useEffect(() => {
+    if (selectedAttribute) {
+      openModal("AttributeDetail");
+    }
+  }, [selectedAttribute]);
+
   // If a user finished setting inital stats, redirect them to home
   // These needs to happen after global state is updated
   useEffect(() => {
@@ -145,35 +137,9 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
     }
   }, [state.initialHomescreenLoad]);
 
-  // useEffect(
-  //   () =>
-  //     navigation.addListener("beforeRemove", e => {
-  //       if (prevQp === qpState.qp) {
-  //         // If we don't have unsaved changes, then we don't need to do anything
-  //         return;
-  //       }
-
-  //       // Prevent default behavior of leaving the screen
-  //       e.preventDefault();
-
-  //       // Prompt the user before leaving the screen
-  //       Alert.alert("Discard changes?", "You have unsaved changes. Are you sure to discard them and leave the screen?", [
-  //         { text: "Don't leave", style: "cancel", onPress: () => {} },
-  //         {
-  //           text: "Discard",
-  //           style: "destructive",
-  //           // If the user confirmed, then we dispatch the action we blocked earlier
-  //           // This will continue the action that had triggered the removal of the screen
-  //           onPress: () => navigation.dispatch(e.data.action),
-  //         },
-  //       ]);
-  //     }),
-  //   [navigation, prevQp, qpState.qp],
-  // );
-
   return (
     <ScreenContainer screenName={route.name}>
-      <Header text={`Quantum Points [${qpState.qp}]`} />
+      <Header text={`Quantum Points [${qpState.qp}]`} mt={3} mb={-2} />
 
       <FlatList
         ListHeaderComponent={
@@ -203,7 +169,7 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
             <Box borderRadius={14} bg={`base.${lcStatName}`} m={3} shadow={5}>
               <HStack alignItems="center" space={0}>
                 <View flex={4}>
-                  <StatDisplay iconWatermark reversedText={lcStatName === "aether" ? false : true} stat={item.stat} value={item.value} description={item.description} />
+                  <StatDisplay iconWatermark reversedText={lcStatName === "aether" ? false : true} stat={item.stat} value={item.value} description={item.descriptionShort} setSelectedAttribute={setSelectedAttribute} />
                 </View>
 
                 {!disabled && (
@@ -218,8 +184,8 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
           );
         }}
       />
-
       <ScreenActionButton text="Done" action={() => (existingHero ? _handleStatSave() : _handleNewUserStatFinish())} />
+      {selectedAttribute && <AttributeDetail id="AttributeDetail" attribute={selectedAttribute} />}
     </ScreenContainer>
   );
 };

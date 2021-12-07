@@ -3,6 +3,7 @@
     "stat" : "Power",
     "lcName" : "power",
     "value" : "100",
+    "descriptionShort" : "Primary source of Damage",
     "description" : "Primary source of Damage. Your opponent’s Armor value will reduce damage done.",
     "descriptionArray" : [
       "Primary source of damage",
@@ -16,6 +17,7 @@
     "stat" : "Health",
     "lcName" : "health",
     "value" : "100",
+    "descriptionShort" : "Hero's life total",
     "description" : "A Hero's life total. Physical & elemental damage reduces health in battle. If health drops to zero, the hero is 'Knocked Out'.",
     "descriptionArray" : [
       "Life Total of a hero or foe",
@@ -31,6 +33,7 @@
     "stat" : "Recovery",
     "lcName" : "recovery",
     "value" : "5",
+    "descriptionShort" : "Health Regeneration",
     "description" : "Boosts Health Recovered per hour & chance to revive early from being 'Knocked Out'",
     "descriptionArray" : [
       "Boosts Health Recovered per hour",
@@ -46,6 +49,7 @@
     "stat" : "Armor",
     "lcName" : "armor",
     "value" : "0",
+    "descriptionShort" : "Physical Damage Reduction",
     "description" : "Reduces Physical Damage and is a counter to high Power adversaries.",
     "descriptionArray" : [
       "Reduces Physical damage",
@@ -60,6 +64,7 @@
     "stat" : "Fire",
     "lcName" : "fire",
     "value" : "0",
+    "descriptionShort" : "Critical Strike",
     "description" : "Critical Strike\nResistance to Fire\nBonus Damage to Air & Water\nReduced Damage to Earth",
     "descriptionArray" : [
       "Deals Fire damage",
@@ -75,6 +80,7 @@
     "stat" : "Earth",
     "lcName" : "earth",
     "value" : "0",
+    "descriptionShort" : "Thorns Damage",
     "description" : "Thorns Damage\nResistance to Earth\nBonus Damage to Air & Fire\nReduced Damage to Water",
     "descriptionArray" : [
       "Deals Earth damage",
@@ -90,6 +96,7 @@
     "stat" : "Water",
     "lcName" : "water",
     "value" : "0",
+    "descriptionShort" : "Vampiric Touch",
     "description" : "Vampiric Touch\nResistance to Water\nBonus Damage to Fire & Earth\nReduced Damage to Air",
     "descriptionArray" : [
       "Deals Water damage",
@@ -105,6 +112,7 @@
     "stat" : "Air",
     "lcName" : "air",
     "value" : "0",
+    "descriptionShort" : "Evasion",
     "description" : "Evasion\nResistance to Air\nBonus Damage to Earth & Water\nReduced Damage to Fire",
     "descriptionArray" : [
       "Deals Air damage",
@@ -120,6 +128,7 @@
     "stat" : "Aether",
     "lcName" : "aether",
     "value" : "0",
+    "descriptionShort" : "Temporal Distortion",
     "description" : "Temporal Distortion: \nChance to repeat an attacking round \nRecover health from physical activities",
     "descriptionArray" : [
       "Increases Temporal Distortion - A % chance to have a second consecutive attacking round",

@@ -40,9 +40,9 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   const sideBarWidth = deviceWidth / 2;
   const isLongPhone = deviceAspectType === "long";
   const isMediumPhone = deviceAspectType === "medium";
-  const heroImagePosition = isLongPhone ? deviceHeight * 0.52 : isMediumPhone ? deviceHeight * 0.53 : deviceHeight * 0.52;
-  const petImagePosition = isLongPhone ? deviceHeight * 0.58 : isMediumPhone ? deviceHeight * 0.56 : deviceHeight * 0.5;
-  const heroImageSize = isLongPhone ? 375 : isMediumPhone ? 300 : 275;
+  const heroImagePosition = isLongPhone ? deviceHeight * 0.52 : isMediumPhone ? deviceHeight * 0.54 : deviceHeight * 0.54;
+  const petImagePosition = isLongPhone ? deviceHeight * 0.62 : isMediumPhone ? deviceHeight * 0.6 : deviceHeight * 0.55;
+  const heroImageSize = isLongPhone ? 350 : isMediumPhone ? 275 : 250;
   const bottomDrawerHeight = isLongPhone ? deviceHeight / 2.8 : isMediumPhone ? deviceHeight / 2.6 : deviceHeight / 2.4;
   const hero = state.hero as Hero;
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
@@ -188,6 +188,10 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
       }, 3000);
     }
   }, [route.params?.postBattleReportAwards]);
+
+  // useEffect(() => {
+  //   addToast("success", "works");
+  // }, []);
 
   return (
     <SideMenu disableGestures={(Boolean(state.initialHomescreenLoad) ?? false) || bottomDrawerOpen} bounceBackOnOverdraw={false} onChange={isOpen => setSideDrawerOpen(isOpen)} isOpen={sideDrawerOpen} menuPosition={"right"} menu={<SidebarMenu navigation={navigation} setSideDrawerOpen={setSideDrawerOpen} heroName={hero.name} />} openMenuOffset={sideBarWidth}>

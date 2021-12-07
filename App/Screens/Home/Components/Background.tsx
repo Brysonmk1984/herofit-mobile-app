@@ -37,7 +37,7 @@ const Background: React.FC<BackgroundProps> = ({ animation, setBackgroundAnimati
       // Images imported with the required method are numbers, so render them here
       return (
         <View style={[styles.imageContainer, { height: "100%", width: "100%", justifyContent: "flex-start" }]}>
-          <ImageBackground source={bg[sessionBackground]} style={{ height: "90%" }} resizeMode="cover" />
+          <ImageBackground source={bg[sessionBackground]} style={{ height: "100%" }} resizeMode="cover" />
         </View>
       );
     } else if (Array.isArray(bg[sessionBackground])) {

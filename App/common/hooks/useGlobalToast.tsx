@@ -5,6 +5,7 @@ import Ionicons from "@expo/vector-icons/build/Ionicons";
 import MaterialIcons from "@expo/vector-icons/build/MaterialIcons";
 import toastTheme from "../../styles/toastTheme";
 import { ActionFeedbackType } from "../types";
+import { Dimensions } from "react-native";
 
 const useGlobalToast = () => {
   const toast = useToast();
