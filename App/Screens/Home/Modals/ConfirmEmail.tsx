@@ -30,7 +30,7 @@ const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
   function resendEmailLink() {
     try {
       resendEmailConfirmation({ email: state.user.email, isMobileApp: true }).then(data => {
-        addToast("success", "Please check your email to verify account. Check your spam folder if the message is not in your inbox. Sometimes the email takes a few minutes to arrive.");
+        addToast("success", "Please check your email to verify account. Check your spam folder if the message is not in your inbox. Sometimes the email takes a few minutes to arrive.", "bottom", 5000);
       });
     } catch (error) {
       addToast("error", error.message);

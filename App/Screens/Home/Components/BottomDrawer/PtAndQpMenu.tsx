@@ -26,7 +26,7 @@ const PtAndQpMenu: React.FC<PtAndQpMenuProps> = ({ photonTokens, qp, openBottomD
               </Text>
             </HStack>
 
-            <Image position="absolute" elevation={1001} left={-30} top={-23} size={70} source={require("../../../../../assets/images/misc/quantum_points.webp")} />
+            <Image position="absolute" elevation={1001} left={-30} top={-25} size={70} source={require("../../../../../assets/images/misc/quantum_points.webp")} />
           </Pressable>
           <Box zIndex={1001} elevation={1001} position="absolute" left="50%" top={-36} marginLeft={-44}>
             <Triangle action={openBottomDrawer} />
@@ -41,7 +41,7 @@ const PtAndQpMenu: React.FC<PtAndQpMenuProps> = ({ photonTokens, qp, openBottomD
               </Text>
             </HStack>
 
-            <Image position="absolute" elevation={1001} right={-22} top={-33} size="75" source={require("../../../../../assets/images/misc/photon_stack.webp")} />
+            <Image position="absolute" elevation={1001} right={-22} top={-38} size="75" source={require("../../../../../assets/images/misc/photon_stack.webp")} />
           </Pressable>
         </HStack>
       </Box>

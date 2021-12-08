@@ -138,7 +138,7 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
 
                 {showLegacyLink ? (
                   <Center mt={2}>
-                    <PaneSupportText iconName="caution" iconColor="base.caution" text={"Must Verify Account on HeroFit.io"}>
+                    <PaneSupportText iconName="caution" iconColor="base.caution" text={"Must Verify Account"}>
                       We have upgraded our login system and because you have a legacy account, you must verify your account from our website.
                     </PaneSupportText>
                     <Link _text={{ fontSize: "3xl" }} onPress={() => navigation.push("ForgotPassword")} mt={1}>

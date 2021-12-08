@@ -37,7 +37,7 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
       const existingHeroStats = (({ qp, power, health, maxHealth, armor, recovery, fire, earth, water, air, aether, qpPower, qpHealth, qpArmor, qpRecovery, qpFire, qpEarth, qpAir, qpWater, qpAether }) => ({ qp, power, health, maxHealth, armor, recovery, fire, earth, water, air, aether, qpPower, qpHealth, qpArmor, qpRecovery, qpFire, qpEarth, qpAir, qpWater, qpAether }))(hero);
       return existingHeroStats;
     } else {
-      return { qp: 10, power: 100, health: 100, maxHealth: 100, armor: 0, recovery: 5, fire: 0, earth: 0, water: 0, air: 0, aether: 0, qpPower: 0, qpHealth: 0, qpArmor: 0, qpRecovery: 0, qpFire: 0, qpEarth: 0, qpAir: 0, qpWater: 0, qpAether: 0 };
+      return { qp: 10, power: 100, health: 100, maxHealth: 100, armor: 0, recovery: 5, fire: hero.fire, earth: hero.earth, water: hero.water, air: hero.air, aether: 0, qpPower: 0, qpHealth: 0, qpArmor: 0, qpRecovery: 0, qpFire: 0, qpEarth: 0, qpAir: 0, qpWater: 0, qpAether: 0 };
     }
   })();
 

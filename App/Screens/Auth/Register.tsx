@@ -115,7 +115,9 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
 
     try {
       const { avatar, avatarId, awardedItemMessage } = await insertAvatar({ avatar: state.hero, email: user.email, userId: user.id });
+
       await instantiateUserTotals({ email: user.email, avatarId: avatarId });
+
       dispatch({ type: "SET HERO", payload: { hero: Object.assign(state.hero, avatar) } });
       formDispatch({ type: "SET LOADING", loading: false });
       // Display welcome message

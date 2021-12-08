@@ -62,7 +62,7 @@ const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">)
       }
       await sendPasswordResetEmailVerification({ email, isMobileApp: true });
       setLoading(false);
-      addToast("success", "Please check your email to verify account. Check your spam folder if the message is not in your inbox.");
+      addToast("success", "Please check your email to verify account. Check your spam folder if the message is not in your inbox.", "bottom", 5000);
     } catch (error) {
       setEmailSent(false);
       setLoading(false);

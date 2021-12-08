@@ -107,21 +107,21 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   }
 
   // Handles detecting when the app comes back to the foreground
-  const _handleAppStateChange = nextAppState => {
-    if (appState.current.match(/inactive|background/) && nextAppState === "active") {
-      handleReload();
-    }
-    appState.current = nextAppState;
-    setAppStateVisible(appState.current);
-  };
+  // const _handleAppStateChange = nextAppState => {
+  //   if (appState.current.match(/inactive|background/) && nextAppState === "active") {
+  //     handleReload();
+  //   }
+  //   appState.current = nextAppState;
+  //   setAppStateVisible(appState.current);
+  // };
 
   // Only add Foreground listener is active user
-  useEffect(() => {
-    if (state.userStatus !== "new" && state.userStatus !== "unconfirmed" && state.user?.dataSrcId) {
-      AppState.addEventListener("change", _handleAppStateChange);
-      return () => AppState.removeEventListener("change", _handleAppStateChange);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (state.userStatus !== "new" && state.userStatus !== "unconfirmed" && state.user?.dataSrcId) {
+  //     AppState.addEventListener("change", _handleAppStateChange);
+  //     return () => AppState.removeEventListener("change", _handleAppStateChange);
+  //   }
+  // }, []);
 
   // Alert user if they received an item on login (from get-avatar)
   useEffect(() => {
