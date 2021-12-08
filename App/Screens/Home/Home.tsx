@@ -19,7 +19,7 @@ import useStravaDataProcess from "../../common/hooks/useStravaDataProcess";
 import moment from "moment";
 import useGlobalToast from "../../common/hooks/useGlobalToast";
 import useInventory from "../../common/hooks/useInventory";
-import { clearLs } from "../../common/helperFunctions";
+import { clearLs, getLsWithExpiry, setLsWithExpiry } from "../../common/helperFunctions";
 import SideMenu from "react-native-side-menu-updated";
 import { AppState, Dimensions, ImageBackground } from "react-native";
 import SidebarMenu from "./Components/SidebarMenu";
@@ -28,6 +28,7 @@ import GestureRecognizer, { swipeDirections } from "react-native-swipe-gestures"
 import * as Linking from "expo-linking";
 import useAspectRatio from "../../common/hooks/useAspectRatio";
 import LevelUpText from "./Components/LevelUpText";
+import useServerMessage from "../../common/hooks/useServerMessage";
 
 const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -35,6 +36,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   const { newStravaActivities, getFreshStravaData, resetNewStravaActivities } = useStravaDataProcess();
   const [newActivities, setNewActivities] = useState<Activity[]>([]);
   const { addToast } = useGlobalToast();
+  useServerMessage();
   const { equippedSkin, equippedPet, equippedTitle } = useInventory(true);
   const { deviceWidth, deviceHeight, deviceAspectType } = useMemo(() => useAspectRatio(), []);
   const sideBarWidth = deviceWidth / 2;

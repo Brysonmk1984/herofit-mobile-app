@@ -10,7 +10,7 @@ interface ToggleLoadingAction {
 }
 interface SetExistingUserInitDataAction {
   type: "SET EXISTING USER INIT DATA";
-  payload: { user: User; hero: Hero; latestSavedActivities: Activity[]; latestSavedActivityDate: string | null; latestBattle: Battle; isSignedIn: boolean; allGameItems: Item[]; awardedItemMessage: string | null };
+  payload: { globalMessage: string | undefined; user: User; hero: Hero; latestSavedActivities: Activity[]; latestSavedActivityDate: string | null; latestBattle: Battle; isSignedIn: boolean; allGameItems: Item[]; awardedItemMessage: string | null };
 }
 interface SetIsSignedInAction {
   type: "SET ISSIGNEDIN";
@@ -97,6 +97,7 @@ interface Activity {
 }
 
 interface InitialAppState {
+  globalMessage: GlobalMessage | undefined;
   jwt: string | null;
   isSignedIn: boolean;
   isLoading: boolean;
@@ -381,4 +382,12 @@ type TabColors = {
 
 type ActionFeedbackType = "info" | "caution" | "error" | "success";
 
-export { Action, AppDispatch, InitialAppState, AppAction, Store, User, UserStatus, Activity, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, ItemWithOwnership, BattleInstantItem, ServerItemType, ServerInventoryCategories, EquippableItemType, Effect, Stat, PrimaryElement, EveryElement, AttrObj, HeroChoice, CharacterName, CharacterAlias, FoeAbility, FoeType, AllFoes, SkinLcUnderscoreName, SkinName, Tint, Foe, FoeClass, ZodiacSign, TabType, TabColors, ActionFeedbackType };
+interface GlobalMessage {
+  type: ActionFeedbackType;
+  message: string;
+  persist?: boolean;
+  link?: string;
+}
+type GlobalMessages = GlobalMessage[];
+
+export { Action, AppDispatch, InitialAppState, AppAction, Store, User, UserStatus, Activity, Stats, Hero, ExistingHeroPropertiesAsUnion, ExistingHeroProperties, StartingElementalPower, SelectedHero, HeroStatus, DefaultHeroProperties, HeroWithStats, ItemInstance, Item, ItemWithOwnership, BattleInstantItem, ServerItemType, ServerInventoryCategories, EquippableItemType, Effect, Stat, PrimaryElement, EveryElement, AttrObj, HeroChoice, CharacterName, CharacterAlias, FoeAbility, FoeType, AllFoes, SkinLcUnderscoreName, SkinName, Tint, Foe, FoeClass, ZodiacSign, TabType, TabColors, ActionFeedbackType, GlobalMessages };

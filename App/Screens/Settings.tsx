@@ -84,6 +84,7 @@ const Settings: React.FC<MainStackProps<"Settings">> = ({ navigation, route }) =
   function deleteAllCache() {
     clearLs("herofit-stravaActivities");
     clearLs("herofit-jwt");
+    clearLs("herofit-seenGlobalMessage");
   }
 
   return (

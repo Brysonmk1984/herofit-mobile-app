@@ -3,18 +3,19 @@ import axiosRetry from "axios-retry";
 import { axiosOptions } from "./axiosDefaults";
 import handleHttpError from "./handleHttpError";
 import Constants from "expo-constants";
+import { GlobalMessages, User } from "../common/types";
 const endpoint: string = Constants.manifest.extra.HF_ENDPOINT;
 
 let axios = _axios.create();
 axiosRetry(axios, { retries: 3 });
 
-const getUser = async function (body?: { email?: string }): Promise<any> {
+const getUser = async function (body?: { email?: string }): Promise<{ user: User; globalMessages: GlobalMessages | undefined }> {
   return axios
     .post(`${endpoint}user/user-details`, body, await axiosOptions())
     .then(({ data }) => {
-      const user = data.data.user;
+      const { user, globalMessage: globalMessages } = data.data;
 
-      return { user };
+      return { user, globalMessages };
     })
     .catch(({ request, response }) => {
       throw handleHttpError(request, response);

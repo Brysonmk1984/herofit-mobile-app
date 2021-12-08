@@ -5,7 +5,7 @@ import { fetchAllGameItems } from "../api/inventory";
 import { convertItemIdsToFullItems } from "./helperFunctions";
 import { fetchBattleReport } from "../api/battle";
 import debugErrors from "./debugErrors";
-import { User, Hero, Item, AppDispatch, InitialAppState } from "./types";
+import { User, Hero, Item, AppDispatch, InitialAppState, GlobalMessages } from "./types";
 
 // FETCH ALL THE NEEDED DATA FOR INITIALIZING THE HOME SCREEN
 // Either accepts the jwt token and gets email from it in the case of already-valid jwt, or accepts email as a parameter in the case of signing in
@@ -19,7 +19,8 @@ async function fetchInitialData(token: string, dispatch: AppDispatch, state: Ini
 
     // Fetch the user, avatar, and all game items
     const [p1, p2, p3, p4, p5] = await Promise.all([getUser(), getAvatar({ email, isMobileApp: true }), fetchAllGameItems(), fetchBattleReport({ owner: email }), getSavedActivities({ email, count: 30 })]);
-    const user: User = p1.user;
+    const { user, globalMessages }: { user: User; globalMessages: GlobalMessages | undefined } = p1;
+
     const hero: Hero = p2.hero;
     const awardedItemMessage: string = p2.awardedItemMessage;
 
@@ -33,7 +34,7 @@ async function fetchInitialData(token: string, dispatch: AppDispatch, state: Ini
 
     const userStatus = user.active ? "active" : "unconfirmed";
 
-    dispatch({ type: "SET EXISTING USER INIT DATA", payload: { user, hero, latestBattle, isSignedIn: true, userStatus, latestSavedActivities, latestSavedActivityDate, allGameItems, awardedItemMessage } });
+    dispatch({ type: "SET EXISTING USER INIT DATA", payload: { globalMessages, user, hero, latestBattle, isSignedIn: true, userStatus, latestSavedActivities, latestSavedActivityDate, allGameItems, awardedItemMessage } });
   } catch (error) {
     throw error;
   }
