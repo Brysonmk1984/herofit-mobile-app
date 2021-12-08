@@ -35,7 +35,7 @@ const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">)
       setLoading(true);
       setHelperText(null);
       setFormIsValid(false);
-      await resetPassword({ email, token: verifyPassword, password });
+      await resetPassword({ email: email.trim(), token: verifyPassword, password: password.trim() });
       setLoading(false);
       addToast("success", "Password has been updated!");
       setTimeout(() => {
@@ -60,7 +60,7 @@ const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">)
       if (!formIsValid) {
         throw new Error("Please complete the form.");
       }
-      await sendPasswordResetEmailVerification({ email, isMobileApp: true });
+      await sendPasswordResetEmailVerification({ email: email.trim(), isMobileApp: true });
       setLoading(false);
       addToast("success", "Please check your email to verify account. Check your spam folder if the message is not in your inbox.", "bottom", 5000);
     } catch (error) {

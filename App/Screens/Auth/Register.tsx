@@ -142,7 +142,7 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
 
       formDispatch({ type: "SET LOADING", loading: true });
 
-      const data = await register({ email, firstName, username, password, emailMarketingOptIn, isMobileApp: true });
+      const data = await register({ email: email.trim(), firstName, username, password: password.trim(), emailMarketingOptIn, isMobileApp: true });
       const { user } = data;
       dispatch({ type: "SET USER STATUS", payload: { userStatus: "unconfirmed" } });
 

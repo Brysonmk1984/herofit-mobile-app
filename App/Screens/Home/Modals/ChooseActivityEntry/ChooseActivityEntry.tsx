@@ -62,7 +62,7 @@ const ChooseActivityEntry: React.FC<ChooseActivityEntryProps> = ({ id }) => {
   }, [stravaSuccess]);
 
   return (
-    <CharacterModal id={id} modalOpen={state.modalQueue[0] === id} speech="Now that you're a pupil in my Dojo?, we'll need to hold you accountable!" disabled={!activityRadioValue} modalAction={confirmButton.modalAction} buttonText={activityRadioValue === "Manual" ? confirmButton.buttonText : null}>
+    <CharacterModal id={id} modalOpen={state.modalQueue[0] === id} speech="Now that you're a pupil in my dojo, I'll have my eye on you... with my 360 degree vision!" disabled={!activityRadioValue} modalAction={confirmButton.modalAction} buttonText={activityRadioValue === "Manual" ? confirmButton.buttonText : null}>
       <ModalActionHeader type="info" text="How will you log activities??" />
       <BodyContent>
         {stravaSuccess ? (

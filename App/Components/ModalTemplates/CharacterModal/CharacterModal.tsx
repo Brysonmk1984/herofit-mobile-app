@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   triangle: {
     position: "absolute",
     left: -16,
-    top: 25,
+    top: 15,
     width: 0,
     height: 0,
     backgroundColor: "transparent",

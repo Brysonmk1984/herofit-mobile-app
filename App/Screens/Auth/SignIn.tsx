@@ -33,7 +33,7 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
         throw new Error("Please complete the form.");
       }
 
-      const { user, tokenObject } = await login({ email, password, isMobileApp: true });
+      const { user, tokenObject } = await login({ email: email.trim(), password: password.trim(), isMobileApp: true });
       setSuccess(true);
 
       // User hasn't confirmed email yet
