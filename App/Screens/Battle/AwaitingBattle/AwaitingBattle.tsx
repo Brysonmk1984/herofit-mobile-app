@@ -71,7 +71,7 @@ const AwaitingBattle: React.FC<MainStackProps<"AwaitingBattle">> = ({ navigation
     <ScreenContainer screenName={route.name}>
       <HeroSection rewards={rewards} height={deviceHeight} width={deviceWidth} setPressedItem={setPressedItem} handleNavigation={isInstant ? () => null : handleNavigation} />
       <FoeSection foe={foe} height={deviceHeight} width={deviceWidth} character={character} handleNavigation={isInstant ? () => null : handleNavigation} />
-      <VsSection isLongPhone={deviceAspectType === "long"} height={deviceHeight} handleNavigation={isInstant ? () => null : handleNavigation} />
+      <VsSection isLongPhone={deviceAspectType === "long"} height={deviceHeight} handleNavigation={isInstant ? () => null : handleNavigation} disableCountdown={isInstant ? true : false} />
 
       {pressedItem && <ItemDetail id="AwaitingBattleItemDetail" item={pressedItem} character={character} buttonText="OK" />}
     </ScreenContainer>

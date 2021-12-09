@@ -19,6 +19,8 @@ export const TopHud: React.FC<TopHudProps> = ({ equippedTitle }) => {
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
   const [secondaryLoading, setSecondaryLoading] = useState(false);
+  const [awaitingBattle, setAwaitingBattle] = useState(false);
+
   const { mounted } = useDidMount();
 
   useEffect(() => {
@@ -29,6 +31,19 @@ export const TopHud: React.FC<TopHudProps> = ({ equippedTitle }) => {
       return () => clearTimeout(secondaryLoadingTimeout);
     }
   }, [mounted]);
+
+  // Only needed for delaying the countdown timer when users use instant battle items
+  useEffect(() => {
+    if (hero.goToBattle) {
+      const awaitingBattleTimeout = setTimeout(() => {
+        setAwaitingBattle(true);
+      }, 3500);
+
+      return () => clearTimeout(awaitingBattleTimeout);
+    } else {
+      setAwaitingBattle(false);
+    }
+  }, [hero.goToBattle]);
 
   return (
     <Box minHeight={windowHeight * 0.18}>
@@ -49,7 +64,7 @@ export const TopHud: React.FC<TopHudProps> = ({ equippedTitle }) => {
                 <Box flexDirection="row" mt={-1}>
                   <CountdownTimer fontSize={20} type={"Knocked Out"} />
                 </Box>
-              ) : hero.goToBattle ? (
+              ) : awaitingBattle ? (
                 <Box flexDirection="row" mt={-0.5}>
                   <CountdownTimer fontSize={20} type={"Battle"} />
                 </Box>

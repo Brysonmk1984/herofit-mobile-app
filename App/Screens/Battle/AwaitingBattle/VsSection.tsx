@@ -9,9 +9,10 @@ interface VsSectionProps {
   height: number;
   handleNavigation: () => void;
   isLongPhone: boolean;
+  disableCountdown: boolean;
 }
 
-const VsSection: React.FC<VsSectionProps> = ({ height, handleNavigation, isLongPhone }) => {
+const VsSection: React.FC<VsSectionProps> = ({ height, handleNavigation, isLongPhone, disableCountdown }) => {
   return (
     <VStack zIndex={100} h={height * 0.5} w="100%" position="absolute" top={isLongPhone ? height * 0.28 : height * 0.32}>
       <Pressable onPress={() => handleNavigation()}>
@@ -27,9 +28,11 @@ const VsSection: React.FC<VsSectionProps> = ({ height, handleNavigation, isLongP
             <Text style={styles.textShadow} mt={0} fontSize={140} fontFamily="heading">
               VS
             </Text>
-            <Box mt={-45} mb={35}>
-              <CountdownTimer fontSize={40} hideType={true} type={"Battle"} />
-            </Box>
+            {!disableCountdown && (
+              <Box mt={-45} mb={35}>
+                <CountdownTimer fontSize={40} hideType={true} type={"Battle"} />
+              </Box>
+            )}
           </Box>
         </ImageBackground>
       </Pressable>

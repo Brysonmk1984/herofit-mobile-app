@@ -14,7 +14,7 @@ function useServerMessage() {
         const hasSeen = await getLsWithExpiry("herofit-seenGlobalMessage");
         // If user hasn't seen the global message yet, as tracked in local storage
         // then display it and set local storage
-        if (true || !hasSeen) {
+        if (!hasSeen) {
           if (state.globalMessages) {
             const globalMessageTimeout = setTimeout(() => {
               state.globalMessages.forEach(m => {

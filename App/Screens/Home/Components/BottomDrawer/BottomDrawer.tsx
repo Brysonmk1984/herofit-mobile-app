@@ -52,7 +52,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
   async function handleFetchUpcomingBattle(isInstant = false) {
     try {
       const { foe, rewards } = await fetchUpcomingFoeAndRewards({ avatarID: id });
-      navigation.push("AwaitingBattle", { foe, rewards, character, isInstant });
+      navigation.navigate("AwaitingBattle", { foe, rewards, character, isInstant });
     } catch (error) {
       addToast("error", `${error.status}: ${error.message}`, "top");
       return debugErrors(error, user);
@@ -106,7 +106,9 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
       const { isBattleInstantItem } = await consume(item, hero as Hero);
       // Instantiate Battle, open Awaiting Battle Screen
       if (isBattleInstantItem) {
-        handleFetchUpcomingBattle(true);
+        setTimeout(() => {
+          handleFetchUpcomingBattle(true);
+        }, 2500);
       } else if (item.name === "Health Potion") {
         setBackgroundAnimation("health-up");
       }

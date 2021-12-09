@@ -59,7 +59,7 @@ const useGlobalToast = () => {
   }
 
   return {
-    addToast: (type: ActionFeedbackType, message: string, placement: "top" | "bottom" = "bottom", duration = 2100) =>
+    addToast: (type: ActionFeedbackType, message: string, placement: "top" | "bottom" = "bottom", duration = 1000) =>
       (toastIdRef.current = toast.show({
         render: () => renderToast(type, message),
         placement,
