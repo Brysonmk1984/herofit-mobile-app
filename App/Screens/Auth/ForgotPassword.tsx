@@ -12,6 +12,7 @@ import * as WebBrowser from "expo-web-browser";
 import Constants from "expo-constants";
 import useGlobalToast from "../../common/hooks/useGlobalToast";
 import PaneActionButton from "../../Components/PaneActionButton";
+import KeyboardScrollView from "../../Components/KeyboardScrollView";
 
 const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">) => {
   const { addToast } = useGlobalToast();
@@ -124,7 +125,7 @@ const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">)
 
   return (
     <ScreenContainer screenName={route.name}>
-      <View>
+      <KeyboardScrollView>
         <Header text="Forgot Password" />
         {verifyPassword ? (
           // Show Password inputs
@@ -147,7 +148,7 @@ const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">)
               {loading && <LoadingInPane text="Updating Password..." />}
               <View alignItems="center">
                 <Link _text={{ fontSize: "lg" }} onPress={() => navigation.push("SignIn")} my={1}>
-                  Back To Sign In
+                  Back to Sign in
                 </Link>
               </View>
             </VStack>
@@ -176,13 +177,13 @@ const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">)
                 )}
 
                 <Link _text={{ fontSize: "lg" }} onPress={() => navigation.push("SignIn")} my={1}>
-                  Back To Sign In
+                  Back to Sign in
                 </Link>
               </View>
             </VStack>
           </Pane>
         )}
-      </View>
+      </KeyboardScrollView>
     </ScreenContainer>
   );
 };

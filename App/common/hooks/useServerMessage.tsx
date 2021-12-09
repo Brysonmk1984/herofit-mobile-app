@@ -20,8 +20,8 @@ function useServerMessage() {
               state.globalMessages.forEach(m => {
                 addToast(m.type, m.message);
               });
-              // expire haven't seen 'herofit-seenGlobalMessage' after 12 hours, so they can see global messages again
-              setLsWithExpiry("herofit-seenGlobalMessage", true, 43200000);
+              // expire haven't seen 'herofit-seenGlobalMessage' after 48 hours, so they can see global messages again
+              setLsWithExpiry("herofit-seenGlobalMessage", true, 172800000);
             }, 2000);
 
             return () => clearTimeout(globalMessageTimeout);

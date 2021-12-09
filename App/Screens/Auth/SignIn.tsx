@@ -11,7 +11,8 @@ import useGlobalToast from "../../common/hooks/useGlobalToast";
 import * as WebBrowser from "expo-web-browser";
 import PaneSupportText from "../../Components/PaneSupportText";
 import PaneActionButton from "../../Components/PaneActionButton";
-import { Keyboard } from "react-native";
+import { Keyboard, Platform } from "react-native";
+import KeyboardScrollView from "../../Components/KeyboardScrollView";
 
 const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -105,29 +106,16 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
 
   return (
     <ScreenContainer screenName={route.name}>
-      <View>
+      <KeyboardScrollView>
         <Header text="Sign In" />
+
         <Pane>
           <VStack space={6} mt={5}>
             <FormControl isRequired isInvalid={helperText === "Must be valid email address" ? true : false}>
               <Input onChangeText={text => handleInputChange(text, setEmail)} value={email} placeholder="Email" shadow={1} autoCapitalize="none" />
             </FormControl>
             <FormControl isRequired isInvalid={helperText === "Password must be at least 8 characters" ? true : false}>
-              <Input
-                onChangeText={text => handleInputChange(text, setPassword)}
-                value={password}
-                secureTextEntry={true}
-                autoCapitalize="none"
-                autoCompleteType="password"
-                textContentType="password"
-                placeholder="Password"
-                onSubmitEditing={() =>
-                  setTimeout(() => {
-                    Keyboard.dismiss();
-                    handleSignIn(), 500;
-                  })
-                }
-              />
+              <Input onChangeText={text => handleInputChange(text, setPassword)} value={password} secureTextEntry={true} autoCapitalize="none" autoCompleteType="password" textContentType="password" placeholder="Password" onSubmitEditing={() => Keyboard.dismiss()} />
             </FormControl>
             <PaneActionButton text="Let's Go!" disabled={loading || showLegacyLink ? true : false} action={handleSignIn} />
             {loading ? (
@@ -156,7 +144,7 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
             )}
           </VStack>
         </Pane>
-      </View>
+      </KeyboardScrollView>
     </ScreenContainer>
   );
 };

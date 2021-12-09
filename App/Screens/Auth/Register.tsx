@@ -12,6 +12,7 @@ import { User } from "../../common/types";
 import { instantiateUserTotals } from "../../api/user";
 import useGlobalToast from "../../common/hooks/useGlobalToast";
 import PaneActionButton from "../../Components/PaneActionButton";
+import KeyboardScrollView from "../../Components/KeyboardScrollView";
 
 // prettier-ignore
 interface FormState { email: string; firstName: string; username: string; password: string; emailMarketingOptIn: boolean; helperText: string; formIsValid: boolean; loading: boolean }
@@ -161,8 +162,9 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
 
   return (
     <ScreenContainer screenName={route.name}>
-      <Header text="Sign Up" mb={2} />
-      <ScrollView mb={5}>
+      <KeyboardScrollView>
+        <Header text="Sign Up" mb={2} />
+
         <Pane mb={3}>
           <VStack space={2} mt={0}>
             <FormControl isRequired isInvalid={formState.helperText === "Must be valid email address" ? true : false}>
@@ -190,7 +192,7 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
             {formState.loading ? <LoadingInPane text="Creating Account..." /> : formState.helperText ? <HelperText text={formState.helperText} type={formState.formIsValid ? "success" : "error"} /> : null}
           </VStack>
         </Pane>
-      </ScrollView>
+      </KeyboardScrollView>
     </ScreenContainer>
   );
 };

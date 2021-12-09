@@ -4,14 +4,15 @@ import ScreenContainer from "../../Components/ScreenContainer/ScreenContainer";
 import { MainStackProps } from "../../common/types-navigator";
 import FeedbackForm from "./FeedbackForm";
 import { Header } from "../../Components/CustomComponents";
+import KeyboardScrollView from "../../Components/KeyboardScrollView";
 
 const Feedback: React.FC<MainStackProps<"Feedback">> = ({ route }) => {
   return (
     <ScreenContainer screenName={route.name}>
-      <ScrollView>
+      <KeyboardScrollView extraScroll={150}>
         <Header text="Feedback" />
         <FeedbackForm />
-      </ScrollView>
+      </KeyboardScrollView>
     </ScreenContainer>
   );
 };

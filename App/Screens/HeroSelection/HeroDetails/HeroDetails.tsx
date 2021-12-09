@@ -11,6 +11,8 @@ import useModal from "../../../common/hooks/useModal";
 import { GlobalStateContext } from "../../../store";
 import HeroDescription from "./Modals/HeroDescription";
 import AttributeDetail from "../../../Components/Modals/AttributeDetail";
+import KeyboardScrollView from "../../../Components/KeyboardScrollView";
+import debugErrors from "../../../common/debugErrors";
 
 // Hero Details Screen
 const HeroDetails = ({ route, navigation }: AuthStackProps<"HeroDetails">) => {
@@ -83,8 +85,9 @@ const HeroDetails = ({ route, navigation }: AuthStackProps<"HeroDetails">) => {
 
   return (
     <ScreenContainer screenName={route.name} bg={colors[0]} hero={alias}>
-      <Header text={alias} color={colors[1]} bgColor="base.transparent" />
-      <ScrollView mt={-3} mb={5}>
+      <KeyboardScrollView extraScroll={150}>
+        <Header text={alias} color={colors[1]} bgColor="base.transparent" />
+
         <HStack mb={0} justifyContent={"space-between"}>
           <Pane variant="transparent" mb={5}>
             <VStack mt={-3} mb={-3} space={0}>
@@ -113,16 +116,16 @@ const HeroDetails = ({ route, navigation }: AuthStackProps<"HeroDetails">) => {
           </Box>
         </HStack>
 
-        <Pane variant="transparent" mt={6}>
+        <Pane variant="transparent">
           <Input value={heroName} onChangeText={name => setHeroName(name)} placeholder="What's Your Hero Name?" shadow={1} />
 
           {helperText && <HelperText type={helperText === "Checking Availability..." ? "caution" : heroNameIsLegit ? "success" : "error"} text={helperText} reversed={true} />}
         </Pane>
-      </ScrollView>
-      <ScreenActionButton text="Select" disabled={!heroNameIsLegit} action={handleFinalizeHeroSelection} />
 
-      {state.modalQueue[0] === "HeroDescription" && <HeroDescription id="HeroDescription" character={route.params.selectedHero} />}
-      {selectedAttribute && <AttributeDetail id="AttributeDetail" attribute={selectedAttribute} />}
+        <ScreenActionButton text="Select" disabled={!heroNameIsLegit} action={handleFinalizeHeroSelection} />
+        {state.modalQueue[0] === "HeroDescription" && <HeroDescription id="HeroDescription" character={route.params.selectedHero} />}
+        {selectedAttribute && <AttributeDetail id="AttributeDetail" attribute={selectedAttribute} />}
+      </KeyboardScrollView>
     </ScreenContainer>
   );
 };
