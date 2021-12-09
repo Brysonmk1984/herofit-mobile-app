@@ -1,7 +1,7 @@
 import React, { createContext, useReducer, Context, FC, ReactElement } from "react";
 import { InitialAppState, AppAction } from "./common/types";
 
-const initialState: InitialAppState = { isLoading: true, isSignedIn: false, userStatus: "new", user: null, hero: null, latestSavedActivities: [], latestSavedActivityDate: null, latestBattle: null, jwt: null, modalQueue: [], allGameItems: [], inventory: { pets: [], consumables: [], skins: [], titles: [], codices: [] }, equipped: { skin: null, pet: null, title: null }, initialHomescreenLoad: null, background: null };
+const initialState: InitialAppState = { isLoading: true, isLoadingInApp: false, isSignedIn: false, userStatus: "new", user: null, hero: null, latestSavedActivities: [], latestSavedActivityDate: null, latestBattle: null, jwt: null, modalQueue: [], allGameItems: [], inventory: { pets: [], consumables: [], skins: [], titles: [], codices: [] }, equipped: { skin: null, pet: null, title: null }, initialHomescreenLoad: null, background: null };
 
 type AppState = typeof initialState;
 
@@ -15,6 +15,10 @@ function appStateReducer(state: AppState, action: AppAction): AppState {
         return Object.assign({}, state, { isLoading: !state.isLoading });
       }
       return Object.assign({}, state, { isLoading });
+    }
+    case "TOGGLE IN APP LOADING": {
+      const { isLoadingInApp } = action.payload;
+      return Object.assign({}, state, { isLoadingInApp });
     }
     case "SET EXISTING USER INIT DATA": {
       const existingUserInitData = action.payload;

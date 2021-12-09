@@ -1,26 +1,28 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { LogBox, Dimensions } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { useFonts } from "expo-font";
-import { GlobalStateContext } from "./store";
-import { AuthStackScreen, MainStackScreen } from "./Navigator";
-import { Loading } from "./Screens";
-import debugErrors from "./common/debugErrors";
-import fetchInitialData from "./common/fetchInitialData";
-import useJwt from "./common/hooks/useJwt";
+import { LogBox } from "react-native";
 import { View } from "native-base";
-import useGlobalToast from "./common/hooks/useGlobalToast";
+import { NavigationContainer } from "@react-navigation/native";
 import { Logs } from "expo";
+import { useFonts } from "expo-font";
+import { AuthStackScreen, MainStackScreen } from "./Navigator";
+import { GlobalStateContext } from "./store";
+import { Loading } from "./Screens";
+import useJwt from "./common/hooks/useJwt";
+import useForegroundListener from "./common/hooks/useForegroundListener";
+import useAppDataFetch from "./common/hooks/useAppDataFetch";
+import LoadingSpinner from "./Components/LoadingSpinner";
 
 LogBox.ignoreLogs(["Reanimated 2", "Remote debugger", "VirtualizedLists should never be nested", 'Expected style "lineHeight: 24" to contain units', 'Expected style "lineHeight: 30" to contain units', 'Expected style "lineHeight: 40" to contain units', 'Expected style "lineHeight: 50" to contain units', 'Expected style "lineHeight: 85" to contain units', 'Expected style "lineHeight: 120" to contain units', "Please pass alt prop to Image component", "Non-serializable values were found in the navigation state", "When server rendering, you must wrap your application in an <SSRProvider> to ensure consistent ids are generated between the client and server.", "VirtualizedLists should never be nested inside plain ScrollViews with the same orientation because it can break windowing and other functionality - use another VirtualizedList-backed container instead.", "Sentry Logger [Warn]: SentryError: Native is disabled"]);
-//LogBox.ignoreAllLogs(true);
 Logs.enableExpoCliLogging();
 
-const height = Dimensions.get("window").height;
 const App: React.FC = () => {
   const { state, dispatch } = useContext(GlobalStateContext);
-  const { addToast } = useGlobalToast();
   const [jwt] = useJwt();
+  const [hasRunInitJwtCheck, setHasRunInitJwtCheck] = useState(false);
+  const { refreshAppData } = useForegroundListener();
+  const { getAllAppData } = useAppDataFetch();
+
+  // LOAD CUSTOM FONTS
   const [fontsLoaded] = useFonts({
     icomoon: require("../assets/fonts/icomoon.ttf"),
     "bebas-neue": require("../assets/fonts/BebasNeue-Regular.ttf"),
@@ -28,49 +30,46 @@ const App: React.FC = () => {
     shadowsIntoLight: require("../assets/fonts/ShadowsIntoLight-Regular.ttf"),
   });
 
-  // GET INITIAL APP DATA if JWT exists
-  useEffect(() => {
-    if (jwt) {
-      // local JWT check happened, JWT is still present. Use it to fetch user data,
-      // Then after data returns, hide loading indicator / allow the app homepage to be presented
-      async function initialData() {
-        try {
-          await fetchInitialData(jwt as string, dispatch, state);
-        } catch (error) {
-          console.log("JWT EXISTS, but ERROR FETCHING DATA");
-          addToast("error", "There was a problem fetching game data... Please try again later.");
-          debugErrors(error);
-          dispatch({ type: "RESET DEFAULTS" });
-        } finally {
-          setTimeout(() => {
-            dispatch({
-              type: "TOGGLE LOADING",
-              payload: { isLoading: false },
-            });
-          }, 2000);
-        }
-      }
-      initialData();
-    } else if (jwt === false) {
-      // local JWT check happened, it's not there so stop loading which will show signin page
-      dispatch({ type: "TOGGLE LOADING", payload: { isLoading: false } });
-    }
-  }, [jwt]);
-
-  function determineNavigator(isSignedIn: boolean, initialHomescreenLoad: string) {
+  // DETERMINE WHETHER AUTH STACK OR MAIN STACK WILL BE VISIBLE
+  function _determineNavigator(isSignedIn: boolean, initialHomescreenLoad: string) {
     return isSignedIn || initialHomescreenLoad === "Home" ? <MainStackScreen /> : <AuthStackScreen />;
   }
 
+  // GET INITIAL APP DATA if JWT EXISTS
+  useEffect(() => {
+    if (jwt && !hasRunInitJwtCheck) {
+      getAllAppData(null, jwt);
+      setHasRunInitJwtCheck(true);
+    } else {
+      const loadingTimeout = setTimeout(() => {
+        dispatch({ type: "TOGGLE LOADING", payload: { isLoading: false } });
+      }, 1000);
+      return () => clearTimeout(loadingTimeout);
+    }
+  }, [jwt, hasRunInitJwtCheck]);
+
+  // REFRESH APP DATA IF APP HAS RETURNED TO THE FOREGROUND
+  useEffect(() => {
+    // Android for some will run this initially, while ios wont, so hasRunInitJwtCheck is needed
+    if (refreshAppData && hasRunInitJwtCheck) {
+      dispatch({ type: "TOGGLE IN APP LOADING", payload: { isLoadingInApp: true } });
+      getAllAppData(true);
+    }
+  }, [refreshAppData]);
+
   return (
-    <NavigationContainer /* theme={MyTheme} linking={linking}*/>
-      <View style={{ height }}>
+    <NavigationContainer>
+      <View flex={1}>
         {/* If app is loading -> state.isLoading === true
             OR
             If Font have not been loaded  -> fontLoaded === false
             Show loading, otherwise show view
           */}
-        {state.isLoading || !fontsLoaded ? <Loading /> : determineNavigator(state.isSignedIn, state.initialHomescreenLoad)}
+        {state.isLoading || !fontsLoaded ? <Loading /> : _determineNavigator(state.isSignedIn, state.initialHomescreenLoad)}
       </View>
+
+      {/* RELOADING ON SCREEN */}
+      {state.isLoadingInApp && <LoadingSpinner color="base.brand" size="lg" />}
     </NavigationContainer>
   );
 };

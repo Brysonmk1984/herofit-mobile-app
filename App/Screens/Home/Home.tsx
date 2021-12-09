@@ -11,7 +11,7 @@ import BottomDrawer from "./Components/BottomDrawer/BottomDrawer";
 import { HeroImage } from "../../Components/HeroImage/HeroImage";
 import { TopHud } from "./Components/TopHud/TopHud";
 import { PetImage } from "./Components/PetImage";
-import { DrawerIndicator, LoadingInPane, LoadingSpinner } from "../../Components/CustomComponents";
+import { DrawerIndicator } from "../../Components/CustomComponents";
 import { Activity, Hero } from "../../common/types";
 import { upgradeSequence } from "../../api/avatar";
 import buildGainsMessages from "./Components/gainsMessages";
@@ -23,12 +23,12 @@ import { clearLs, getLsWithExpiry, setLsWithExpiry } from "../../common/helperFu
 import SideMenu from "react-native-side-menu-updated";
 import { AppState, Dimensions, ImageBackground } from "react-native";
 import SidebarMenu from "./Components/SidebarMenu";
-import { reloadAsync } from "expo-updates";
 import GestureRecognizer, { swipeDirections } from "react-native-swipe-gestures";
 import * as Linking from "expo-linking";
 import useAspectRatio from "../../common/hooks/useAspectRatio";
 import LevelUpText from "./Components/LevelUpText";
 import useServerMessage from "../../common/hooks/useServerMessage";
+import useAppDataFetch from "../../common/hooks/useAppDataFetch";
 
 const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -36,7 +36,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   const { newStravaActivities, getFreshStravaData, resetNewStravaActivities } = useStravaDataProcess();
   const [newActivities, setNewActivities] = useState<Activity[]>([]);
   const { addToast } = useGlobalToast();
-  useServerMessage();
+  const { getAllAppData } = useAppDataFetch();
   const { equippedSkin, equippedPet, equippedTitle } = useInventory(true);
   const { deviceWidth, deviceHeight, deviceAspectType } = useMemo(() => useAspectRatio(), []);
   const sideBarWidth = deviceWidth / 2;
@@ -48,15 +48,12 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   const bottomDrawerHeight = isLongPhone ? deviceHeight / 2.8 : isMediumPhone ? deviceHeight / 2.6 : deviceHeight / 2.4;
   const hero = state.hero as Hero;
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
-  const [appIsReloading, setAppIsReloading] = useState(false);
   // Used only to disable the sidebar when the bottom menu is active
   const [bottomDrawerOpen, setBottomDrawerOpen] = useState(false);
-  // detect app  in foreground
-  const appState = useRef(AppState.currentState);
-  const [appStateVisible, setAppStateVisible] = useState(appState.current);
   const [backgroundAnimation, setBackgroundAnimation] = useState(null);
   const [leveledUp, setLeveledUp] = useState(false);
   const openBottomDrawerFromParent = useRef(null);
+  useServerMessage();
 
   async function handleHeroUpgrade(activities: Activity[]) {
     const user = state.user;
@@ -99,31 +96,6 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
       debugErrors(error, user);
     }
   }
-
-  // SWIPE DOWN - RELOAD APP
-  function handleReload() {
-    if (!bottomDrawerOpen) {
-      setAppIsReloading(true);
-      reloadAsync();
-    }
-  }
-
-  // Handles detecting when the app comes back to the foreground
-  // const _handleAppStateChange = nextAppState => {
-  //   if (appState.current.match(/inactive|background/) && nextAppState === "active") {
-  //     handleReload();
-  //   }
-  //   appState.current = nextAppState;
-  //   setAppStateVisible(appState.current);
-  // };
-
-  // Only add Foreground listener is active user
-  // useEffect(() => {
-  //   if (state.userStatus !== "new" && state.userStatus !== "unconfirmed" && state.user?.dataSrcId) {
-  //     AppState.addEventListener("change", _handleAppStateChange);
-  //     return () => AppState.removeEventListener("change", _handleAppStateChange);
-  //   }
-  // }, []);
 
   // Alert user if they received an item on login (from get-avatar)
   useEffect(() => {
@@ -193,7 +165,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
     <SideMenu disableGestures={(Boolean(state.initialHomescreenLoad) ?? false) || bottomDrawerOpen} bounceBackOnOverdraw={false} onChange={isOpen => setSideDrawerOpen(isOpen)} isOpen={sideDrawerOpen} menuPosition={"right"} menu={<SidebarMenu navigation={navigation} setSideDrawerOpen={setSideDrawerOpen} heroName={hero.name} />} openMenuOffset={sideBarWidth}>
       <ScreenContainer bg={<Background animation={backgroundAnimation} setBackgroundAnimation={setBackgroundAnimation} />} screenName={route.name}>
         <View zIndex={110} elevation={110}>
-          <GestureRecognizer onSwipeDown={state => handleReload()}>
+          <GestureRecognizer onSwipeDown={state => getAllAppData(true)}>
             {/* TOP SECTION */}
             <View zIndex={110}>
               <TopHud equippedTitle={equippedTitle} />
@@ -225,9 +197,6 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
         <GoToBattle id="GoToBattle" goTo={navigation.push} heroId={hero.id} openBottomDrawerFromParent={() => openBottomDrawerFromParent.current()} />
 
         {newActivities.length ? <ActivityUpgrade id="ActivityUpgrade" activities={newActivities} modalAction={() => handleHeroUpgrade(newActivities)} goBack={navigation.push} state={state} closeModal={closeModal} setNewActivities={setNewActivities} /> : null}
-
-        {/* RELOADING IN PAGE */}
-        {appIsReloading && <LoadingSpinner color="base.brand" size="lg" />}
       </ScreenContainer>
     </SideMenu>
   );

@@ -2,11 +2,15 @@ import { Battle } from "./types-battle";
 
 type Pluralize<T extends string> = `${T}s`;
 
-type ActionType = "TOGGLE LOADING" | "SET EXISTING USER INIT DATA" | "SET ISSIGNEDIN" | "SET NEW USER" | "SET HERO" | "SET USER" | "RESET DEFAULTS" | "POST UPGRADE" | "SEEN BATTLE REPORT" | "UPDATE INVENTORY" | "UPDATE EQUIPPED" | "UPDATE LATEST BATTLE" | "SET INITIAL HOMESCREEN LOAD" | "SET BACKGROUND";
+type ActionType = "TOGGLE LOADING" | "TOGGLE IN APP LOADING" | "SET EXISTING USER INIT DATA" | "SET ISSIGNEDIN" | "SET NEW USER" | "SET HERO" | "SET USER" | "RESET DEFAULTS" | "POST UPGRADE" | "SEEN BATTLE REPORT" | "UPDATE INVENTORY" | "UPDATE EQUIPPED" | "UPDATE LATEST BATTLE" | "SET INITIAL HOMESCREEN LOAD" | "SET BACKGROUND";
 
 interface ToggleLoadingAction {
   type: "TOGGLE LOADING";
   payload: { isLoading: boolean };
+}
+interface ToggleInAppLoadingAction {
+  type: "TOGGLE IN APP LOADING";
+  payload: { isLoadingInApp: boolean };
 }
 interface SetExistingUserInitDataAction {
   type: "SET EXISTING USER INIT DATA";
@@ -75,7 +79,7 @@ interface SetBackgroundAction {
 }
 
 // Same as ShoppingListAction in example
-type AppAction = ToggleLoadingAction | SetExistingUserInitDataAction | SetIsSignedInAction | SetUserStatusAction | SetHeroAction | SetUserAction | ResetDefaultsAction | AddModalAction | RemoveModalAction | PostUpgradeAction | SeenBattleReportAction | UpdateInventoryAction | UpdateEquippedAction | UpdateLatestBattleAction | SetInitialHomescreenLoadAction | SetBackgroundAction;
+type AppAction = ToggleLoadingAction | ToggleInAppLoadingAction | SetExistingUserInitDataAction | SetIsSignedInAction | SetUserStatusAction | SetHeroAction | SetUserAction | ResetDefaultsAction | AddModalAction | RemoveModalAction | PostUpgradeAction | SeenBattleReportAction | UpdateInventoryAction | UpdateEquippedAction | UpdateLatestBattleAction | SetInitialHomescreenLoadAction | SetBackgroundAction;
 type AppDispatch = (action: AppAction) => void;
 
 interface Action<Payload = {}> {
@@ -97,10 +101,11 @@ interface Activity {
 }
 
 interface InitialAppState {
-  globalMessage: GlobalMessage | undefined;
+  globalMessages: GlobalMessages | undefined;
   jwt: string | null;
   isSignedIn: boolean;
   isLoading: boolean;
+  isLoadingInApp: boolean;
   userStatus: UserStatus;
   user: User | null;
   hero: Hero | (HeroWithStats & DefaultHeroProperties) | null;
