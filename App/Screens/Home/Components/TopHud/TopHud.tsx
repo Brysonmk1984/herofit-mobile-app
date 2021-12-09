@@ -46,11 +46,15 @@ export const TopHud: React.FC<TopHudProps> = ({ equippedTitle }) => {
           <StatusBar windowWidth={windowWidth}>
             <Box justifyContent="center" flexDirection="row">
               {hero.status === "Knocked Out" ? (
-                <CountdownTimer fontSize={20} type={"Knocked Out"} />
+                <Box flexDirection="row" mt={-1}>
+                  <CountdownTimer fontSize={20} type={"Knocked Out"} />
+                </Box>
               ) : hero.goToBattle ? (
-                <CountdownTimer fontSize={20} type={"Battle"} />
+                <Box flexDirection="row" mt={-0.5}>
+                  <CountdownTimer fontSize={20} type={"Battle"} />
+                </Box>
               ) : (
-                <Box flexDirection="row" mt={1}>
+                <Box flexDirection="row" mt={0.5}>
                   <Text fontSize={20} fontFamily="heading" color="base.white" opacity=".5">
                     Status
                   </Text>

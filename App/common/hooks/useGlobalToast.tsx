@@ -5,11 +5,13 @@ import Ionicons from "@expo/vector-icons/build/Ionicons";
 import MaterialIcons from "@expo/vector-icons/build/MaterialIcons";
 import toastTheme from "../../styles/toastTheme";
 import { ActionFeedbackType } from "../types";
-import { Dimensions } from "react-native";
+import useAspectRatio from "./useAspectRatio";
 
 const useGlobalToast = () => {
   const toast = useToast();
   const toastIdRef = useRef();
+  const { deviceAspectType, deviceHeight } = useAspectRatio();
+  const toastPosition = deviceAspectType === "long" ? deviceHeight * 0.12 : deviceAspectType === "medium" ? deviceHeight * 0.1 : deviceHeight * 0.12;
 
   function close() {
     if (toastIdRef.current) {
@@ -36,7 +38,7 @@ const useGlobalToast = () => {
     const aStyle = toastTheme[type];
     return (
       // Single Alert
-      <View opacity={0.9} style={aStyle}>
+      <View opacity={0.9} style={aStyle} bottom={toastPosition}>
         {/* Alert Header */}
         <HStack justifyContent="space-between">
           <Box flexDirection="row">
