@@ -27,6 +27,9 @@ function useAppDataFetch(): { getAllAppData: (passedJwt?: any) => Promise<void>;
       setTimeout(() => {
         dispatch({ type: "TOGGLE LOADING", payload: { isLoading: false } });
       }, 1500);
+      setTimeout(() => {
+        dispatch({ type: "TOGGLE IN APP LOADING", payload: { isLoading: false } });
+      }, 1500);
     } catch (error) {
       console.log("JWT EXISTS, but ERROR FETCHING DATA");
       //addToast("error", "There was a problem fetching game data... Please try again later.");

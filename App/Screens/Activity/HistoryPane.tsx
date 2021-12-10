@@ -36,7 +36,7 @@ const HistoryPane: React.FC<HistoryPaneProps> = ({ navigation, isStravaUser }) =
           )}
         </PaneSupportText>
       )}
-      {orderedActivities.length > 0 && <FlatList ListHeaderComponent={() => <ListHeaderComponent />} data={orderedActivities} renderItem={item => <ActivityDetail activity={item.item} />} />}
+      {orderedActivities.length > 0 && <FlatList ListHeaderComponent={() => <ListHeaderComponent />} data={orderedActivities} renderItem={item => <ActivityDetail activity={item.item} />} keyExtractor={(item, index) => index.toString()} />}
     </Pane>
   );
 };

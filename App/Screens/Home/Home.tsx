@@ -87,7 +87,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
       // Show messages via toast
       messageArray.forEach((message: string, i: number) => {
         setTimeout(() => {
-          addToast("success", message);
+          addToast("success", message, 1500, 125);
         }, 3000 * i);
       });
     } catch (error) {
@@ -97,10 +97,10 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
     }
   }
 
-  // Alert user if they received an item on login (from get-avatar)
+  // ON LOGIN REWARD ALERT (from get-avatar)
   useEffect(() => {
     if (state.awardedItemMessage) {
-      addToast("success", state.awardedItemMessage, "bottom", 4000);
+      addToast("success", state.awardedItemMessage, 4000, 125);
     }
   }, [state.awardedItemMessage]);
 
@@ -150,12 +150,13 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
     }
   }, [route.params?.fetchStravaManually]);
 
+  // POST BATTLE REWARDS
   useEffect(() => {
     const awards = route.params?.postBattleReportAwards;
     if (awards && awards.length) {
       awards.forEach((award: string, i: number) => {
         setTimeout(() => {
-          addToast("success", award);
+          addToast("success", award, 1500, 125);
         }, 3000 * i);
       });
     }
@@ -163,7 +164,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
 
   return (
     <SideMenu disableGestures={(Boolean(state.initialHomescreenLoad) ?? false) || bottomDrawerOpen} bounceBackOnOverdraw={false} onChange={isOpen => setSideDrawerOpen(isOpen)} isOpen={sideDrawerOpen} menuPosition={"right"} menu={<SidebarMenu navigation={navigation} setSideDrawerOpen={setSideDrawerOpen} heroName={hero.name} />} openMenuOffset={sideBarWidth}>
-      <ScreenContainer bg={<Background animation={backgroundAnimation} setBackgroundAnimation={setBackgroundAnimation} />} screenName={route.name}>
+      <ScreenContainer bg={<Background setBackgroundAnimation={setBackgroundAnimation} />} screenName={route.name}>
         <View zIndex={110} elevation={110}>
           <GestureRecognizer onSwipeDown={state => getAllAppData()}>
             {/* TOP SECTION */}
@@ -196,7 +197,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
         <SignupFinished id="SignupFinished" />
         <GoToBattle id="GoToBattle" goTo={navigation.push} heroId={hero.id} openBottomDrawerFromParent={() => openBottomDrawerFromParent.current()} />
 
-        {newActivities.length ? <ActivityUpgrade id="ActivityUpgrade" activities={newActivities} modalAction={() => handleHeroUpgrade(newActivities)} goBack={navigation.push} state={state} closeModal={closeModal} setNewActivities={setNewActivities} /> : null}
+        <ActivityUpgrade id="ActivityUpgrade" activities={newActivities} modalAction={() => handleHeroUpgrade(newActivities)} goBack={navigation.push} state={state} closeModal={closeModal} setNewActivities={setNewActivities} />
       </ScreenContainer>
     </SideMenu>
   );

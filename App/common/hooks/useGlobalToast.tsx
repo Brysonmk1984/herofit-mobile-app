@@ -1,11 +1,12 @@
 import React, { useRef } from "react";
 
-import { Pressable, Button, View, useToast, Text, Toast, Box, HStack } from "native-base";
+import { Pressable, Button, View, useToast, Text, Box, HStack } from "native-base";
 import Ionicons from "@expo/vector-icons/build/Ionicons";
 import MaterialIcons from "@expo/vector-icons/build/MaterialIcons";
 import toastTheme from "../../styles/toastTheme";
 import { ActionFeedbackType } from "../types";
 import useAspectRatio from "./useAspectRatio";
+import Toast from "react-native-toast-message";
 
 const useGlobalToast = () => {
   const toast = useToast();
@@ -34,37 +35,17 @@ const useGlobalToast = () => {
     }
   }
 
-  function renderToast(type: ActionFeedbackType, message: string) {
-    const aStyle = toastTheme[type];
-    return (
-      // Single Alert
-      <View opacity={0.9} style={aStyle} bottom={toastPosition}>
-        {/* Alert Header */}
-        <HStack justifyContent="space-between">
-          <Box flexDirection="row">
-            {_renderIcon(type, aStyle)}
-            <Text ml={2} mr={10} fontSize={20} lineHeight={24} color={aStyle.color}>
-              {type === "info" ? "FYI" : type.toUpperCase()}
-            </Text>
-          </Box>
-          <Pressable onPress={close}>
-            <Ionicons name="md-close" size={24} color={`${aStyle.color}`} />
-          </Pressable>
-        </HStack>
-
-        {/* Alert Body Text / Link / Button */}
-        <Text style={{ color: aStyle.color }}>{message} </Text>
-      </View>
-    );
-  }
-
   return {
-    addToast: (type: ActionFeedbackType, message: string, placement: "top" | "bottom" = "bottom", duration = 1000) =>
-      (toastIdRef.current = toast.show({
-        render: () => renderToast(type, message),
-        placement,
-        duration,
-      })),
+    addToast: (type: ActionFeedbackType, message: string, duration = 2200, offset: number | string = "default") => {
+      const bottomOffset = offset === "default" ? 25 : (offset as number);
+      return Toast.show({
+        type,
+        text1: type.toUpperCase(),
+        text2: message,
+        visibilityTime: duration,
+        bottomOffset,
+      });
+    },
   };
 };
 

@@ -10,6 +10,8 @@ import { Loading } from "./Screens";
 import useForegroundListener from "./common/hooks/useForegroundListener";
 import useAppDataFetch from "./common/hooks/useAppDataFetch";
 import LoadingSpinner from "./Components/LoadingSpinner";
+import Toast from "react-native-toast-message";
+import toastConfig from "./common/toastConfig";
 
 LogBox.ignoreLogs(["Reanimated 2", "Remote debugger", "VirtualizedLists should never be nested", 'Expected style "lineHeight: 24" to contain units', 'Expected style "lineHeight: 30" to contain units', 'Expected style "lineHeight: 40" to contain units', 'Expected style "lineHeight: 50" to contain units', 'Expected style "lineHeight: 85" to contain units', 'Expected style "lineHeight: 120" to contain units', "Please pass alt prop to Image component", "Non-serializable values were found in the navigation state", "When server rendering, you must wrap your application in an <SSRProvider> to ensure consistent ids are generated between the client and server.", "VirtualizedLists should never be nested inside plain ScrollViews with the same orientation because it can break windowing and other functionality - use another VirtualizedList-backed container instead.", "Sentry Logger [Warn]: SentryError: Native is disabled"]);
 Logs.enableExpoCliLogging();
@@ -66,6 +68,7 @@ const App: React.FC = () => {
 
       {/* RELOADING ON SCREEN */}
       {state.isLoadingInApp && <LoadingSpinner color="base.brand" size="lg" />}
+      <Toast position="bottom" config={toastConfig} />
     </NavigationContainer>
   );
 };

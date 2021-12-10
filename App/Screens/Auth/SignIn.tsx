@@ -1,14 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, VStack, FormControl, Input, Link, Spinner, HStack, Center, Button } from "native-base";
+import { VStack, FormControl, Input, Link, Center } from "native-base";
 import { login } from "../../api/authentication";
 import { GlobalStateContext } from "../../store";
 import debugErrors from "../../common/debugErrors";
 import fetchInitialData from "../../common/fetchInitialData";
-import { Header, ScreenContainer, ScreenActionButton, Pane, HelperText, LoadingInPane } from "../../Components/CustomComponents";
+import { Header, ScreenContainer, Pane, HelperText, LoadingInPane } from "../../Components/CustomComponents";
 import { useDebouncedCallback } from "use-debounce";
 import { AuthStackProps } from "../../common/types-navigator";
 import useGlobalToast from "../../common/hooks/useGlobalToast";
-import * as WebBrowser from "expo-web-browser";
 import PaneSupportText from "../../Components/PaneSupportText";
 import PaneActionButton from "../../Components/PaneActionButton";
 import { Keyboard, Platform } from "react-native";
@@ -25,49 +24,7 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
   const [showLegacyLink, setShowLegacyLink] = useState(false);
   const { addToast } = useGlobalToast();
 
-  async function handleSignIn() {
-    setLoading(true);
-    setHelperText(null);
-    Keyboard.dismiss();
-    try {
-      if (!formIsValid) {
-        throw new Error("Please complete the form.");
-      }
-
-      const { user, tokenObject } = await login({ email: email.trim(), password: password.trim(), isMobileApp: true });
-      setSuccess(true);
-
-      // User hasn't confirmed email yet
-      if (!user.active) {
-        addToast("caution", "Please Confirm your Email by Clicking the link in the message sent after registration.", null, 20000);
-        dispatch({ type: "SET USER", payload: { user, isSignedIn: false } });
-        setLoading(false);
-        if (!user.emailCode) {
-          return setShowLegacyLink(true);
-        }
-        return;
-      }
-
-      await fetchInitialData(null, dispatch, state, user.email);
-      setLoading(false);
-    } catch (error) {
-      let message = debugErrors(error);
-
-      if (Array.isArray(error.debug)) {
-        if (error.debug[0].msg === "Couldn't find a user with that email." || error.debug[0].msg === "Incorrect password, please try again.") {
-          message = error.debug[0].msg;
-          // Force Users from Back before the new login system was built (JUNE 2020) to update via web login.
-        } else if (error.debug[0].oldUserMigration) {
-          setShowLegacyLink(true);
-        }
-      }
-
-      setLoading(false);
-      addToast("error", message);
-    }
-  }
-
-  const debounced = useDebouncedCallback(() => {
+  function _validationCheck() {
     if (email.includes("@")) {
       if (password.length >= 8) {
         setHelperText(null);
@@ -83,6 +40,55 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
       setHelperText("Must be valid email address");
     }
     setFormIsValid(false);
+  }
+
+  async function handleSignIn() {
+    setLoading(true);
+    setHelperText(null);
+    Keyboard.dismiss();
+    try {
+      if (!formIsValid) {
+        setLoading(false);
+        _validationCheck();
+        return addToast("error", "Please complete the form.");
+      }
+
+      const { user, tokenObject } = await login({ email: email.trim(), password: password.trim(), isMobileApp: true });
+      setSuccess(true);
+
+      // User hasn't confirmed email yet
+      if (!user.active) {
+        addToast("caution", "Please Confirm your Email by Clicking the link in the message sent after registration.", 20000);
+        dispatch({ type: "SET USER", payload: { user, isSignedIn: false } });
+        setLoading(false);
+        if (!user.emailCode) {
+          return setShowLegacyLink(true);
+        }
+        return;
+      }
+
+      await fetchInitialData(null, dispatch, state, user.email);
+      setLoading(false);
+    } catch (error) {
+      let message = debugErrors(error);
+
+      if (Array.isArray(error.debug)) {
+        if (error.debug[0].msg === "Couldn't find a user with that email." || error.debug[0].msg === "Incorrect password, please try again.") {
+          message = "Incorrect username or password, please try again.";
+          setFormIsValid(true);
+        } else if (error.debug[0].oldUserMigration) {
+          // Force Users from Back before the new login system was built (JUNE 2020) to update via web login.
+          setShowLegacyLink(true);
+        }
+      }
+
+      setLoading(false);
+      addToast("error", message);
+    }
+  }
+
+  const debounced = useDebouncedCallback(() => {
+    _validationCheck();
   }, 500);
 
   function handleInputChange(text: string, updateFunction: React.Dispatch<React.SetStateAction<string>>) {
@@ -100,9 +106,6 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
 
     return () => clearTimeout(disableButtonTimeout);
   }, [showLegacyLink]);
-
-  // TODO : need to cleanup ASYNC tasks
-  useEffect(() => {}, []);
 
   return (
     <ScreenContainer screenName={route.name}>

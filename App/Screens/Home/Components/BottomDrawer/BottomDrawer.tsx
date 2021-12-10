@@ -54,7 +54,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
       const { foe, rewards } = await fetchUpcomingFoeAndRewards({ avatarID: id });
       navigation.navigate("AwaitingBattle", { foe, rewards, character, isInstant });
     } catch (error) {
-      addToast("error", `${error.status}: ${error.message}`, "top");
+      addToast("error", `${error.status}: ${error.message}`);
       return debugErrors(error, user);
     }
   }
@@ -68,7 +68,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
     // Only applies to pets for now
     if (goToBattle) {
       if (item.type === "pet") {
-        return addToast("error", "Unable to switch pet's while waiting for battle!", "bottom");
+        return addToast("error", "Unable to switch pet's while waiting for battle!");
       }
     }
 
@@ -175,7 +175,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
 
       <Box shadow={8} zIndex={1} elevation={1} borderColor="base.brand" borderTopWidth={1} display="flex" flexDirection="row" bgColor="base.primaryAlt">
         <Box w="50%" p={2} borderRightWidth={1} borderRightColor="base.brand">
-          <Button py={2} bgColor={newActivitiesAvailable ? "base.highlight" : undefined} onPress={() => (newActivitiesAvailable ? openModal("ActivityUpgrade") : navigation.push("Activity"))} _text={{ fontFamily: "heading", fontSize: 27 }} borderRadius="0px">
+          <Button py={2} bgColor={newActivitiesAvailable ? "base.highlight" : undefined} onPress={() => (newActivitiesAvailable ? openModal("ActivityUpgrade") : navigation.push("Activity"))} _pressed={{ bgColor: "success.300" }} _text={{ fontFamily: "heading", fontSize: 27 }} borderRadius="0px">
             Activity
           </Button>
         </Box>

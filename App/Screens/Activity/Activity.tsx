@@ -184,7 +184,7 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
             </HStack>
             {helperText && <HelperText type="error" text={helperText} />}
           </VStack>
-          <Button bgColor={!formIsValid ? "base.disabled" : "base.success"} _text={{ fontFamily: "heading", fontSize: "4xl", lineHeight: 45, color: !formIsValid ? "muted.500" : "base.white" }} mt={5} disabled={!formIsValid} onPress={() => handleSubmit(activity, date, duration, distance, speed)}>
+          <Button bgColor={!formIsValid ? "base.disabled" : "base.success"} _text={{ fontFamily: "heading", fontSize: "4xl", lineHeight: 45, color: !formIsValid ? "muted.500" : "base.white" }} _pressed={{ bgColor: "success.300" }} mt={5} disabled={!formIsValid} onPress={() => handleSubmit(activity, date, duration, distance, speed)}>
             APPLY TO HERO
           </Button>
         </Pane>

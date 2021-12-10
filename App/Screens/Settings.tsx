@@ -122,6 +122,24 @@ const Settings: React.FC<MainStackProps<"Settings">> = ({ navigation, route }) =
             </Button>
           </Pane>
         )}
+
+        {__DEV__ && (
+          <Pane mb={10}>
+            <Subheader fontSize="xl" text="Test Toasts" />
+            <Button _text={{ fontFamily: "heading", fontSize: "2xl" }} mt={5} onPress={() => addToast("success", "This was a success very long loa sasd", 2000, 500)}>
+              success Toast
+            </Button>
+            <Button _text={{ fontFamily: "heading", fontSize: "2xl" }} mt={5} onPress={() => addToast("error", "This was a error")}>
+              error Toast
+            </Button>
+            <Button _text={{ fontFamily: "heading", fontSize: "2xl" }} mt={5} onPress={() => addToast("info", "This was a info")}>
+              info Toast
+            </Button>
+            <Button _text={{ fontFamily: "heading", fontSize: "2xl" }} mt={5} onPress={() => addToast("caution", "This was a caution")}>
+              caution Toast
+            </Button>
+          </Pane>
+        )}
         <Pane mb={10}>
           <Subheader fontSize="xl" text="Permanently delete your account" />
           <Button variant="caution" onPress={() => createAlert("Delete Account", "WARNING: This is non-reversible!", handleDeleteAccount)} _text={{ fontFamily: "heading", fontSize: "2xl" }}>

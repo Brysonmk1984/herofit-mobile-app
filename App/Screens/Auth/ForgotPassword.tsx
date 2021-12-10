@@ -63,10 +63,15 @@ const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">)
       }
       await sendPasswordResetEmailVerification({ email: email.trim(), isMobileApp: true });
       setLoading(false);
-      addToast("success", "Please check your email to verify account. Check your spam folder if the message is not in your inbox.", "bottom", 5000);
+      addToast("success", "Please check your email to verify account. Check your spam folder if the message is not in your inbox.", 5000);
     } catch (error) {
+      console.log("nope", error);
       setEmailSent(false);
       setLoading(false);
+
+      if (error.meta === "No matching email.") {
+        error.message = "Email is not on record.";
+      }
       debugErrors(error);
       addToast("error", `${error.message}`);
     }
