@@ -46,7 +46,7 @@ function appStateReducer(state: AppState, action: AppAction): AppState {
       return { ...state, user, isSignedIn };
     }
     case "RESET DEFAULTS": {
-      return { ...state, isLoading: false, hero: null, user: null };
+      return { ...state, isLoading: false, isLoadingInApp: false, hero: null, user: null };
     }
     case "ADD MODAL": {
       const { id } = action.payload;

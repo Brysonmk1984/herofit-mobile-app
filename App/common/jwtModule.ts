@@ -1,21 +1,19 @@
-import moment from 'moment';
-import { getLsWithExpiry, setLsWithExpiry, clearLs } from './helperFunctions';
+import moment from "moment";
+import { getLsWithExpiry, setLsWithExpiry, clearLs } from "./helperFunctions";
 
-
-function setJwtInLocalStorage({ token, expiresIn }){
+function setJwtInLocalStorage({ token, expiresIn }) {
   const daysInt = parseInt(expiresIn);
-  const duration = moment.duration(daysInt, 'days');
+  const duration = moment.duration(daysInt, "days");
   const milliseconds = duration.asMilliseconds();
-  return setLsWithExpiry('herofit-jwt', token, milliseconds);
-};
-
-function getJwtInLocalStorage(){
-  
-  return getLsWithExpiry('herofit-jwt');
+  return setLsWithExpiry("herofit-jwt", token, milliseconds);
 }
 
-function clearJwtInLocalStorage(){
-  return clearLs('herofit-jwt');
+function getJwtInLocalStorage(): Promise<string | false> {
+  return getLsWithExpiry("herofit-jwt");
+}
+
+function clearJwtInLocalStorage() {
+  return clearLs("herofit-jwt");
 }
 
 export { setJwtInLocalStorage, getJwtInLocalStorage, clearJwtInLocalStorage };

@@ -165,7 +165,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
     <SideMenu disableGestures={(Boolean(state.initialHomescreenLoad) ?? false) || bottomDrawerOpen} bounceBackOnOverdraw={false} onChange={isOpen => setSideDrawerOpen(isOpen)} isOpen={sideDrawerOpen} menuPosition={"right"} menu={<SidebarMenu navigation={navigation} setSideDrawerOpen={setSideDrawerOpen} heroName={hero.name} />} openMenuOffset={sideBarWidth}>
       <ScreenContainer bg={<Background animation={backgroundAnimation} setBackgroundAnimation={setBackgroundAnimation} />} screenName={route.name}>
         <View zIndex={110} elevation={110}>
-          <GestureRecognizer onSwipeDown={state => getAllAppData(true)}>
+          <GestureRecognizer onSwipeDown={state => getAllAppData()}>
             {/* TOP SECTION */}
             <View zIndex={110}>
               <TopHud equippedTitle={equippedTitle} />

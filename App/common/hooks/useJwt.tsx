@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import debugErrors from "../debugErrors";
 import { getJwtInLocalStorage } from "../jwtModule";
 
-export default function useJwt(): [boolean, React.Dispatch<any>] | [string, React.Dispatch<any>] {
-  const [jwt, setJwt] = useState(null);
+export default function useJwt(): [string | null, React.Dispatch<any>] {
+  const [jwt, setJwt] = useState<string | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -12,7 +12,7 @@ export default function useJwt(): [boolean, React.Dispatch<any>] | [string, Reac
       async function getJwt() {
         try {
           const jwt = await getJwtInLocalStorage();
-          setJwt(jwt);
+          setJwt(jwt || null);
         } catch (error) {
           debugErrors(error);
         }

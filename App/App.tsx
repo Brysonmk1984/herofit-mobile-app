@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { LogBox } from "react-native";
 import { View } from "native-base";
 import { NavigationContainer } from "@react-navigation/native";
@@ -7,7 +7,6 @@ import { useFonts } from "expo-font";
 import { AuthStackScreen, MainStackScreen } from "./Navigator";
 import { GlobalStateContext } from "./store";
 import { Loading } from "./Screens";
-import useJwt from "./common/hooks/useJwt";
 import useForegroundListener from "./common/hooks/useForegroundListener";
 import useAppDataFetch from "./common/hooks/useAppDataFetch";
 import LoadingSpinner from "./Components/LoadingSpinner";
@@ -17,10 +16,8 @@ Logs.enableExpoCliLogging();
 
 const App: React.FC = () => {
   const { state, dispatch } = useContext(GlobalStateContext);
-  const [jwt] = useJwt();
-  const [hasRunInitJwtCheck, setHasRunInitJwtCheck] = useState(false);
   const { refreshAppData } = useForegroundListener();
-  const { getAllAppData } = useAppDataFetch();
+  const { getAllAppData, jwt } = useAppDataFetch();
 
   // LOAD CUSTOM FONTS
   const [fontsLoaded] = useFonts({
@@ -37,23 +34,22 @@ const App: React.FC = () => {
 
   // GET INITIAL APP DATA if JWT EXISTS
   useEffect(() => {
-    if (jwt && !hasRunInitJwtCheck) {
-      getAllAppData(null, jwt);
-      setHasRunInitJwtCheck(true);
+    if (jwt && !state.isSignedIn) {
+      getAllAppData();
     } else {
       const loadingTimeout = setTimeout(() => {
         dispatch({ type: "TOGGLE LOADING", payload: { isLoading: false } });
-      }, 1000);
+      }, 1500);
       return () => clearTimeout(loadingTimeout);
     }
-  }, [jwt, hasRunInitJwtCheck]);
+  }, [jwt]);
 
   // REFRESH APP DATA IF APP HAS RETURNED TO THE FOREGROUND
   useEffect(() => {
     // Android for some will run this initially, while ios wont, so hasRunInitJwtCheck is needed
-    if (refreshAppData && hasRunInitJwtCheck) {
+    if (refreshAppData && state.isSignedIn) {
       dispatch({ type: "TOGGLE IN APP LOADING", payload: { isLoadingInApp: true } });
-      getAllAppData(true);
+      getAllAppData();
     }
   }, [refreshAppData]);
 
