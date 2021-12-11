@@ -57,7 +57,7 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
       setSuccess(true);
 
       // User hasn't confirmed email yet
-      if (!user.active) {
+      if (!user.active && !user.emailCode) {
         //addToast("caution", "Please Confirm your Email by Clicking the link in the message sent after registration.", 20000);
         dispatch({ type: "SET USER", payload: { user, isSignedIn: false } });
         setLoading(false);

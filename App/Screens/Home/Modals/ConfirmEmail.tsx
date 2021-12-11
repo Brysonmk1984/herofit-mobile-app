@@ -46,9 +46,11 @@ const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
       // * First time the user is assigned
       const { user } = await getUser({ email: state.user.email });
       if (user.active) {
-        dispatch({ type: "SET USER", payload: { user, isSignedIn: true } });
-        dispatch({ type: "SET HERO", payload: { hero: { ...state.hero } } });
         dispatch({ type: "SET USER STATUS", payload: { userStatus: "active" } });
+        setTimeout(() => {
+          dispatch({ type: "SET USER", payload: { user, isSignedIn: true } });
+          dispatch({ type: "SET HERO", payload: { hero: { ...state.hero } } });
+        }, 500);
         closeModal("ChooseActivityEntry");
       } else {
         addToast("error", "Email Has not been confirmed; please click the link in your inbox.");
