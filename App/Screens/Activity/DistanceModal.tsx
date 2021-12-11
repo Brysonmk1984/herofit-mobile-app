@@ -61,7 +61,7 @@ const DistanceModal: React.FC<DistanceModalProps> = ({ id, title, modalAction, d
         selectedIndex={0}
         renderItem={(data, index) => <Text>{data.toString().slice(1, 3) || ".0"}</Text>}
         onValueChange={(data, selectedIndex) => {
-          console.log(data, typeof data);
+          //console.log(data, typeof data);
           setDecimal(data);
           setOnChangeDecimalCalled(true);
         }}

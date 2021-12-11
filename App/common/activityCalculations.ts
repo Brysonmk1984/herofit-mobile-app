@@ -12,7 +12,6 @@ function convertMilesHoursToMetersSeconds(mph: number) {
 }
 
 function convertDurationStringToSeconds(duration: string) {
-  console.log("THE DUR", duration);
   let hours = 0;
   let minutes = 0;
   if (duration.includes("hrs")) {

@@ -24,10 +24,8 @@ const getStravaUserId = function (stravaAccessToken: string) {
       return data;
     })
     .catch(({ request, response }) => {
-      console.log("COME ON", response.data.errors);
       response = { status: response.status, data: { message: response.data.message, debug: `Error connecting to Strava API - ${response.data.errors[0].code}: ${response.data.errors[0].field} - getStravaUserId` } };
-
-      console.log("HERE", response);
+      //console.log("HERE", response);
       throw handleHttpError(request, response);
     });
 };

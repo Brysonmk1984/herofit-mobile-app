@@ -106,7 +106,6 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
 
   // Determine which modal should pop up
   useEffect(() => {
-    //console.log("SU", state.userStatus, state.user);
     if (state.userStatus === "new") {
       openModal("SignupToSave", 3000);
     } else if (state.userStatus === "unconfirmed") {

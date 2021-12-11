@@ -7,7 +7,7 @@ import { getHeroImage } from "../common/helperFunctions";
 const SLIDER_WIDTH = Dimensions.get("window").width;
 const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.65);
 const ITEM_HEIGHT = ITEM_WIDTH;
-console.log(ITEM_HEIGHT);
+
 export default function HeroCarousel({ heroList, setActiveHero, viewDetails }) {
   function _renderItem({ item, index }) {
     return (

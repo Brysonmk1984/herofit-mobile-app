@@ -21,11 +21,10 @@ interface ConfirmEmailProps {
 
 const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
-  const { openModal, closeModal } = useModal();
+  const { closeModal } = useModal();
   const [loading, setLoading] = useState(false);
   const [disableButton, setDisableButton] = useState(true);
   const [showChecklist, setShowChecklist] = useState(false);
-  const [result, setResult] = useState(null);
   const { signOut } = useSignOut();
   const { addToast } = useGlobalToast();
 
@@ -49,14 +48,13 @@ const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
       if (user.active) {
         dispatch({ type: "SET USER", payload: { user, isSignedIn: true } });
         dispatch({ type: "SET HERO", payload: { hero: { ...state.hero } } });
-        dispatch({ type: "SET USER STATUS", payload: { userStatus: user.active ? "active" : "unconfirmed" } });
+        dispatch({ type: "SET USER STATUS", payload: { userStatus: "active" } });
         closeModal("ChooseActivityEntry");
       } else {
         addToast("error", "Email Has not been confirmed; please click the link in your inbox.");
       }
       setLoading(false);
     } catch (error) {
-      console.log("HERE", error);
       debugErrors(error, state.user);
       setLoading(false);
     }

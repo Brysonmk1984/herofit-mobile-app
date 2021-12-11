@@ -33,7 +33,6 @@ function useAppDataFetch(): { getAllAppData: (passedJwt?: any) => Promise<void>;
       }, 1500);
     } catch (error) {
       console.log("JWT EXISTS, but ERROR FETCHING DATA");
-      //addToast("error", "There was a problem fetching game data... Please try again later.");
       debugErrors(error);
       dispatch({ type: "RESET DEFAULTS" });
     }

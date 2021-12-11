@@ -114,7 +114,7 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
     const totalMeters = convertMilesToMeters(distance);
     const averageMetersPerSecond = convertMilesHoursToMetersSeconds(speed);
     const totalSeconds = convertDurationStringToSeconds(duration);
-    console.log(distance, typeof distance, totalMeters, speed, typeof speed, averageMetersPerSecond, duration, totalSeconds);
+    //console.log(distance, typeof distance, totalMeters, speed, typeof speed, averageMetersPerSecond, duration, totalSeconds);
 
     const dateWithOffset = calculateOffSet(date);
     //console.log(date, dateWithOffset);

@@ -11,7 +11,6 @@ let axios = _axios.create();
 axiosRetry(axios, { retries: 3 });
 
 const login = async function (body) {
-  console.log("EPPP", endpoint);
   return axios
     .post(`${endpoint}auth/login`, body, await axiosOptions())
     .then(({ data }) => {

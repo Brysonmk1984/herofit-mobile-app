@@ -50,7 +50,6 @@ interface MessageAccountInfo {
 }
 
 const emailContactForm = async function (body: { email: string; feedbackType: string; message: string; accountInfo: MessageAccountInfo }): Promise<any> {
-  console.log("THE BODY", body);
   return axios
     .post(`${endpoint}email/contact-form`, body, await axiosOptions())
     .then(({ data }) => {

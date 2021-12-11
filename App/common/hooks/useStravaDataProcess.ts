@@ -14,10 +14,10 @@ async function _checkStravaToken(user: User, state: InitialAppState, dispatch: R
 
   // CHECK IF access token is valid, if so, just resolve the promise and move on
   if (accessTokenExpiration > nowEpoch && user.stravaAccessToken) {
-    console.log("TOKEN VALID, using existing access token");
+    //console.log("TOKEN VALID, using existing access token");
     return user.stravaAccessToken;
   }
-  console.log("TOKEN INVALID, refreshing access token");
+  //console.log("TOKEN INVALID, refreshing access token");
 
   try {
     // OTHERWISE, we need to run the sequence to update the access token
@@ -27,7 +27,6 @@ async function _checkStravaToken(user: User, state: InitialAppState, dispatch: R
 
     return updatedUser.stravaAccessToken;
   } catch (error) {
-    console.log("GENERAL ERROR", error);
     // Couldn't retrieve strava credentials
     debugErrors(error, user);
     throw new Error(`${error.status}: ${error.message}`);
@@ -138,11 +137,11 @@ function useStravaDataProcess(): { newStravaActivities: Activity[]; getFreshStra
           // If there are locally saved strava activities, use cached version
           // This is to prevent too many requests against Strava API
           if (lsStrava) {
-            console.log("YES LS STRAVA DATA", state.latestSavedActivityDate, lsStrava);
+            //console.log("YES LS STRAVA DATA", state.latestSavedActivityDate, lsStrava);
             const formattedNewActivities = _handleStravaActivities(hero, lsStrava, state.latestSavedActivityDate, state.user);
             setNewStravaActivities(formattedNewActivities);
           } else {
-            console.log("NO LS STRAVA DATA");
+            //console.log("NO LS STRAVA DATA");
             // Otherwise, do Strava Check
             getFreshStravaData();
           }

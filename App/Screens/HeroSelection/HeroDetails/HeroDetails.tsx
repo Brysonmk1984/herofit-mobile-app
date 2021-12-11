@@ -37,7 +37,6 @@ const HeroDetails = ({ route, navigation }: AuthStackProps<"HeroDetails">) => {
       fire,
     };
 
-    console.log("NAMED HERO", namedSelectedHero);
     return navigation.push("SpendQP", { hero: namedSelectedHero });
   }
 
