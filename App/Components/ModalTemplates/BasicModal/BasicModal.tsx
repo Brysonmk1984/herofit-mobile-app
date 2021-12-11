@@ -13,9 +13,11 @@ interface IBasicModal {
   buttonText?: string;
   disabled?: boolean;
   preventClose?: boolean;
+  closeModalAction?: (val: any) => void | undefined;
+  hideCloseButton?: boolean;
 }
 
-function BasicModal({ children, id, modalOpen, modalAction, title, buttonText = "OK", disabled = false, preventClose }: IBasicModal) {
+function BasicModal({ children, id, modalOpen, modalAction, title, buttonText = "OK", disabled = false, preventClose, hideCloseButton = false, closeModalAction }: IBasicModal) {
   const { closeModal } = useModal();
 
   function handleModalAction(idToClose: string, modalAction: () => void, preventClose: boolean) {
@@ -27,10 +29,18 @@ function BasicModal({ children, id, modalOpen, modalAction, title, buttonText = 
     }
   }
 
+  function _onClose(closeModalAction) {
+    if (closeModalAction) {
+      closeModalAction();
+    } else {
+      closeModal(id);
+    }
+  }
+
   return (
-    <Modal isOpen={modalOpen} onClose={() => closeModal(id)} closeOnOverlayClick={!preventClose}>
+    <Modal isOpen={modalOpen} onClose={() => _onClose(closeModalAction)} closeOnOverlayClick={!preventClose}>
       <Modal.Content>
-        {!preventClose && <ModalCloseButton bgColor="primary.50" />}
+        {!preventClose && !hideCloseButton && <ModalCloseButton bgColor="primary.50" />}
         <Modal.Header px={5} py={3}>
           <View>
             <Text textAlign="center" fontSize="2xl" fontFamily="heading" overflow="hidden">

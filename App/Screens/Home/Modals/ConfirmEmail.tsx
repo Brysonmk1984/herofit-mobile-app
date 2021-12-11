@@ -11,6 +11,8 @@ import { getUser } from "../../../api/user";
 import useModal from "../../../common/hooks/useModal";
 import useGlobalToast from "../../../common/hooks/useGlobalToast";
 import { ModalActionHeader } from "../../../Components/ModalTemplates/ModalActionHeader";
+import useSignOut from "../../../common/hooks/useSignout";
+import { Alert } from "react-native";
 
 interface ConfirmEmailProps {
   id: string;
@@ -24,7 +26,7 @@ const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
   const [disableButton, setDisableButton] = useState(true);
   const [showChecklist, setShowChecklist] = useState(false);
   const [result, setResult] = useState(null);
-
+  const { signOut } = useSignOut();
   const { addToast } = useGlobalToast();
 
   function resendEmailLink() {
@@ -60,6 +62,27 @@ const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
     }
   }
 
+  function _handleSignout() {
+    Alert.alert(
+      "Warning!",
+      `If you close this window without confirming your email, you'll be redirected to the login screen.`,
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+          onPress: () => {},
+        },
+        {
+          text: "I understand",
+          onPress: () => {
+            signOut();
+          },
+        },
+      ],
+      { cancelable: true },
+    );
+  }
+
   useEffect(() => {
     if (state.modalQueue[0] === id) {
       // Timeout is only to prevent the user from clicking the action button right away without checking email
@@ -72,8 +95,8 @@ const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
   }, [state.modalQueue[0]]);
 
   return (
-    <BasicModal id={id} modalOpen={state.modalQueue[0] === id} modalAction={() => handleEmailConfirmed()} disabled={disableButton} title="Please Confirm Your Email!" buttonText="Ok, I did it!" preventClose={state.userStatus === "unconfirmed" ? true : false}>
-      <ModalActionHeader type="caution" text="Must click the link in your email" preventClose={state.userStatus === "unconfirmed" ? true : false} />
+    <BasicModal id={id} modalOpen={state.modalQueue[0] === id} modalAction={() => handleEmailConfirmed()} disabled={disableButton} title="Please Confirm Your Email!" buttonText="Ok, I did it!" closeModalAction={state.userStatus === "unconfirmed" ? () => _handleSignout() : undefined} hideCloseButton={true}>
+      <ModalActionHeader type="caution" text="Must click the link in your email" />
       <BodyContent>
         {showChecklist ? (
           <ScrollView>

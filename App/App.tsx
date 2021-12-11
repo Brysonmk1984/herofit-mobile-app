@@ -48,8 +48,9 @@ const App: React.FC = () => {
 
   // REFRESH APP DATA IF APP HAS RETURNED TO THE FOREGROUND
   useEffect(() => {
+    console.log(state.user);
     // Android for some will run this initially, while ios wont, so hasRunInitJwtCheck is needed
-    if (refreshAppData && state.isSignedIn) {
+    if (refreshAppData && state.isSignedIn && state.user.active) {
       dispatch({ type: "TOGGLE IN APP LOADING", payload: { isLoadingInApp: true } });
       getAllAppData();
     }

@@ -58,7 +58,7 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
 
       // User hasn't confirmed email yet
       if (!user.active) {
-        addToast("caution", "Please Confirm your Email by Clicking the link in the message sent after registration.", 20000);
+        //addToast("caution", "Please Confirm your Email by Clicking the link in the message sent after registration.", 20000);
         dispatch({ type: "SET USER", payload: { user, isSignedIn: false } });
         setLoading(false);
         if (!user.emailCode) {
@@ -96,16 +96,16 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
     debounced();
   }
 
-  useEffect(() => {
-    let disableButtonTimeout;
-    if (showLegacyLink) {
-      disableButtonTimeout = setTimeout(() => {
-        setShowLegacyLink(false);
-      }, 20000);
-    }
+  // useEffect(() => {
+  //   let disableButtonTimeout;
+  //   if (showLegacyLink) {
+  //     disableButtonTimeout = setTimeout(() => {
+  //       setShowLegacyLink(false);
+  //     }, 20000);
+  //   }
 
-    return () => clearTimeout(disableButtonTimeout);
-  }, [showLegacyLink]);
+  //   return () => clearTimeout(disableButtonTimeout);
+  // }, [showLegacyLink]);
 
   return (
     <ScreenContainer screenName={route.name}>
@@ -129,8 +129,8 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
 
                 {showLegacyLink ? (
                   <Center mt={2}>
-                    <PaneSupportText iconName="caution" iconColor="base.caution" text={"Must Verify Account"}>
-                      We have upgraded our login system and because you have a legacy account, you must verify your account from our website.
+                    <PaneSupportText iconName="caution" iconColor="base.caution" text={"Must Verify Email Before Continuing"}>
+                      We have upgraded our login system and because you have a legacy account, you must verify your account now.
                     </PaneSupportText>
                     <Link _text={{ fontSize: "3xl" }} onPress={() => navigation.push("ForgotPassword")} mt={1}>
                       Verify Account

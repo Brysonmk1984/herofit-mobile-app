@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Button, Box, Modal } from "native-base";
+import { Text, View, Button, Box, Modal } from "native-base";
 
 interface ModalCloseButton {
   bgColor: string;

@@ -23,6 +23,7 @@ function useAppDataFetch(): { getAllAppData: (passedJwt?: any) => Promise<void>;
       }
 
       await fetchInitialData(jwt, dispatch, state);
+
       dispatch({ type: "TOGGLE IN APP LOADING", payload: { isLoadingInApp: false } });
       setTimeout(() => {
         dispatch({ type: "TOGGLE LOADING", payload: { isLoading: false } });

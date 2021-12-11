@@ -95,14 +95,14 @@ function handleHttpError(request: AxiosRequestConfig, response: AxiosResponse | 
   } else if (request) {
     //console.log("REQUEST!", request);
     return {
-      status: null,
+      status: 503,
       message: "Network Error, please try again later.",
       debug: "Request failed to go through.",
     };
     // No request was even made, error in code above
   } else {
     return {
-      status: null,
+      status: 400,
       message: "There was an error, please try again later.",
       debug: "Error in client code before the request was made!",
     };
