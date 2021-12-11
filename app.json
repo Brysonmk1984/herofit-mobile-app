@@ -5,13 +5,14 @@
     "owner":"brysonmk1984",
     "version": "1.2.6",
     "orientation": "portrait",
-    "icon": "./assets/ios-logo-512.png",
+    "icon": "./assets/app-icon.png",
     "scheme": "herofit",
     "splash": {
       "image": "./assets/splash-background-night.png",
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
+    "privacy": "public",
     "plugins": ["sentry-expo"],
     "hooks": {
       "postPublish": [
