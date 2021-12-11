@@ -50,7 +50,7 @@ const ActivityUpgrade: React.FC<ActivityUpgradeProps> = ({ id, activities, modal
     <CharacterModal id={id} modalOpen={state.modalQueue[0] === id} speech={`Masterful form, young ${state.hero.name}! I see you've been working out. Keep it up and the Dark Forces will be no match for you`} buttonText="Upgrade" modalAction={modalAction}>
       <ModalActionHeader type="info" text="You've been working out!" />
       <BodyContent>
-        <ScrollView maxHeight={windowHeight * 0.3} minHeight={windowHeight * 0.15}>
+        <ScrollView maxHeight={windowHeight * 0.3} minHeight={windowHeight * 0.08}>
           <FlatList data={activities} renderItem={({ item }) => renderListItem(item)} keyExtractor={(item, index) => item.id?.toString() || index.toString()} />
         </ScrollView>
 

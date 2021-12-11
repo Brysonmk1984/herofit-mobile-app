@@ -162,6 +162,10 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
     }
   }, [route.params?.postBattleReportAwards]);
 
+  useEffect(() => {
+    addToast("success", "how high", 1500, 125);
+  }, []);
+
   return (
     <SideMenu disableGestures={(Boolean(state.initialHomescreenLoad) ?? false) || bottomDrawerOpen} bounceBackOnOverdraw={false} onChange={isOpen => setSideDrawerOpen(isOpen)} isOpen={sideDrawerOpen} menuPosition={"right"} menu={<SidebarMenu navigation={navigation} setSideDrawerOpen={setSideDrawerOpen} heroName={hero.name} />} openMenuOffset={sideBarWidth}>
       <ScreenContainer bg={<Background setBackgroundAnimation={setBackgroundAnimation} />} screenName={route.name}>
