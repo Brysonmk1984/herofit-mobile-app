@@ -31,10 +31,10 @@ async function fetchInitialData(token: string, dispatch: AppDispatch, state: Ini
     // Takes item instance IDs and assigns full items to the hero under 'equipped' property
     const equipped = convertItemIdsToFullItems(hero.equipped, allGameItems);
     hero.equipped = equipped;
-
+    console.log("EQ!", equipped);
     const userStatus = user.active ? "active" : "unconfirmed";
 
-    dispatch({ type: "SET EXISTING USER INIT DATA", payload: { globalMessages, user, hero, latestBattle, isSignedIn: true, userStatus, latestSavedActivities, latestSavedActivityDate, allGameItems, awardedItemMessage } });
+    dispatch({ type: "SET EXISTING USER INIT DATA", payload: { globalMessages, user, hero, latestBattle, isSignedIn: true, userStatus, latestSavedActivities, latestSavedActivityDate, allGameItems, awardedItemMessage, equipped } });
   } catch (error) {
     throw error;
   }

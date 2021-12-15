@@ -14,7 +14,7 @@ interface ToggleInAppLoadingAction {
 }
 interface SetExistingUserInitDataAction {
   type: "SET EXISTING USER INIT DATA";
-  payload: { globalMessage: string | undefined; user: User; hero: Hero; latestSavedActivities: Activity[]; latestSavedActivityDate: string | null; latestBattle: Battle; isSignedIn: boolean; allGameItems: Item[]; awardedItemMessage: string | null };
+  payload: { globalMessages: GlobalMessages | undefined; user: User; hero: Hero; latestSavedActivities: Activity[]; latestSavedActivityDate: string | null; latestBattle: Battle; isSignedIn: boolean; allGameItems: Item[]; awardedItemMessage: string | null };
 }
 interface SetIsSignedInAction {
   type: "SET ISSIGNEDIN";

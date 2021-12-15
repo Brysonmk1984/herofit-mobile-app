@@ -19,6 +19,7 @@ interface UpdaterMethods {
   equip: (newItem: Item, hero: Hero) => void;
   unequip: (oldItem: Item, hero: Hero) => void;
   equipUnequip: (newItem: Item, oldItemId: number, hero: Hero) => void;
+  fetchAndUpdateInventory: () => void;
 }
 
 export default function useInventory(makeInventoryRequest?: boolean): ServerInventoryCategories & EquippedItems & UpdaterMethods {
@@ -150,24 +151,30 @@ export default function useInventory(makeInventoryRequest?: boolean): ServerInve
     return { skin: skin ?? null, pet: pet ?? null, title: title ?? null };
   }
 
+  // Will be called on initial homepage load since 'makeInventoryRequest' is passed as true
+  // subsequent refreshes may call this function directly
+  function fetchAndUpdateInventory() {
+    try {
+      (async () => {
+        const inventory = await fetchAvatarInventory({ avatarID: hero.id });
+        //console.log("INVENTTORY=", inventory);
+        const equipped = _determineEquippedItems(inventory);
+        //console.log("equipped=", equipped);
+        dispatch({ type: "UPDATE INVENTORY", payload: { inventory } });
+        dispatch({ type: "UPDATE EQUIPPED", payload: { equipped } });
+      })();
+    } catch (error) {
+      debugErrors(error, user);
+      addToast("error", `${error.status}: ${error.message}`, undefined, 125);
+    }
+  }
+
   // ONE-TIME - Homepage makes a fresh inventory request
   useEffect(() => {
     // Only fetch Inventory if the makeInventoryRequest parameter was passed (true) - happens from home page
     // I could alternatively fetch inventory as part of the initial app data, but this seems fine and will help spread out the data-fetching burden
     if (makeInventoryRequest) {
-      try {
-        (async () => {
-          const inventory = await fetchAvatarInventory({ avatarID: hero.id });
-          //console.log("INVENTTORY=", inventory);
-          const equipped = _determineEquippedItems(inventory);
-          //console.log("equipped=", equipped);
-          dispatch({ type: "UPDATE INVENTORY", payload: { inventory } });
-          dispatch({ type: "UPDATE EQUIPPED", payload: { equipped } });
-        })();
-      } catch (error) {
-        debugErrors(error, user);
-        addToast("error", `${error.status}: ${error.message}`, undefined, 125);
-      }
+      fetchAndUpdateInventory();
     }
   }, [makeInventoryRequest]);
 
@@ -237,5 +244,6 @@ export default function useInventory(makeInventoryRequest?: boolean): ServerInve
     buy,
     consume,
     // utility methods
+    fetchAndUpdateInventory,
   };
 }

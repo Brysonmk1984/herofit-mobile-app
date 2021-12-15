@@ -33,11 +33,11 @@ import useAppDataFetch from "../../common/hooks/useAppDataFetch";
 const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { openModal, closeModal } = useModal();
-  const { newStravaActivities, getFreshStravaData, resetNewStravaActivities } = useStravaDataProcess();
+  const { newStravaActivities, getFreshStravaData } = useStravaDataProcess();
   const [newActivities, setNewActivities] = useState<Activity[]>([]);
   const { addToast } = useGlobalToast();
   const { getAllAppData } = useAppDataFetch();
-  const { equippedSkin, equippedPet, equippedTitle } = useInventory(true);
+  const { equippedSkin, equippedPet, equippedTitle, fetchAndUpdateInventory } = useInventory(true);
   const { deviceWidth, deviceHeight, deviceAspectType } = useMemo(() => useAspectRatio(), []);
   const sideBarWidth = deviceWidth / 2;
   const isLongPhone = deviceAspectType === "long";
@@ -78,6 +78,13 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
       const maxDate = moment.max(activities.map(act => moment(act.activityDate)));
       //console.log("max data", maxDate);
       dispatch({ type: "POST UPGRADE", payload: { hero: heroEquipped, latestSavedActivities: [...state.latestSavedActivities, ...upgradeResults.activities], latestSavedActivityDate: maxDate } });
+
+      // If items were found, we need to fetch inventory again and update
+      const { items, rewards } = upgradeResults;
+      if (items.length || rewards.length) {
+        fetchAndUpdateInventory();
+      }
+
       setNewActivities([]);
       clearLs("herofit-stravaActivities");
 
@@ -165,7 +172,13 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
     <SideMenu disableGestures={(Boolean(state.initialHomescreenLoad) ?? false) || bottomDrawerOpen} bounceBackOnOverdraw={false} onChange={isOpen => setSideDrawerOpen(isOpen)} isOpen={sideDrawerOpen} menuPosition={"right"} menu={<SidebarMenu navigation={navigation} setSideDrawerOpen={setSideDrawerOpen} heroName={hero.name} />} openMenuOffset={sideBarWidth}>
       <ScreenContainer bg={<Background animation={backgroundAnimation} setBackgroundAnimation={setBackgroundAnimation} />} screenName={route.name}>
         <View zIndex={110} elevation={110}>
-          <GestureRecognizer onSwipeDown={state => getAllAppData()}>
+          <GestureRecognizer
+            onSwipeDown={state => {
+              getAllAppData().then(data => {
+                fetchAndUpdateInventory();
+              });
+            }}
+          >
             {/* TOP SECTION */}
             <View zIndex={110}>
               <TopHud equippedTitle={equippedTitle} />
