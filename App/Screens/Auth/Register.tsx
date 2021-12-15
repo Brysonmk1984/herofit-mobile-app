@@ -122,7 +122,7 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
       dispatch({ type: "SET HERO", payload: { hero: Object.assign(state.hero, avatar) } });
       formDispatch({ type: "SET LOADING", loading: false });
       // Display welcome message
-      awardedItemMessage ? addToast("success", `Welcome to HeroFit! ${awardedItemMessage}`) : addToast("success", `Welcome to HeroFit!`);
+      awardedItemMessage ? addToast("success", `Welcome to HeroFit! ${awardedItemMessage}`, 5000) : addToast("success", `Welcome to HeroFit!`, 3000);
       // changing isSignedIn will unmount the component; must be last
       dispatch({ type: "SET ISSIGNEDIN", payload: { isSignedIn: true, initialHomescreenLoad: null } });
     } catch (error) {

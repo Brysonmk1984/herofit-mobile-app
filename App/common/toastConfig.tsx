@@ -11,23 +11,24 @@ const toastConfig = {
   success: props => (
     <BaseToast
       {...props}
-      style={{ borderLeftColor: "white", backgroundColor: colors.base.successLight, opacity: 0.9, width: "76%", height: "auto", paddingHorizontal: 2 }}
+      style={{ borderLeftColor: colors.base.background, backgroundColor: colors.base.successLight, opacity: 0.9, width: "76%", height: "auto", paddingHorizontal: 2 }}
       contentContainerStyle={{ paddingLeft: 8, paddingVertical: 8, paddingRight: 2 }}
       text1Style={{
         fontSize: 24,
         fontFamily: fonts.heading,
-        color: "white",
+        color: colors.base.background,
       }}
       text2Style={{
         marginTop: 1,
         fontSize: 14,
-        color: "white",
+        color: colors.base.background,
+        textDecorationLine: props.props.hasLink ? "underline" : "none",
       }}
       text2NumberOfLines={4}
       renderLeadingIcon={() => (
         <View style={{ paddingLeft: 3, alignItems: "center", justifyContent: "center" }}>
           <Text style={{ paddingVertical: 8 }}>
-            <Ionicons name="md-checkmark-circle" size={24} color="white" />
+            <Ionicons name="md-checkmark-circle" size={24} color={colors.base.background} />
           </Text>
         </View>
       )}
@@ -36,49 +37,50 @@ const toastConfig = {
   info: props => (
     <BaseToast
       {...props}
-      style={{ borderLeftColor: "white", backgroundColor: colors.base.infoLight, opacity: 0.9, width: "76%", height: "auto", paddingHorizontal: 2 }}
+      style={{ borderLeftColor: colors.base.background, backgroundColor: colors.base.infoLight, opacity: 0.9, width: "76%", height: "auto", paddingHorizontal: 2 }}
       contentContainerStyle={{ paddingLeft: 8, paddingVertical: 8, paddingRight: 2 }}
       text1Style={{
         fontSize: 24,
         fontFamily: fonts.heading,
-        color: "white",
+        color: colors.base.background,
       }}
       text2Style={{
         marginTop: 1,
         fontSize: 14,
-        color: "white",
+        color: colors.base.background,
+        textDecorationLine: props.props.hasLink ? "underline" : "none",
       }}
       text2NumberOfLines={4}
       renderLeadingIcon={() => (
         <View style={{ paddingLeft: 3, alignItems: "center", justifyContent: "center" }}>
           <Text style={{ paddingVertical: 8 }}>
-            <MaterialIcons name="info" size={24} color="white" />
+            <MaterialIcons name="info" size={24} color={colors.base.background} />
           </Text>
         </View>
       )}
     />
   ),
-
   error: props => (
     <ErrorToast
       {...props}
-      style={{ borderLeftColor: "white", backgroundColor: colors.base.errorLight, opacity: 0.9, width: "76%", height: "auto", paddingHorizontal: 2 }}
+      style={{ borderLeftColor: colors.base.background, backgroundColor: colors.base.errorLight, opacity: 0.9, width: "76%", height: "auto", paddingHorizontal: 2 }}
       contentContainerStyle={{ paddingLeft: 8, paddingVertical: 8, paddingRight: 2 }}
       text1Style={{
         fontSize: 24,
         fontFamily: fonts.heading,
-        color: "white",
+        color: colors.base.background,
       }}
       text2Style={{
         marginTop: 1,
         fontSize: 14,
-        color: "white",
+        color: colors.base.background,
+        textDecorationLine: props.props.hasLink ? "underline" : "none",
       }}
       text2NumberOfLines={4}
       renderLeadingIcon={() => (
         <View style={{ paddingLeft: 3, alignItems: "center", justifyContent: "center" }}>
           <Text style={{ paddingVertical: 8 }}>
-            <MaterialIcons name="error" size={24} color="white" />
+            <MaterialIcons name="error" size={24} color={colors.base.background} />
           </Text>
         </View>
       )}
@@ -87,23 +89,24 @@ const toastConfig = {
   caution: props => (
     <BaseToast
       {...props}
-      style={{ borderLeftColor: "white", backgroundColor: colors.base.cautionLight, opacity: 0.9, width: "76%", height: "auto", paddingHorizontal: 2 }}
+      style={{ borderLeftColor: colors.base.background, backgroundColor: colors.base.caution, opacity: 0.9, width: "76%", height: "auto", paddingHorizontal: 2 }}
       contentContainerStyle={{ paddingLeft: 8, paddingVertical: 8, paddingRight: 2 }}
       text1Style={{
         fontSize: 24,
         fontFamily: fonts.heading,
-        color: "white",
+        color: colors.base.background,
       }}
       text2Style={{
         marginTop: 1,
         fontSize: 14,
-        color: "white",
+        color: colors.base.background,
+        textDecorationLine: props.props.hasLink ? "underline" : "none",
       }}
       text2NumberOfLines={4}
       renderLeadingIcon={() => (
         <View style={{ paddingLeft: 3, alignItems: "center", justifyContent: "center" }}>
           <Text style={{ paddingVertical: 8 }}>
-            <Ionicons name="md-warning-sharp" size={24} color="white" />
+            <Ionicons name="md-warning-sharp" size={24} color={colors.base.background} />
           </Text>
         </View>
       )}

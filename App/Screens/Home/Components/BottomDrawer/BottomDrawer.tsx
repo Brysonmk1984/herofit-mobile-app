@@ -54,7 +54,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
       const { foe, rewards } = await fetchUpcomingFoeAndRewards({ avatarID: id });
       navigation.navigate("AwaitingBattle", { foe, rewards, character, isInstant });
     } catch (error) {
-      addToast("error", `${error.status}: ${error.message}`);
+      addToast("error", `${error.status}: ${error.message}`, undefined, 125);
       return debugErrors(error, user);
     }
   }
@@ -68,7 +68,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
     // Only applies to pets for now
     if (goToBattle) {
       if (item.type === "pet") {
-        return addToast("error", "Unable to switch pet's while waiting for battle!");
+        return addToast("error", "Unable to switch pet's while waiting for battle!", undefined, 125);
       }
     }
 
@@ -113,7 +113,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
         setBackgroundAnimation("health-up");
       }
     } catch (error) {
-      addToast("error", `${error.message}`);
+      addToast("error", `${error.message}`, undefined, 125);
       debugErrors(error, user);
     }
   }

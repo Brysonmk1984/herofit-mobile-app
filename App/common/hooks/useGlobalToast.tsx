@@ -1,6 +1,7 @@
 import { ActionFeedbackType } from "../types";
 import useAspectRatio from "./useAspectRatio";
 import Toast from "react-native-toast-message";
+import * as WebBrowser from "expo-web-browser";
 
 const useGlobalToast = () => {
   const { deviceAspectType } = useAspectRatio();
@@ -23,15 +24,22 @@ const useGlobalToast = () => {
   }
 
   return {
-    addToast: (type: ActionFeedbackType, message: string, duration = 2200, offset: number | "default" = "default") => {
+    addToast: (type: ActionFeedbackType, message: string, duration = 2200, offset: number | "default" = "default", link?: string, persist: boolean = false) => {
       const bottomOffset = _determineBottomOffset(offset, isLongPhone);
 
       return Toast.show({
         type,
         text1: type.toUpperCase(),
         text2: message,
+        autoHide: persist ? false : true,
         visibilityTime: duration,
         bottomOffset,
+        onPress: () => {
+          link ? WebBrowser.openBrowserAsync(link) : Toast.hide();
+        },
+        props: {
+          hasLink: link ? true : false,
+        },
       });
     },
   };
