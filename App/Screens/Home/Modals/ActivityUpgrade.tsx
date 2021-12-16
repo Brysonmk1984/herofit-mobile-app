@@ -41,9 +41,11 @@ const ActivityUpgrade: React.FC<ActivityUpgradeProps> = ({ id, activities, modal
   }
 
   function handleBackToActivities() {
-    setNewActivities([]);
-    goBack("Activity");
     closeModal();
+    setNewActivities([]);
+    setTimeout(() => {
+      goBack("Activity");
+    }, 500);
   }
 
   return (

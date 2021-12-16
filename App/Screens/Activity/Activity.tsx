@@ -117,7 +117,7 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
     //console.log(distance, typeof distance, totalMeters, speed, typeof speed, averageMetersPerSecond, duration, totalSeconds);
 
     const dateWithOffset = calculateOffSet(date);
-    //console.log(date, dateWithOffset);
+
     const newManualActivity = {
       source: "herofit",
       type: activity,
@@ -129,7 +129,6 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
       elevationGain: 0,
     };
 
-    resetForm();
     navigation.reset({
       index: 0,
       routes: [
@@ -156,6 +155,12 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
     }
   }, [activity]);
 
+  useEffect(() => {
+    if (date) {
+      console.log("DATE CHANGE", date);
+    }
+  }, [date]);
+
   return (
     <ScreenContainer screenName={route.name}>
       <Header text="Activity" />
@@ -169,7 +174,8 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
 
             {/* Date - Time - Duration Input */}
             <DateTimeDuration
-              initialDate={initialDate}
+              date={date}
+              setDate={setDate}
               setShowDateTimeWheel={setShowDateTimeWheel}
               showDateTimeWheel={showDateTimeWheel}
               render={() => {

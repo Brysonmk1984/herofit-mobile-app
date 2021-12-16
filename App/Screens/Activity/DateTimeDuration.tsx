@@ -12,9 +12,8 @@ interface DateTimeDurationProps {
   setShowDateTimeWheel: (showDateTimeWheel: boolean) => void;
 }
 
-const DateTimeDuration: React.FC<DateTimeDurationProps> = ({ render, initialDate, showDateTimeWheel, setShowDateTimeWheel }) => {
+const DateTimeDuration: React.FC<DateTimeDurationProps> = ({ render, initialDate, showDateTimeWheel, setShowDateTimeWheel, date, setDate }) => {
   //For both date & time
-  const [date, setDate] = useState(initialDate);
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
 
@@ -24,6 +23,7 @@ const DateTimeDuration: React.FC<DateTimeDurationProps> = ({ render, initialDate
   const platform = Platform.OS;
 
   const onDateTimeChange = (event, selectedDate: Date) => {
+    console.log("selected date", selectedDate);
     const currentDate = selectedDate || date;
     setShow(platform === "ios");
     setDate(currentDate);

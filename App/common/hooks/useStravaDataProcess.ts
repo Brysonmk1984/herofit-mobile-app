@@ -103,9 +103,9 @@ function useStravaDataProcess(): { newStravaActivities: Activity[]; getFreshStra
       // Setting LS to prevent repeated calls to strava server - Expires in 30 minutes
       await setLsWithExpiry("herofit-stravaActivities", formattedNewActivities, 1800000);
       if (manually && !formattedNewActivities?.length) {
-        addToast("info", `Couldn't find any new Strava activities...`);
+        addToast("info", `Couldn't find any new Strava activities...`, undefined, 125);
       } else if (formattedNewActivities?.length) {
-        addToast("success", `Strava Activities Found!`);
+        addToast("success", `Strava Activities Found!`, undefined, 125);
       }
       return;
     } catch (error) {

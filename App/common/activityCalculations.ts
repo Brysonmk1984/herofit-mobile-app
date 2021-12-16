@@ -58,7 +58,7 @@ function convertSecondsToReadableTime(sec: number) {
 
 function calculateOffSet(date: Date) {
   const offsetInMin = moment(date).utcOffset();
-  return moment().utcOffset(offsetInMin, true);
+  return moment(date).utcOffset(offsetInMin, true);
 }
 
 interface IncludedColumns {

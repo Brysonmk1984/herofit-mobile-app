@@ -78,16 +78,16 @@ function useStravaConnect(): StravaConnectReturn {
           dispatch({ type: "SET USER", payload: { user, isSignedIn: true } });
           setStravaSuccess(true);
           setHelperText(null);
-          addToast("success", "Strava Account Successfully Connected!");
+          addToast("success", "Strava Account Successfully Connected!", undefined, 125);
         } catch (error) {
           debugErrors(error);
           setHelperText(null);
           const errorMessage = error?.debug[0]?.msg === "SequelizeUniqueConstraintError: Validation error" ? "Strava account is already in use, can't use twice!" : error.message;
-          addToast("error", errorMessage);
+          addToast("error", errorMessage, undefined, 125);
         }
       })();
     } else {
-      addToast("error", "Must give HeroFit permission to access your Strava data if you want to use Strava, otherwise select 'Manual Mode'");
+      addToast("error", "Must give HeroFit permission to access your Strava data if you want to use Strava, otherwise select 'Manual Mode'", undefined, 125);
     }
   }
 
