@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { GlobalStateContext } from "../../store";
 import debugErrors from "../debugErrors";
 import { getJwtInLocalStorage } from "../jwtModule";
 
-export default function useJwt(): [string | null, React.Dispatch<any>] {
-  const [jwt, setJwt] = useState<string | null>(null);
-
+export default function useJwt(): [string | null] {
+  const { state, dispatch } = useContext(GlobalStateContext);
+  const jwt = state.jwt;
   useEffect(() => {
     let isMounted = true;
 
@@ -12,7 +13,7 @@ export default function useJwt(): [string | null, React.Dispatch<any>] {
       async function getJwt() {
         try {
           const jwt = await getJwtInLocalStorage();
-          setJwt(jwt || null);
+          dispatch({ type: "SET JWT", payload: { jwt } });
         } catch (error) {
           debugErrors(error);
         }
@@ -24,5 +25,5 @@ export default function useJwt(): [string | null, React.Dispatch<any>] {
       isMounted = false;
     };
   }, []);
-  return [jwt, setJwt];
+  return [jwt];
 }

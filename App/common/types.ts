@@ -2,7 +2,7 @@ import { Battle } from "./types-battle";
 
 type Pluralize<T extends string> = `${T}s`;
 
-type ActionType = "TOGGLE LOADING" | "TOGGLE IN APP LOADING" | "SET EXISTING USER INIT DATA" | "SET ISSIGNEDIN" | "SET NEW USER" | "SET HERO" | "SET USER" | "RESET DEFAULTS" | "POST UPGRADE" | "SEEN BATTLE REPORT" | "UPDATE INVENTORY" | "UPDATE EQUIPPED" | "UPDATE LATEST BATTLE" | "SET INITIAL HOMESCREEN LOAD" | "SET BACKGROUND";
+type ActionType = "TOGGLE LOADING" | "TOGGLE IN APP LOADING" | "SET EXISTING USER INIT DATA" | "SET ISSIGNEDIN" | "SET NEW USER" | "SET HERO" | "SET USER" | "RESET DEFAULTS" | "POST UPGRADE" | "SEEN BATTLE REPORT" | "UPDATE INVENTORY" | "UPDATE EQUIPPED" | "UPDATE LATEST BATTLE" | "SET INITIAL HOMESCREEN LOAD" | "SET BACKGROUND" | "SET JWT";
 
 interface ToggleLoadingAction {
   type: "TOGGLE LOADING";
@@ -77,9 +77,13 @@ interface SetBackgroundAction {
   type: "SET BACKGROUND";
   payload: { background: string };
 }
+interface SetJwtAction {
+  type: "SET JWT";
+  payload: { jwt: string | null };
+}
 
 // Same as ShoppingListAction in example
-type AppAction = ToggleLoadingAction | ToggleInAppLoadingAction | SetExistingUserInitDataAction | SetIsSignedInAction | SetUserStatusAction | SetHeroAction | SetUserAction | ResetDefaultsAction | AddModalAction | RemoveModalAction | PostUpgradeAction | SeenBattleReportAction | UpdateInventoryAction | UpdateEquippedAction | UpdateLatestBattleAction | SetInitialHomescreenLoadAction | SetBackgroundAction;
+type AppAction = ToggleLoadingAction | ToggleInAppLoadingAction | SetExistingUserInitDataAction | SetIsSignedInAction | SetUserStatusAction | SetHeroAction | SetUserAction | ResetDefaultsAction | AddModalAction | RemoveModalAction | PostUpgradeAction | SeenBattleReportAction | UpdateInventoryAction | UpdateEquippedAction | UpdateLatestBattleAction | SetInitialHomescreenLoadAction | SetBackgroundAction | SetJwtAction;
 type AppDispatch = (action: AppAction) => void;
 
 interface Action<Payload = {}> {

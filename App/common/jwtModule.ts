@@ -8,8 +8,9 @@ function setJwtInLocalStorage({ token, expiresIn }) {
   return setLsWithExpiry("herofit-jwt", token, milliseconds);
 }
 
-function getJwtInLocalStorage(): Promise<string | false> {
-  return getLsWithExpiry("herofit-jwt");
+async function getJwtInLocalStorage(): Promise<string | null> {
+  const jwt = await getLsWithExpiry("herofit-jwt");
+  return jwt || null;
 }
 
 function clearJwtInLocalStorage() {

@@ -1,5 +1,5 @@
 import React from "react";
-import { VStack, Link, Text, Pressable, Button, Center, Box, Image } from "native-base";
+import { VStack, Text, Button, Image } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { MainStackParamList } from "../../../common/types-navigator";
 import * as WebBrowser from "expo-web-browser";
