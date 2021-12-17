@@ -19,6 +19,7 @@ import StravaPane from "./StravaPane";
 import HistoryPane from "./HistoryPane";
 import useDidMount from "../../common/hooks/useDidMount";
 import customIconActivityTypes from "../../common/customIconActivityTypes";
+import KeyboardScrollView from "../../Components/KeyboardScrollView";
 
 const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
   const windowHeight = useWindowDimensions().height;
@@ -35,7 +36,7 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
   const [distance, setDistance] = useState(0);
   const [speed, setSpeed] = useState(0);
   const { openModal } = useModal();
-  const { state } = useContext(GlobalStateContext);
+  const { state, dispatch } = useContext(GlobalStateContext);
   const isStravaUser = "strava" === checkDataSrcType(state.user.dataSrcId);
   const [showDateTimeWheel, setShowDateTimeWheel] = useState(false);
 
@@ -155,12 +156,6 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
     }
   }, [activity]);
 
-  useEffect(() => {
-    if (date) {
-      console.log("DATE CHANGE", date);
-    }
-  }, [date]);
-
   return (
     <ScreenContainer screenName={route.name}>
       <Header text="Activity" />
@@ -194,10 +189,9 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
             APPLY TO HERO
           </Button>
         </Pane>
-
         {mounted && <HistoryPane navigation={navigation} isStravaUser={isStravaUser} />}
 
-        {isStravaUser && mounted && <StravaPane pop={() => navigation.navigate("Home", { fetchStravaManually: true })} />}
+        {isStravaUser && mounted && <StravaPane dispatch={dispatch} activityRecheckHappened={state.activityRecheckHappened} pop={() => navigation.navigate("Home", { fetchStravaManually: true })} />}
       </ScrollView>
 
       {/* HIDDEN MENU */}

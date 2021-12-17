@@ -7,6 +7,7 @@ import { isExistingHero } from "../../common/typeGuards";
 import { Activity, AppAction, Hero, InitialAppState, User } from "../../common/types";
 import { GlobalStateContext } from "../../store";
 import moment from "moment";
+import usePrevious from "./usePrevious";
 
 async function _checkStravaToken(user: User, state: InitialAppState, dispatch: React.Dispatch<AppAction>): Promise<string> {
   const accessTokenExpiration = user.stravaAccessTokenExpiration;
@@ -80,24 +81,22 @@ function _handleStravaActivities(hero: Hero, stravaActivities: any[], dateOfLate
 function useStravaDataProcess(): { newStravaActivities: Activity[]; getFreshStravaData: (manually?: boolean) => void; resetNewStravaActivities: () => void } {
   const { state, dispatch } = useContext(GlobalStateContext);
   const [lsStrava, setLsStrava] = useState<any[] | undefined>();
-  const [lsStravaCheckHappened, setLsStravaCheckHappened] = useState(false);
   const [newStravaActivities, setNewStravaActivities] = useState<Activity[]>([]);
+  const previousLsCheck = usePrevious(state.lsStravaCheckHappened);
   const hero = state.hero as Hero;
   const { addToast } = useGlobalToast();
 
   async function getFreshStravaData(manually?: boolean): Promise<void> {
     if (manually) {
       setLsStrava([]);
-      setLsStravaCheckHappened(false);
+      dispatch({ type: "SET LS STRAVA CHECK HAPPENED", payload: { lsStravaCheckHappened: false } });
     }
     try {
       const accessToken = await _checkStravaToken(state.user, state, dispatch);
-
-      //console.log("MADE IT ALL THE WAY THROUGH, AT=", accessToken);
       const activities = await getStravaActivityData(accessToken);
 
       const formattedNewActivities = _handleStravaActivities(hero, activities, state.latestSavedActivityDate, state.user);
-
+      //console.log("FNA", formattedNewActivities);
       await setNewStravaActivities(formattedNewActivities);
 
       // Setting LS to prevent repeated calls to strava server - Expires in 30 minutes
@@ -115,29 +114,31 @@ function useStravaDataProcess(): { newStravaActivities: Activity[]; getFreshStra
   }
 
   // Check if Strava User && get lsSaved Strava activities
+  // Gets called on startup AND when homepage remounts, like from coming back from activities screen
   useEffect(() => {
-    if (state.user?.dataSrcId) {
+    if (state.user?.dataSrcId && !state.lsStravaCheckHappened) {
       (async () => {
         const lsSavedStravaActivities: any[] = await getLsWithExpiry("herofit-stravaActivities");
-        //console.log("LS ACTIVITIES=", lsSavedStravaActivities);
         setLsStrava(lsSavedStravaActivities);
-        setLsStravaCheckHappened(true);
+        dispatch({ type: "SET LS STRAVA CHECK HAPPENED", payload: { lsStravaCheckHappened: true } });
       })();
     }
-  }, [state.user?.dataSrcId]);
+  }, []);
 
   // Either Use LS Strava Data OR
   // Initialize Strava Data Fetch Sequence
   useEffect(() => {
-    // Only run Strava code if user is an existing user who already set up Strava with their HF account
-    if (isExistingHero(state.hero) && determineDataSrcType(state.user?.dataSrcId) === "Strava") {
-      (async () => {
-        // Only run this after LS check happened
-        if (lsStravaCheckHappened) {
+    // This should absolutely only be called once, regardless of screen changes - that's why we have the previousLsCheck
+    if (state.lsStravaCheckHappened && previousLsCheck === false) {
+      // Only run Strava code if user is an existing user who already set up Strava with their HF account
+      if (isExistingHero(state.hero) && determineDataSrcType(state.user?.dataSrcId) === "Strava") {
+        (async () => {
+          //console.log("prev", previousLsCheck, "current", state.lsStravaCheckHappened);
+
           // If there are locally saved strava activities, use cached version
           // This is to prevent too many requests against Strava API
           if (lsStrava) {
-            //console.log("YES LS STRAVA DATA", state.latestSavedActivityDate, lsStrava);
+            //console.log("YES LS STRAVA DATA", state.latestSavedActivityDate, lsStrava, state.latestSavedActivityDate);
             const formattedNewActivities = _handleStravaActivities(hero, lsStrava, state.latestSavedActivityDate, state.user);
             setNewStravaActivities(formattedNewActivities);
           } else {
@@ -145,10 +146,10 @@ function useStravaDataProcess(): { newStravaActivities: Activity[]; getFreshStra
             // Otherwise, do Strava Check
             getFreshStravaData();
           }
-        }
-      })();
+        })();
+      }
     }
-  }, [lsStravaCheckHappened]);
+  }, [state.lsStravaCheckHappened, previousLsCheck]);
 
   return {
     newStravaActivities,

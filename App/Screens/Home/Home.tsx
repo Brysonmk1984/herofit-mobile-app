@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useRef, useMemo } from "react";
-import { Box, Button, View, Text, Icon, VStack, Link, Center, Image } from "native-base";
+import { Box, View } from "native-base";
 import ScreenContainer from "../../Components/ScreenContainer/ScreenContainer";
 import debugErrors from "../../common/debugErrors";
 import { GlobalStateContext } from "../../store";
@@ -19,12 +19,10 @@ import useStravaDataProcess from "../../common/hooks/useStravaDataProcess";
 import moment from "moment";
 import useGlobalToast from "../../common/hooks/useGlobalToast";
 import useInventory from "../../common/hooks/useInventory";
-import { clearLs, getLsWithExpiry, setLsWithExpiry } from "../../common/helperFunctions";
+import { clearLs } from "../../common/helperFunctions";
 import SideMenu from "react-native-side-menu-updated";
-import { AppState, Dimensions, ImageBackground } from "react-native";
 import SidebarMenu from "./Components/SidebarMenu";
-import GestureRecognizer, { swipeDirections } from "react-native-swipe-gestures";
-import * as Linking from "expo-linking";
+import GestureRecognizer from "react-native-swipe-gestures";
 import useAspectRatio from "../../common/hooks/useAspectRatio";
 import LevelUpText from "./Components/LevelUpText";
 import useServerMessage from "../../common/hooks/useServerMessage";
@@ -76,8 +74,8 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
       const heroEquipped = Object.assign({}, state.hero, upgradeResults.avatar, { equipped: state.hero.equipped });
 
       const maxDate = moment.max(activities.map(act => moment(act.activityDate)));
-      //console.log("max data", maxDate);
-      dispatch({ type: "POST UPGRADE", payload: { hero: heroEquipped, latestSavedActivities: [...state.latestSavedActivities, ...upgradeResults.activities], latestSavedActivityDate: maxDate } });
+      console.log("max data", maxDate, maxDate.local(), upgradeResults.activities.length);
+      dispatch({ type: "POST UPGRADE", payload: { hero: heroEquipped, latestSavedActivities: upgradeResults.activities, latestSavedActivityDate: maxDate } });
 
       // If items were found, we need to fetch inventory again and update
       const { items, rewards } = upgradeResults;
@@ -86,7 +84,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
       }
 
       setNewActivities([]);
-      clearLs("herofit-stravaActivities");
+      //clearLs("herofit-stravaActivities");
 
       // Builds the Correct message based on returned data from upgrade
       const messageArray = buildGainsMessages(upgradeResults);
@@ -98,7 +96,14 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
         }, 3000 * i);
       });
     } catch (error) {
-      error.message = "Couldn't upgrade hero, please try again later.";
+      // Errors not reaching here for some reason
+      console.log("ERRR", error);
+      if (error?.meta === "Error: Duplicate Activity Entry, couldn't update Hero!") {
+        error.message = error.meta;
+      } else {
+        error.message = "Couldn't upgrade hero, please try again later.";
+      }
+
       addToast("error", error.message);
       debugErrors(error, user);
     }
@@ -152,6 +157,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   // STRAVA MANUALLY FETCHED - User Clicked the button to manually fetch data from the Manual page
   useEffect(() => {
     if (route.params?.fetchStravaManually) {
+      //console.log("calling manually");
       getFreshStravaData(true);
     }
   }, [route.params?.fetchStravaManually]);

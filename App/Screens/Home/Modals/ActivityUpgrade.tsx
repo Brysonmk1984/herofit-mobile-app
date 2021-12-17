@@ -9,6 +9,7 @@ import moment from "moment";
 import { Activity } from "../../../common/types";
 import { ModalActionHeader } from "../../../Components/ModalTemplates/ModalActionHeader";
 import Icon from "../../../Components/Icon";
+import customIconActivityTypes from "../../../common/customIconActivityTypes";
 
 interface ActivityUpgradeProps {
   id: string;
@@ -26,7 +27,7 @@ const ActivityUpgrade: React.FC<ActivityUpgradeProps> = ({ id, activities, modal
     const color = `base.${determineElementFromActivity(type)}`;
     return (
       <Box mt={3} justifyContent="center" flexDirection="row">
-        <Icon iconName={type} size={25} color={color} />
+        <Icon iconName={type} size={customIconActivityTypes.includes(type) ? 25 : 6} color={color} />
         <Text pl={2} fontFamily="heading" color="primary.500" fontSize="lg">
           {`${moment(activityDate).format("MM/DD - hh:mm a")}`}:
         </Text>
