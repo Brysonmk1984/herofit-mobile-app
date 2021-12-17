@@ -16,28 +16,30 @@ interface UpgradeReturnObject {
   reachedLevel: number;
   xpGain: number;
   qpEarned: number;
-  items: Item[];
+  items: string[];
   rewards: Item[];
 }
 
 // For displaying Gains messages after hero upgrade
 function buildGainsMessages(upgradeResults: UpgradeReturnObject) {
-  const { activities, avatar: hero, improvements, reachedLevel, xpGain, qpEarned, items, rewards } = upgradeResults;
+  const { avatar: hero, improvements, reachedLevel, xpGain, qpEarned, items, rewards } = upgradeResults;
   const messageArray = [];
 
   // Message for level up and QP earned if new level reached
   if (reachedLevel) {
     if (hero.albedo) {
-      messageArray.push(`LEVEL UP! Earned ${qpEarned} QP for reaching Albedo Level ${reachedLevel}!`);
+      messageArray.push(`LEVEL UP! Earned ${qpEarned} QP!`, `+5 Aether, +5 Power, +5 MaxHealth, +${xpGain} XP`);
     } else {
-      messageArray.push(`LEVEL UP! Earned ${qpEarned} QP for reaching ${reachedLevel}!`);
+      messageArray.push(`LEVEL UP! Earned ${qpEarned} QP!`, `+5 Power, +5 MaxHealth, +${xpGain} XP`);
     }
+  } else {
+    messageArray.push(`${xpGain} XP earned!`);
   }
 
   // message for found items
   messageArray.push(
-    ...items.map((item: Item) => {
-      return `Found item: ${item}!`;
+    ...items.map((item: string) => {
+      return `Found item: ${item.toUpperCase()}!`;
     }),
   );
   messageArray.push(
@@ -46,15 +48,19 @@ function buildGainsMessages(upgradeResults: UpgradeReturnObject) {
     }),
   );
 
-  // Message for XP gain
-  messageArray.push(`${xpGain} XP earned!`);
-  // Messages for stat improvements
-  for (let attribute in improvements) {
-    if (improvements[attribute] >= 1) {
-      let improvement = improvements[attribute];
-      messageArray.push(`Gained ${improvement} ${attribute.toUpperCase()}!`);
-    }
+  // GAINS - PHOTON TOKEN
+  if (improvements["Photon Tokens"] >= 1) {
+    messageArray.push(`Gained ${improvements["Photon Tokens"]} PHOTON TOKENS!`);
   }
+
+  // GAINS - ELEMENTS
+  const elmGainArray = [{ fire: improvements.fire }, { earth: improvements.earth }, { water: improvements.water }, { air: improvements.air }];
+  elmGainArray.forEach(elmGain => {
+    const elmKeyValue = Object.entries(elmGain)[0];
+    if (elmKeyValue[1] > 0) {
+      messageArray.push(`Gained ${elmKeyValue[1]} ${elmKeyValue[0].toUpperCase()}! `);
+    }
+  });
   return messageArray;
 }
 

@@ -74,7 +74,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
       const heroEquipped = Object.assign({}, state.hero, upgradeResults.avatar, { equipped: state.hero.equipped });
 
       const maxDate = moment.max(activities.map(act => moment(act.activityDate)));
-      console.log("max data", maxDate, maxDate.local(), upgradeResults.activities.length);
+      //console.log("max data", maxDate, maxDate.local(), upgradeResults.activities.length);
       dispatch({ type: "POST UPGRADE", payload: { hero: heroEquipped, latestSavedActivities: upgradeResults.activities, latestSavedActivityDate: maxDate } });
 
       // If items were found, we need to fetch inventory again and update
@@ -92,8 +92,8 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
       // Show messages via toast
       messageArray.forEach((message: string, i: number) => {
         setTimeout(() => {
-          addToast("success", message, 1500, 125);
-        }, 3000 * i);
+          addToast("success", message, 2500, 125);
+        }, 3250 * i);
       });
     } catch (error) {
       // Errors not reaching here for some reason
