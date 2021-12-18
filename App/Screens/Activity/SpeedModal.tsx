@@ -10,9 +10,10 @@ interface SpeedModalProps {
   title: string;
   modalAction: (speed: number) => void;
   speed: number;
+  isMetric: boolean;
 }
 
-const SpeedModal: React.FC<SpeedModalProps> = ({ id, title, modalAction, speed }) => {
+const SpeedModal: React.FC<SpeedModalProps> = ({ id, title, modalAction, speed, isMetric }) => {
   const { state } = useContext(GlobalStateContext);
   const [integer, setInteger] = useState<number | undefined>();
   const [decimal, setDecimal] = useState<number | undefined>();
@@ -72,7 +73,7 @@ const SpeedModal: React.FC<SpeedModalProps> = ({ id, title, modalAction, speed }
         highlightBorderWidth={2}
       />
       <ScrollPicker
-        dataSource={["mph"]}
+        dataSource={isMetric ? ["kph"] : ["mph"]}
         selectedIndex={1}
         renderItem={(data, index) => <Text>{data}</Text>}
         onValueChange={(data, selectedIndex) => {

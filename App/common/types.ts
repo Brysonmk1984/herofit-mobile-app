@@ -172,6 +172,8 @@ interface User {
   dataSrcId: string;
   emailMarketingOptIn: boolean;
   updatedAt: string;
+  isMetric: boolean;
+  foundOutBy: string;
 }
 
 interface Stats {

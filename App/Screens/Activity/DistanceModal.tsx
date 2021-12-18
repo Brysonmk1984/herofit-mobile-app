@@ -10,9 +10,10 @@ interface DistanceModalProps {
   title: string;
   modalAction: (distance: number) => void;
   distance: number;
+  isMetric: boolean;
 }
 
-const DistanceModal: React.FC<DistanceModalProps> = ({ id, title, modalAction, distance }) => {
+const DistanceModal: React.FC<DistanceModalProps> = ({ id, title, modalAction, distance, isMetric }) => {
   const { state } = useContext(GlobalStateContext);
   const [integer, setInteger] = useState<number | undefined>(0);
   const [decimal, setDecimal] = useState<number | undefined>(0);
@@ -72,7 +73,7 @@ const DistanceModal: React.FC<DistanceModalProps> = ({ id, title, modalAction, d
         highlightColor="#d8d8d8"
         highlightBorderWidth={2}
       />
-      <ScrollPicker dataSource={["mi"]} selectedIndex={1} renderItem={(data, index) => <Text>{data}</Text>} wrapperHeight={120} wrapperWidth={30} wrapperBackground="#FFFFFF" itemHeight={60} highlightColor="#d8d8d8" highlightBorderWidth={2} />
+      <ScrollPicker dataSource={isMetric ? ["km"] : ["mi"]} selectedIndex={1} renderItem={(data, index) => <Text>{data}</Text>} wrapperHeight={120} wrapperWidth={30} wrapperBackground="#FFFFFF" itemHeight={60} highlightColor="#d8d8d8" highlightBorderWidth={2} />
     </WheelSelectModal>
   );
 };

@@ -13,13 +13,12 @@ import PressableInput from "../../Components/PressableInput";
 import SpeedModal from "./SpeedModal";
 import DistanceModal from "./DistanceModal";
 import DurationModal from "./DurationModal";
-import { convertMilesToMeters, convertMilesHoursToMetersSeconds, convertDurationStringToSeconds, calculateOffSet } from "../../common/activityCalculations";
+import { convertMilesToMeters, convertMilesHoursToMetersSeconds, convertDurationStringToSeconds, calculateOffSet, convertKilometersToMeters, convertKilometersHoursToMetersSeconds } from "../../common/activityCalculations";
 import { checkDataSrcType, roundNumberToTenthReturnNumber, roundNumberToThousandthReturnNumber } from "../../common/helperFunctions";
 import StravaPane from "./StravaPane";
 import HistoryPane from "./HistoryPane";
 import useDidMount from "../../common/hooks/useDidMount";
 import customIconActivityTypes from "../../common/customIconActivityTypes";
-import KeyboardScrollView from "../../Components/KeyboardScrollView";
 
 const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
   const windowHeight = useWindowDimensions().height;
@@ -112,9 +111,16 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
   }
 
   function handleSubmit(activity: string, date: Date, duration: string, distance: number, speed: number) {
-    const totalMeters = convertMilesToMeters(distance);
-    const averageMetersPerSecond = convertMilesHoursToMetersSeconds(speed);
-    const totalSeconds = convertDurationStringToSeconds(duration);
+    let totalMeters: number;
+    let averageMetersPerSecond: number;
+    let totalSeconds = convertDurationStringToSeconds(duration);
+    if (state.user.isMetric) {
+      totalMeters = convertKilometersToMeters(distance);
+      averageMetersPerSecond = convertKilometersHoursToMetersSeconds(speed);
+    } else {
+      totalMeters = convertMilesToMeters(distance);
+      averageMetersPerSecond = convertMilesHoursToMetersSeconds(speed);
+    }
     //console.log(distance, typeof distance, totalMeters, speed, typeof speed, averageMetersPerSecond, duration, totalSeconds);
 
     const dateWithOffset = calculateOffSet(date);
@@ -124,7 +130,7 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
       type: activity,
       activityDate: dateWithOffset,
       averageSpeed: roundNumberToThousandthReturnNumber(averageMetersPerSecond),
-      maxSpeed: roundNumberToTenthReturnNumber(averageMetersPerSecond),
+      maxSpeed: roundNumberToThousandthReturnNumber(averageMetersPerSecond),
       distance: roundNumberToTenthReturnNumber(totalMeters),
       duration: totalSeconds,
       elevationGain: 0,
@@ -171,9 +177,9 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
             />
             <HStack>
               {/* Distance Input */}
-              <PressableInput flex={1} ml={2} mr={2} action={() => handleModalOpening("DistanceModal")} value={`${distance} mi`} />
+              <PressableInput flex={1} ml={2} mr={2} action={() => handleModalOpening("DistanceModal")} value={`${distance} ${state.user.isMetric ? "km" : "mi"}`} />
               {/* Speed Input */}
-              <PressableInput flex={1} ml={2} mr={2} action={() => handleModalOpening("SpeedModal")} value={`${speed} mph`} />
+              <PressableInput flex={1} ml={2} mr={2} action={() => handleModalOpening("SpeedModal")} value={`${speed} ${state.user.isMetric ? "kph" : "mph"}`} />
             </HStack>
             {helperText && <HelperText type="error" text={helperText} />}
           </VStack>
@@ -218,10 +224,10 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
       {mounted && <DurationModal id="DurationModal" title="Duration" modalAction={setDuration} duration={duration} />}
 
       {/* Distance Wheel Selector Modal */}
-      {mounted && <DistanceModal id="DistanceModal" title="Distance" modalAction={setDistance} distance={distance} />}
+      {mounted && <DistanceModal id="DistanceModal" title="Distance" modalAction={setDistance} distance={distance} isMetric={state.user.isMetric} />}
 
       {/* Speed Wheel Selector Modal */}
-      {mounted && <SpeedModal id="SpeedModal" title="Speed" modalAction={setSpeed} speed={speed} />}
+      {mounted && <SpeedModal id="SpeedModal" title="Speed" modalAction={setSpeed} speed={speed} isMetric={state.user.isMetric} />}
     </ScreenContainer>
   );
 };

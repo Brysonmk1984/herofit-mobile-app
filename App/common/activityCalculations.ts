@@ -11,6 +11,14 @@ function convertMilesHoursToMetersSeconds(mph: number) {
   return mph * 0.44704;
 }
 
+function convertKilometersToMeters(kilometers: number) {
+  return kilometers * 1000;
+}
+
+function convertKilometersHoursToMetersSeconds(kph: number) {
+  return kph / 3.6;
+}
+
 function convertDurationStringToSeconds(duration: string) {
   let hours = 0;
   let minutes = 0;
@@ -40,9 +48,15 @@ function convertMetersToFeet(meters: number) {
 function convertMetersToMiles(distance: number) {
   return distance ? `${(distance * 0.000621371).toFixed(2)} mi` : null;
 }
+function convertMetersToKilometers(meters: number) {
+  return meters ? `${(meters / 1000).toFixed(1)} km` : null;
+}
 
 function convertMetersSecondsToMilesHours(mps: number) {
   return mps ? `${(mps * 2.2369).toFixed(1)} mph` : null;
+}
+function convertMetersSecondsToKilometersHours(meterSeconds: number) {
+  return meterSeconds ? `${(meterSeconds * 3.6).toFixed(1)} kph` : null;
 }
 
 function convertSecondsToReadableTime(sec: number) {
@@ -204,4 +218,4 @@ function calculateElementBonus(sec: number, allElements: boolean, isTimeAndHalfA
   return (Math.floor(10 * num) / 10).toString();
 }
 
-export { convertMilesToMeters, convertMilesHoursToMetersSeconds, convertDurationStringToSeconds, convertMetersToFeet, convertMetersToMiles, convertMetersSecondsToMilesHours, convertSecondsToReadableTime, calculateOffSet, checkForDistanceColumns, calculateXPBonus, calculatePowerBonus, calculateElementBonus, determineElementFromActivity };
+export { convertMilesToMeters, convertMilesHoursToMetersSeconds, convertMetersToKilometers, convertKilometersToMeters, convertKilometersHoursToMetersSeconds, convertMetersSecondsToKilometersHours, convertDurationStringToSeconds, convertMetersToFeet, convertMetersToMiles, convertMetersSecondsToMilesHours, convertSecondsToReadableTime, calculateOffSet, checkForDistanceColumns, calculateXPBonus, calculatePowerBonus, calculateElementBonus, determineElementFromActivity };

@@ -17,7 +17,7 @@ interface HistoryPaneProps {
 
 const HistoryPane: React.FC<HistoryPaneProps> = ({ navigation, isStravaUser }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
-  const { latestSavedActivities } = state;
+  const { latestSavedActivities, user } = state;
 
   const orderedActivities = latestSavedActivities.sort((a, b) => (moment(a.activityDate).isAfter(moment(b.activityDate)) ? -1 : 1)).slice(0, 10);
 
@@ -36,7 +36,7 @@ const HistoryPane: React.FC<HistoryPaneProps> = ({ navigation, isStravaUser }) =
           )}
         </PaneSupportText>
       )}
-      {orderedActivities.length > 0 && <FlatList ListHeaderComponent={() => <ListHeaderComponent />} data={orderedActivities} renderItem={item => <ActivityDetail activity={item.item} />} keyExtractor={(item, index) => index.toString()} />}
+      {orderedActivities.length > 0 && <FlatList ListHeaderComponent={() => <ListHeaderComponent />} data={orderedActivities} renderItem={item => <ActivityDetail activity={item.item} isMetric={user.isMetric} />} keyExtractor={(item, index) => index.toString()} />}
     </Pane>
   );
 };
