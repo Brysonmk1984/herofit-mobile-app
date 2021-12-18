@@ -27,7 +27,7 @@ function useServerMessage() {
               });
               // expire haven't seen 'herofit-seenGlobalMessage' after 48 hours, so they can see global messages again
               setLsWithExpiry("herofit-seenGlobalMessage", true, 172800000);
-            }, 2000);
+            }, 6000);
 
             return () => {
               clearTimeout(globalMessageTimeout);
