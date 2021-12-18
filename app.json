@@ -3,7 +3,7 @@
     "name": "HeroFit",
     "slug" : "herofit",
     "owner":"brysonmk1984",
-    "version": "1.2.8",
+    "version": "1.3.0",
     "orientation": "portrait",
     "icon": "./assets/app-icon.png",
     "scheme": "herofit",
@@ -41,7 +41,7 @@
       },
       "package": "com.herofitllc.herofit",
       "permissions": [],
-      "versionCode": 11
+      "versionCode": 12
     },
     "ios": {
     "bundleIdentifier": "com.herofitllc.herofit",

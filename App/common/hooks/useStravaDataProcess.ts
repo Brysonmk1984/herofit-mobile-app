@@ -7,7 +7,6 @@ import { isExistingHero } from "../../common/typeGuards";
 import { Activity, AppAction, Hero, InitialAppState, User } from "../../common/types";
 import { GlobalStateContext } from "../../store";
 import moment from "moment";
-import usePrevious from "./usePrevious";
 
 async function _checkStravaToken(user: User, state: InitialAppState, dispatch: React.Dispatch<AppAction>): Promise<string> {
   const accessTokenExpiration = user.stravaAccessTokenExpiration;
@@ -82,14 +81,15 @@ function useStravaDataProcess(): { newStravaActivities: Activity[]; getFreshStra
   const { state, dispatch } = useContext(GlobalStateContext);
   const [lsStrava, setLsStrava] = useState<any[] | undefined>();
   const [newStravaActivities, setNewStravaActivities] = useState<Activity[]>([]);
-  const previousLsCheck = usePrevious(state.lsStravaCheckHappened);
+  const [lsStravaCheckHappened, setLsStravaCheckHappened] = useState(false);
   const hero = state.hero as Hero;
   const { addToast } = useGlobalToast();
 
   async function getFreshStravaData(manually?: boolean): Promise<void> {
     if (manually) {
       setLsStrava([]);
-      dispatch({ type: "SET LS STRAVA CHECK HAPPENED", payload: { lsStravaCheckHappened: false } });
+      //dispatch({ type: "SET LS STRAVA CHECK HAPPENED", payload: { lsStravaCheckHappened: false } });
+      setLsStravaCheckHappened(false);
     }
     try {
       const accessToken = await _checkStravaToken(state.user, state, dispatch);
@@ -116,11 +116,12 @@ function useStravaDataProcess(): { newStravaActivities: Activity[]; getFreshStra
   // Check if Strava User && get lsSaved Strava activities
   // Gets called on startup AND when homepage remounts, like from coming back from activities screen
   useEffect(() => {
-    if (state.user?.dataSrcId && !state.lsStravaCheckHappened) {
+    if (state.user?.dataSrcId && !lsStravaCheckHappened) {
       (async () => {
         const lsSavedStravaActivities: any[] = await getLsWithExpiry("herofit-stravaActivities");
         setLsStrava(lsSavedStravaActivities);
-        dispatch({ type: "SET LS STRAVA CHECK HAPPENED", payload: { lsStravaCheckHappened: true } });
+        //dispatch({ type: "SET LS STRAVA CHECK HAPPENED", payload: { lsStravaCheckHappened: true } });
+        setLsStravaCheckHappened(true);
       })();
     }
   }, []);
@@ -129,7 +130,7 @@ function useStravaDataProcess(): { newStravaActivities: Activity[]; getFreshStra
   // Initialize Strava Data Fetch Sequence
   useEffect(() => {
     // This should absolutely only be called once, regardless of screen changes - that's why we have the previousLsCheck
-    if (state.lsStravaCheckHappened && previousLsCheck === false) {
+    if (lsStravaCheckHappened) {
       // Only run Strava code if user is an existing user who already set up Strava with their HF account
       if (isExistingHero(state.hero) && determineDataSrcType(state.user?.dataSrcId) === "Strava") {
         (async () => {
@@ -149,7 +150,7 @@ function useStravaDataProcess(): { newStravaActivities: Activity[]; getFreshStra
         })();
       }
     }
-  }, [state.lsStravaCheckHappened, previousLsCheck]);
+  }, [lsStravaCheckHappened]);
 
   return {
     newStravaActivities,

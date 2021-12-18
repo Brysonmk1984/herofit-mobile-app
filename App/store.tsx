@@ -1,7 +1,7 @@
 import React, { createContext, useReducer, Context, FC, ReactElement } from "react";
 import { InitialAppState, AppAction } from "./common/types";
 
-const initialState: InitialAppState = { isLoading: true, isLoadingInApp: false, isSignedIn: false, userStatus: "new", user: null, hero: null, latestSavedActivities: [], latestSavedActivityDate: null, latestBattle: null, modalQueue: [], allGameItems: [], inventory: { pets: [], consumables: [], skins: [], titles: [], codices: [] }, equipped: { skin: null, pet: null, title: null }, initialHomescreenLoad: null, background: null, jwt: null, activityRecheckHappened: false, lsStravaCheckHappened: false };
+const initialState: InitialAppState = { isLoading: true, isLoadingInApp: false, isSignedIn: false, userStatus: "new", user: null, hero: null, latestSavedActivities: [], latestSavedActivityDate: null, latestBattle: null, modalQueue: [], allGameItems: [], inventory: { pets: [], consumables: [], skins: [], titles: [], codices: [] }, equipped: { skin: null, pet: null, title: null }, initialHomescreenLoad: null, background: null, jwt: null, activityRecheckHappened: false };
 
 type AppState = typeof initialState;
 
@@ -106,10 +106,6 @@ function appStateReducer(state: AppState, action: AppAction): AppState {
     case "SET ACTIVITY RECHECK HAPPENED": {
       const { activityRecheckHappened } = action.payload;
       return { ...state, activityRecheckHappened };
-    }
-    case "SET LS STRAVA CHECK HAPPENED": {
-      const { lsStravaCheckHappened } = action.payload;
-      return { ...state, lsStravaCheckHappened };
     }
     default:
       throw new Error("In Store default, should not happen.");

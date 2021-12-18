@@ -2,7 +2,7 @@ import { Battle } from "./types-battle";
 
 type Pluralize<T extends string> = `${T}s`;
 
-type ActionType = "TOGGLE LOADING" | "TOGGLE IN APP LOADING" | "SET EXISTING USER INIT DATA" | "SET ISSIGNEDIN" | "SET NEW USER" | "SET HERO" | "SET USER" | "RESET DEFAULTS" | "POST UPGRADE" | "SEEN BATTLE REPORT" | "UPDATE INVENTORY" | "UPDATE EQUIPPED" | "UPDATE LATEST BATTLE" | "SET INITIAL HOMESCREEN LOAD" | "SET BACKGROUND" | "SET JWT" | "SET ACTIVITY RECHECK HAPPENED" | "SET LS STRAVA CHECK HAPPENED";
+type ActionType = "TOGGLE LOADING" | "TOGGLE IN APP LOADING" | "SET EXISTING USER INIT DATA" | "SET ISSIGNEDIN" | "SET NEW USER" | "SET HERO" | "SET USER" | "RESET DEFAULTS" | "POST UPGRADE" | "SEEN BATTLE REPORT" | "UPDATE INVENTORY" | "UPDATE EQUIPPED" | "UPDATE LATEST BATTLE" | "SET INITIAL HOMESCREEN LOAD" | "SET BACKGROUND" | "SET JWT" | "SET ACTIVITY RECHECK HAPPENED";
 
 interface ToggleLoadingAction {
   type: "TOGGLE LOADING";
@@ -92,15 +92,9 @@ interface SetUpdateLatestActivities {
     latestSavedActivityDate: string;
   };
 }
-interface SetLsStravaCheckHappened {
-  type: "SET LS STRAVA CHECK HAPPENED";
-  payload: {
-    lsStravaCheckHappened: boolean;
-  };
-}
 
 // Same as ShoppingListAction in example
-type AppAction = ToggleLoadingAction | ToggleInAppLoadingAction | SetExistingUserInitDataAction | SetIsSignedInAction | SetUserStatusAction | SetHeroAction | SetUserAction | ResetDefaultsAction | AddModalAction | RemoveModalAction | PostUpgradeAction | SeenBattleReportAction | UpdateInventoryAction | UpdateEquippedAction | UpdateLatestBattleAction | SetInitialHomescreenLoadAction | SetBackgroundAction | SetJwtAction | SetActivityRecheckHappened | SetUpdateLatestActivities | SetLsStravaCheckHappened;
+type AppAction = ToggleLoadingAction | ToggleInAppLoadingAction | SetExistingUserInitDataAction | SetIsSignedInAction | SetUserStatusAction | SetHeroAction | SetUserAction | ResetDefaultsAction | AddModalAction | RemoveModalAction | PostUpgradeAction | SeenBattleReportAction | UpdateInventoryAction | UpdateEquippedAction | UpdateLatestBattleAction | SetInitialHomescreenLoadAction | SetBackgroundAction | SetJwtAction | SetActivityRecheckHappened | SetUpdateLatestActivities;
 type AppDispatch = (action: AppAction) => void;
 
 interface Action<Payload = {}> {
@@ -151,7 +145,6 @@ interface InitialAppState {
   background: string;
   awardedItemMessage: string | null;
   activityRecheckHappened: boolean;
-  lsStravaCheckHappened: boolean;
 }
 
 interface Store {

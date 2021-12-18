@@ -130,15 +130,7 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
       elevationGain: 0,
     };
 
-    navigation.reset({
-      index: 0,
-      routes: [
-        {
-          name: "Home",
-          params: { newManualActivity },
-        },
-      ],
-    });
+    navigation.navigate("Home", { newManualActivity });
   }
 
   function handleModalOpening(modalName: string) {
