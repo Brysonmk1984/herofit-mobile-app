@@ -52,4 +52,15 @@ const disconnectDataSrc = async function (body): Promise<{ user: User }> {
     });
 };
 
-export { updateAvatarName, updateOwnerUsername, deleteAccount, disconnectDataSrc };
+const updateMeasuringSystem = async function (body: { isMetric: boolean; email: string }): Promise<{ user: User; message: string }> {
+  return axios
+    .put(`${endpoint}account/toggle-metric-system`, body, await axiosOptions())
+    .then(({ data }) => {
+      return data.data;
+    })
+    .catch(({ request, response }) => {
+      throw handleHttpError(request, response);
+    });
+};
+
+export { updateAvatarName, updateOwnerUsername, deleteAccount, disconnectDataSrc, updateMeasuringSystem };

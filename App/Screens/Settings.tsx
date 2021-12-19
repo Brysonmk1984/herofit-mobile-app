@@ -1,9 +1,9 @@
-import React, { useContext } from "react";
-import { Button, Text } from "native-base";
+import React, { useContext, useState } from "react";
+import { Box, Button, HStack, Switch, Text } from "native-base";
 import ScreenContainer from "../Components/ScreenContainer/ScreenContainer";
 import debugErrors, { createAppError } from "../common/debugErrors";
 import { User } from "../common/types";
-import { deleteAccount, disconnectDataSrc } from "../api/account";
+import { deleteAccount, disconnectDataSrc, updateMeasuringSystem } from "../api/account";
 import { GlobalStateContext } from "../store";
 import { MainStackProps } from "../common/types-navigator";
 import { isExistingHero } from "../common/typeGuards";
@@ -19,6 +19,7 @@ const Settings: React.FC<MainStackProps<"Settings">> = ({ navigation, route }) =
   const { state, dispatch } = useContext(GlobalStateContext);
   const { addToast } = useGlobalToast();
   const { hero, user } = state;
+  const [isMetric, setIsMetric] = useState(user.isMetric);
   const isStravaUser = "strava" === checkDataSrcType(user.dataSrcId);
 
   async function handleDisconnection() {
@@ -87,6 +88,22 @@ const Settings: React.FC<MainStackProps<"Settings">> = ({ navigation, route }) =
     clearLs("herofit-seenGlobalMessage");
   }
 
+  async function toggleMetricSystem(isImperial: boolean) {
+    // true  toggles imperial on metric off
+    // false toggles imperial off  metric on
+    setIsMetric(!isImperial);
+    try {
+      const { user: updatedUser, message } = await updateMeasuringSystem({ isMetric: isImperial ? false : true, email: user.email });
+      console.log(updatedUser);
+      dispatch({ type: "SET USER", payload: { user: updatedUser, isSignedIn: true } });
+      addToast("success", message);
+    } catch (error) {
+      setIsMetric(isImperial);
+      debugErrors(error, user, dispatch);
+      addToast("error", error.message);
+    }
+  }
+
   return (
     <ScreenContainer screenName={route.name}>
       <Header text="Settings" />
@@ -140,6 +157,16 @@ const Settings: React.FC<MainStackProps<"Settings">> = ({ navigation, route }) =
             </Button>
           </Pane>
         )}
+
+        <Pane mb={10}>
+          <Subheader fontSize="xl" text="Choose Measurement System" />
+          <HStack alignItems="center" alignSelf="center">
+            <Text>METRIC</Text>
+            <Switch isChecked={!isMetric} onToggle={val => toggleMetricSystem(val)} mx={5} size="lg" offThumbColor="blue.700" onThumbColor="red.600" />
+            <Text>MURICAN</Text>
+          </HStack>
+        </Pane>
+
         <Pane mb={10}>
           <Subheader fontSize="xl" text="Permanently delete your account" />
           <Button variant="caution" onPress={() => createAlert("Delete Account", "WARNING: This is non-reversible!", handleDeleteAccount)} _text={{ fontFamily: "heading", fontSize: "2xl" }}>
