@@ -33,6 +33,8 @@ interface RegisterBody {
   username: string;
   password: string;
   emailMarketingOptIn: boolean;
+  isMetric: boolean;
+  foundOutBy: string;
   isMobileApp: true;
 }
 

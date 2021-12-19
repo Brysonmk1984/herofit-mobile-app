@@ -94,7 +94,6 @@ const Settings: React.FC<MainStackProps<"Settings">> = ({ navigation, route }) =
     setIsMetric(!isImperial);
     try {
       const { user: updatedUser, message } = await updateMeasuringSystem({ isMetric: isImperial ? false : true, email: user.email });
-      console.log(updatedUser);
       dispatch({ type: "SET USER", payload: { user: updatedUser, isSignedIn: true } });
       addToast("success", message);
     } catch (error) {
@@ -161,9 +160,13 @@ const Settings: React.FC<MainStackProps<"Settings">> = ({ navigation, route }) =
         <Pane mb={10}>
           <Subheader fontSize="xl" text="Choose Measurement System" />
           <HStack alignItems="center" alignSelf="center">
-            <Text>METRIC</Text>
+            <Text fontSize="lg" fontFamily="heading">
+              METRIC
+            </Text>
             <Switch isChecked={!isMetric} onToggle={val => toggleMetricSystem(val)} mx={5} size="lg" offThumbColor="blue.700" onThumbColor="red.600" />
-            <Text>MURICAN</Text>
+            <Text fontSize="lg" fontFamily="heading">
+              MURICAN
+            </Text>
           </HStack>
         </Pane>
 
