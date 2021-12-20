@@ -20,7 +20,7 @@ export const AdversaryPanel: React.FC<AdversaryPanelProps> = ({ foesDefeated, fo
   const [requiredLevel, setRequiredLevel] = useState(null);
   const isOdd = index % 2;
   function determineBackgroundColor(isOdd) {
-    if (foe["class"] == "Spirits") {
+    if (foe["class"] === "Spirits") {
       return isOdd ? "#F5F5F5" : "base.white";
     } else if (foe["class"] == "Elementals") {
       return isOdd ? `base.${elementType}` : `${elementType}.700`;

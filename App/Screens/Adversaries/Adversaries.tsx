@@ -24,13 +24,13 @@ const Adversaries: React.FC<MainStackProps<"Adversaries">> = ({ navigation, rout
   const { state, dispatch } = useContext(GlobalStateContext);
   const { openModal } = useModal();
   const { addToast } = useGlobalToast();
-
+  const [foeData, setFoeData] = useState(null);
   const { hero, allGameItems } = state;
   const [foesDefeated, setFoesDefeated] = useState([]);
   const [villains, setVillains] = useState({ Spirits: [], Elementals: [], Titans: [] });
   const [sectionedElementals, setSectionedElementals] = useState(null);
   const [pressedItem, setPressedItem] = useState<Item>(null);
-  const [activeTab, setActiveTab] = useState<FoeClass>("Spirits");
+  const [activeTab, setActiveTab] = useState<FoeClass>("Elementals");
 
   // Show Reward Item
   function handleItemClick(itemName: string) {
@@ -102,6 +102,16 @@ const Adversaries: React.FC<MainStackProps<"Adversaries">> = ({ navigation, rout
     })();
   }, [hero.id]);
 
+  // The next two hooks are a workaround for the foe images not updating on tab change
+  useEffect(() => {
+    setFoeData([]);
+  }, [activeTab]);
+  useEffect(() => {
+    if (foeData?.length === 0) {
+      setFoeData(villains[activeTab]);
+    }
+  }, [foeData]);
+
   return (
     <ScreenContainer screenName={route.name}>
       <Header text="Adversaries" />
@@ -124,8 +134,7 @@ const Adversaries: React.FC<MainStackProps<"Adversaries">> = ({ navigation, rout
               keyExtractor={(item, index) => index.toString()}
             />
           ) : (
-            // Other Foes
-            <FlatList data={villains[activeTab]} renderItem={item => renderItem(item)} keyExtractor={(item, index) => index.toString()} />
+            <FlatList data={foeData} renderItem={item => renderItem(item)} keyExtractor={(item, index) => index.toString()} />
           )}
         </ScrollView>
       </Center>
