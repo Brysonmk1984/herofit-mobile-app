@@ -11,6 +11,7 @@ import { User, Hero, Item, AppDispatch, InitialAppState, GlobalMessages } from "
 // Either accepts the jwt token and gets email from it in the case of already-valid jwt, or accepts email as a parameter in the case of signing in
 // user, hero, items, latestBattle
 async function fetchInitialData(token: string, dispatch: AppDispatch, state: InitialAppState, email: string | null = null) {
+  //console.log("FETCHING", token, email);
   try {
     // Decode the JWT to get email, needed for fetching avatar
     if (token) {

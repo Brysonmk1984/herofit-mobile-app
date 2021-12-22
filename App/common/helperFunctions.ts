@@ -388,6 +388,8 @@ function getPetImage(petName: string): number {
       return require("../../assets/images/items/pets/spirit_hawk.webp");
     case "snowshoe_hare":
       return require("../../assets/images/items/pets/snowshoe_hare.webp");
+    case "ashborn_phoenix":
+      return require("../../assets/images/items/pets/ashborn_phoenix.webp");
     case "splash_artist":
       return require("../../assets/images/foes/elementals/splash_artist.webp");
     case "rock_skipper":
