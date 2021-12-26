@@ -113,29 +113,30 @@ function useStravaDataProcess(): { newStravaActivities: Activity[]; getFreshStra
     }
   }
 
+  async function _doLocalStravaCheck() {
+    const lsSavedStravaActivities: any[] = await getLsWithExpiry("herofit-stravaActivities");
+    setLsStrava(lsSavedStravaActivities);
+    setLsStravaCheckHappened(true);
+  }
+
   // Check if Strava User && get lsSaved Strava activities
   // Gets called on startup AND when homepage remounts, like from coming back from activities screen
   useEffect(() => {
+    //console.log(state.user?.dataSrcId, !lsStravaCheckHappened);
     if (state.user?.dataSrcId && !lsStravaCheckHappened) {
-      (async () => {
-        const lsSavedStravaActivities: any[] = await getLsWithExpiry("herofit-stravaActivities");
-        setLsStrava(lsSavedStravaActivities);
-        //dispatch({ type: "SET LS STRAVA CHECK HAPPENED", payload: { lsStravaCheckHappened: true } });
-        setLsStravaCheckHappened(true);
-      })();
+      _doLocalStravaCheck();
     }
   }, []);
 
   // Either Use LS Strava Data OR
   // Initialize Strava Data Fetch Sequence
   useEffect(() => {
-    // This should absolutely only be called once, regardless of screen changes - that's why we have the previousLsCheck
+    // This should absolutely only be called once on load, or when screen gets refreshed
+    // either from swiping down or coming to foreground
     if (lsStravaCheckHappened) {
       // Only run Strava code if user is an existing user who already set up Strava with their HF account
       if (isExistingHero(state.hero) && determineDataSrcType(state.user?.dataSrcId) === "Strava") {
         (async () => {
-          //console.log("prev", previousLsCheck, "current", state.lsStravaCheckHappened);
-
           // If there are locally saved strava activities, use cached version
           // This is to prevent too many requests against Strava API
           if (lsStrava) {
@@ -151,6 +152,15 @@ function useStravaDataProcess(): { newStravaActivities: Activity[]; getFreshStra
       }
     }
   }, [lsStravaCheckHappened]);
+
+  useEffect(() => {
+    if (state.refreshCount > 0) {
+      if (state.user?.dataSrcId) {
+        setLsStravaCheckHappened(false);
+        _doLocalStravaCheck();
+      }
+    }
+  }, [state.refreshCount]);
 
   return {
     newStravaActivities,
