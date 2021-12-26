@@ -51,6 +51,9 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
   const [backgroundAnimation, setBackgroundAnimation] = useState(null);
   const [leveledUp, setLeveledUp] = useState(false);
   const openBottomDrawerFromParent = useRef(null);
+  // Only used to force a refresh on the countdown timer
+  const [countdownTimerRefreshCount, setCountdownTimerRefreshCount] = useState(0);
+
   useServerMessage();
 
   async function handleHeroUpgrade(activities: Activity[]) {
@@ -173,7 +176,6 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
       });
     }
   }, [route.params?.postBattleReportAwards]);
-
   return (
     <SideMenu disableGestures={(Boolean(state.initialHomescreenLoad) ?? false) || bottomDrawerOpen} bounceBackOnOverdraw={false} onChange={isOpen => setSideDrawerOpen(isOpen)} isOpen={sideDrawerOpen} menuPosition={"right"} menu={<SidebarMenu navigation={navigation} setSideDrawerOpen={setSideDrawerOpen} heroName={hero.name} />} openMenuOffset={sideBarWidth}>
       <ScreenContainer bg={<Background animation={backgroundAnimation} setBackgroundAnimation={setBackgroundAnimation} />} screenName={route.name}>
@@ -181,13 +183,15 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
           <GestureRecognizer
             onSwipeDown={state => {
               getAllAppData().then(data => {
+                setCountdownTimerRefreshCount(existingCount => ++existingCount);
+                dispatch({ type: "INCREMENT REFRESH COUNT" });
                 fetchAndUpdateInventory();
               });
             }}
           >
             {/* TOP SECTION */}
             <View zIndex={110}>
-              <TopHud equippedTitle={equippedTitle} />
+              <TopHud equippedTitle={equippedTitle} refreshCountdownTimer={countdownTimerRefreshCount} />
               {state.isSignedIn && !state.initialHomescreenLoad && <DrawerIndicator setSideDrawerOpen={setSideDrawerOpen} />}
             </View>
             {/* HERO & PET */}

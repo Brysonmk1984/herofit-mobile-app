@@ -67,13 +67,8 @@ function handleHttpError(request: AxiosRequestConfig, response: AxiosResponse | 
         meta = errorArray[0].meta;
       }
     } else if (typeof error === "string") {
-      errorArray = [
-        {
-          msg: error,
-          location: "Backend",
-        },
-      ];
-      meta = errorArray[0].msg;
+      errorArray = [error];
+      meta = errorArray[0];
     } else {
       if (error) {
         errorArray = [error];

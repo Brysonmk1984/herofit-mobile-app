@@ -22,7 +22,6 @@ export const TopHud: React.FC<TopHudProps> = ({ equippedTitle }) => {
   const [awaitingBattle, setAwaitingBattle] = useState(false);
 
   const { mounted } = useDidMount();
-
   useEffect(() => {
     if (mounted) {
       const secondaryLoadingTimeout = setTimeout(() => {
@@ -62,11 +61,11 @@ export const TopHud: React.FC<TopHudProps> = ({ equippedTitle }) => {
             <Box justifyContent="center" flexDirection="row">
               {hero.status === "Knocked Out" ? (
                 <Box flexDirection="row" mt={-1}>
-                  <CountdownTimer fontSize={20} type={"Knocked Out"} />
+                  <CountdownTimer fontSize={20} type={"Knocked Out"} key={state.refreshCount} refreshTimerOnZero={() => dispatch({ type: "INCREMENT REFRESH COUNT" })} />
                 </Box>
               ) : awaitingBattle ? (
                 <Box flexDirection="row" mt={-0.5}>
-                  <CountdownTimer fontSize={20} type={"Battle"} />
+                  <CountdownTimer fontSize={20} type={"Battle"} key={state.refreshCount} refreshTimerOnZero={() => dispatch({ type: "INCREMENT REFRESH COUNT" })} />
                 </Box>
               ) : (
                 <Box flexDirection="row" mt={0.5}>

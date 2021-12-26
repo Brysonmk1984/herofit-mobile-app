@@ -6,9 +6,10 @@ interface CountdownTimerProps {
   type: "Knocked Out" | "Battle";
   hideType?: boolean;
   fontSize?: number;
+  refreshTimerOnZero?: () => void;
 }
 
-export const CountdownTimer: React.FC<CountdownTimerProps> = ({ type, hideType = false, fontSize = 20 }) => {
+export const CountdownTimer: React.FC<CountdownTimerProps> = ({ type, hideType = false, fontSize = 20, refreshTimerOnZero }) => {
   const [hours, setHours] = useState<string | number>(0);
   const [minutes, setMinutes] = useState<string | number>(0);
   const [seconds, setSeconds] = useState<string | number>(0);
@@ -50,6 +51,13 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({ type, hideType =
 
     return () => clearInterval(countdownInterval);
   }, []);
+
+  // Increments refreshCount in global state, which triggers the key change on the this component, which refreshes the component
+  useEffect(() => {
+    if (seconds < 0) {
+      refreshTimerOnZero();
+    }
+  }, [seconds]);
 
   return (
     <View>

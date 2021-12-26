@@ -54,6 +54,7 @@ const App: React.FC = () => {
     if (refreshAppData && state.isSignedIn && state.user.active) {
       dispatch({ type: "TOGGLE IN APP LOADING", payload: { isLoadingInApp: true } });
       getAllAppData().then(data => {
+        dispatch({ type: "INCREMENT REFRESH COUNT" });
         fetchAndUpdateInventory();
       });
     }

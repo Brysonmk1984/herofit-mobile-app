@@ -53,7 +53,7 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
         return addToast("error", "Please complete the form.");
       }
 
-      const { user, tokenObject } = await login({ email: email.trim(), password: password.trim(), isMobileApp: true });
+      const { user, tokenObject } = await login({ email: email.trim(), password: password.trim() });
       setSuccess(true);
 
       // User hasn't confirmed email yet
@@ -73,7 +73,7 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
       let message = debugErrors(error);
 
       if (Array.isArray(error.debug)) {
-        if (error.debug[0].msg === "Couldn't find a user with that email." || error.debug[0].msg === "Incorrect password, please try again.") {
+        if (error.debug[0] === "Couldn't find a user with that email." || error.debug[0] === "Incorrect password, please try again.") {
           message = "Incorrect username or password, please try again.";
           setFormIsValid(true);
         } else if (error.debug[0].oldUserMigration) {
@@ -115,7 +115,7 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
         <Pane>
           <VStack space={6} mt={5}>
             <FormControl isRequired isInvalid={helperText === "Must be valid email address" ? true : false}>
-              <Input onChangeText={text => handleInputChange(text, setEmail)} value={email} placeholder="Email" shadow={1} autoCapitalize="none" />
+              <Input onChangeText={text => handleInputChange(text, setEmail)} value={email} placeholder="Email" shadow={1} keyboardType="email-address" autoCapitalize="none" />
             </FormControl>
             <FormControl isRequired isInvalid={helperText === "Password must be at least 8 characters" ? true : false}>
               <Input onChangeText={text => handleInputChange(text, setPassword)} value={password} secureTextEntry={true} autoCapitalize="none" autoCompleteType="password" textContentType="password" placeholder="Password" onSubmitEditing={() => Keyboard.dismiss()} />

@@ -59,11 +59,15 @@ interface SetReferredBy {
 type FormAction = EmailInputAction | FirstNameInputAction | UsernameInputAction | PasswordInputAction | EmailMarketingOptInToggleAction | SetLoadingAction | SetHelperTextAction | SetIsMetric | SetFoundOutBy | SetReferredBy;
 
 function formReducer(state: FormState, action: FormAction): FormState {
-  function checkValidForm({ email, username, password }) {
+  function checkValidForm({ email, username, password, foundOutBy }) {
     if (email.includes("@")) {
       if (username.length) {
         if (password.length >= 8) {
-          return { formIsValid: true, helperText: "Looks Good!" };
+          if (foundOutBy) {
+            return { formIsValid: true, helperText: "Looks Good!" };
+          } else {
+            return { formIsValid: false, helperText: "How did you hear about us?" };
+          }
         } else {
           return { formIsValid: false, helperText: "Password must be at least 8 characters" };
         }
@@ -107,7 +111,9 @@ function formReducer(state: FormState, action: FormAction): FormState {
       return { ...state, isMetric: action.isMetric };
     }
     case "SET FOUND OUT BY": {
-      return { ...state, foundOutBy: action.foundOutBy };
+      const updatedState = { ...state, foundOutBy: action.foundOutBy };
+      const { formIsValid, helperText } = checkValidForm(updatedState);
+      return { ...updatedState, formIsValid, helperText };
     }
     case "SET REFERRED BY": {
       return { ...state, referredBy: action.referredBy };
@@ -175,11 +181,10 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
     } catch (error) {
       formDispatch({ type: "SET LOADING", loading: false });
       if (error.debug) {
-        addToast("error", error.debug[0].msg);
+        addToast("error", error.debug[0]);
       } else {
         addToast("error", error.toString());
       }
-
       debugErrors(error);
     }
   }
@@ -195,13 +200,13 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
 
   return (
     <ScreenContainer screenName={route.name}>
-      <KeyboardScrollView extraScroll={600}>
+      <KeyboardScrollView extraScroll={300}>
         <Header text="Sign Up" mb={0} />
 
         <Pane mt={-5} mb={3}>
           <VStack space={2} mt={0}>
             <FormControl isRequired isInvalid={formState.helperText === "Must be valid email address" ? true : false}>
-              <Input onChangeText={email => formDispatch({ type: "EMAIL INPUT", email })} value={formState.email} placeholder="Email" autoCapitalize="none" />
+              <Input onChangeText={email => formDispatch({ type: "EMAIL INPUT", email })} value={formState.email} placeholder="Email" keyboardType="email-address" autoCapitalize="none" />
             </FormControl>
             <FormControl isRequired isInvalid={formState.helperText === "Username is required" ? true : false}>
               <Input onChangeText={username => formDispatch({ type: "USERNAME INPUT", username })} value={formState.username} placeholder="Username" autoCapitalize="none" />
@@ -225,7 +230,7 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
               </HStack>
             </FormControl>
             <Box bgColor="primary.100" px={2} pb={2}>
-              <FormControl my={3}>
+              <FormControl my={3} isRequired>
                 <Select
                   placeholder="How did you hear about HeroFit?"
                   selectedValue={formState.foundOutBy}

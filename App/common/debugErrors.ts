@@ -31,8 +31,10 @@ function debugErrors(error: appError, user?: User, dispatch?: AppDispatch): stri
         console.log(error.status === 403, "403 error, usually from first startup?");
         console.log(error.status === 401, "401 error, expired or missing token");
       } else {
-        console.error("NOT 403 or 401, emailing app error");
-        emailAppError({ status: error.status, message: error.message, debug: error.debug, version: process.env.APP_VERSION, accountInfo: user, meta: error.meta });
+        // receiving too many 400 errors from non authenticated users. no longer sending them
+        if (user) {
+          emailAppError({ status: error.status, message: error.message, debug: error.debug, version: process.env.APP_VERSION, accountInfo: user, meta: error.meta });
+        }
       }
       return error.message;
     } else {
