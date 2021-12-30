@@ -45,7 +45,7 @@
     },
     "ios": {
     "bundleIdentifier": "com.herofitllc.herofit",
-     "buildNumber": "1.4.0",
+     "buildNumber": "1.0.0",
       "infoPlist": {
          "LSApplicationQueriesSchemes": [
             "message",
