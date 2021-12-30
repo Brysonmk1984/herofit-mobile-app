@@ -25,7 +25,7 @@ async function fetchInitialData(token: string, dispatch: AppDispatch, state: Ini
     const hero: Hero = p2.hero;
     const awardedItemMessage: string = p2.awardedItemMessage;
 
-    const allGameItems: Item[] = p3.items.map(item => ({ ...item, itemID: item.id }));
+    const allGameItems: Item[] = p3.items.map((item: Item) => ({ ...item, itemID: item.id }));
     const latestBattle = p4.latestBattle;
     const { activities: latestSavedActivities, latestActivityDate: latestSavedActivityDate } = p5;
 

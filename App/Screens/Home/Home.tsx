@@ -100,14 +100,16 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
       });
     } catch (error) {
       // Errors not reaching here for some reason
-      console.log("ERRR", error);
       if (error?.meta === "Error: Duplicate Activity Entry, couldn't update Hero!") {
         error.message = error.meta;
       } else {
         error.message = "Couldn't upgrade hero, please try again later.";
       }
+      // clear out any activities locally
+      clearLs("herofit-stravaActivities");
+      setNewActivities([]);
 
-      addToast("error", error.message);
+      addToast("error", error.message, undefined, 125);
       debugErrors(error, user);
     }
   }

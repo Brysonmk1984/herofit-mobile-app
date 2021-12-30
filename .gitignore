@@ -15,3 +15,9 @@ web-build/
 
 # macOS
 .DS_Store
+
+
+build/
+# TS -incremental file
+tsconfig.tsbuildinfo
+node_modules

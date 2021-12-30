@@ -20,7 +20,7 @@
           "file": "sentry-expo/upload-sourcemaps",
           "config": {
             "organization": "herofit",
-            "project": "HeroFit-Sentry",
+            "project": "herofit",
             "authToken": "da2016af30174727829c0cfa9e19bbc3815e7ec19d684e33b1f9826021348ecd"
           }
         }
