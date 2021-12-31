@@ -95,7 +95,7 @@ const ConfirmEmail: React.FC<ConfirmEmailProps> = ({ id, modalAction }) => {
   }, [state.modalQueue[0]]);
 
   return (
-    <BasicModal id={id} modalOpen={state.modalQueue[0] === id} modalAction={() => handleEmailConfirmed()} disabled={disableButton} title="Please Confirm Your Email!" buttonText="Ok, I did it!" closeModalAction={state.userStatus === "unconfirmed" ? () => _handleSignout() : undefined} hideCloseButton={true}>
+    <BasicModal id={id} modalOpen={state.modalQueue[0] === id} modalAction={() => handleEmailConfirmed()} disabled={disableButton} title="Please Confirm Your Email!" buttonText="Ok, I did it!" /*closeModalAction={state.userStatus === "unconfirmed" ? () => _handleSignout() : undefined}*/ preventClose={true}>
       <ModalActionHeader type="caution" text="Must click the link in your email" />
       <BodyContent>
         {showChecklist ? (

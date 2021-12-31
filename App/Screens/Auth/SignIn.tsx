@@ -115,10 +115,10 @@ const SignIn = ({ navigation, route }: AuthStackProps<"SignIn">) => {
         <Pane>
           <VStack space={6} mt={5}>
             <FormControl isRequired isInvalid={helperText === "Must be valid email address" ? true : false}>
-              <Input onChangeText={text => handleInputChange(text, setEmail)} value={email} placeholder="Email" shadow={1} keyboardType="email-address" autoCapitalize="none" />
+              <Input onChangeText={text => handleInputChange(text, setEmail)} value={email} placeholder="Email" shadow={1} keyboardType="email-address" autoCapitalize="none" autoCorrect={false} />
             </FormControl>
             <FormControl isRequired isInvalid={helperText === "Password must be at least 8 characters" ? true : false}>
-              <Input onChangeText={text => handleInputChange(text, setPassword)} value={password} secureTextEntry={true} autoCapitalize="none" autoCompleteType="password" textContentType="password" placeholder="Password" onSubmitEditing={() => Keyboard.dismiss()} />
+              <Input onChangeText={text => handleInputChange(text, setPassword)} value={password} secureTextEntry={true} autoCapitalize="none" autoCompleteType="password" textContentType="password" placeholder="Password" onSubmitEditing={() => Keyboard.dismiss()} autoCorrect={false} />
             </FormControl>
             <PaneActionButton text="Let's Go!" disabled={loading || showLegacyLink ? true : false} action={handleSignIn} />
             {loading ? (

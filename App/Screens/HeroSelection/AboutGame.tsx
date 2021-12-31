@@ -8,12 +8,14 @@ import debugErrors from "../../common/debugErrors";
 import PaneSupportText from "../../Components/PaneSupportText";
 import AttributeDetail from "../../Components/Modals/AttributeDetail";
 import useModal from "../../common/hooks/useModal";
+import useGlobalToast from "../../common/hooks/useGlobalToast";
 
 // How To Select Screen
 export default function AboutGame({ navigation, route }: AuthStackProps<"AboutGame">) {
   // Make API call to get hero data for the next screen
   const [heroList, setHeroList] = useState<HeroChoice[] | []>([]);
   const [selectedAttribute, setSelectedAttribute] = useState(null);
+  const { addToast } = useGlobalToast();
   const { openModal } = useModal();
   function renderHeader(stat: string, lcStat: string) {
     return (
@@ -79,6 +81,7 @@ export default function AboutGame({ navigation, route }: AuthStackProps<"AboutGa
         setHeroList(data);
       })
       .catch(error => {
+        addToast("error", "There was a problem fetching game data, please try again later", 5000);
         return debugErrors(error);
       });
   }, []);
@@ -202,7 +205,7 @@ export default function AboutGame({ navigation, route }: AuthStackProps<"AboutGa
         </VStack>
       </ScrollView>
 
-      <ScreenActionButton text="OK" action={() => navigation.push("SelectHero", { heroList })} />
+      <ScreenActionButton disabled={heroList.length === 0} text="OK" action={() => navigation.push("SelectHero", { heroList })} />
       {selectedAttribute && <AttributeDetail id="AttributeDetail" attribute={selectedAttribute} />}
     </ScreenContainer>
   );

@@ -12,7 +12,7 @@ web-build/
 .env.development
 .env.production
 .vscode/
-
+.tmp/
 # macOS
 .DS_Store
 

@@ -206,13 +206,13 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
         <Pane mt={-5} mb={3}>
           <VStack space={2} mt={0}>
             <FormControl isRequired isInvalid={formState.helperText === "Must be valid email address" ? true : false}>
-              <Input onChangeText={email => formDispatch({ type: "EMAIL INPUT", email })} value={formState.email} placeholder="Email" keyboardType="email-address" autoCapitalize="none" />
+              <Input onChangeText={email => formDispatch({ type: "EMAIL INPUT", email })} value={formState.email} placeholder="Email" keyboardType="email-address" autoCapitalize="none" autoCorrect={false} />
             </FormControl>
             <FormControl isRequired isInvalid={formState.helperText === "Username is required" ? true : false}>
               <Input onChangeText={username => formDispatch({ type: "USERNAME INPUT", username })} value={formState.username} placeholder="Username" autoCapitalize="none" />
             </FormControl>
             <FormControl isRequired isInvalid={formState.helperText === "Password must be at least 8 characters" ? true : false}>
-              <Input onChangeText={password => formDispatch({ type: "PASSWORD INPUT", password })} value={formState.password} secureTextEntry={true} autoCompleteType="password" textContentType="password" placeholder="Password" autoCapitalize="none" />
+              <Input onChangeText={password => formDispatch({ type: "PASSWORD INPUT", password })} value={formState.password} secureTextEntry={true} autoCompleteType="password" textContentType="password" placeholder="Password" autoCapitalize="none" autoCorrect={false} />
             </FormControl>
             <FormControl>
               <Input onChangeText={firstName => formDispatch({ type: "FIRST NAME INPUT", firstName })} value={formState.firstName} placeholder="First Name (Optional)" autoCapitalize="none" />

@@ -38,7 +38,7 @@ function BasicModal({ children, id, modalOpen, modalAction, title, buttonText = 
   }
 
   return (
-    <Modal isOpen={modalOpen} onClose={() => _onClose(closeModalAction)} closeOnOverlayClick={!preventClose}>
+    <Modal isOpen={modalOpen} onClose={() => _onClose(closeModalAction)} closeOnOverlayClick={!preventClose} isKeyboardDismissable={!preventClose}>
       <Modal.Content>
         {!preventClose && !hideCloseButton && <ModalCloseButton bgColor="primary.50" />}
         <Modal.Header px={5} py={3}>

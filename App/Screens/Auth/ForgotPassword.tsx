@@ -137,15 +137,15 @@ const ForgotPassword = ({ navigation, route }: AuthStackProps<"ForgotPassword">)
             <VStack space={6} mt={5}>
               <FormControl isDisabled isRequired isInvalid={helperText === "Password must be at least 8 characters" ? true : false}>
                 <FormControl.Label>Email</FormControl.Label>
-                <Input onChangeText={text => handleInputChange(text, setEmail)} value={email} autoCompleteType="email" textContentType="emailAddress" placeholder="Enter Email" autoCapitalize="none" />
+                <Input onChangeText={text => handleInputChange(text, setEmail)} value={email} autoCompleteType="email" textContentType="emailAddress" placeholder="Enter Email" autoCapitalize="none" autoCorrect={false} />
               </FormControl>
               <FormControl isRequired isInvalid={helperText === "Password must be at least 8 characters" ? true : false}>
                 <FormControl.Label>New Password</FormControl.Label>
-                <Input onChangeText={text => handleInputChange(text, setPassword)} value={password} secureTextEntry={true} autoCompleteType="password" textContentType="password" placeholder="Enter Password" autoCapitalize="none" />
+                <Input onChangeText={text => handleInputChange(text, setPassword)} value={password} secureTextEntry={true} autoCompleteType="password" textContentType="password" placeholder="Enter Password" autoCapitalize="none" autoCorrect={false} />
               </FormControl>
               <FormControl isRequired isInvalid={helperText === "Password must be at least 8 characters" ? true : false}>
                 <FormControl.Label>Confirm Password</FormControl.Label>
-                <Input onChangeText={text => handleInputChange(text, setPasswordConfirm)} value={passwordConfirm} secureTextEntry={true} autoCompleteType="password" textContentType="password" placeholder="Confirm Password" autoCapitalize="none" />
+                <Input onChangeText={text => handleInputChange(text, setPasswordConfirm)} value={passwordConfirm} secureTextEntry={true} autoCompleteType="password" textContentType="password" placeholder="Confirm Password" autoCapitalize="none" autoCorrect={false} />
               </FormControl>
               <PaneActionButton text="Update Password" disabled={!formIsValid ? true : false} action={handleReset} />
               {helperText && <HelperText type={formIsValid ? "success" : "error"} text={helperText} />}

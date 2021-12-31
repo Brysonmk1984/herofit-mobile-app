@@ -7,11 +7,13 @@ import defaultStats from "../../common/defaultStats.json";
 import { AuthStackProps } from "../../common/types-navigator";
 import { HeroChoice } from "../../common/types";
 import PaneSupportText from "../../Components/PaneSupportText";
+import useGlobalToast from "../../common/hooks/useGlobalToast";
 
 // How To Select Screen
 export default function SelectHeroHowTo({ navigation, route }: AuthStackProps<"SelectHeroHowTo">) {
   // Make API call to get hero data for the next screen
   const [heroList, setHeroList] = useState<HeroChoice[] | []>([]);
+  const { addToast } = useGlobalToast();
 
   useEffect(() => {
     // Fetch list of Heroes from server so it's ready for the next screen
@@ -20,6 +22,7 @@ export default function SelectHeroHowTo({ navigation, route }: AuthStackProps<"S
         setHeroList(data);
       })
       .catch(error => {
+        addToast("error", "There was a problem fetching game data, please try again later", 5000);
         return debugErrors(error);
       });
   }, []);
