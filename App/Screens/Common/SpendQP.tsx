@@ -19,6 +19,16 @@ import usePrevious from "../../common/hooks/usePrevious";
 import AttributeDetail from "../../Components/Modals/AttributeDetail";
 import useModal from "../../common/hooks/useModal";
 
+// Comes into play if a user uses retrocausaul capsule after 100
+function _determineMaxAPossibleAether(albedo: number | undefined) {
+  if (typeof albedo === "undefined") {
+    return 0;
+  }
+  const autoEarnedAether = albedo * 5;
+  const possibleSpentOnAether = (albedo + 1) * 5;
+  return autoEarnedAether + possibleSpentOnAether;
+}
+
 const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
   // Global State
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -31,6 +41,7 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
   const { openModal } = useModal();
   // Used for more detail modal only
   const [selectedAttribute, setSelectedAttribute] = useState(null);
+  const [maxPossibleAether, setMaxPossibleAether] = useState(_determineMaxAPossibleAether(hero.albedo));
 
   let initialState: Stats = (() => {
     if (existingHero) {
@@ -164,7 +175,12 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
         keyExtractor={(item, i) => i.toString()}
         renderItem={({ item }) => {
           const lcStatName = item.stat.toLowerCase();
-          const disabled = qpState.qp === 0;
+          let disabled = qpState.qp === 0;
+
+          if (lcStatName === "aether" && item.value >= maxPossibleAether) {
+            disabled = true;
+          }
+
           return (
             <Box borderRadius={14} bg={`base.${lcStatName}`} m={3} shadow={5}>
               <HStack alignItems="center" space={0}>
