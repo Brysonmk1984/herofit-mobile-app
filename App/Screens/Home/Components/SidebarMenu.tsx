@@ -46,7 +46,7 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({ navigation, setSideDrawerOpen
       <VStack flexBasis={100} alignItems="center" mb={5}>
         <Image size="80%" source={require("../../../../assets/images/misc/herofit-logo.webp")} resizeMode="contain" alt="HeroFit Logo" />
         <Text mt={-5} color="base.brand">
-          ©2021 HeroFit LLC.
+          ©2020 - 2022 HeroFit
         </Text>
       </VStack>
     </VStack>
