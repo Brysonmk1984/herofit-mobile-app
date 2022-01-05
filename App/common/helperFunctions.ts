@@ -60,6 +60,14 @@ const shuffleArray = function (array: any[]) {
 
   return array;
 };
+type Primitive = number | string | symbol | boolean | null | undefined;
+
+const primitiveArraysAreEqual = function (array1: Primitive[], array2: Primitive[]) {
+  const sortedArray1 = [...array1].sort();
+  const sortedArray2 = [...array2].sort();
+
+  return sortedArray1.length == sortedArray2.length && sortedArray1.every((item, index) => item === sortedArray2[index]);
+};
 
 function setLsWithExpiry(key: string, value: any, ttl: number) {
   const now = new Date();
@@ -656,4 +664,4 @@ const createAlert = (title: string, message: string, cb: () => void) => {
   );
 };
 
-export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, convertAorAn, getHeroAlias, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems, capitalize, getHeroImage, getFoeImage, getPetImage, equippedSkin, equippedPet, equippedTitle, getColorFromClassName, getColorFromItemName, checkForMultipleItem, determineDataSrcType, roundNumberToTenthReturnNumber, roundNumberToThousandthReturnNumber, getFoeColor, determineScenario, convertItemTypeName, determineItemTypeColor, checkDataSrcType, createAlert };
+export { lowercaseUnderscore, lowercaseDash, lowercaseSpace, titlecaseUnderscore, shuffleArray, primitiveArraysAreEqual, getLsWithExpiry, setLsWithExpiry, clearLs, thousandsFormat, roundNumbersTenth, roundNumbersHundreth, cloneObj, convertAorAn, getHeroAlias, rankingSuffix, determineSkinType, determineSkinName, convertItemArrayToCategories, convertItemIdsToFullItems, capitalize, getHeroImage, getFoeImage, getPetImage, equippedSkin, equippedPet, equippedTitle, getColorFromClassName, getColorFromItemName, checkForMultipleItem, determineDataSrcType, roundNumberToTenthReturnNumber, roundNumberToThousandthReturnNumber, getFoeColor, determineScenario, convertItemTypeName, determineItemTypeColor, checkDataSrcType, createAlert };

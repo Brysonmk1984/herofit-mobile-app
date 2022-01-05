@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { buyItemByAvatarId, consumeItemRequest, equipItem, equipUnequipItem, fetchAvatarInventory, unequipItem } from "../../api/inventory";
 import debugErrors from "../debugErrors";
-import { convertAorAn } from "../helperFunctions";
+import { convertAorAn, primitiveArraysAreEqual } from "../helperFunctions";
 import useGlobalToast from "./useGlobalToast";
 import { BattleInstantItem, Hero, Item, ServerInventoryCategories, ServerItemType } from "../types";
 import { GlobalStateContext } from "../../store";
@@ -153,16 +153,22 @@ export default function useInventory(makeInventoryRequest?: boolean): ServerInve
 
   // Will be called on initial homepage load since 'makeInventoryRequest' is passed as true
   // subsequent refreshes may call this function directly
-  function fetchAndUpdateInventory() {
+  async function fetchAndUpdateInventory() {
     try {
-      (async () => {
-        const inventory = await fetchAvatarInventory({ avatarID: hero.id });
-        //console.log("INVENTTORY=", inventory);
-        const equipped = _determineEquippedItems(inventory);
-        //console.log("equipped=", equipped);
-        dispatch({ type: "UPDATE INVENTORY", payload: { inventory } });
-        dispatch({ type: "UPDATE EQUIPPED", payload: { equipped } });
-      })();
+      const inventory = await fetchAvatarInventory({ avatarID: hero.id });
+      //console.log("INVENTORY=", inventory);
+      const equipped = _determineEquippedItems(inventory);
+      //console.log("equipped=", equipped);
+      dispatch({ type: "UPDATE INVENTORY", payload: { inventory } });
+
+      // This code isn't working, but I'd like it to... ideally we wouldn't dispatch UPDATE EQUIPPED every time this function is called.
+      // const newEquippedItemIds = [equipped.skin?.itemID, equipped.pet?.itemID, equipped.title?.itemID];
+      // const oldEquippedItemIds = [equippedSkin?.itemID, equippedPet?.itemID, equippedTitle?.itemID];
+      // console.log(newEquippedItemIds, oldEquippedItemIds, "arrays are same-", primitiveArraysAreEqual(newEquippedItemIds, oldEquippedItemIds));
+      // if (!primitiveArraysAreEqual(newEquippedItemIds, oldEquippedItemIds)) {
+      //console.log("UPDATING EQUIPPED!");
+      dispatch({ type: "UPDATE EQUIPPED", payload: { equipped } });
+      //}
     } catch (error) {
       debugErrors(error, user);
       addToast("error", `${error.status}: ${error.message}`, undefined, 125);
@@ -212,18 +218,26 @@ export default function useInventory(makeInventoryRequest?: boolean): ServerInve
 
   // PETS
   useEffect(() => {
-    // Sets Hero's inventory
-    setEquippedPet(equipped.pet);
+    // Only set visibly equipped pet if the itemIDs aren't the same
+    if (typeof equipped.pet !== "undefined" && equipped.pet?.itemID !== equippedPet?.itemID) {
+      setEquippedPet(equipped.pet);
+    }
   }, [equipped.pet]);
 
   // COSTUMES
   useEffect(() => {
-    setEquippedSkin(equipped.skin);
+    // Only set visibly equipped skin if the itemIDs aren't the same
+    if (typeof equipped.skin !== "undefined" && equipped.skin?.itemID !== equippedSkin?.itemID) {
+      setEquippedSkin(equipped.skin);
+    }
   }, [equipped.skin]);
 
   // TITLES
   useEffect(() => {
-    setEquippedTitle(equipped.title);
+    // Only set visibly equipped title if the itemIDs aren't the same
+    if (typeof equipped.title !== "undefined" && equipped.title?.itemID !== equippedTitle?.itemID) {
+      setEquippedTitle(equipped.title);
+    }
   }, [equipped.title]);
 
   return {

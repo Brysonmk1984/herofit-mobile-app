@@ -32,9 +32,15 @@ function useAppDataFetch(): { getAllAppData: (passedJwt?: any) => Promise<void>;
         dispatch({ type: "TOGGLE IN APP LOADING", payload: { isLoading: false } });
       }, 1500);
     } catch (error) {
-      console.log("JWT EXISTS, but ERROR FETCHING DATA");
+      //console.log("JWT EXISTS, but ERROR FETCHING DATA", "refreshCount: ", state.refreshCount);
       debugErrors(error);
-      dispatch({ type: "RESET DEFAULTS" });
+      // Only reset defaults if the refresh count is zero and the app isLoading, meaning initial startup.
+      if (state.refreshCount === 0 && state.isLoading) {
+        dispatch({ type: "RESET DEFAULTS" });
+      } else {
+        // We still need to dismiss the loading indicator even if network call fails
+        dispatch({ type: "TOGGLE IN APP LOADING", payload: { isLoading: false } });
+      }
     }
   }
 
