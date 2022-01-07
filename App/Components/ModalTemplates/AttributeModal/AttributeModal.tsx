@@ -33,7 +33,7 @@ const AttributeModal: React.FC<AttributeModalProps> = ({ children, id, modalOpen
         {/* Action Header */}
         <Box>
           <Center justifyContent="center" bgColor={`base.${attrObj.lcName}`} py={2}>
-            <Text color="white" textAlign="center" fontSize="4xl" fontFamily="heading">
+            <Text color={attrObj.lcName === "aether" ? "base.primaryAlt" : "white"} textAlign="center" fontSize="4xl" fontFamily="heading">
               {attrObj.lcName}
             </Text>
           </Center>
@@ -53,7 +53,7 @@ const AttributeModal: React.FC<AttributeModalProps> = ({ children, id, modalOpen
               Earned By:
             </Text>
           )}
-          <Text color={`base.${attrObj.lcName}`} fontSize="md">
+          <Text color={attrObj.lcName === "aether" ? "base.primaryAlt" : `base.${attrObj.lcName}`} fontSize="md">
             {attrObj.earnedBy}
           </Text>
         </VStack>

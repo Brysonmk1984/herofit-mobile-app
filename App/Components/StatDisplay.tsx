@@ -10,6 +10,7 @@ interface StatDisplaySizes {
   valueSize: nativeBaseSizes;
   statSize: number;
   statSize2: number;
+  statSize3: number;
   descriptionSize: nativeBaseSizes;
 }
 
@@ -33,26 +34,29 @@ export default function StatDisplay({ stat, value, description, size, reversedTe
   const numberColor = statColor ? statColor : reversedText ? "base.white" : "base.primary";
   const textColor = reversedText ? "base.white" : "base.primary";
 
-  const { iconSize, valueSize, statSize, statSize2, descriptionSize } = ((): StatDisplaySizes => {
+  const { iconSize, valueSize, statSize, statSize2, statSize3, descriptionSize } = ((): StatDisplaySizes => {
     let iconSize = 50,
       valueSize: nativeBaseSizes = "2xl",
       statSize = 50,
       statSize2 = 35,
+      statSize3 = 32,
       descriptionSize: nativeBaseSizes = "xl";
 
     if (size === "sm") {
-      (iconSize = 30), (valueSize = "lg"), (statSize = 30), (statSize2 = 28), (descriptionSize = "md");
+      (iconSize = 30), (valueSize = "lg"), (statSize = 30), (statSize2 = 28), (statSize3 = 26), (descriptionSize = "md");
     }
     if (iconWatermark) {
       iconSize = 140;
       statSize = 60;
       statSize2 = 60;
+      statSize3 = 50;
     }
     return {
       iconSize,
       valueSize,
       statSize,
       statSize2,
+      statSize3,
       descriptionSize,
     };
   })();
@@ -79,7 +83,7 @@ export default function StatDisplay({ stat, value, description, size, reversedTe
     if (iconWatermark) {
       return (
         <View flex={2} alignItems="center">
-          <Text color={numberColor} fontFamily="heading" fontSize={value >= 100 ? statSize2 : statSize} textAlign="center" lineHeight={size === "sm" ? "60px" : "80px"}>
+          <Text color={numberColor} fontFamily="heading" fontSize={value >= 1000 ? statSize3 : value >= 100 ? statSize2 : statSize} textAlign="center" lineHeight={size === "sm" ? "60px" : "80px"}>
             {value}
           </Text>
           <Text textAlign="center" color={"base.highlight"} fontFamily="heading" fontSize={valueSize} mt={-5}>
