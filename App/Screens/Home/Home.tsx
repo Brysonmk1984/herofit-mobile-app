@@ -221,7 +221,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
         <SignupFinished id="SignupFinished" />
         <GoToBattle id="GoToBattle" goTo={navigation.push} heroId={hero.id} openBottomDrawerFromParent={() => openBottomDrawerFromParent.current()} />
 
-        <ActivityUpgrade id="ActivityUpgrade" activities={newActivities} modalAction={() => handleHeroUpgrade(newActivities)} goBack={navigation.push} state={state} closeModal={closeModal} setNewActivities={setNewActivities} />
+        <ActivityUpgrade id="ActivityUpgrade" activities={newActivities} modalAction={() => handleHeroUpgrade(newActivities)} goBack={(activity: Activity) => navigation.push("Activity", { activity })} state={state} closeModal={closeModal} setNewActivities={setNewActivities} />
       </ScreenContainer>
     </SideMenu>
   );

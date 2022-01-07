@@ -10,13 +10,15 @@ import { Activity } from "../../../common/types";
 import { ModalActionHeader } from "../../../Components/ModalTemplates/ModalActionHeader";
 import Icon from "../../../Components/Icon";
 import customIconActivityTypes from "../../../common/customIconActivityTypes";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { MainStackParamList } from "../../../common/types-navigator";
 
 interface ActivityUpgradeProps {
   id: string;
   activities: Activity[];
   modalAction: () => void;
   state: AppState;
-  goBack: (navigator: string, options: { screen: string }) => void;
+  goBack: (activity: Activity) => void;
   closeModal: () => void;
   setNewActivities: ([]: []) => void;
 }
@@ -45,7 +47,7 @@ const ActivityUpgrade: React.FC<ActivityUpgradeProps> = ({ id, activities, modal
     closeModal();
     setNewActivities([]);
     setTimeout(() => {
-      goBack("Activity");
+      goBack(activities[0]);
     }, 500);
   }
 

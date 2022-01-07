@@ -218,4 +218,14 @@ function calculateElementBonus(sec: number, allElements: boolean, isTimeAndHalfA
   return (Math.floor(10 * num) / 10).toString();
 }
 
-export { convertMilesToMeters, convertMilesHoursToMetersSeconds, convertMetersToKilometers, convertKilometersToMeters, convertKilometersHoursToMetersSeconds, convertMetersSecondsToKilometersHours, convertDurationStringToSeconds, convertMetersToFeet, convertMetersToMiles, convertMetersSecondsToMilesHours, convertSecondsToReadableTime, calculateOffSet, checkForDistanceColumns, calculateXPBonus, calculatePowerBonus, calculateElementBonus, determineElementFromActivity };
+// distance is in meters, so convert to kilometers for metric or miles for imperial
+function determineDistance(distance: number, isMetric: boolean) {
+  return isMetric ? convertMetersToKilometers(distance) : convertMetersToMiles(distance);
+}
+
+// Speed is in meters per second, so convert to kph for metric or mph for imperial
+function determineSpeed(speed: number, isMetric: boolean) {
+  return isMetric ? convertMetersSecondsToKilometersHours(speed) : convertMetersSecondsToMilesHours(speed);
+}
+
+export { convertMilesToMeters, convertMilesHoursToMetersSeconds, convertMetersToKilometers, convertKilometersToMeters, convertKilometersHoursToMetersSeconds, convertMetersSecondsToKilometersHours, convertDurationStringToSeconds, convertMetersToFeet, convertMetersToMiles, convertMetersSecondsToMilesHours, convertSecondsToReadableTime, calculateOffSet, checkForDistanceColumns, calculateXPBonus, calculatePowerBonus, calculateElementBonus, determineElementFromActivity, determineDistance, determineSpeed };

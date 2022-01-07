@@ -35,6 +35,7 @@ type MainStackParamList = {
   SpendQP: undefined;
   Activity: {
     isStravaUser: boolean;
+    activity?: Activity;
   };
   AwaitingBattle: {
     foe: Foe;

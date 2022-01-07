@@ -3,7 +3,7 @@ import { useWindowDimensions } from "react-native";
 import { Center, Heading, Box, HStack, VStack, Text, ScrollView, FlatList, View, useTheme, Input, Pressable, Modal, Button } from "native-base";
 import { ScreenContainer, ScreenActionButton, Header, Icon, Pane, Subheader, HelperText } from "../../Components/CustomComponents";
 import useModal from "../../common/hooks/useModal";
-import { AuthStackProps } from "../../common/types-navigator";
+import { MainStackProps } from "../../common/types-navigator";
 import { GlobalStateContext } from "../../store";
 import RBSheet from "react-native-raw-bottom-sheet";
 import activityList from "../../common/activityList.json";
@@ -13,14 +13,14 @@ import PressableInput from "../../Components/PressableInput";
 import SpeedModal from "./SpeedModal";
 import DistanceModal from "./DistanceModal";
 import DurationModal from "./DurationModal";
-import { convertMilesToMeters, convertMilesHoursToMetersSeconds, convertDurationStringToSeconds, calculateOffSet, convertKilometersToMeters, convertKilometersHoursToMetersSeconds } from "../../common/activityCalculations";
+import { convertMilesToMeters, convertMilesHoursToMetersSeconds, convertDurationStringToSeconds, calculateOffSet, convertKilometersToMeters, convertKilometersHoursToMetersSeconds, determineDistance, determineSpeed } from "../../common/activityCalculations";
 import { checkDataSrcType, roundNumberToTenthReturnNumber, roundNumberToThousandthReturnNumber } from "../../common/helperFunctions";
 import StravaPane from "./StravaPane";
 import HistoryPane from "./HistoryPane";
 import useDidMount from "../../common/hooks/useDidMount";
 import customIconActivityTypes from "../../common/customIconActivityTypes";
 
-const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
+const Activity = ({ route, navigation }: MainStackProps<"Activity">) => {
   const windowHeight = useWindowDimensions().height;
   const refRBSheet = useRef({ open: () => null, close: () => null });
   const bottomDrawerHeight = windowHeight / 2;
@@ -153,6 +153,25 @@ const Activity = ({ route, navigation }: AuthStackProps<"Activity">) => {
       refRBSheet.current.close();
     }
   }, [activity]);
+
+  // If user navigates back to Activity screen, auto populate the Activity form with last activity
+  useEffect(() => {
+    const act = route.params?.activity;
+    if (act) {
+      const minutes = act.duration / 60;
+      const hours = Math.floor(minutes / 60);
+      const minRemainderFromHours = minutes % 60;
+      let hoursToSave = hours > 0 ? hours : 0;
+      let minutesToSave = hours > 0 ? minRemainderFromHours : minutes;
+
+      const stringToSave = hoursToSave && minutesToSave ? `${hoursToSave} hrs, ${minutesToSave} min` : hoursToSave ? `${hoursToSave} hrs` : `${minutesToSave} min`;
+      setActivity(act.type);
+      setDate(new Date(act.activityDate));
+      setDuration(stringToSave);
+      setDistance(parseFloat(determineDistance(act.distance, state.user.isMetric)));
+      setSpeed(parseFloat(determineSpeed(act.averageSpeed, state.user.isMetric)));
+    }
+  }, [route.params?.activity]);
 
   return (
     <ScreenContainer screenName={route.name}>

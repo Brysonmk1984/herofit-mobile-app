@@ -3,7 +3,7 @@ import { HStack, Text } from "native-base";
 import { Activity } from "../../common/types";
 import moment from "moment";
 import { Icon } from "../../Components/CustomComponents";
-import { convertMilesToMeters, convertMilesHoursToMetersSeconds, convertDurationStringToSeconds, convertMetersToFeet, convertMetersToMiles, convertMetersSecondsToMilesHours, convertSecondsToReadableTime, calculateOffSet, checkForDistanceColumns, calculateXPBonus, calculatePowerBonus, calculateElementBonus, determineElementFromActivity, convertMetersToKilometers, convertMetersSecondsToKilometersHours } from "../../common/activityCalculations";
+import { convertMilesToMeters, convertMilesHoursToMetersSeconds, convertDurationStringToSeconds, convertMetersToFeet, convertMetersToMiles, convertMetersSecondsToMilesHours, convertSecondsToReadableTime, calculateOffSet, checkForDistanceColumns, calculateXPBonus, calculatePowerBonus, calculateElementBonus, determineElementFromActivity, convertMetersToKilometers, convertMetersSecondsToKilometersHours, determineDistance, determineSpeed } from "../../common/activityCalculations";
 import customIconActivityTypes from "../../common/customIconActivityTypes";
 import { roundNumbersTenth } from "../../common/helperFunctions";
 
@@ -21,16 +21,6 @@ const ActivityDetail: React.FC<ActivityDetailProps> = ({ activity, isMetric }) =
       return moment(date).format("DD/MM h:mm A");
     }
     return moment(date).format("ddd h:mm A");
-  }
-
-  // distance is in meters, so convert to kilometers for metric or miles for imperial
-  function determineDistance(distance: number, isMetric: boolean) {
-    return isMetric ? convertMetersToKilometers(distance) : convertMetersToMiles(distance);
-  }
-
-  // Speed is in meters per second, so convert to kph for metric or mph for imperial
-  function determineSpeed(speed: number, isMetric: boolean) {
-    return isMetric ? convertMetersSecondsToKilometersHours(speed) : convertMetersSecondsToMilesHours(speed);
   }
 
   // Elevation gain is in meters, so return meters if metric, or use feet for imperial
