@@ -137,7 +137,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
       return consumableItemProps;
     } else if (!item.owned && item.ptCost) {
       // Modal Action is to Buy Item
-      return { buttonText: "BUY", modalAction: () => handleBuying(item) };
+      return { buttonText: "BUY", modalAction: () => handleBuying(item), disabled: !(item.ptCost <= hero.photonTokens) };
     } else if (item.owned && determineEquippableType(item.type)) {
       // Modal Action is to Buy Item
       return { buttonText: "Equip", modalAction: () => handleEquipping(item.type as ServerItemType, item, hero.goToBattle) };

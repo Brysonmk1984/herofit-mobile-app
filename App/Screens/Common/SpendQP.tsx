@@ -166,7 +166,7 @@ const SpendQP = ({ route, navigation }: AuthStackProps<"SpendQP">) => {
           // Aether should only be present for existing users who are over 100
           if (item.stat === "Aether") {
             if (existingHero) {
-              return hero.level > 100 ? true : false;
+              return hero.albedo ? true : false;
             }
             return false;
           }
