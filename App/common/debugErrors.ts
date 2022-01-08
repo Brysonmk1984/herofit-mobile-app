@@ -33,7 +33,9 @@ function debugErrors(error: appError, user?: User, dispatch?: AppDispatch): stri
       } else {
         // receiving too many 400 errors from non authenticated users. no longer sending them
         if (user) {
-          emailAppError({ status: error.status, message: error.message, debug: error.debug, version: process.env.APP_VERSION, accountInfo: user, meta: error.meta });
+          if (error.message !== "Error: Duplicate Activity Entry, couldn't update Hero") {
+            emailAppError({ status: error.status, message: error.message, debug: error.debug, version: process.env.APP_VERSION, accountInfo: user, meta: error.meta });
+          }
         }
       }
       return error.message;
