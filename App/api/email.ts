@@ -32,17 +32,6 @@ const emailFeedbackData = async function (body: FeedbackChoiceBody) {
     });
 };
 
-const emailSurveyData = async function (body) {
-  return axios
-    .post(`${endpoint}email/survey-data`, body, await axiosOptions())
-    .then(({ data }) => {
-      return data.data;
-    })
-    .catch(({ request, response }) => {
-      throw handleHttpError(request, response);
-    });
-};
-
 interface MessageAccountInfo {
   email: string;
   firstName: string;
@@ -73,4 +62,4 @@ const emailAppError = async function (body) {
     });
 };
 
-export { emailFeedbackData, FeedbackChoiceBody, emailSurveyData, emailContactForm, emailAppError };
+export { emailFeedbackData, FeedbackChoiceBody, emailContactForm, emailAppError };
