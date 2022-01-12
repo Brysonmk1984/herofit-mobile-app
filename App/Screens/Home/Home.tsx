@@ -216,7 +216,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
         {/* MODALS */}
         <SignupToSave id="SignupToSave" modalAction={() => dispatch({ type: "SET INITIAL HOMESCREEN LOAD", payload: { initialHomescreenLoad: "Register" } })} />
         <ConfirmEmail id="ConfirmEmail" />
-        <ChooseActivityEntry id="ChooseActivityEntry" />
+        <ChooseActivityEntry id="ChooseActivityEntry" getFreshStravaData={getFreshStravaData} />
         <FeedbackChoice id="FeedbackChoice" />
         <SignupFinished id="SignupFinished" />
         <GoToBattle id="GoToBattle" goTo={navigation.push} heroId={hero.id} openBottomDrawerFromParent={() => openBottomDrawerFromParent.current()} />

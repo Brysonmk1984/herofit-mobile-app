@@ -17,10 +17,11 @@ import { ModalActionHeader } from "../../../../Components/ModalTemplates/ModalAc
 
 interface ChooseActivityEntryProps {
   id: string;
+  getFreshStravaData: (manually: true) => void;
 }
 
 // SELECT ACTIVITY ENTRY MODE
-const ChooseActivityEntry: React.FC<ChooseActivityEntryProps> = ({ id }) => {
+const ChooseActivityEntry: React.FC<ChooseActivityEntryProps> = ({ id, getFreshStravaData }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { openModal, closeModal } = useModal();
   const { clientId, request, promptAsync, stravaSuccess, setStravaSuccess, helperText } = useStravaConnect();
@@ -55,8 +56,11 @@ const ChooseActivityEntry: React.FC<ChooseActivityEntryProps> = ({ id }) => {
     if (stravaSuccess) {
       closeModal("ChooseActivityEntry");
       setStravaSuccess(false);
+
+      // TODO: should only call this if new user...
       setTimeout(() => {
         openModal("SignupFinished");
+        getFreshStravaData(true);
       }, 1500);
     }
   }, [stravaSuccess]);

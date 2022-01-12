@@ -78,12 +78,12 @@ function useStravaConnect(): StravaConnectReturn {
           dispatch({ type: "SET USER", payload: { user, isSignedIn: true } });
           setStravaSuccess(true);
           setHelperText(null);
-          addToast("success", "Strava Account Successfully Connected!", undefined, 125);
+          addToast("success", "Strava Account Successfully Connected!", undefined);
         } catch (error) {
           debugErrors(error);
           setHelperText(null);
           const errorMessage = error?.debug[0] === "SequelizeUniqueConstraintError: Validation error" ? "Strava account is already in use, can't use twice!" : error.message;
-          addToast("error", errorMessage, undefined, 125);
+          addToast("error", errorMessage, undefined);
         }
       })();
     } else {
