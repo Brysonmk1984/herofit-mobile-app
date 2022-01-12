@@ -530,7 +530,7 @@ function checkForMultipleItem(itemName) {
 
 function determineDataSrcType(dataSrcId: string) {
   // A length of 8 means the user has Strava set up in HeroFit
-  if (dataSrcId?.length === 8) {
+  if (dataSrcId?.length === 8 || dataSrcId?.length === 7) {
     return "Strava";
   }
   return "Manual";

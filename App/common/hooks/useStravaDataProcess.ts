@@ -113,6 +113,7 @@ function useStravaDataProcess(): { newStravaActivities: Activity[]; getFreshStra
     }
   }
 
+  // Check if Strava activities exist locally and set local state
   async function _doLocalStravaCheck() {
     const lsSavedStravaActivities: any[] = await getLsWithExpiry("herofit-stravaActivities");
     setLsStrava(lsSavedStravaActivities);
@@ -120,7 +121,6 @@ function useStravaDataProcess(): { newStravaActivities: Activity[]; getFreshStra
   }
 
   // Check if Strava User && get lsSaved Strava activities
-  // Gets called on startup AND when homepage remounts, like from coming back from activities screen
   useEffect(() => {
     //console.log(state.user?.dataSrcId, !lsStravaCheckHappened);
     if (state.user?.dataSrcId && !lsStravaCheckHappened) {

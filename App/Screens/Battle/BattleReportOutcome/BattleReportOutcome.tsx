@@ -17,7 +17,9 @@ const BattleReportOutcome: React.FC<MainStackProps<"BattleReportOutcome">> = ({ 
   const { colors } = useTheme();
   const [top, setTop] = useState(null);
   const [bottom, setBottom] = useState(null);
-  const [legacyBattle, setLegacyBattle] = useState(roundBreakdown.length ? false : true);
+  // Legacy Battles (where recording the rounds didnt happen) shouldn't be viewable from the app.
+  // Yet Sentry caught an error so just handle more gracefully by optional chaining
+  const [legacyBattle, setLegacyBattle] = useState(roundBreakdown?.length ? false : true);
   const [pressedItem, setPressedItem] = useState(null);
   const { openModal } = useModal();
 
