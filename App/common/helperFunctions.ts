@@ -9,28 +9,28 @@ function capitalize<T = string>(val: T) {
   if (typeof val === "string") {
     return val.charAt(0).toUpperCase() + val.slice(1);
   }
-  throw new Error(`${val} is not a String; can't transform`);
+  console.error(`${val} is not a String; can't transform`);
 }
 
 const lowercaseUnderscore = function <T = string>(val: T) {
   if (typeof val === "string") {
     return val.replace(/(\s|-)+/g, "_").toLowerCase();
   }
-  throw new Error(`${val} is not a String; can't transform`);
+  console.error(`${val} is not a String; can't transform`);
 };
 
 const lowercaseDash = function <T = string>(val: T) {
   if (typeof val === "string") {
     return val.replace(/(\s|_)+/g, "-").toLowerCase();
   }
-  throw new Error(`${val} is not a String; can't transform`);
+  console.error(`${val} is not a String; can't transform`);
 };
 
 const lowercaseSpace = function <T = string>(val: T) {
   if (typeof val === "string") {
     return val.replace(/(\s|_|-)+/g, " ").toLowerCase();
   }
-  throw new Error(`${val} is not a String; can't transform`);
+  console.error(`${val} is not a String; can't transform`);
 };
 
 const titlecaseUnderscore = function <T = string>(val: T) {
@@ -38,7 +38,7 @@ const titlecaseUnderscore = function <T = string>(val: T) {
     const uppercaseVal = val[0].toUpperCase() + val.substring(1);
     return uppercaseVal.replace(/(\s|-)+/g, "_");
   }
-  throw new Error(`${val} is not a String; can't transform`);
+  console.error(`${val} is not a String; can't transform`);
 };
 
 const shuffleArray = function (array: any[]) {
@@ -292,7 +292,6 @@ function getHeroImage(characterName: CharacterName, skin?: SkinName): number {
     case "compost_creature":
       return getCompostCreatureImage(lcSkin);
     default:
-      //throw new Error("No matching image");
       console.error(`No Matching Image - ${lcSkin}`);
   }
 }
@@ -355,7 +354,6 @@ function getFoeImage(foeType: FoeType, heroCharacterName?: CharacterName): numbe
     case "guardian_of_the_depths":
       return require("../../assets/images/foes/titans/guardian_of_the_depths.webp");
     default:
-      //throw new Error("No image by that foe type");
       console.error("No image by that foe type");
   }
 }

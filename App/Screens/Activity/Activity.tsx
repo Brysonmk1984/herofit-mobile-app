@@ -39,7 +39,7 @@ const Activity = ({ route, navigation }: MainStackProps<"Activity">) => {
   const isStravaUser = "strava" === checkDataSrcType(state.user.dataSrcId);
   const [showDateTimeWheel, setShowDateTimeWheel] = useState(false);
 
-  // Used to speed up inital screen rendering
+  // Used to speed up initial screen rendering
   const { mounted } = useDidMount();
   function resetForm() {
     setActivity(null);
