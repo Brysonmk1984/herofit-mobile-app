@@ -3,7 +3,7 @@ import axiosRetry from "axios-retry";
 import { axiosOptions } from "./axiosDefaults";
 import handleHttpError from "./handleHttpError";
 import Constants from "expo-constants";
-import { Hero } from "../common/types";
+import { Activity, Hero } from "../common/types";
 const endpoint: string = Constants.manifest.extra.HF_ENDPOINT;
 
 let axios = _axios.create();
@@ -31,7 +31,27 @@ const updateAvatarStats = async function (body) {
     });
 };
 
-const upgradeSequence = async function (body) {
+export interface UpgradeResults {
+  activities: Activity[];
+  avatar: Hero;
+  improvements: {
+    power: number;
+    maxHealth: number;
+    health: number;
+    air: number;
+    water: number;
+    fire: number;
+    earth: number;
+    aether: number;
+  };
+  reachedLevel: number;
+  qpEarned: number;
+  xpGain: number;
+  items: Item[];
+  rewards: string[];
+}
+
+const upgradeSequence = async function (body): Promise<UpgradeResults> {
   return axios
     .post(`${endpoint}avatar/upgrade-sequence`, body, await axiosOptions())
     .then(({ data }) => {

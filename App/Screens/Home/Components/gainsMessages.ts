@@ -16,8 +16,8 @@ interface UpgradeReturnObject {
   reachedLevel: number;
   xpGain: number;
   qpEarned: number;
-  items: string[];
-  rewards: Item[];
+  items: Item[];
+  rewards: string[];
 }
 
 // For displaying Gains messages after hero upgrade

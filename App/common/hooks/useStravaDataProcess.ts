@@ -7,6 +7,8 @@ import { isExistingHero } from "../../common/typeGuards";
 import { Activity, AppAction, Hero, InitialAppState, User } from "../../common/types";
 import { GlobalStateContext } from "../../store";
 import moment from "moment";
+import activityList from "../../common/activityList.json";
+const activityTypes = activityList.map(a => a.type);
 
 async function _checkStravaToken(user: User, state: InitialAppState, dispatch: React.Dispatch<AppAction>): Promise<string> {
   const accessTokenExpiration = user.stravaAccessTokenExpiration;
@@ -39,7 +41,7 @@ function _handleStravaActivities(hero: Hero, stravaActivities: any[], dateOfLate
     return {
       id: act.id,
       activityDate: act.start_date || act.activityDate,
-      type: act.type,
+      type: activityTypes.includes(act.type) ? act.type : "Workout",
       averageSpeed: act.average_speed ?? act.averageSpeed,
       maxSpeed: act.max_speed ?? act.maxSpeed,
       distance: act.distance,

@@ -13,7 +13,7 @@ import { TopHud } from "./Components/TopHud/TopHud";
 import { PetImage } from "./Components/PetImage";
 import { DrawerIndicator } from "../../Components/CustomComponents";
 import { Activity, Hero } from "../../common/types";
-import { upgradeSequence } from "../../api/avatar";
+import { UpgradeResults, upgradeSequence } from "../../api/avatar";
 import buildGainsMessages from "./Components/gainsMessages";
 import useStravaDataProcess from "../../common/hooks/useStravaDataProcess";
 import moment from "moment";
@@ -56,61 +56,36 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
 
   useServerMessage();
 
-  async function handleHeroUpgrade(activities: Activity[]) {
-    const user = state.user;
-    try {
-      // INSERT ACTIVITIES, UPDATE USER TOTALS, BUF AVATAR
-      const upgradeResults = await upgradeSequence({ email: user.email, activities, accountDate: user.createdAt, hasBeenUpgraded: state.hero.hasBeenUpgraded });
-      setNewActivities([]);
+  async function handleHeroUpgrade(upgradeResults: UpgradeResults) {
+    const { items, rewards, reachedLevel } = upgradeResults;
 
-      // Set Background Animation
-      if (upgradeResults.reachedLevel) {
-        setBackgroundAnimation("level-up");
-        setLeveledUp(true);
-        setTimeout(() => {
-          setLeveledUp(false);
-        }, 3000);
-      } else {
-        setBackgroundAnimation("activity-up");
-      }
+    setNewActivities([]);
 
-      // combine returned avatar with existing equipped items... backend not fetching equipment here
-      const heroEquipped = Object.assign({}, state.hero, upgradeResults.avatar, { equipped: state.hero.equipped });
-
-      const maxDate = moment.max(activities.map(act => moment(act.activityDate)));
-      //console.log("max data", maxDate, maxDate.local(), upgradeResults.activities.length);
-      dispatch({ type: "POST UPGRADE", payload: { hero: heroEquipped, latestSavedActivities: upgradeResults.activities, latestSavedActivityDate: maxDate } });
-
-      // If items were found, we need to fetch inventory again and update
-      const { items, rewards } = upgradeResults;
-      if (items.length || rewards.length) {
-        fetchAndUpdateInventory();
-      }
-
-      //clearLs("herofit-stravaActivities");
-
-      // Builds the Correct message based on returned data from upgrade
-      const messageArray = buildGainsMessages(upgradeResults);
-
-      // Show messages via toast
-      messageArray.forEach((message: string, i: number) => {
-        setTimeout(() => {
-          addToast("success", message, 2500, 125);
-        }, 3250 * i);
-      });
-    } catch (error) {
-      // Errors not reaching here for some reason
-      if (error?.meta === "Error: Duplicate Activity Entry, couldn't update Hero!") {
-        error.message = error.meta;
-      } else {
-        error.message = "Couldn't upgrade hero, please try again later.";
-        debugErrors(error, user);
-      }
-      // clear out any activities locally
-      clearLs("herofit-stravaActivities");
-      setNewActivities([]);
-      addToast("error", error.message, undefined, 125);
+    // Set Background Animation
+    if (reachedLevel) {
+      setBackgroundAnimation("level-up");
+      setLeveledUp(true);
+      setTimeout(() => {
+        setLeveledUp(false);
+      }, 3000);
+    } else {
+      setBackgroundAnimation("activity-up");
     }
+
+    // If items were found, we need to fetch inventory again and update
+    if (items.length || rewards.length) {
+      fetchAndUpdateInventory();
+    }
+
+    // Builds the Correct message based on returned data from upgrade
+    const messageArray = buildGainsMessages(upgradeResults);
+
+    // Show messages via toast
+    messageArray.forEach((message: string, i: number) => {
+      setTimeout(() => {
+        addToast("success", message, 2500, 125);
+      }, 3250 * i);
+    });
   }
 
   // ON LOGIN REWARD ALERT (from get-avatar)
@@ -220,7 +195,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
         <SignupFinished id="SignupFinished" />
         <GoToBattle id="GoToBattle" goTo={navigation.push} heroId={hero.id} openBottomDrawerFromParent={() => openBottomDrawerFromParent.current()} />
 
-        <ActivityUpgrade id="ActivityUpgrade" activities={newActivities} modalAction={() => handleHeroUpgrade(newActivities)} goBack={(activity: Activity) => navigation.push("Activity", { activity })} state={state} closeModal={closeModal} setNewActivities={setNewActivities} />
+        <ActivityUpgrade id="ActivityUpgrade" activities={newActivities} modalAction={(upgradeResults: UpgradeResults) => handleHeroUpgrade(upgradeResults)} goBack={(activity: Activity) => navigation.push("Activity", { activity })} closeModal={closeModal} setNewActivities={setNewActivities} />
       </ScreenContainer>
     </SideMenu>
   );
