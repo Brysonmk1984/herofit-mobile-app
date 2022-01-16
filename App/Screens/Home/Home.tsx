@@ -61,6 +61,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
     try {
       // INSERT ACTIVITIES, UPDATE USER TOTALS, BUF AVATAR
       const upgradeResults = await upgradeSequence({ email: user.email, activities, accountDate: user.createdAt, hasBeenUpgraded: state.hero.hasBeenUpgraded });
+      setNewActivities([]);
 
       // Set Background Animation
       if (upgradeResults.reachedLevel) {
@@ -86,7 +87,6 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
         fetchAndUpdateInventory();
       }
 
-      setNewActivities([]);
       //clearLs("herofit-stravaActivities");
 
       // Builds the Correct message based on returned data from upgrade
@@ -104,13 +104,12 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
         error.message = error.meta;
       } else {
         error.message = "Couldn't upgrade hero, please try again later.";
+        debugErrors(error, user);
       }
       // clear out any activities locally
       clearLs("herofit-stravaActivities");
       setNewActivities([]);
-
       addToast("error", error.message, undefined, 125);
-      debugErrors(error, user);
     }
   }
 
