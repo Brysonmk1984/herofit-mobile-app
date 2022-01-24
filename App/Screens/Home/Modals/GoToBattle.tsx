@@ -1,9 +1,9 @@
 import React, { useContext, useState } from "react";
-import { Heading, Text, Box, View, Pressable, Link, HStack, VStack, Image } from "native-base";
+import { Text, Box, View, Link, HStack, VStack, Image } from "native-base";
 import { CharacterModal } from "../../../Components/ModalTemplates/ModalTemplates";
 import { BodyContent } from "../../../Components/ModalTemplates/BasicModal/Content";
 import { GlobalStateContext } from "../../../store";
-import { CharacterName, Foe, Hero, Item, UserStatus } from "../../../common/types";
+import { CharacterName, Foe, Hero, Item } from "../../../common/types";
 import useModal from "../../../common/hooks/useModal";
 import LoadingInPane from "../../../Components/LoadingInPane";
 import useGlobalToast from "../../../common/hooks/useGlobalToast";
@@ -11,7 +11,6 @@ import debugErrors from "../../../common/debugErrors";
 import { sendHeroToBattle } from "../../../api/battle";
 import { ModalActionHeader } from "../../../Components/ModalTemplates/ModalActionHeader";
 import * as WebBrowser from "expo-web-browser";
-import { HeroImage } from "../../../Components/HeroImage/HeroImage";
 import Icon from "../../../Components/Icon";
 
 interface GoToParams {
@@ -21,8 +20,8 @@ interface GoToParams {
 }
 interface GoToBattleProps {
   id: string;
-  goTo: (navigator: string, options: { screen: string; params: GoToParams }) => void;
-  openBottomDrawerFromParent: (isOpen: boolean) => void;
+  goTo: (screen: string, params: GoToParams) => void;
+  openBottomDrawerFromParent: () => void;
 }
 
 export const GoToBattle: React.FC<GoToBattleProps> = ({ id, goTo, openBottomDrawerFromParent }) => {
@@ -80,7 +79,7 @@ export const GoToBattle: React.FC<GoToBattleProps> = ({ id, goTo, openBottomDraw
   }
 
   return (
-    <CharacterModal id={id} modalOpen={state.modalQueue[0] === id} speech={goToBattleOwlAdvice} buttonText="Go To Battle" disabled={disabledButton} modalAction={() => handleGoToBattle()}>
+    <CharacterModal id={id} modalOpen={state.modalQueue[0] === id} speech={goToBattleOwlAdvice} buttonText="Go To Battle" disabled={disabledButton} modalAction={() => handleGoToBattle()} disabled={loading}>
       <ModalActionHeader type={goToBattleActionHeader} text={goToBattleActionText} />
       <BodyContent>
         <View>
@@ -109,18 +108,19 @@ export const GoToBattle: React.FC<GoToBattleProps> = ({ id, goTo, openBottomDraw
             <Text>
               {hero.name} must have at least <Text color="base.highlight">{Math.ceil(hero.maxHealth * 0.8)}</Text> Health (80% recovered) before going to go to battle. Your current recovery rate is <Text color="base.highlight">{hero.healthRegenRate}</Text> health per hour. Heal faster with more Quantum Points in 'Recovery', or use a{" "}
               <Link mb={-1} onPress={handlePotionLink}>
-                {" "}
-                Health Potion{" "}
+                Health Potion
               </Link>
               .
             </Text>
           )}
 
-          <Link onPress={() => WebBrowser.openBrowserAsync(`https://herofit.io/battles/`)} alignSelf="center" my={6} _text={{ fontSize: "xl" }}>
-            Learn More
-          </Link>
-
-          {loading && <LoadingInPane text="Preparing for battle..." />}
+          {loading ? (
+            <LoadingInPane text="Preparing for battle..." />
+          ) : (
+            <Link onPress={() => WebBrowser.openBrowserAsync(`https://herofit.io/battles/`)} alignSelf="center" my={6} _text={{ fontSize: "xl" }}>
+              Learn More
+            </Link>
+          )}
         </View>
       </BodyContent>
     </CharacterModal>
