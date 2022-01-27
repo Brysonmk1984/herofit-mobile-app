@@ -7,21 +7,20 @@ import { GlobalStateContext } from "../../../../store";
 import { createManualDataSrcId } from "../../../../api/authentication";
 import debugErrors from "../../../../common/debugErrors";
 import useModal from "../../../../common/hooks/useModal";
-import * as Linking from "expo-linking";
 import useStravaConnect from "../../../../common/hooks/useStravaConnect";
 import HelperText from "../../../../Components/HelperText";
 import LoadingInPane from "../../../../Components/LoadingInPane";
-import { Box } from "native-base";
-import { BackHandler } from "react-native";
 import { ModalActionHeader } from "../../../../Components/ModalTemplates/ModalActionHeader";
 
 interface ChooseActivityEntryProps {
   id: string;
   getFreshStravaData: (manually: true) => void;
+  fetchAndUpdateInventory: () => void;
+  addToast: (type: ActionFeedbackType, message: string, duration?: number, offset?: number | "default", link?: string, persist?: boolean) => {};
 }
 
 // SELECT ACTIVITY ENTRY MODE
-const ChooseActivityEntry: React.FC<ChooseActivityEntryProps> = ({ id, getFreshStravaData }) => {
+const ChooseActivityEntry: React.FC<ChooseActivityEntryProps> = ({ id, getFreshStravaData, fetchAndUpdateInventory, addToast }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
   const { openModal, closeModal } = useModal();
   const { clientId, request, promptAsync, stravaSuccess, setStravaSuccess, helperText } = useStravaConnect();
@@ -29,12 +28,31 @@ const ChooseActivityEntry: React.FC<ChooseActivityEntryProps> = ({ id, getFreshS
   const [confirmButton, setConfirmButton] = useState({ modalAction: () => {}, buttonText: "Done" });
   const [loading, setLoading] = useState(false);
 
+  function _handleSignupAwardMessage(message) {
+    // If there's an award on signup, add Toast message here
+    if (message) {
+      setTimeout(() => {
+        addToast("success", message, 4000, 250);
+      }, 1000);
+    }
+  }
+
   async function handleManualDetails(email: string) {
     try {
       const { user } = await createManualDataSrcId({ email });
       dispatch({ type: "SET USER", payload: { user, isSignedIn: true } });
+      fetchAndUpdateInventory();
       closeModal("ChooseActivityEntry");
       openModal("SignupFinished");
+
+      // If there's an award on signup, add Toast message here
+      if (state.awardedItemMessage) {
+        setTimeout(() => {
+          addToast("success", state.awardedItemMessage, 4000, 250);
+        }, 1000);
+      }
+      // Signup award message
+      _handleSignupAwardMessage(state.awardedItemMessage);
     } catch (error) {
       debugErrors(error, state.user);
     }
@@ -59,6 +77,9 @@ const ChooseActivityEntry: React.FC<ChooseActivityEntryProps> = ({ id, getFreshS
 
       // TODO: should only call this if new user...
       setTimeout(() => {
+        // Signup award message
+        _handleSignupAwardMessage(state.awardedItemMessage);
+
         openModal("SignupFinished");
         getFreshStravaData(true);
       }, 1500);

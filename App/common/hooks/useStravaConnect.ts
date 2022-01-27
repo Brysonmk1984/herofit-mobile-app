@@ -35,8 +35,11 @@ function useStravaConnect(): StravaConnectReturn {
   // Connecting Strava requires fetching the client ID from the server
   async function _getStravaCredentials() {
     try {
-      const { clientId, redirectUri } = await getStravaClientCredentials();
-      setClientId(clientId);
+      // Only attempt to get strava credentials if user is active
+      if (state.user?.active) {
+        const { clientId, redirectUri } = await getStravaClientCredentials();
+        setClientId(clientId);
+      }
     } catch (error) {
       debugErrors(error);
       throw error;

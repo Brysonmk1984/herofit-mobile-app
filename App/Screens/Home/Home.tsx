@@ -88,13 +88,6 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
     });
   }
 
-  // ON LOGIN REWARD ALERT (from get-avatar)
-  useEffect(() => {
-    if (state.awardedItemMessage) {
-      addToast("success", state.awardedItemMessage, 4000, 125);
-    }
-  }, [state.awardedItemMessage]);
-
   // Determine which modal should pop up
   useEffect(() => {
     if (state.userStatus === "new") {
@@ -147,8 +140,8 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
     if (awards && awards.length) {
       awards.forEach((award: string, i: number) => {
         setTimeout(() => {
-          addToast("success", award, 1500, 125);
-        }, 3000 * i);
+          addToast("success", award, 3000, 125);
+        }, 4500 * i);
       });
     }
   }, [route.params?.postBattleReportAwards]);
@@ -190,7 +183,7 @@ const Home: React.FC<MainStackProps<"Home">> = ({ navigation, route }) => {
         {/* MODALS */}
         <SignupToSave id="SignupToSave" modalAction={() => dispatch({ type: "SET INITIAL HOMESCREEN LOAD", payload: { initialHomescreenLoad: "Register" } })} />
         <ConfirmEmail id="ConfirmEmail" />
-        <ChooseActivityEntry id="ChooseActivityEntry" getFreshStravaData={getFreshStravaData} />
+        <ChooseActivityEntry id="ChooseActivityEntry" getFreshStravaData={getFreshStravaData} fetchAndUpdateInventory={fetchAndUpdateInventory} addToast={addToast} />
         <FeedbackChoice id="FeedbackChoice" />
         <SignupFinished id="SignupFinished" />
         <GoToBattle id="GoToBattle" goTo={navigation.push} heroId={hero.id} openBottomDrawerFromParent={() => openBottomDrawerFromParent.current()} />

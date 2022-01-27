@@ -155,20 +155,22 @@ export default function useInventory(makeInventoryRequest?: boolean): ServerInve
   // subsequent refreshes may call this function directly
   async function fetchAndUpdateInventory() {
     try {
-      const inventory = await fetchAvatarInventory({ avatarID: hero.id });
-      //console.log("INVENTORY=", inventory);
-      const equipped = _determineEquippedItems(inventory);
-      //console.log("equipped=", equipped);
-      dispatch({ type: "UPDATE INVENTORY", payload: { inventory } });
+      if (state.user?.active) {
+        const inventory = await fetchAvatarInventory({ avatarID: hero.id });
+        //console.log("INVENTORY=", inventory);
+        const equipped = _determineEquippedItems(inventory);
+        //console.log("equipped=", equipped);
+        dispatch({ type: "UPDATE INVENTORY", payload: { inventory } });
 
-      // This code isn't working, but I'd like it to... ideally we wouldn't dispatch UPDATE EQUIPPED every time this function is called.
-      // const newEquippedItemIds = [equipped.skin?.itemID, equipped.pet?.itemID, equipped.title?.itemID];
-      // const oldEquippedItemIds = [equippedSkin?.itemID, equippedPet?.itemID, equippedTitle?.itemID];
-      // console.log(newEquippedItemIds, oldEquippedItemIds, "arrays are same-", primitiveArraysAreEqual(newEquippedItemIds, oldEquippedItemIds));
-      // if (!primitiveArraysAreEqual(newEquippedItemIds, oldEquippedItemIds)) {
-      //console.log("UPDATING EQUIPPED!");
-      dispatch({ type: "UPDATE EQUIPPED", payload: { equipped } });
-      //}
+        // This code isn't working, but I'd like it to... ideally we wouldn't dispatch UPDATE EQUIPPED every time this function is called.
+        // const newEquippedItemIds = [equipped.skin?.itemID, equipped.pet?.itemID, equipped.title?.itemID];
+        // const oldEquippedItemIds = [equippedSkin?.itemID, equippedPet?.itemID, equippedTitle?.itemID];
+        // console.log(newEquippedItemIds, oldEquippedItemIds, "arrays are same-", primitiveArraysAreEqual(newEquippedItemIds, oldEquippedItemIds));
+        // if (!primitiveArraysAreEqual(newEquippedItemIds, oldEquippedItemIds)) {
+        //console.log("UPDATING EQUIPPED!");
+        dispatch({ type: "UPDATE EQUIPPED", payload: { equipped } });
+        //}
+      }
     } catch (error) {
       debugErrors(error, user);
       addToast("error", `${error.status}: ${error.message}`, undefined, 125);

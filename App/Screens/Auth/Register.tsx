@@ -275,7 +275,7 @@ const Register = ({ navigation, route }: AuthStackProps<"Register">) => {
                 </HStack>
               </FormControl>
             </Box>
-            <PaneActionButton text="Let's Go!" action={handleSignUp} />
+            <PaneActionButton text="Let's Go!" action={handleSignUp} disabled={formState.loading} />
             {/* Show Loading indicator or Helper Text */}
             {formState.loading ? <LoadingInPane text="Creating Account..." /> : formState.helperText ? <HelperText text={formState.helperText} type={formState.formIsValid ? "success" : "error"} /> : null}
           </VStack>

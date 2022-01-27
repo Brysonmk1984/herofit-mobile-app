@@ -40,9 +40,7 @@ function debugErrors(error: appError, user?: User, dispatch?: AppDispatch): stri
       }
       return error.message;
     } else {
-      if (error.status === 403) {
-        console.log("403 error, usually from first startup?");
-      } else if (error.status === 401) {
+      if (error.status === 401) {
         console.log("401 error, expired or missing token");
       } else {
         console.error(`STATUS: ${error.status} \n`, `MESSAGE: ${error.message} \n`, `DEBUG:`, error.debug, `META: ${error.meta}`);
