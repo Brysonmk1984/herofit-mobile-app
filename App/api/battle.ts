@@ -38,17 +38,6 @@ const fetchBattleReport = async function (body): Promise<{ latestBattle: Battle 
     });
 };
 
-const fetchBattleReportById = async function (body) {
-  return axios
-    .post(`${endpoint}battle/fetch-battle-report-by-id`, body, await axiosOptions())
-    .then(({ data }) => {
-      return data.data;
-    })
-    .catch(({ request, response }) => {
-      throw handleHttpError(request, response);
-    });
-};
-
 const updateBattleReportSeen = async function (body) {
   return axios
     .post(`${endpoint}battle/update-battle-report-seen`, body, await axiosOptions())
@@ -109,4 +98,4 @@ const runSpecificBattle = async function (body) {
     });
 };
 
-export { sendHeroToBattle, fetchBattleReport, updateBattleReportSeen, getVillainList, fetchBattlesWonOrDkoByAvatarID, fetchUpcomingFoeAndRewards, fetchBattleReportById, runSpecificBattle };
+export { sendHeroToBattle, fetchBattleReport, updateBattleReportSeen, getVillainList, fetchBattlesWonOrDkoByAvatarID, fetchUpcomingFoeAndRewards, runSpecificBattle };
