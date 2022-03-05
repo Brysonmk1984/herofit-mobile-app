@@ -34,6 +34,7 @@
     ],
     
     "android": {
+
       "adaptiveIcon": {
         "foregroundImage": "./assets/logo512.png",
         "backgroundColor": "#d4af37"
