@@ -123,6 +123,17 @@ const updateSeenLatestPatch = async function (body) {
     });
 };
 
+const sendVerificationCode = async function (body) {
+  return axios
+    .post(`${endpoint}auth/validated-email`, body, await axiosOptions())
+    .then(({ data }) => {
+      return data.data;
+    })
+    .catch(({ request, response }) => {
+      throw handleHttpError(request, response);
+    });
+};
+
 // Only meant for initial registration email confirm
 const resendEmailConfirmation = async function (body) {
   return axios
@@ -158,4 +169,4 @@ const createManualDataSrcId = async function (body: { email: string }): Promise<
     });
 };
 
-export { login, register, getStravaClientCredentials, insertStravaCredentials, fetchLatestPatchDetails, updateSeenLatestPatch, resetPassword, sendPasswordResetEmailVerification, resendEmailConfirmation, getHeroList, createManualDataSrcId };
+export { login, register, getStravaClientCredentials, insertStravaCredentials, fetchLatestPatchDetails, updateSeenLatestPatch, resetPassword, sendPasswordResetEmailVerification, sendVerificationCode, resendEmailConfirmation, getHeroList, createManualDataSrcId };

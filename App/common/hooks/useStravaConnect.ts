@@ -90,7 +90,7 @@ function useStravaConnect(): StravaConnectReturn {
         }
       })();
     } else {
-      setHelperText(null);
+      addToast("error", "Must give HeroFit permission to access your Strava data if you want to use Strava, otherwise select 'Manual Mode'", undefined, 125);
     }
   }
 
@@ -103,10 +103,8 @@ function useStravaConnect(): StravaConnectReturn {
 
   // Fetch clientId from server
   useEffect(() => {
-    if (state.user?.active) {
-      _getStravaCredentials();
-    }
-  }, [state.user?.active]);
+    _getStravaCredentials();
+  }, []);
 
   return {
     clientId,
