@@ -8,7 +8,7 @@
     "build:web": "env-cmd -f .env.production expo build:web",
     "upload:android": "expo upload:android",
     "eject": "expo eject",
-    "test": "jest --verbose",
+    "test": "jest --verbose --maxWorkers=1 ",
     "test:watch": "jest --watch --verbose",
     "lint": "./node_modules/.bin/eslint"
   },
@@ -41,6 +41,7 @@
     "expo-status-bar": "~1.1.0",
     "expo-updates": "~0.10.15",
     "expo-web-browser": "~10.0.3",
+
     "jwt-decode": "^3.1.2",
     "lottie-react-native": "4.0.3",
     "moment": "^2.29.1",
@@ -76,6 +77,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
+    "@swc/core": "^1.2.152",
+    "@swc/jest": "^0.2.20",
     "@testing-library/jest-native": "^4.0.2",
     "@testing-library/react-native": "^7.2.0",
     "@types/jest": "^27.0.1",
@@ -96,6 +99,7 @@
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^1.7.0",
     "eslint-plugin-react-native": "^3.11.0",
+    "jest": "^27.5.1",
     "jest-expo": "^43.0.0",
     "jest-fetch-mock": "^3.0.3",
     "localtunnel": "^2.0.1",
