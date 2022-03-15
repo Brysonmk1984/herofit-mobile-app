@@ -40,7 +40,7 @@ export const GoToBattle: React.FC<GoToBattleProps> = ({ id, goTo, openBottomDraw
   if (hero.restedEnough) {
     goToBattleOwlAdvice = `The Dark Forces are ruthless adversaries with powerful abilities... attacking the mind and flesh! But I've trained you well, go get em!`;
     goToBattleActionHeader = "info";
-    goToBattleActionText = "Battles happen automatically at 2 AM MST \n (for Europeans, that's 10 am CET)";
+    goToBattleActionText = "Battles happen automatically at 8 AM UTC";
     disabledButton = false;
   } else {
     goToBattleOwlAdvice = `HOO!! Look at you.. You are in no condition to battle the Dark Forces. Give your wounds time to heal, my young neonate.`;
