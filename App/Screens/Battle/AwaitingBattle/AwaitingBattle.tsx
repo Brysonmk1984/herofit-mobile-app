@@ -14,6 +14,7 @@ import { convertItemIdsToFullItems } from "../../../common/helperFunctions";
 import ItemDetail from "../../Home/Components/BottomDrawer/HiddenInventory/Modals/ItemDetail";
 import useModal from "../../../common/hooks/useModal";
 import useAspectRatio from "../../../common/hooks/useAspectRatio";
+import { CommonActions } from "@react-navigation/native";
 
 const AwaitingBattle: React.FC<MainStackProps<"AwaitingBattle">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -56,7 +57,7 @@ const AwaitingBattle: React.FC<MainStackProps<"AwaitingBattle">> = ({ navigation
   useEffect(() => {
     const screenPop = setTimeout(() => {
       handleNavigation();
-    }, 6000);
+    }, 5000);
 
     return () => clearTimeout(screenPop);
   }, []);
@@ -66,6 +67,22 @@ const AwaitingBattle: React.FC<MainStackProps<"AwaitingBattle">> = ({ navigation
       openModal("AwaitingBattleItemDetail");
     }
   }, [pressedItem]);
+
+  // Disable going back for instant battle items
+  useEffect(() => {
+    if (isInstant) {
+      navigation.dispatch(state => {
+        // Remove the AwaitingBattle route from the stack
+        const routes = state.routes.filter(r => r.name !== "Home");
+
+        return CommonActions.reset({
+          ...state,
+          routes,
+          index: routes.length - 1,
+        });
+      });
+    }
+  }, [isInstant]);
 
   return (
     <ScreenContainer screenName={route.name}>
