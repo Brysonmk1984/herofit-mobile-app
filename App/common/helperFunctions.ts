@@ -464,7 +464,7 @@ function getColorFromClassName(className) {
     case "skin-wraith":
     case "skin-phantom":
     case "skin-phantasm":
-      return "#0000000";
+      return "#000000";
     case "skin-specter":
     case "skin-poltergeist":
     case "skin-apparition":
