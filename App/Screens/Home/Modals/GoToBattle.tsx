@@ -79,7 +79,7 @@ export const GoToBattle: React.FC<GoToBattleProps> = ({ id, goTo, openBottomDraw
   }
 
   return (
-    <CharacterModal id={id} modalOpen={state.modalQueue[0] === id} speech={goToBattleOwlAdvice} buttonText="Go To Battle" disabled={disabledButton} modalAction={() => handleGoToBattle()} disabled={loading}>
+    <CharacterModal id={id} modalOpen={state.modalQueue[0] === id} speech={goToBattleOwlAdvice} buttonText="Go To Battle" disabled={disabledButton || loading} modalAction={() => handleGoToBattle()}>
       <ModalActionHeader type={goToBattleActionHeader} text={goToBattleActionText} />
       <BodyContent>
         <View>
