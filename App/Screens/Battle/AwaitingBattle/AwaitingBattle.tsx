@@ -14,7 +14,6 @@ import { convertItemIdsToFullItems } from "../../../common/helperFunctions";
 import ItemDetail from "../../Home/Components/BottomDrawer/HiddenInventory/Modals/ItemDetail";
 import useModal from "../../../common/hooks/useModal";
 import useAspectRatio from "../../../common/hooks/useAspectRatio";
-import { CommonActions } from "@react-navigation/native";
 
 const AwaitingBattle: React.FC<MainStackProps<"AwaitingBattle">> = ({ navigation, route }) => {
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -27,37 +26,47 @@ const AwaitingBattle: React.FC<MainStackProps<"AwaitingBattle">> = ({ navigation
   const { openModal } = useModal();
 
   async function handleNavigation() {
-    try {
-      // BATTLE ENDPOINT
-      await runSpecificBattle({ avatarID: hero.id });
+    if (isInstant) {
+      try {
+        // BATTLE ENDPOINT
+        await runSpecificBattle({ avatarID: hero.id });
 
-      // Get updated Hero and latest Battle Report
-      const [p1, p2] = await Promise.all([getAvatar({ email: hero.owner }), fetchBattleReport({ avatarID: hero.id })]);
-      const { hero: updatedHero } = p1;
-      const { latestBattle } = p2;
-      // Takes item instance IDs and assigns full items to the hero under 'equipped' property
-      // updates state with new avatar
-      const equipped = convertItemIdsToFullItems(updatedHero.equipped, allGameItems);
-      updatedHero.equipped = equipped;
+        // Get updated Hero and latest Battle Report
+        const allPromises = Promise.all([getAvatar({ email: hero.owner }), fetchBattleReport({ avatarID: hero.id })]);
+        const [p1, p2] = await allPromises;
 
-      dispatch({ type: "SET HERO", payload: { hero: updatedHero } });
-      dispatch({ type: "UPDATE LATEST BATTLE", payload: { latestBattle } });
+        const { hero: updatedHero } = p1;
+        const { latestBattle } = p2;
 
-      navigation.push("BattleReport", { battleReport: latestBattle });
-    } catch (error) {
-      debugErrors(error);
-      navigation.push("Home");
+        // Takes item instance IDs and assigns full items to the hero under 'equipped' property
+        // updates state with new avatar
+        const equipped = convertItemIdsToFullItems(updatedHero.equipped, allGameItems);
+        updatedHero.equipped = equipped;
+        dispatch({ type: "SET HERO", payload: { hero: updatedHero } });
+        dispatch({ type: "UPDATE LATEST BATTLE", payload: { latestBattle } });
+        navigation.push("BattleReport", { battleReport: latestBattle });
+      } catch (error) {
+        return debugErrors(error);
+      }
+    } else {
+      navigation.pop();
     }
   }
 
   useEffect(() => {
+    if (isInstant) {
+      navigation.addListener("beforeRemove", e => {
+        // Prevent default behavior of leaving the screen
+        e.preventDefault();
+        navigation.dispatch(e.data.action);
+      });
+    }
+  }, [navigation, isInstant]);
+
+  useEffect(() => {
     const screenPop = setTimeout(() => {
-      if (isInstant) {
-        handleNavigation();
-      } else {
-        navigation.pop();
-      }
-    }, 5000);
+      handleNavigation();
+    }, 6000);
 
     return () => clearTimeout(screenPop);
   }, []);
@@ -67,22 +76,6 @@ const AwaitingBattle: React.FC<MainStackProps<"AwaitingBattle">> = ({ navigation
       openModal("AwaitingBattleItemDetail");
     }
   }, [pressedItem]);
-
-  // Disable going back for instant battle items
-  useEffect(() => {
-    if (isInstant) {
-      navigation.dispatch(state => {
-        // Remove the AwaitingBattle route from the stack
-        const routes = state.routes.filter(r => r.name !== "Home");
-
-        return CommonActions.reset({
-          ...state,
-          routes,
-          index: routes.length - 1,
-        });
-      });
-    }
-  }, [isInstant]);
 
   return (
     <ScreenContainer screenName={route.name}>
