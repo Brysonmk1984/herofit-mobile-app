@@ -349,6 +349,12 @@ interface HeroChoice {
   image: string;
   description: string;
   history: string;
+  passive: {
+    type: string;
+    name: string;
+    description: string;
+    icon: string;
+  };
 }
 
 // Hero object received going into from HeroDetails

@@ -17,15 +17,16 @@ import debugErrors from "../../../common/debugErrors";
 // Hero Details Screen
 const HeroDetails = ({ route, navigation }: AuthStackProps<"HeroDetails">) => {
   const { state, dispatch } = useContext(GlobalStateContext);
-  const { alias, character, description, history, elms, colors } = route.params.selectedHero;
+  const { alias, character, description, history, elms, colors, passive } = route.params.selectedHero;
   const { air, water, earth, fire } = elms;
   const [heroName, setHeroName] = useState(null);
   const [heroNameIsLegit, setHeroNameIsLegit] = useState(false);
   const [helperText, setHelperText] = useState(null);
   const [debouncedHeroName] = useDebounce(heroName, 500);
   const [selectedAttribute, setSelectedAttribute] = useState(null);
-  const { openModal } = useModal();
   const darkBackgrounds = ["Chrono Guy", "Empath", "Natural Ninja", "Timber Terror", "Wildspeaker"];
+  const [textColor, setTextColor] = useState(darkBackgrounds.includes(alias) ? "base.white" : "base.primary");
+  const { openModal } = useModal();
 
   function handleFinalizeHeroSelection() {
     const namedSelectedHero: SelectedHero & { name: string } = {
@@ -114,6 +115,19 @@ const HeroDetails = ({ route, navigation }: AuthStackProps<"HeroDetails">) => {
             </Center>
           </Box>
         </HStack>
+        <VStack mb={10}>
+          <HStack>
+            <Box flex={1} justifyContent="center" alignItems="center">
+              <Icon iconName={passive.icon} size={60} color={colors[1]} />
+            </Box>
+            <VStack flex={3} space={1}>
+              <Text fontSize="lg" fontFamily="heading" color={textColor}>
+                {passive.name}
+              </Text>
+              <Text color={textColor === "base.white" ? "primary.400" : textColor}>{passive.description}</Text>
+            </VStack>
+          </HStack>
+        </VStack>
 
         <Pane variant="transparent">
           <Input value={heroName} onChangeText={name => setHeroName(name)} placeholder="What's Your Hero Name?" shadow={1} />
