@@ -75,7 +75,25 @@ const StatDisplay: React.FC<StatDisplayProps> = ({ battleReport, setSelectedAttr
   const gradient = ["transparent", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "transparent"];
   const stats: BattleReportStats = ["health", "power", "armor", "fire", "earth", "water", "air", "aether"];
   const [allEffectProcs, setAllEffectProcs] = useState(nonNullEffectProcs);
-  const postBattleEffects = nonNullEffectProcs.filter(ep => ep.type === "postbattle").map(ep => ep.effect);
+
+  const {
+    postbattle: postProcs,
+    prebattle: preProcs,
+    battle: battleProcs,
+  } = nonNullEffectProcs.reduce(
+    (acc, cur) => {
+      if (cur.type === "prebattle") {
+        acc.prebattle.push(cur.effect);
+      } else if (cur.type === "battle") {
+        acc.battle.push(cur.effect);
+      } else if (cur.type === "postbattle") {
+        acc.postbattle.push(cur.effect);
+      }
+
+      return acc;
+    },
+    { prebattle: [], battle: [], postbattle: [] },
+  );
 
   function renderStatRows(stat: BattleReportStats) {
     if (stat === "aether" && !brf.aether && !brh.aether) {
@@ -138,6 +156,39 @@ const StatDisplay: React.FC<StatDisplayProps> = ({ battleReport, setSelectedAttr
     ) : null;
   }
 
+  function renderPreProcs(procs: BattleEffectProc[]) {
+    return procs?.length ? (
+      <Center p={2} borderTopWidth={1}>
+        <Text fontFamily="heading" fontSize={20}>
+          Pre-Battle Effects
+        </Text>
+        <FlatList data={procs} renderItem={({ item }) => <Text>{item}</Text>} keyExtractor={(item, index) => index.toString()} />{" "}
+      </Center>
+    ) : null;
+  }
+
+  function renderBattleProcs(procs: BattleEffectProc[]) {
+    return procs?.length ? (
+      <Center p={2} borderTopWidth={1}>
+        <Text fontFamily="heading" fontSize={20}>
+          Battle Effects
+        </Text>
+        <FlatList data={procs} renderItem={({ item }) => <Text>{item}</Text>} keyExtractor={(item, index) => index.toString()} />
+      </Center>
+    ) : null;
+  }
+
+  function renderPostProcs(procs: BattleEffectProc[]) {
+    return procs?.length ? (
+      <Center p={2} borderTopWidth={1}>
+        <Text fontFamily="heading" fontSize={20}>
+          Post-Battle Effects
+        </Text>
+        <FlatList data={procs} renderItem={({ item }) => <Text>{item}</Text>} keyExtractor={(item, index) => index.toString()} />
+      </Center>
+    ) : null;
+  }
+
   useEffect(() => {
     const elementalBonusProc = determineElementalBonusProc(seasonalBonusElement);
     const scenarioBonusProc = determineScenarioBonusProc(scenario);
@@ -177,14 +228,9 @@ const StatDisplay: React.FC<StatDisplayProps> = ({ battleReport, setSelectedAttr
         <Center bgColor="base.highlightTransparent" py={1} borderTopWidth={1} borderBottomWidth={1}>
           <Text fontSize={13}>Scenario: {determineScenario(scenario).type}</Text>
         </Center>
-        {postBattleEffects.length ? (
-          <Center p={2} borderTopWidth={1}>
-            <Text fontFamily="heading" fontSize={20}>
-              Post-Battle Effects
-            </Text>
-            <FlatList data={postBattleEffects} renderItem={({ item }) => <Text>{item}</Text>} keyExtractor={(item, index) => index.toString()} />
-          </Center>
-        ) : null}
+        {renderPreProcs(preProcs)}
+        {renderBattleProcs(battleProcs)}
+        {renderPostProcs(postProcs)}
       </ScrollView>
     </View>
   );

@@ -92,7 +92,7 @@ interface BattleEffectProc {
   effect: string;
   heroStatsEffected?: BattleReportStats[];
   foeStatsEffected?: BattleReportStats[];
-  type?: "postbattle";
+  type?: "postbattle" | "prebattle" | "battle";
 }
 interface BattleSeasonalBonusElement {
   element: PrimaryElement;
