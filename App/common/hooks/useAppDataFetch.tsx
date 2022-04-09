@@ -3,9 +3,11 @@ import { GlobalStateContext } from "../../store";
 import debugErrors from "../debugErrors";
 import fetchInitialData from "../fetchInitialData";
 import useJwt from "./useJwt";
+import useSignOut from "./useSignout";
 
 function useAppDataFetch(): { getAllAppData: (passedJwt?: any) => Promise<void>; jwt: string | null } {
   const { state, dispatch } = useContext(GlobalStateContext);
+  const { signOut } = useSignOut();
   const [jwt] = useJwt();
 
   // local JWT check happened, JWT is still present. Use it to fetch user data,
@@ -27,9 +29,7 @@ function useAppDataFetch(): { getAllAppData: (passedJwt?: any) => Promise<void>;
       dispatch({ type: "TOGGLE IN APP LOADING", payload: { isLoadingInApp: false } });
       setTimeout(() => {
         dispatch({ type: "TOGGLE LOADING", payload: { isLoading: false } });
-      }, 1500);
-      setTimeout(() => {
-        dispatch({ type: "TOGGLE IN APP LOADING", payload: { isLoading: false } });
+        dispatch({ type: "TOGGLE IN APP LOADING", payload: { isLoadingInApp: false } });
       }, 1500);
     } catch (error) {
       //console.log("JWT EXISTS, but ERROR FETCHING DATA", "refreshCount: ", state.refreshCount);
@@ -39,7 +39,11 @@ function useAppDataFetch(): { getAllAppData: (passedJwt?: any) => Promise<void>;
         dispatch({ type: "RESET DEFAULTS" });
       } else {
         // We still need to dismiss the loading indicator even if network call fails
-        dispatch({ type: "TOGGLE IN APP LOADING", payload: { isLoading: false } });
+        dispatch({ type: "TOGGLE IN APP LOADING", payload: { isLoadingInApp: false } });
+      }
+
+      if (error.status === 401) {
+        signOut();
       }
     }
   }
