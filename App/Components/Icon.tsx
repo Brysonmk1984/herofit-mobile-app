@@ -36,6 +36,7 @@ interface IconProps {
 // Returns the matching icon based on iconName prop
 const InGameIcons = ({ iconName, size, color = "base.primary" }: IconProps) => {
   const { colors: themeColors } = useTheme();
+
   switch (iconName) {
     // ACTIVITIES
     // Fire
@@ -109,6 +110,9 @@ const InGameIcons = ({ iconName, size, color = "base.primary" }: IconProps) => {
       return <Icon as={FontAwesome5} name="info-circle" size={size} color={color} />;
     case "air":
       return <Icon as={FontAwesome5} name="wind" size={size} color={color} />;
+    // Smelling Salts needs the correct name in icomoon, this is a workaround for now.
+    case "Smelling Salts":
+      return <IcoMoon name={"hot-spices"} size={size} color={getMatchingThemeColor(color, themeColors)} />;
     // DEFAULT: ICOMOON ICON OR NONE FOUND
     default:
       // If no icon is explicitly returned above, attempt to find icon from within icomoon custom icon set

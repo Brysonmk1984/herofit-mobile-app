@@ -509,6 +509,8 @@ function getColorFromItemName(name: string, reverseDefault?: boolean) {
     case "black_belt":
     case "black_belt_sensei":
       return "#000000";
+    case "smelling_salts":
+      return "#f7df1e";
     default:
       return reverseDefault ? "#f8f8ff" : "#57534e";
   }

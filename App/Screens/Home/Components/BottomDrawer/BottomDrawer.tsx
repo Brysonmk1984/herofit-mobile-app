@@ -130,7 +130,9 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ hero, newActivitiesAvailabl
       // Modal Action is to Consume Item
       const consumableItemProps = { buttonText: "USE", modalAction: () => handleConsuming(item), disabled: false };
       if (hero.status === "Knocked Out") {
-        consumableItemProps.disabled = true;
+        if (!item.effects.some(effect => effect.name === "Revive")) {
+          consumableItemProps.disabled = true;
+        }
       } else if (isBattleInstantItem(item.name) && !hero.restedEnough) {
         consumableItemProps.disabled = true;
       }
