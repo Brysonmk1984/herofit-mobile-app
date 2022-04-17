@@ -12,9 +12,10 @@ function capitalize<T = string>(val: T) {
   console.error(`${val} is not a String; can't transform`);
 }
 
-const lowercaseUnderscore = function <T = string>(val: T) {
+const lowercaseUnderscore = function <T = string>(val: T, allowDash = false) {
   if (typeof val === "string") {
-    return val.replace(/(\s|-)+/g, "_").toLowerCase();
+    let regex = allowDash ? /(\s)+/g : /(\s|-)+/g;
+    return val.replace(regex, "_").toLowerCase();
   }
   console.error(`${val} is not a String; can't transform`);
 };
@@ -360,7 +361,7 @@ function getFoeImage(foeType: FoeType, heroCharacterName?: CharacterName): numbe
 
 function getPetImage(petName: string): number {
   // Figure out which pet to use
-  const lcName = lowercaseUnderscore(petName);
+  const lcName = lowercaseUnderscore(petName, true);
   switch (lcName) {
     case "alpha_dog":
       return require("../../assets/images/items/pets/alpha_dog.webp");
@@ -396,6 +397,14 @@ function getPetImage(petName: string): number {
       return require("../../assets/images/items/pets/snowshoe_hare.webp");
     case "ashborn_phoenix":
       return require("../../assets/images/items/pets/ashborn_phoenix.webp");
+    case "galapagos_sea_turtle":
+      return require("../../assets/images/items/pets/galapagos_sea_turtle.webp");
+    case "sure-footed_billy_goat":
+      return require("../../assets/images/items/pets/sure-footed_billy_goat.webp");
+    case "skydiving_osprey":
+      return require("../../assets/images/items/pets/skydiving_osprey.webp");
+    case "fiery_salamander":
+      return require("../../assets/images/items/pets/fiery_salamander.webp");
     case "splash_artist":
       return require("../../assets/images/foes/elementals/splash_artist.webp");
     case "rock_skipper":
