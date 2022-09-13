@@ -4,8 +4,9 @@ import { NativeBaseProvider, extendTheme } from "native-base";
 import { StateProvider } from "./store";
 import App from "./App";
 import herofitTheme from "./styles/herofitTheme";
-import "react-native-gesture-handler";
+// import "react-native-gesture-handler";
 import * as Sentry from "sentry-expo";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 Sentry.init({
   dsn: "https://051e343d956b42e3bb7286f93ffe965d@o1077292.ingest.sentry.io/6080100",
@@ -19,7 +20,9 @@ const Root = () => {
   return (
     <NativeBaseProvider theme={theme} config={{ suppressColorAccessibilityWarning: true }}>
       <StateProvider>
-        <App />
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <App />
+        </GestureHandlerRootView>
       </StateProvider>
     </NativeBaseProvider>
   );
