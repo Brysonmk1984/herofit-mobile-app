@@ -56,6 +56,9 @@ export default {
         caution: {
           bg: `buttonWarning.200`,
         },
+        ghost: {
+          bg: `base.transparent`,
+        },
       },
     },
     Toast: {
