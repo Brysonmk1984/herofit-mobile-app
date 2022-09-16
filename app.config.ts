@@ -10,9 +10,9 @@ export default ({ config }) => {
       STRAVA_AUTHORIZATION_ENDPOINT: process.env.APP_STRAVA_AUTHORIZATION_ENDPOINT,
       STRAVA_TOKEN_ENDPOINT: process.env.APP_STRAVA_TOKEN_ENDPOINT,
       STRAVA_REVOCATION_ENDPOINT: process.env.APP_STRAVA_REVOCATION_ENDPOINT,
-      // eas: {
-      //   projectId: "bb814ca5-a6a1-4895-abdc-cf2401673ee1",
-      // },
+      eas: {
+        projectId: "bb814ca5-a6a1-4895-abdc-cf2401673ee1",
+      },
     },
     ...config,
   };

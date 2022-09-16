@@ -74,7 +74,8 @@
     "styled-system": "^5.1.5",
     "sync-storage": "^0.4.2",
     "use-count-up": "^3.0.1",
-    "use-debounce": "^7.0.0"
+    "use-debounce": "^7.0.0",
+    "expo-dev-client": "~1.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.18.6",
