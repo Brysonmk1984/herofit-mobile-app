@@ -1,9 +1,9 @@
 import { registerRootComponent } from "expo";
 import React from "react";
 import { NativeBaseProvider, extendTheme } from "native-base";
-import { StateProvider } from "./store";
-import App from "./App";
-import herofitTheme from "./styles/herofitTheme";
+import { StateProvider } from "./App/store";
+import App from "./App/App";
+import herofitTheme from "./App/styles/herofitTheme";
 import * as Sentry from "sentry-expo";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
