@@ -1,5 +1,5 @@
 {
-  "main": "./App/index.tsx",
+  "main": "./App/index.js",
   "scripts": {
     "dev": "env-cmd -f .env.development expo start",
     "dev:clear": "env-cmd -f .env.development expo start -c",
