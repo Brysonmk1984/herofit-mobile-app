@@ -119,20 +119,22 @@ const Adversaries: React.FC<MainStackProps<"Adversaries">> = ({ navigation, rout
         <AdversaryTabs activeTab={activeTab} setActiveTab={setActiveTab} />
         <ScrollView w="100%">
           {activeTab === "Elementals" ? (
-            // Elemental Foe list is structered differently using a SectionList
-            <SectionList
-              renderSectionHeader={({ section: { title } }) => (
-                <HStack bgColor={`base.${title}`} py={3} px={2}>
-                  <Icon iconName={title} size={30} color="base.white" />
-                  <Text fontFamily="heading" fontSize={35} color="white" pl={3} mt={-1}>
-                    {title}
-                  </Text>
-                </HStack>
-              )}
-              sections={sectionedElementals}
-              renderItem={(item, index) => renderItem(item, index)}
-              keyExtractor={(item, index) => index.toString()}
-            />
+            // Elemental Foe list is structured differently using a SectionList
+            sectionedElementals ? (
+              <SectionList
+                renderSectionHeader={({ section: { title } }) => (
+                  <HStack bgColor={`base.${title}`} py={3} px={2}>
+                    <Icon iconName={title} size={30} color="base.white" />
+                    <Text fontFamily="heading" fontSize={35} color="white" pl={3} mt={-1}>
+                      {title}
+                    </Text>
+                  </HStack>
+                )}
+                sections={sectionedElementals}
+                renderItem={(item, index) => renderItem(item, index)}
+                keyExtractor={(item, index) => index.toString()}
+              />
+            ) : null
           ) : (
             <FlatList data={foeData} renderItem={item => renderItem(item)} keyExtractor={(item, index) => index.toString()} />
           )}
