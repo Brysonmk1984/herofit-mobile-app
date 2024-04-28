@@ -21,7 +21,7 @@ function debugErrors(error: appError, user?: User, dispatch?: AppDispatch): stri
       emailAppError({ status: 999, message: error, version: process.env.APP_VERSION, accountInfo: user });
       return error;
     } else {
-      console.log("ERROR STRING ONLY - ", error);
+      console.error("ERROR STRING ONLY - ", error);
       return error;
     }
   } else {
